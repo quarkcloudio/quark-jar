@@ -19,7 +19,7 @@
 	</properties>
 	<modules>
 		<module>quark-admin</module>
-		<module>quark-base</module>
+		<module>quark-engine</module>
 		<module>quark-starter</module>
 	</modules>
 	<dependencies>

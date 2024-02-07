@@ -18,7 +18,7 @@
     <dependencies>
         <dependency>
             <groupId>io.quarkcloud</groupId>
-            <artifactId>quark-base</artifactId>
+            <artifactId>quark-engine</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
@@ -35,6 +35,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkcloud</groupId>
+            <artifactId>quark-engine</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
