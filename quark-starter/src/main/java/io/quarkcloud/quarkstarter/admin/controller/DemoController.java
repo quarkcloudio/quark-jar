@@ -4,12 +4,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import io.quarkcloud.quarkbase.controller.BaseController;
+
 @Controller
-public class DemoController {
+public class DemoController extends BaseController<String> {
 
     @RequestMapping("/api/admin/demo/index")
     @ResponseBody
     public String index() {
-        return "admin data";
+        return this.jsonOk("Hello World!");
     }
 }

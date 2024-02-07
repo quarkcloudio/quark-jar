@@ -18,6 +18,11 @@
     <dependencies>
         <dependency>
             <groupId>io.quarkcloud</groupId>
+            <artifactId>quark-base</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkcloud</groupId>
             <artifactId>quark-admin</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
