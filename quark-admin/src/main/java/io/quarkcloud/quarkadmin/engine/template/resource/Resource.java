@@ -1,4 +1,4 @@
-package io.quarkcloud.quarkadmin.template.resource;
+package io.quarkcloud.quarkadmin.engine.template.resource;
 
 public class Resource {
 
