@@ -10,7 +10,7 @@ public class IndexController {
 
     @RequestMapping("/")
     @ResponseBody
-    @Resource
+    @Resource("abcd")
     public String index() {
         return "Hello World!";
     }

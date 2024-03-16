@@ -1,5 +1,7 @@
 package io.quarkcloud.quarkadmin.annotation;
 
+import java.lang.reflect.Method;
+
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
@@ -7,6 +9,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
 @Aspect
@@ -19,11 +22,26 @@ public class ResourceAspect {
      * 环绕通知
      */
     @Around("Resource()")
-    public void advice(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object advice(ProceedingJoinPoint joinPoint) throws Throwable {
         System.out.println("around begin...");
         //执行到这里走原来的方法
         joinPoint.proceed();
         System.out.println("around after....");
+
+
+        //得到连接点执行的方法对象
+        MethodSignature signature= (MethodSignature) joinPoint.getSignature();
+        Method method = signature.getMethod();
+ 
+        //得到方法上的注解
+        Resource annotation = method.getAnnotation(Resource.class);
+        if (annotation!=null){
+            //获取注解属性的value值
+            String value = annotation.value();
+            return value;
+        }
+
+        return joinPoint.proceed();
     }
 
     @Before("Resource()")
