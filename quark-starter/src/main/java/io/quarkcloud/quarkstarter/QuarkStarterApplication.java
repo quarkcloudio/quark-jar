@@ -11,5 +11,4 @@ public class QuarkStarterApplication {
     public static void main(String[] args) {
         SpringApplication.run(QuarkStarterApplication.class, args);
     }
-
 }
