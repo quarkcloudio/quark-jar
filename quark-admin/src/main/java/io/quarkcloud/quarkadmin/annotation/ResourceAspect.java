@@ -23,11 +23,6 @@ public class ResourceAspect {
      */
     @Around("Resource()")
     public Object advice(ProceedingJoinPoint joinPoint) throws Throwable {
-        System.out.println("around begin...");
-        //执行到这里走原来的方法
-        joinPoint.proceed();
-        System.out.println("around after....");
-
 
         //得到连接点执行的方法对象
         MethodSignature signature= (MethodSignature) joinPoint.getSignature();
@@ -41,6 +36,7 @@ public class ResourceAspect {
             return value;
         }
 
+        // 这里是调用原来的方法
         return joinPoint.proceed();
     }
 
