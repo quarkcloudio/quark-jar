@@ -14,14 +14,14 @@ import org.springframework.stereotype.Component;
 
 @Aspect
 @Component
-public class ResourceAspect {
-    @Pointcut("@annotation(io.quarkcloud.quarkadmin.annotation.Resource)")
-    private void Resource() {}
+public class AdminResourceFieldsAspect {
+    @Pointcut("@annotation(io.quarkcloud.quarkadmin.annotation.AdminResourceFields)")
+    private void AdminResourceFields() {}
 
     /**
      * 环绕通知
      */
-    @Around("Resource()")
+    @Around("AdminResourceFields()")
     public Object advice(ProceedingJoinPoint joinPoint) throws Throwable {
 
         //得到连接点执行的方法对象
@@ -29,7 +29,7 @@ public class ResourceAspect {
         Method method = signature.getMethod();
  
         //得到方法上的注解
-        Resource annotation = method.getAnnotation(Resource.class);
+        AdminResourceFields annotation = method.getAnnotation(AdminResourceFields.class);
         if (annotation!=null){
             //获取注解属性的value值
             String value = annotation.value();
@@ -40,12 +40,12 @@ public class ResourceAspect {
         return joinPoint.proceed();
     }
 
-    @Before("Resource()")
+    @Before("AdminResourceFields()")
     public void record(JoinPoint joinPoint) {
         System.out.println("Before");
     }
 
-    @After("Resource()")
+    @After("AdminResourceFields()")
     public void after() {
         System.out.println("After");
     }

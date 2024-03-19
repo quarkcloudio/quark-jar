@@ -7,6 +7,6 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Resource {
+public @interface AdminResourceFields {
     String value() default "quark jar";
 }
