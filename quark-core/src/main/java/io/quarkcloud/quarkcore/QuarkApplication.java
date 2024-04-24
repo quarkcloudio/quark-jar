@@ -1,4 +1,4 @@
-package io.quarkcloud.quarkstarter;
+package io.quarkcloud.quarkcore;
 
 import io.quarkcloud.quarkadmin.autoconfigure.QuarkAdminApplication;
 

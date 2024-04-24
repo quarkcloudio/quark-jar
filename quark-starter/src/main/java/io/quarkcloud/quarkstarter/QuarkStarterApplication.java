@@ -3,6 +3,7 @@ package io.quarkcloud.quarkstarter;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import io.quarkcloud.quarkcore.QuarkApplication;
 import io.quarkcloud.quarkadmin.autoconfigure.QuarkAdminApplication;
 
 @SpringBootApplication(scanBasePackages = {"io.quarkcloud.quarkstarter","io.quarkcloud.quarkadmin"})
