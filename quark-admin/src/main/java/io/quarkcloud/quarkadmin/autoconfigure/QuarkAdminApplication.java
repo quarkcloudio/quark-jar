@@ -1,4 +1,4 @@
-package io.quarkcloud.quarkadmin.annotation;
+package io.quarkcloud.quarkadmin.autoconfigure;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,6 +7,6 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface QuarkAdmin {
+public @interface QuarkAdminApplication {
     String[] value() default {"io.quarkcloud.quarkstarter.service"};
 }
