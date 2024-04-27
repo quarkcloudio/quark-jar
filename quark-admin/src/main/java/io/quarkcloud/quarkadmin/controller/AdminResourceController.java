@@ -1,12 +1,12 @@
 package io.quarkcloud.quarkadmin.controller;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
-public class ResourceController {
+@RestController
+public class AdminResourceController {
 
     @RequestMapping("/api/admin/{resource}/index")
     @ResponseBody
