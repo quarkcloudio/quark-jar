@@ -7,7 +7,7 @@ import io.quarkcloud.quarkcore.QuarkApplication;
 import io.quarkcloud.quarkadmin.autoconfigure.QuarkAdminApplication;
 
 @SpringBootApplication(scanBasePackages = {"io.quarkcloud.quarkstarter","io.quarkcloud.quarkadmin"})
-@QuarkAdminApplication({"io.quarkcloud.quarkstarter.service.admin"})
+@QuarkAdminApplication(basePackages = {"io.quarkcloud.quarkstarter.service.admin"})
 @MapperScan(basePackages = {"io.quarkcloud.quarkadmin.mapper"})
 public class QuarkStarterApplication {
 
