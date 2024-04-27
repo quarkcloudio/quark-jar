@@ -29,7 +29,7 @@ public class Login {
         this.redirect = "/layout/index?api=/api/admin/dashboard/index/index";
 
         // 标题
-        this.title = "QuarkGo";
+        this.title = "QuarkJar";
 
         // 副标题
         this.subTitle = "信息丰富的世界里，唯一稀缺的就是人类的注意力";
