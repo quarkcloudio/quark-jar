@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class Item extends Commponent {
+public class Field extends Commponent {
 
     public String api;
 
@@ -29,7 +29,7 @@ public class Item extends Commponent {
 
     public Object[] actions;
 
-    public Item() {
+    public Field() {
         this.component = "formItem";
         this.setComponentKey();
     }
