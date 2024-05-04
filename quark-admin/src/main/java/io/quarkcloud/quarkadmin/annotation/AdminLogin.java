@@ -5,8 +5,22 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target(ElementType.METHOD)
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AdminLogin {
-    String resource() default "index";
+
+    // api
+    String api() default "";
+
+    // redirect
+    String redirect() default "";
+
+    // logo
+    String logo() default "";
+
+    // title
+    String title() default "";
+
+    // subTitle
+    String subTitle() default "";
 }

@@ -30,7 +30,7 @@ public class AdminResourceFieldsAspect {
  
         //得到方法上的注解
         AdminResourceFields annotation = method.getAnnotation(AdminResourceFields.class);
-        if (annotation!=null){
+        if (annotation != null) {
             //获取注解属性的value值
             String value = annotation.value();
             return value;

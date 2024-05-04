@@ -1,7 +1,6 @@
 package io.quarkcloud.quarkadmin.annotation;
 
 import java.lang.reflect.Method;
-
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -13,7 +12,7 @@ import io.quarkcloud.quarkcore.service.ClassLoader;
 
 @Aspect
 @Component
-public class AdminLoginAspect {
+public class AdminLoginRenderAspect {
 
     // 加载基础资源包路径
     public String[] basePackages = Config.getInstance().getBasePackages("admin");
@@ -21,8 +20,8 @@ public class AdminLoginAspect {
     // 加载本资源包路径
     public String[] packages = {".login."};
 
-    @Pointcut("@annotation(io.quarkcloud.quarkadmin.annotation.AdminLogin)")
-    private void AdminLogin() {}
+    @Pointcut("@annotation(io.quarkcloud.quarkadmin.annotation.AdminLoginRender)")
+    private void AdminLoginRender() {}
 
     // 获取加载包路径
     protected String[] getLoadPackages() {
@@ -34,15 +33,15 @@ public class AdminLoginAspect {
     /**
      * 环绕通知
      */
-    @Around("AdminLogin()")
+    @Around("AdminLoginRender()")
     public Object advice(ProceedingJoinPoint joinPoint) throws Throwable {
 
-        //得到连接点执行的方法对象
+        // 得到连接点执行的方法对象
         MethodSignature signature= (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
  
-        //得到方法上的注解
-        AdminLogin annotation = method.getAnnotation(AdminLogin.class);
+        // 得到方法上的注解
+        AdminLoginRender annotation = method.getAnnotation(AdminLoginRender.class);
         if (annotation==null) {
             return joinPoint.proceed();
         }
@@ -59,7 +58,7 @@ public class AdminLoginAspect {
             return joinPoint.proceed();
         }
 
-        // TODO:加载类，暂时只支持加载一个配置
+        // 加载类，暂时只支持加载一个配置
         String[] loadPackages = getLoadPackages();
         ClassLoader classLoader = new ClassLoader(loadPackages[0]+resource);
 
