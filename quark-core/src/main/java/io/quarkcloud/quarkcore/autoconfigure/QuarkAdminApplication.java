@@ -1,4 +1,4 @@
-package io.quarkcloud.quarkadmin.autoconfigure;
+package io.quarkcloud.quarkcore.autoconfigure;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -1,4 +1,7 @@
-package io.quarkcloud.quarkadmin.service;
+package io.quarkcloud.quarkcore.service;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Config {
 
@@ -6,7 +9,7 @@ public class Config {
     private Config(){}
     
     //定义basePackages
-    private String[] basePackages = {"io.quarkcloud.quarkstarter.service"};
+    private Map<String,String[]> basePackages = new HashMap<String, String[]>();
 
     //在静态代码块中进行创建
     private static Config instance;
@@ -20,12 +23,12 @@ public class Config {
     }
 
     //提供获取basePackages的方法
-    public String[] getBasePackages() {
-        return basePackages;
+    public String[] getBasePackages(String packageKey) {
+        return basePackages.get(packageKey);
     }
 
     //提供设置basePackages的方法
-    public void setBasePackages(String[] basePackages) {
-        this.basePackages = basePackages;
+    public void setBasePackages(String packageKey,String[] basePackages) {
+        this.basePackages.put(packageKey, basePackages);
     }
 }

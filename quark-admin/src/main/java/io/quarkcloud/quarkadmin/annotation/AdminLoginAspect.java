@@ -8,7 +8,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
-import io.quarkcloud.quarkadmin.service.Config;
+import io.quarkcloud.quarkcore.service.Config;
 import io.quarkcloud.quarkcore.service.ClassLoader;
 
 @Aspect
@@ -16,7 +16,7 @@ import io.quarkcloud.quarkcore.service.ClassLoader;
 public class AdminLoginAspect {
 
     // 加载基础资源包路径
-    public String[] basePackages = Config.getInstance().getBasePackages();
+    public String[] basePackages = Config.getInstance().getBasePackages("admin");
 
     // 加载本资源包路径
     public String[] packages = {".login."};
@@ -54,7 +54,7 @@ public class AdminLoginAspect {
         resource = resource.toString().substring(0, 1).toUpperCase() + resource.toString().substring(1);
 
         // 获取配置文件
-        String[] basePackages = Config.getInstance().getBasePackages();
+        String[] basePackages = Config.getInstance().getBasePackages("admin");
         if (basePackages.length == 0) {
             return joinPoint.proceed();
         }

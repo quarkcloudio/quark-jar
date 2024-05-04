@@ -1,6 +1,6 @@
 package io.quarkcloud.quarkcore;
 
-import io.quarkcloud.quarkadmin.autoconfigure.QuarkAdminApplication;
+import io.quarkcloud.quarkcore.autoconfigure.QuarkAdminApplication;
 
 public class QuarkApplication {
 
@@ -14,7 +14,7 @@ public class QuarkApplication {
             QuarkAdminApplication annotation = clazz.getAnnotation(QuarkAdminApplication.class);
 
             // 设置注解值
-            io.quarkcloud.quarkadmin.service.Config.getInstance().setBasePackages(annotation.basePackages());
+            io.quarkcloud.quarkcore.service.Config.getInstance().setBasePackages("admin",annotation.basePackages());
        }
 
         return null;
