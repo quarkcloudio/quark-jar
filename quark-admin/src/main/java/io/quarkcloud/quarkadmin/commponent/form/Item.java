@@ -1,7 +1,6 @@
 package io.quarkcloud.quarkadmin.commponent.form;
 
 import java.util.Map;
-
 import io.quarkcloud.quarkadmin.commponent.Commponent;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
