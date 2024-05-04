@@ -14,7 +14,7 @@ public class QuarkApplication {
             QuarkAdminApplication annotation = clazz.getAnnotation(QuarkAdminApplication.class);
 
             // 设置注解值
-            io.quarkcloud.quarkcore.service.Config.getInstance().setBasePackages("admin",annotation.basePackages());
+            io.quarkcloud.quarkcore.service.Config.getInstance().setBasePackages("admin",annotation.scanBasePackages());
        }
 
         return null;

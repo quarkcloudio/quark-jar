@@ -63,6 +63,7 @@ public class Login {
 
     // 获取表单内容
     public Object render() {
+        @SuppressWarnings("rawtypes")
         LoginCommponent login = new LoginCommponent();
 
         login.setApi(api);

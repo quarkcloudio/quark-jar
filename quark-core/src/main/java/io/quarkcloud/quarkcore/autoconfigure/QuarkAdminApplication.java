@@ -8,5 +8,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface QuarkAdminApplication {
-    String[] basePackages() default {"io.quarkcloud.quarkstarter.service"};
+    String[] scanBasePackages() default {"io.quarkcloud.quarkstarter.service"};
 }
