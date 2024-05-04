@@ -1,12 +1,14 @@
-package io.quarkcloud.quarkadmin.commponent;
+package io.quarkcloud.quarkadmin.commponent.login;
 
 import java.util.Map;
+
+import io.quarkcloud.quarkadmin.commponent.Commponent;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class LoginCommponent extends ElementCommponent {
+public class Login extends Commponent {
 
     public String api;
 
@@ -28,7 +30,7 @@ public class LoginCommponent extends ElementCommponent {
 
     public Object[] actions;
 
-    public LoginCommponent() {
+    public Login() {
         this.component = "login";
         this.setComponentKey();
     }

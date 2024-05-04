@@ -5,7 +5,7 @@ import java.util.UUID;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class ElementCommponent {
+public class Commponent {
 
     // 组件Key
     public String componentKey;
