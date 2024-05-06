@@ -1,6 +1,7 @@
 package io.quarkcloud.quarkadmin.service;
 
 import io.quarkcloud.quarkadmin.annotation.AdminLogin;
+import io.quarkcloud.quarkadmin.commponent.form.Field;
 
 public class Login {
 
@@ -113,7 +114,11 @@ public class Login {
  
     // 获取字段
     public Object[] fields() {
-        return null;
+
+        return new Object[] {
+            Field.text("username"),
+            Field.password("password")
+        };
     }
 
     // 组件渲染
@@ -135,12 +140,13 @@ public class Login {
         subTitle = this.getSubTitle();
 
         // 设置组件属性
-        login.setApi(api);
-        login.setRedirect(redirect);
-        login.setLogo(logo);
-        login.setTitle(title);
-        login.setSubTitle(subTitle);
-        login.setBody(this.fields());
+        login.
+        setApi(api).
+        setRedirect(redirect).
+        setLogo(logo).
+        setTitle(title).
+        setSubTitle(subTitle).
+        setBody(this.fields());
 
         return login;
     }

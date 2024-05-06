@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class Text extends Commponent {
+public class Password extends Commponent {
 
     // 开启 grid 模式时传递给 Row, 仅在ProFormGroup, ProFormList, ProFormFieldSet 中有效，默认：{ gutter: 8 }
 	Map<String, ?> rowProps;
@@ -198,8 +198,8 @@ public class Text extends Commponent {
     // 自定义样式
 	Map<String, ?> style;
 
-    public Text() {
-        this.component = "textField";
+    public Password() {
+        this.component = "passwordField";
         this.setComponentKey();
     }
 }

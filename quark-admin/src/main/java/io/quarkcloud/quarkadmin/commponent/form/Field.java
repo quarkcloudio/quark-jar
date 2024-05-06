@@ -1,36 +1,23 @@
 package io.quarkcloud.quarkadmin.commponent.form;
 
-import java.util.Map;
-import io.quarkcloud.quarkadmin.commponent.Commponent;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import io.quarkcloud.quarkadmin.commponent.form.fields.Password;
+import io.quarkcloud.quarkadmin.commponent.form.fields.Text;
 
-@Data
-@EqualsAndHashCode(callSuper = true)
-public class Field extends Commponent {
+public class Field {
 
-    public String api;
+    public static Text text(String name) {
+        return new Text().setName(name);
+    }
 
-    public String redirect;
+    public static Text text(String name, String label) {
+        return new Text().setName(name).setLabel(label);
+    }
 
-    public String logo;
+    public static Password password(String name) {
+        return new Password().setName(name);
+    }
 
-    public String title;
-
-    public String subTitle;
-
-    public String backgroundImageUrl;
-
-    public Map<String,?> values;
-
-    public Map<String,?> initialValues;
-
-    public Object body;
-
-    public Object[] actions;
-
-    public Field() {
-        this.component = "formItem";
-        this.setComponentKey();
+    public static Password password(String name, String label) {
+        return new Password().setName(name).setLabel(label);
     }
 }
