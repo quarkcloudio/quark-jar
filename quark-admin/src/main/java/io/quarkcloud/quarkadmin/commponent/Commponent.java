@@ -36,6 +36,7 @@ public class Commponent {
             MessageDigest md;
             try {
                 md = MessageDigest.getInstance("MD5");
+                
                 // 计算消息的摘要
                 byte[] digest = md.digest(defaultKey.getBytes());
                 
