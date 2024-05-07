@@ -4,6 +4,7 @@ import io.quarkcloud.quarkadmin.annotation.AdminLogin;
 import io.quarkcloud.quarkadmin.commponent.form.Field;
 import io.quarkcloud.quarkadmin.commponent.icon.Icon;
 import io.quarkcloud.quarkadmin.commponent.message.Message;
+import jakarta.servlet.http.HttpServletRequest;
 
 public class Login {
 
@@ -115,7 +116,7 @@ public class Login {
     }
  
     // 获取字段
-    public Object[] fields() {
+    public Object[] fields(HttpServletRequest request) {
 
         return new Object[] {
             Field.
@@ -134,12 +135,12 @@ public class Login {
     }
 
     // 登录执行方法
-    public Object handle() {
+    public Object handle(HttpServletRequest request) {
         return Message.error("方法未实现！");
     }
 
     // 组件渲染
-    public Object render() {
+    public Object render(HttpServletRequest request) {
 
         // 登录表单组件
         io.quarkcloud.quarkadmin.commponent.login.Login login = new io.quarkcloud.quarkadmin.commponent.login.Login();
@@ -163,7 +164,7 @@ public class Login {
         setLogo(logo).
         setTitle(title).
         setSubTitle(subTitle).
-        setBody(this.fields());
+        setBody(this.fields(request));
 
         return login;
     }

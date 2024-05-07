@@ -8,6 +8,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 import io.quarkcloud.quarkcore.service.Config;
+import jakarta.servlet.http.HttpServletRequest;
 import io.quarkcloud.quarkcore.service.ClassLoader;
 
 @Aspect
@@ -47,7 +48,10 @@ public class AdminLoginHandleAspect {
         }
 
         // 调用原方法
-        Object resource= joinPoint.proceed();
+        Object request = joinPoint.proceed();
+
+        // 获取资源名称
+        String resource = ((HttpServletRequest) request).getParameter("resource");
 
         // 字符串首字母大写
         resource = resource.toString().substring(0, 1).toUpperCase() + resource.toString().substring(1);
