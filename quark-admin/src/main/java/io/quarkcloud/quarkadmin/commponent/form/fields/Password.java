@@ -1,5 +1,6 @@
 package io.quarkcloud.quarkadmin.commponent.form.fields;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import io.quarkcloud.quarkadmin.commponent.Commponent;
@@ -196,10 +197,23 @@ public class Password extends Commponent {
 	String placeholder;
 
     // 自定义样式
-	Map<String, ?> style;
+	Map<String, ?> style = new HashMap<>();
 
     public Password() {
         this.component = "passwordField";
         this.setComponentKey();
+    }
+
+    // Field 的长度，我们归纳了常用的 Field 长度以及适合的场景，支持了一些枚举 "xs" , "s" , "m" , "l" , "x"
+    public Password setWidth(Object width) {
+        Map<String, Object> style = new HashMap<>();
+
+        this.style.forEach((key, value) -> {
+            style.put(key, value);
+        });
+        style.put("width", width);
+        this.style = style;
+
+        return this;
     }
 }

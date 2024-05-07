@@ -117,8 +117,16 @@ public class Login {
     public Object[] fields() {
 
         return new Object[] {
-            Field.text("username"),
-            Field.password("password")
+            Field.
+            text("username").
+            setPlaceholder("用户名").
+            setWidth("100%").
+            setSize("large"),
+
+            Field.password("password").
+            setPlaceholder("密码").
+            setWidth("100%").
+            setSize("large")
         };
     }
 
