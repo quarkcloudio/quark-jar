@@ -2,6 +2,7 @@ package io.quarkcloud.quarkadmin.service;
 
 import io.quarkcloud.quarkadmin.annotation.AdminLogin;
 import io.quarkcloud.quarkadmin.commponent.form.Field;
+import io.quarkcloud.quarkadmin.commponent.message.Message;
 
 public class Login {
 
@@ -119,6 +120,11 @@ public class Login {
             Field.text("username"),
             Field.password("password")
         };
+    }
+
+    // 登录执行方法
+    public Object handle() {
+        return Message.error("方法未实现！");
     }
 
     // 组件渲染
