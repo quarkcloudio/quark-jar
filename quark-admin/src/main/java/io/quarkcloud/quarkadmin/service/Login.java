@@ -2,6 +2,7 @@ package io.quarkcloud.quarkadmin.service;
 
 import io.quarkcloud.quarkadmin.annotation.AdminLogin;
 import io.quarkcloud.quarkadmin.commponent.form.Field;
+import io.quarkcloud.quarkadmin.commponent.icon.Icon;
 import io.quarkcloud.quarkadmin.commponent.message.Message;
 
 public class Login {
@@ -121,12 +122,14 @@ public class Login {
             text("username").
             setPlaceholder("用户名").
             setWidth("100%").
-            setSize("large"),
+            setSize("large").
+            setPrefix(new Icon().setType("icon-user")),
 
             Field.password("password").
             setPlaceholder("密码").
             setWidth("100%").
-            setSize("large")
+            setSize("large").
+            setPrefix(new Icon().setType("icon-lock"))
         };
     }
 
