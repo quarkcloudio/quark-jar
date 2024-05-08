@@ -1,5 +1,10 @@
 package io.quarkcloud.quarkadmin.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import cn.hutool.captcha.CaptchaUtil;
+import cn.hutool.captcha.LineCaptcha;
 import io.quarkcloud.quarkadmin.annotation.AdminLogin;
 import io.quarkcloud.quarkadmin.commponent.form.Field;
 import io.quarkcloud.quarkadmin.commponent.icon.Icon;
@@ -130,12 +135,28 @@ public class Login {
             setPlaceholder("密码").
             setWidth("100%").
             setSize("large").
-            setPrefix(new Icon().setType("icon-lock"))
+            setPrefix(new Icon().setType("icon-lock")),
+
+            Field.imageCaptcha("captcha").
+            setPlaceholder("验证码").
+            setWidth("100%").
+            setSize("large").
+            setCaptchaIdUrl("/api/admin/login/index/captchaId").
+            setCaptchaUrl("/api/admin/login/index/captcha/{id}").
+            setPrefix(new Icon().setType("icon-safetycertificate")),
         };
     }
 
-    // 登录执行方法
-    public Object handle(HttpServletRequest request) {
+    // 获取验证码ID
+    public Object captchaId(HttpServletRequest request) {
+        Map<String,String> map = new HashMap<String,String>();
+        map.put("captchaId", "default");
+
+        return Message.success("获取成功！", map);
+    }
+
+    // 获取验证码
+    public Object captcha(HttpServletRequest request) {
         return Message.error("方法未实现！");
     }
 

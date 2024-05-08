@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.quarkcloud.quarkadmin.annotation.AdminLoginCaptcha;
+import io.quarkcloud.quarkadmin.annotation.AdminLoginCaptchaId;
 import io.quarkcloud.quarkadmin.annotation.AdminLoginHandle;
 import io.quarkcloud.quarkadmin.annotation.AdminLoginRender;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,6 +32,28 @@ public class AdminLoginController {
     @ResponseBody
     @AdminLoginHandle
     public Object handle(@PathVariable("resource") String resource,HttpServletRequest request) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("resource", resource);
+        map.put("request", request);
+
+        return map;
+    }
+
+    @RequestMapping("/api/admin/login/{resource}/captchaId")
+    @ResponseBody
+    @AdminLoginCaptchaId
+    public Object captchaId(@PathVariable("resource") String resource,HttpServletRequest request) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("resource", resource);
+        map.put("request", request);
+
+        return map;
+    }
+
+    @RequestMapping("/api/admin/login/{resource}/captcha/{id}")
+    @ResponseBody
+    @AdminLoginCaptcha
+    public Object captcha(@PathVariable("resource") String resource,HttpServletRequest request) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("resource", resource);
         map.put("request", request);

@@ -42,6 +42,14 @@ public class Message extends Commponent {
     }
 
     // 返回成功
+    public static Object success(String message,Object data) {
+        return new Message().
+        setType("success").
+        setContent(message).
+        setData(data);
+    }
+
+    // 返回成功
     public static Object success(String message,String url,Object data) {
         return new Message().
         setType("success").
