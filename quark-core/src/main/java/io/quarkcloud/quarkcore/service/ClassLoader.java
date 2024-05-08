@@ -2,6 +2,8 @@ package io.quarkcloud.quarkcore.service;
 
 import java.lang.reflect.InvocationTargetException;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 public class ClassLoader {
 
     // 类路径
@@ -59,6 +61,34 @@ public class ClassLoader {
             Class<?> clazz = Class.forName(classPath);
             try {
                 result = clazz.getMethod(methodName).invoke(classInstance);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (SecurityException e) {
+                e.printStackTrace();
+            }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    // 执行指定方法
+    public Object doMethod(String methodName, HttpServletRequest request) {
+        Object classInstance = getInstance();
+        if (classInstance==null) {
+            return null;
+        }
+
+        Object result = null;
+        try {
+            Class<?> clazz = Class.forName(classPath);
+            try {
+                result = clazz.getMethod(methodName,HttpServletRequest.class).invoke(classInstance, request);
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             } catch (InvocationTargetException e) {

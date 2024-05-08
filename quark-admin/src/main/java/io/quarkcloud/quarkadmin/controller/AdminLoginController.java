@@ -1,5 +1,8 @@
 package io.quarkcloud.quarkadmin.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -15,14 +18,22 @@ public class AdminLoginController {
     @RequestMapping("/api/admin/login/{resource}/index")
     @ResponseBody
     @AdminLoginRender
-    public Object index(HttpServletRequest request) {
-        return request;
+    public Object index(@PathVariable("resource") String resource, HttpServletRequest request) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("resource", resource);
+        map.put("request", request);
+
+        return map;
     }
 
     @RequestMapping("/api/admin/login/{resource}/handle")
     @ResponseBody
     @AdminLoginHandle
-    public Object handle(HttpServletRequest request) {
-        return request;
+    public Object handle(@PathVariable("resource") String resource,HttpServletRequest request) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("resource", resource);
+        map.put("request", request);
+
+        return map;
     }
 }

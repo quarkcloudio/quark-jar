@@ -1,6 +1,8 @@
 package io.quarkcloud.quarkadmin.annotation;
 
 import java.lang.reflect.Method;
+import java.util.Map;
+
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -48,10 +50,22 @@ public class AdminLoginRenderAspect {
         }
 
         // 调用原方法
-        Object request = joinPoint.proceed();
+        Object map = joinPoint.proceed();
+
+        // 获取返回值
+        Map<String, Object> getMap = (Map<String, Object>) map;
 
         // 获取资源名称
-        String resource = ((HttpServletRequest) request).getParameter("resource");
+        Object resource = getMap.get("resource");
+        if (resource==null) {
+            return joinPoint.proceed();
+        }
+
+        // 获取资源名称
+        Object request = getMap.get("request");
+        if (request==null) {
+            return joinPoint.proceed();
+        }
 
         // 字符串首字母大写
         resource = resource.toString().substring(0, 1).toUpperCase() + resource.toString().substring(1);
@@ -67,6 +81,6 @@ public class AdminLoginRenderAspect {
         ClassLoader classLoader = new ClassLoader(loadPackages[0]+resource);
 
         // 调用类方法
-        return classLoader.doMethod("render");
+        return classLoader.doMethod("render",(HttpServletRequest) request);
     }
 }
