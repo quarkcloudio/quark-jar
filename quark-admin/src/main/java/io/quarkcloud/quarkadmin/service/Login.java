@@ -8,6 +8,7 @@ import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.LineCaptcha;
 import io.quarkcloud.quarkadmin.annotation.AdminLogin;
 import io.quarkcloud.quarkadmin.commponent.form.Field;
+import io.quarkcloud.quarkadmin.commponent.form.Rule;
 import io.quarkcloud.quarkadmin.commponent.icon.Icon;
 import io.quarkcloud.quarkadmin.commponent.message.Message;
 import jakarta.servlet.http.HttpServletRequest;
@@ -125,21 +126,33 @@ public class Login {
     // 获取字段
     public Object[] fields(HttpServletRequest request) {
 
+        System.out.println(request.getPathInfo());
+
         return new Object[] {
             Field.
             text("username").
+            setRules(new Rule[]{
+				Rule.required(true, "请输入用户名"),
+			}).
             setPlaceholder("用户名").
             setWidth("100%").
             setSize("large").
-            setPrefix(new Icon().setType("icon-user")),
+            setPrefix(new Icon().setType("icon-user")).
+            buildFrontendRules("/create"),
 
             Field.password("password").
+            setRules(new Rule[]{
+				Rule.required(true, "请输入密码"),
+			}).
             setPlaceholder("密码").
             setWidth("100%").
             setSize("large").
             setPrefix(new Icon().setType("icon-lock")),
 
             Field.imageCaptcha("captcha").
+            setRules(new Rule[]{
+				Rule.required(true, "请输入验证码"),
+			}).
             setPlaceholder("验证码").
             setWidth("100%").
             setSize("large").
