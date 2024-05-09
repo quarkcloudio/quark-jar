@@ -13,6 +13,7 @@ import io.quarkcloud.quarkadmin.annotation.AdminLoginCaptchaId;
 import io.quarkcloud.quarkadmin.annotation.AdminLoginHandle;
 import io.quarkcloud.quarkadmin.annotation.AdminLoginRender;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 public class AdminLoginController {
@@ -31,7 +32,7 @@ public class AdminLoginController {
     @RequestMapping("/api/admin/login/{resource}/handle")
     @ResponseBody
     @AdminLoginHandle
-    public Object handle(@PathVariable("resource") String resource,HttpServletRequest request) {
+    public Object handle(@PathVariable("resource") String resource, HttpServletRequest request) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("resource", resource);
         map.put("request", request);
@@ -42,7 +43,7 @@ public class AdminLoginController {
     @RequestMapping("/api/admin/login/{resource}/captchaId")
     @ResponseBody
     @AdminLoginCaptchaId
-    public Object captchaId(@PathVariable("resource") String resource,HttpServletRequest request) {
+    public Object captchaId(@PathVariable("resource") String resource, HttpServletRequest request) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("resource", resource);
         map.put("request", request);
@@ -53,10 +54,11 @@ public class AdminLoginController {
     @RequestMapping("/api/admin/login/{resource}/captcha/{id}")
     @ResponseBody
     @AdminLoginCaptcha
-    public Object captcha(@PathVariable("resource") String resource,HttpServletRequest request) {
+    public Object captcha(@PathVariable("resource") String resource, HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("resource", resource);
         map.put("request", request);
+        map.put("response", response);
 
         return map;
     }

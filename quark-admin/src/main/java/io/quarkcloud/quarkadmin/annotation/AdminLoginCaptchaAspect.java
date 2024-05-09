@@ -1,7 +1,8 @@
 package io.quarkcloud.quarkadmin.annotation;
 
+import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -11,8 +12,11 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 import io.quarkcloud.quarkcore.service.Config;
-import jakarta.servlet.http.HttpServletRequest;
 import io.quarkcloud.quarkcore.service.ClassLoader;
+
+import javax.imageio.ImageIO;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Aspect
 @Component
@@ -38,7 +42,7 @@ public class AdminLoginCaptchaAspect {
      * 环绕通知
      */
     @Around("AdminLoginCaptcha()")
-    public Object advice(ProceedingJoinPoint joinPoint) throws Throwable {
+    public void advice(ProceedingJoinPoint joinPoint) throws Throwable {
 
         // 得到连接点执行的方法对象
         MethodSignature signature= (MethodSignature) joinPoint.getSignature();
@@ -47,7 +51,7 @@ public class AdminLoginCaptchaAspect {
         // 得到方法上的注解
         AdminLoginCaptcha annotation = method.getAnnotation(AdminLoginCaptcha.class);
         if (annotation==null) {
-            return joinPoint.proceed();
+            return;
         }
 
         // 调用原方法
@@ -59,13 +63,19 @@ public class AdminLoginCaptchaAspect {
         // 获取资源名称
         Object resource = getMap.get("resource");
         if (resource==null) {
-            return joinPoint.proceed();
+            return;
         }
 
-        // 获取资源名称
+        // 获取request对象
         Object request = getMap.get("request");
         if (request==null) {
-            return joinPoint.proceed();
+            return;
+        }
+
+        // 获取response对象
+        Object response = getMap.get("response");
+        if (response==null) {
+            return;
         }
 
         // 字符串首字母大写
@@ -74,7 +84,7 @@ public class AdminLoginCaptchaAspect {
         // 获取配置文件
         String[] basePackages = Config.getInstance().getBasePackages("admin");
         if (basePackages.length == 0) {
-            return joinPoint.proceed();
+            return;
         }
 
         // 加载类，暂时只支持加载一个配置
@@ -82,6 +92,6 @@ public class AdminLoginCaptchaAspect {
         ClassLoader classLoader = new ClassLoader(loadPackages[0]+resource);
 
         // 调用类方法
-        return classLoader.doMethod("captcha",(HttpServletRequest) request);
+        classLoader.doMethod("captcha",(HttpServletRequest) request, (HttpServletResponse) response);
     }
 }

@@ -1,5 +1,6 @@
 package io.quarkcloud.quarkadmin.service;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ import io.quarkcloud.quarkadmin.commponent.form.Field;
 import io.quarkcloud.quarkadmin.commponent.icon.Icon;
 import io.quarkcloud.quarkadmin.commponent.message.Message;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 public class Login {
 
@@ -156,8 +158,16 @@ public class Login {
     }
 
     // 获取验证码
-    public Object captcha(HttpServletRequest request) {
-        return Message.error("方法未实现！");
+    public void captcha(HttpServletRequest request, HttpServletResponse response) {
+
+        //定义图形验证码的长、宽、验证码字符数、干扰线宽度
+        LineCaptcha lineCaptcha = CaptchaUtil.createLineCaptcha(150, 40, 5, 4);
+
+        try {
+            lineCaptcha.write(response.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // 组件渲染
