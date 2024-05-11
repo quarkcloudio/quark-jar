@@ -3,9 +3,7 @@ package io.quarkcloud.quarkadmin.commponent.form.fields;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.lang3.ArrayUtils;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
-
 import io.quarkcloud.quarkadmin.commponent.Commponent;
 import io.quarkcloud.quarkadmin.commponent.form.Rule;
 import lombok.Data;
