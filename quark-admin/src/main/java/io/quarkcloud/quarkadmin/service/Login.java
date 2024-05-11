@@ -1,6 +1,7 @@
 package io.quarkcloud.quarkadmin.service;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -179,6 +180,95 @@ public class Login {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    // 包裹在组件内的创建页字段
+    public Object[] fieldsWithinComponents(HttpServletRequest request) {
+
+        // 获取字段
+        Object[] fields = this.fields(request);
+
+        // 解析创建页表单组件内的字段
+        Object[] items = this.formFieldsParser(request, fields);
+
+        return items;
+    }
+
+    // 解析创建页表单组件内的字段
+    public Object formFieldsParser(HttpServletRequest request, Object fields) {
+        if (fields instanceof Object[]) {
+            Arrays.stream((Object[]) fields).forEach(field -> {
+                boolean hasBody = false;
+                Object body = new Object();
+                try {
+                    body = field.getClass().getField("body");
+                    hasBody = true;
+                } catch (NoSuchFieldException e) {
+                    hasBody = false;
+                }
+                if (hasBody) {
+                    this.formFieldsParser(request, body);
+                } else {
+
+                }
+            });
+        }
+
+        // 解析字段
+        // if fields, ok := fields.([]interface{}); ok {
+        //     for _, v := range fields {
+        //         hasBody := reflect.
+        //             ValueOf(v).
+        //             Elem().
+        //             FieldByName("Body").
+        //             IsValid()
+        //         if hasBody {
+
+        //             // 获取内容值
+        //             body := reflect.
+        //                 ValueOf(v).
+        //                 Elem().
+        //                 FieldByName("Body").
+        //                 Interface()
+
+        //             // 解析值
+        //             getFields := p.FormFieldsParser(ctx, body)
+
+        //             // 更新值
+        //             reflect.
+        //                 ValueOf(v).
+        //                 Elem().
+        //                 FieldByName("Body").
+        //                 Set(reflect.ValueOf(getFields))
+
+        //             items = append(items, v)
+        //         } else {
+        //             component := reflect.
+        //                 ValueOf(v).
+        //                 Elem().
+        //                 FieldByName("Component").
+        //                 String()
+        //             if strings.Contains(component, "Field") {
+
+        //                 // 判断是否在创建页面
+        //                 if v, ok := v.(interface{ IsShownOnCreation() bool }); ok {
+        //                     if v.IsShownOnCreation() {
+
+        //                         // 生成前端验证规则
+        //                         v.(interface{ BuildFrontendRules(string) interface{} }).BuildFrontendRules(ctx.Path())
+
+        //                         // 组合数据
+        //                         items = append(items, v)
+        //                     }
+        //                 }
+        //             } else {
+        //                 items = append(items, v)
+        //             }
+        //         }
+        //     }
+        // }
+
+        return fields;
     }
 
     // 组件渲染
