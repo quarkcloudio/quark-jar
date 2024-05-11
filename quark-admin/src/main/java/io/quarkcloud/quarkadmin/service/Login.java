@@ -126,7 +126,7 @@ public class Login {
     // 获取字段
     public Object[] fields(HttpServletRequest request) {
 
-        System.out.println(request.getPathInfo());
+        System.out.println(request.getRequestURI());
 
         return new Object[] {
             Field.

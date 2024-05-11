@@ -2,9 +2,12 @@ package io.quarkcloud.quarkadmin.commponent;
 
 import java.util.Map;
 import java.util.UUID;
+
+import lombok.experimental.Accessors;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+@Accessors(chain = true)
 public class Commponent {
 
     // 组件Key

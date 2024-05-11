@@ -1,9 +1,10 @@
 package io.quarkcloud.quarkadmin.commponent.form.fields;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Stream;
+import org.apache.commons.lang3.ArrayUtils;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import io.quarkcloud.quarkadmin.commponent.Commponent;
 import io.quarkcloud.quarkadmin.commponent.form.Rule;
@@ -14,6 +15,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Text extends Commponent {
 
     // 开启 grid 模式时传递给 Row, 仅在ProFormGroup, ProFormList, ProFormFieldSet 中有效，默认：{ gutter: 8 }
@@ -92,15 +94,18 @@ public class Text extends Commponent {
 	Object filters;
 
     // 查询表单中的权重，权重大排序靠前，只在列表页中有效
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 	int order;
 
     // 可排序列，只在列表页中有效
 	Object sorter;
 
     // 包含列的数量，只在详情页中有效
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 	int span;
 
     // 设置列宽，只在列表页中有效
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 	int columnWidth;
 
     // 获取数据接口
@@ -173,6 +178,7 @@ public class Text extends Commponent {
 	String id;
 
     // 最大长度
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 	int maxLength;
 
     // 是否展示字数
@@ -269,7 +275,7 @@ public class Text extends Commponent {
         Rule[] rules = new Rule[]{};
         Rule[] creationRules = new Rule[]{};
         Rule[] updateRules = new Rule[]{};
-        Object[] frontendRules = new Object[]{};
+        Rule[] frontendRules = new Rule[]{};
 
         String[] uri = path.split("/");
         boolean isCreating = (uri[uri.length-1] == "create") || (uri[uri.length-1] == "store");
@@ -288,18 +294,18 @@ public class Text extends Commponent {
         }
 
         if (rules.length > 0) {
-            frontendRules = Stream.concat(Arrays.stream(frontendRules), Arrays.stream(rules)).toArray();
+            frontendRules = (Rule[]) ArrayUtils.addAll(frontendRules, rules);
         }
 
         if (creationRules.length > 0) {
-            frontendRules = Stream.concat(Arrays.stream(frontendRules), Arrays.stream(creationRules)).toArray();
+            frontendRules = (Rule[]) ArrayUtils.addAll(frontendRules, creationRules);
         }
 
         if (updateRules.length > 0) {
-            frontendRules = Stream.concat(Arrays.stream(frontendRules), Arrays.stream(updateRules)).toArray();
+            frontendRules = (Rule[]) ArrayUtils.addAll(frontendRules, updateRules);
         }
 
-        this.frontendRules = (Rule[]) frontendRules;
+        this.frontendRules = frontendRules;
 
         return this;
     }

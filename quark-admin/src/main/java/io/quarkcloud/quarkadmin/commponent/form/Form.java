@@ -1,12 +1,16 @@
 package io.quarkcloud.quarkadmin.commponent.form;
 
 import java.util.Map;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import io.quarkcloud.quarkadmin.commponent.Commponent;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 public class Form extends Commponent {
 
     public String api;

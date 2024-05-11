@@ -1,10 +1,13 @@
 package io.quarkcloud.quarkadmin.commponent.form;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain = true)
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 public class Rule {
 
     // 需要验证的字段名称
@@ -50,7 +53,7 @@ public class Rule {
 	String uniqueIgnoreValue;
 
     // 字段类型，string | number | boolean | method | regexp | integer | float | array | object | enum | date | url | hex | email | any
-	String type;
+    String type;
 
     // 转换前端验证规则，剔除前端不支持的unique
     public static Rule[] convertToFrontendRules(Rule[] rules) {
@@ -316,5 +319,4 @@ public class Rule {
 
         return this;
     }
-
 }
