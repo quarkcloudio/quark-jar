@@ -202,77 +202,27 @@ public class Login {
                 boolean hasBody = false;
                 Object body = new Object();
                 try {
-                    body = field.getClass().getField("body");
+                    body = field.getClass().getField("body").get(field);
                     hasBody = true;
-                } catch (NoSuchFieldException e) {
+                } catch (NoSuchFieldException | IllegalAccessException e) {
                     hasBody = false;
                 }
                 if (hasBody) {
                     this.formFieldsParser(request, body);
                 } else {
                     try {
-                        Method method = field.getClass().getMethod("buildFrontendRules",String.class);
-                        method.invoke(field, request.getQueryString());
-                    } catch (NoSuchMethodException | SecurityException | IllegalAccessException | InvocationTargetException e) {
+                        Object component = field.getClass().getSuperclass().getDeclaredField("component").get(field);
+                        String getComponent = (String) component;
+                        if(getComponent.contains("Field")) {
+                            Method method = field.getClass().getMethod("buildFrontendRules",String.class);
+                            method.invoke(field, request.getQueryString());
+                        }
+                    } catch (NoSuchFieldException | NoSuchMethodException | SecurityException | IllegalAccessException | InvocationTargetException e) {
                         e.printStackTrace();
                     }
                 }
             });
         }
-
-        // 解析字段
-        // if fields, ok := fields.([]interface{}); ok {
-        //     for _, v := range fields {
-        //         hasBody := reflect.
-        //             ValueOf(v).
-        //             Elem().
-        //             FieldByName("Body").
-        //             IsValid()
-        //         if hasBody {
-
-        //             // 获取内容值
-        //             body := reflect.
-        //                 ValueOf(v).
-        //                 Elem().
-        //                 FieldByName("Body").
-        //                 Interface()
-
-        //             // 解析值
-        //             getFields := p.FormFieldsParser(ctx, body)
-
-        //             // 更新值
-        //             reflect.
-        //                 ValueOf(v).
-        //                 Elem().
-        //                 FieldByName("Body").
-        //                 Set(reflect.ValueOf(getFields))
-
-        //             items = append(items, v)
-        //         } else {
-        //             component := reflect.
-        //                 ValueOf(v).
-        //                 Elem().
-        //                 FieldByName("Component").
-        //                 String()
-        //             if strings.Contains(component, "Field") {
-
-        //                 // 判断是否在创建页面
-        //                 if v, ok := v.(interface{ IsShownOnCreation() bool }); ok {
-        //                     if v.IsShownOnCreation() {
-
-        //                         // 生成前端验证规则
-        //                         v.(interface{ BuildFrontendRules(string) interface{} }).BuildFrontendRules(ctx.Path())
-
-        //                         // 组合数据
-        //                         items = append(items, v)
-        //                     }
-        //                 }
-        //             } else {
-        //                 items = append(items, v)
-        //             }
-        //         }
-        //     }
-        // }
 
         return fields;
     }
