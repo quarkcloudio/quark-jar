@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class Text extends Commponent {
+public class WhenItem extends Commponent {
 
     // 开启 grid 模式时传递给 Row, 仅在ProFormGroup, ProFormList, ProFormFieldSet 中有效，默认：{ gutter: 8 }
 	Map<String, ?> rowProps;
@@ -208,13 +208,13 @@ public class Text extends Commponent {
     // 自定义样式
 	Map<String, ?> style = new HashMap<>();
 
-    public Text() {
-        this.component = "textField";
+    public WhenItem() {
+        this.component = "whenField";
         this.setComponentKey();
     }
 
     // Field 的长度，我们归纳了常用的 Field 长度以及适合的场景，支持了一些枚举 "xs" , "s" , "m" , "l" , "x"
-    public Text setWidth(Object width) {
+    public WhenItem setWidth(Object width) {
         Map<String, Object> style = new HashMap<>();
 
         this.style.forEach((key, value) -> {
@@ -233,7 +233,7 @@ public class Text extends Commponent {
     //		rule.Min(6, "用户名不能少于6个字符"),
     //		rule.Max(20, "用户名不能超过20个字符"),
     //	}
-    public Text setRules(Rule[] rules) {
+    public WhenItem setRules(Rule[] rules) {
         for (int i = 0; i < rules.length; i++) {
             rules[i] = rules[i].setName(name);
         }
@@ -247,7 +247,7 @@ public class Text extends Commponent {
     //	[]*rule.Rule{
     //		rule.Unique("admins", "username", "用户名已存在"),
     //	}
-    public Text setCreationRules(Rule[] rules) {
+    public WhenItem setCreationRules(Rule[] rules) {
         for (int i = 0; i < rules.length; i++) {
             rules[i] = rules[i].setName(name);
         }
@@ -261,7 +261,7 @@ public class Text extends Commponent {
     //	[]*rule.Rule{
     //		rule.Unique("admins", "username", "{id}", "用户名已存在"),
     //	}
-    public Text setUpdateRules(Rule[] rules) {
+    public WhenItem setUpdateRules(Rule[] rules) {
         for (int i = 0; i < rules.length; i++) {
             rules[i] = rules[i].setName(name);
         }
@@ -271,7 +271,7 @@ public class Text extends Commponent {
     }
 
     // 生成前端验证规则
-    public Text buildFrontendRules(String path) {
+    public WhenItem buildFrontendRules(String path) {
         Rule[] rules = new Rule[]{};
         Rule[] creationRules = new Rule[]{};
         Rule[] updateRules = new Rule[]{};
@@ -305,96 +305,24 @@ public class Text extends Commponent {
     }
 
     // 表头的筛选菜单项，当值为 true 时，自动使用 valueEnum 生成，只在列表页中有效
-    public Text setFilters(boolean filters) {
+    public WhenItem setFilters(boolean filters) {
         this.filters = filters;
 
         return this;
     }
 
     // 表头的筛选菜单项，当值为 true 时，自动使用 valueEnum 生成，只在列表页中有效
-    public Text setFilters(Map<String, String> filters) {
+    public WhenItem setFilters(Map<String, String> filters) {
         List<Map<String, String>> tmpFilters = new ArrayList<>();
         filters.forEach((k, v)->{
             Map<String, String> map = new HashMap<String, String>();
             map.put("text", v);
             map.put("value", k);
+
             tmpFilters.add(map);
         });
         this.filters = tmpFilters;
 
         return this;
     }
-
-    // 设置When组件数据
-    //
-    //	SetWhen(1, func () interface{} {
-    //		return []interface{}{
-    //	       field.Text("name", "姓名"),
-    //	   }
-    //	})
-    //
-    //	SetWhen(">", 1, func () interface{} {
-    //		return []interface{}{
-    //	       field.Text("name", "姓名"),
-    //	   }
-    //	})
-    // func (p *Component) SetWhen(value ...any) *Component {
-    //     w := when.New()
-    //     i := when.NewItem()
-    //     var operator string
-    //     var option any
-
-    //     if len(value) == 2 {
-    //         operator = "="
-    //         option = value[0]
-    //         callback := value[1].(func() interface{})
-
-    //         i.Body = callback()
-    //     }
-
-    //     if len(value) == 3 {
-    //         operator = value[0].(string)
-    //         option = value[1]
-    //         callback := value[2].(func() interface{})
-
-    //         i.Body = callback()
-    //     }
-
-    //     getOption := convert.AnyToString(option)
-    //     switch operator {
-    //     case "=":
-    //         i.Condition = "<%=String(" + p.Name + ") === '" + getOption + "' %>"
-    //         break
-    //     case ">":
-    //         i.Condition = "<%=String(" + p.Name + ") > '" + getOption + "' %>"
-    //         break
-    //     case "<":
-    //         i.Condition = "<%=String(" + p.Name + ") < '" + getOption + "' %>"
-    //         break
-    //     case "<=":
-    //         i.Condition = "<%=String(" + p.Name + ") <= '" + getOption + "' %>"
-    //         break
-    //     case ">=":
-    //         i.Condition = "<%=String(" + p.Name + ") => '" + getOption + "' %>"
-    //         break
-    //     case "has":
-    //         i.Condition = "<%=(String(" + p.Name + ").indexOf('" + getOption + "') !=-1) %>"
-    //         break
-    //     case "in":
-    //         jsonStr, _ := json.Marshal(option)
-    //         i.Condition = "<%=(" + string(jsonStr) + ".indexOf(" + p.Name + ") !=-1) %>"
-    //         break
-    //     default:
-    //         i.Condition = "<%=String(" + p.Name + ") === '" + getOption + "' %>"
-    //         break
-    //     }
-
-    //     i.ConditionName = p.Name
-    //     i.ConditionOperator = operator
-    //     i.Option = option
-    //     p.WhenItem = append(p.WhenItem, i)
-    //     p.When = w.SetItems(p.WhenItem)
-
-    //     return p
-    // }
 }
