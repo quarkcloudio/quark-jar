@@ -245,7 +245,7 @@ public class Login {
         // 获取子标题
         subTitle = this.getSubTitle();
 
-        // 获取子标题
+        // 获取组件内的字段
         Object body = this.fieldsWithinComponents(request);
 
         // 设置组件属性
