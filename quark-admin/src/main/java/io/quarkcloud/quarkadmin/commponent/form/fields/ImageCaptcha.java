@@ -3,9 +3,10 @@ package io.quarkcloud.quarkadmin.commponent.form.fields;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.ArrayUtils;
 import com.fasterxml.jackson.annotation.JsonInclude;
-
 import io.quarkcloud.quarkadmin.commponent.Commponent;
+import io.quarkcloud.quarkadmin.commponent.form.Rule;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -112,16 +113,16 @@ public class ImageCaptcha extends Commponent {
 	boolean ignore;
 
     // 全局校验规则
-	Object rules;
+	Rule[] rules;
 
     // 创建页校验规则
-	Object creationRules;
+	Rule[] creationRules;
 
     // 编辑页校验规则
-	Object updateRules;
+	Rule[] updateRules;
 
     // 前端校验规则，设置字段的校验逻辑
-	Object frontendRules;
+	Rule[] frontendRules;
 
     // When组件
 	Object when;
@@ -225,6 +226,90 @@ public class ImageCaptcha extends Commponent {
         });
         style.put("width", width);
         this.style = style;
+
+        return this;
+    }
+
+    // 校验规则，设置字段的校验逻辑
+    //
+    //	[]*rule.Rule{
+    //		rule.Required(true, "用户名必须填写"),
+    //		rule.Min(6, "用户名不能少于6个字符"),
+    //		rule.Max(20, "用户名不能超过20个字符"),
+    //	}
+    public ImageCaptcha setRules(Rule[] rules) {
+        for (int i = 0; i < rules.length; i++) {
+            rules[i] = rules[i].setName(name);
+        }
+        this.rules = rules;
+
+        return this;
+    }
+
+    // 校验规则，只在创建表单提交时生效
+    //
+    //	[]*rule.Rule{
+    //		rule.Unique("admins", "username", "用户名已存在"),
+    //	}
+    public ImageCaptcha setCreationRules(Rule[] rules) {
+        for (int i = 0; i < rules.length; i++) {
+            rules[i] = rules[i].setName(name);
+        }
+        this.creationRules = rules;
+
+        return this;
+    }
+
+    // 校验规则，只在更新表单提交时生效
+    //
+    //	[]*rule.Rule{
+    //		rule.Unique("admins", "username", "{id}", "用户名已存在"),
+    //	}
+    public ImageCaptcha setUpdateRules(Rule[] rules) {
+        for (int i = 0; i < rules.length; i++) {
+            rules[i] = rules[i].setName(name);
+        }
+        this.updateRules = rules;
+
+        return this;
+    }
+
+    // 生成前端验证规则
+    public ImageCaptcha buildFrontendRules(String path) {
+        Rule[] rules = new Rule[]{};
+        Rule[] creationRules = new Rule[]{};
+        Rule[] updateRules = new Rule[]{};
+        Rule[] frontendRules = new Rule[]{};
+
+        String[] uri = path.split("/");
+        boolean isCreating = (uri[uri.length-1] == "create") || (uri[uri.length-1] == "store");
+        boolean isEditing = (uri[uri.length-1] == "edit") || (uri[uri.length-1] == "update");
+
+        if (this.rules.length > 0) {
+            rules = Rule.convertToFrontendRules(this.rules);
+        }
+
+        if (isCreating && this.creationRules.length > 0) {
+            creationRules = Rule.convertToFrontendRules(this.creationRules);
+        }
+
+        if (isEditing && this.updateRules.length > 0) {
+            updateRules = Rule.convertToFrontendRules(this.updateRules);
+        }
+
+        if (rules.length > 0) {
+            frontendRules = (Rule[]) ArrayUtils.addAll(frontendRules, rules);
+        }
+
+        if (creationRules.length > 0) {
+            frontendRules = (Rule[]) ArrayUtils.addAll(frontendRules, creationRules);
+        }
+
+        if (updateRules.length > 0) {
+            frontendRules = (Rule[]) ArrayUtils.addAll(frontendRules, updateRules);
+        }
+
+        this.frontendRules = frontendRules;
 
         return this;
     }

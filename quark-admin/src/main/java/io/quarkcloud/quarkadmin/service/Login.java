@@ -1,6 +1,8 @@
 package io.quarkcloud.quarkadmin.service;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -136,8 +138,7 @@ public class Login {
             setPlaceholder("用户名").
             setWidth("100%").
             setSize("large").
-            setPrefix(new Icon().setType("icon-user")).
-            buildFrontendRules("/create"),
+            setPrefix(new Icon().setType("icon-user")),
 
             Field.password("password").
             setRules(new Rule[]{
@@ -183,13 +184,13 @@ public class Login {
     }
 
     // 包裹在组件内的创建页字段
-    public Object[] fieldsWithinComponents(HttpServletRequest request) {
+    public Object fieldsWithinComponents(HttpServletRequest request) {
 
         // 获取字段
         Object[] fields = this.fields(request);
 
         // 解析创建页表单组件内的字段
-        Object[] items = this.formFieldsParser(request, fields);
+        Object items = this.formFieldsParser(request, fields);
 
         return items;
     }
@@ -209,7 +210,12 @@ public class Login {
                 if (hasBody) {
                     this.formFieldsParser(request, body);
                 } else {
-
+                    try {
+                        Method method = field.getClass().getMethod("buildFrontendRules",String.class);
+                        method.invoke(field, request.getQueryString());
+                    } catch (NoSuchMethodException | SecurityException | IllegalAccessException | InvocationTargetException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
         }
@@ -289,6 +295,9 @@ public class Login {
         // 获取子标题
         subTitle = this.getSubTitle();
 
+        // 获取子标题
+        Object body = this.fieldsWithinComponents(request);
+
         // 设置组件属性
         login.
         setApi(api).
@@ -296,7 +305,7 @@ public class Login {
         setLogo(logo).
         setTitle(title).
         setSubTitle(subTitle).
-        setBody(this.fields(request));
+        setBody(body);
 
         return login;
     }
