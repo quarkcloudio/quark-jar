@@ -1,5 +1,6 @@
 package io.quarkcloud.quarkadmin.commponent.form;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.Data;
@@ -11,9 +12,11 @@ import lombok.experimental.Accessors;
 public class Rule {
 
     // 需要验证的字段名称
+    @JsonIgnore
 	String name;
 
     // 规则类型，max | min | unique | required
+    @JsonIgnore
 	String ruleType;
 
     // 仅在 type 为 array 类型时有效，用于指定数组元素的校验规
@@ -44,12 +47,15 @@ public class Rule {
 	boolean required;
 
     // type：unique时，指定验证的表名
+    @JsonIgnore
 	String uniqueTable;
 
     // type：unique时，指定需验证表中的字段
+    @JsonIgnore
 	String uniqueTableField;
 
     // type：unique时，忽略符合条件验证的列，例如：{id}
+    @JsonIgnore
 	String uniqueIgnoreValue;
 
     // 字段类型，string | number | boolean | method | regexp | integer | float | array | object | enum | date | url | hex | email | any
