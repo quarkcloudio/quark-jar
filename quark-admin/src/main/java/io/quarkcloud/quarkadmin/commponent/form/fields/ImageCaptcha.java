@@ -396,4 +396,195 @@ public class ImageCaptcha extends Commponent {
 
         return this;
     }
+
+    // Specify that the element should be hidden from the index view.
+    public ImageCaptcha hideFromIndex(boolean callback) {
+        this.showOnIndex = !callback;
+
+        return this;
+    }
+
+    // Specify that the element should be hidden from the detail view.
+    public ImageCaptcha hideFromDetail(boolean callback) {
+        this.showOnDetail = !callback;
+
+        return this;
+    }
+
+    // Specify that the element should be hidden from the creation view.
+    public ImageCaptcha hideWhenCreating(boolean callback) {
+        this.showOnCreation = !callback;
+
+        return this;
+    }
+
+    // Specify that the element should be hidden from the update view.
+    public ImageCaptcha hideWhenUpdating(boolean callback) {
+        this.showOnUpdate = !callback;
+
+        return this;
+    }
+
+    // Specify that the element should be hidden from the export file.
+    public ImageCaptcha hideWhenExporting(boolean callback) {
+        this.showOnExport = !callback;
+
+        return this;
+    }
+
+    // Specify that the element should be hidden from the import file.
+    public ImageCaptcha hideWhenImporting(boolean callback) {
+        this.showOnImport = !callback;
+
+        return this;
+    }
+
+    // Specify that the element should be hidden from the index view.
+    public ImageCaptcha onIndexShowing(boolean callback) {
+        this.showOnIndex = callback;
+
+        return this;
+    }
+
+    // Specify that the element should be hidden from the detail view.
+    public ImageCaptcha onDetailShowing(boolean callback) {
+        this.showOnDetail = callback;
+
+        return this;
+    }
+
+    // Specify that the element should be hidden from the creation view.
+    public ImageCaptcha showOnCreating(boolean callback) {
+        this.showOnCreation = callback;
+
+        return this;
+    }
+
+    // Specify that the element should be hidden from the update view.
+    public ImageCaptcha showOnUpdating(boolean callback) {
+        this.showOnUpdate = callback;
+
+        return this;
+    }
+
+    // Specify that the element should be hidden from the export file.
+    public ImageCaptcha showOnExporting(boolean callback) {
+        this.showOnExport = callback;
+
+        return this;
+    }
+
+    // Specify that the element should be hidden from the import file.
+    public ImageCaptcha showOnImporting(boolean callback) {
+        this.showOnImport = callback;
+
+        return this;
+    }
+
+    // Specify that the element should only be shown on the index view.
+    public ImageCaptcha onlyOnIndex() {
+        this.showOnIndex = true;
+        this.showOnDetail = false;
+        this.showOnCreation = false;
+        this.showOnUpdate = false;
+        this.showOnExport = false;
+        this.showOnImport = false;
+
+        return this;
+    }
+
+    // Specify that the element should only be shown on the detail view.
+    public ImageCaptcha onlyOnDetail() {
+        this.showOnIndex = false;
+        this.showOnDetail = true;
+        this.showOnCreation = false;
+        this.showOnUpdate = false;
+        this.showOnExport = false;
+        this.showOnImport = false;
+
+        return this;
+    }
+
+    // Specify that the element should only be shown on forms.
+    public ImageCaptcha onlyOnForms() {
+        this.showOnIndex = false;
+        this.showOnDetail = false;
+        this.showOnCreation = true;
+        this.showOnUpdate = true;
+        this.showOnExport = false;
+        this.showOnImport = false;
+
+        return this;
+    }
+
+    // Specify that the element should only be shown on export file.
+    public ImageCaptcha onlyOnExport() {
+        this.showOnIndex = false;
+        this.showOnDetail = false;
+        this.showOnCreation = false;
+        this.showOnUpdate = false;
+        this.showOnExport = true;
+        this.showOnImport = false;
+
+        return this;
+    }
+
+    // Specify that the element should only be shown on import file.
+    public ImageCaptcha onlyOnImport() {
+        this.showOnIndex = false;
+        this.showOnDetail = false;
+        this.showOnCreation = false;
+        this.showOnUpdate = false;
+        this.showOnExport = false;
+        this.showOnImport = true;
+
+        return this;
+    }
+
+    // Specify that the element should be hidden from forms.
+    public ImageCaptcha exceptOnForms() {
+        this.showOnIndex = true;
+        this.showOnDetail = true;
+        this.showOnCreation = false;
+        this.showOnUpdate = false;
+        this.showOnExport = true;
+        this.showOnImport = true;
+
+        return this;
+    }
+
+    // Check for showing when updating.
+    public boolean isShownOnUpdate() {
+        return this.showOnUpdate;
+    }
+
+    // Check showing on index.
+    public boolean isShownOnIndex() {
+        return this.showOnIndex;
+    }
+
+    // Check showing on detail.
+    public boolean isShownOnDetail() {
+        return this.showOnDetail;
+    }
+
+    // Check for showing when creating.
+    public boolean isShownOnCreation() {
+        return this.showOnCreation;
+    }
+
+    // Check for showing when exporting.
+    public boolean isShownOnExport() {
+        return this.showOnExport;
+    }
+
+    // Check for showing when importing.
+    public boolean isShownOnImport() {
+        return this.showOnImport;
+    }
+
+    // 当前列值的枚举 valueEnum
+    public Map<?,?> getValueEnum() {
+        return null;
+    }
 }

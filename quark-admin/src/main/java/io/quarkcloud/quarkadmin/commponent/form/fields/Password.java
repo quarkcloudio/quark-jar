@@ -392,4 +392,195 @@ public class Password extends Commponent {
 
         return this;
     }
+
+    // Specify that the element should be hidden from the index view.
+    public Password hideFromIndex(boolean callback) {
+        this.showOnIndex = !callback;
+
+        return this;
+    }
+
+    // Specify that the element should be hidden from the detail view.
+    public Password hideFromDetail(boolean callback) {
+        this.showOnDetail = !callback;
+
+        return this;
+    }
+
+    // Specify that the element should be hidden from the creation view.
+    public Password hideWhenCreating(boolean callback) {
+        this.showOnCreation = !callback;
+
+        return this;
+    }
+
+    // Specify that the element should be hidden from the update view.
+    public Password hideWhenUpdating(boolean callback) {
+        this.showOnUpdate = !callback;
+
+        return this;
+    }
+
+    // Specify that the element should be hidden from the export file.
+    public Password hideWhenExporting(boolean callback) {
+        this.showOnExport = !callback;
+
+        return this;
+    }
+
+    // Specify that the element should be hidden from the import file.
+    public Password hideWhenImporting(boolean callback) {
+        this.showOnImport = !callback;
+
+        return this;
+    }
+
+    // Specify that the element should be hidden from the index view.
+    public Password onIndexShowing(boolean callback) {
+        this.showOnIndex = callback;
+
+        return this;
+    }
+
+    // Specify that the element should be hidden from the detail view.
+    public Password onDetailShowing(boolean callback) {
+        this.showOnDetail = callback;
+
+        return this;
+    }
+
+    // Specify that the element should be hidden from the creation view.
+    public Password showOnCreating(boolean callback) {
+        this.showOnCreation = callback;
+
+        return this;
+    }
+
+    // Specify that the element should be hidden from the update view.
+    public Password showOnUpdating(boolean callback) {
+        this.showOnUpdate = callback;
+
+        return this;
+    }
+
+    // Specify that the element should be hidden from the export file.
+    public Password showOnExporting(boolean callback) {
+        this.showOnExport = callback;
+
+        return this;
+    }
+
+    // Specify that the element should be hidden from the import file.
+    public Password showOnImporting(boolean callback) {
+        this.showOnImport = callback;
+
+        return this;
+    }
+
+    // Specify that the element should only be shown on the index view.
+    public Password onlyOnIndex() {
+        this.showOnIndex = true;
+        this.showOnDetail = false;
+        this.showOnCreation = false;
+        this.showOnUpdate = false;
+        this.showOnExport = false;
+        this.showOnImport = false;
+
+        return this;
+    }
+
+    // Specify that the element should only be shown on the detail view.
+    public Password onlyOnDetail() {
+        this.showOnIndex = false;
+        this.showOnDetail = true;
+        this.showOnCreation = false;
+        this.showOnUpdate = false;
+        this.showOnExport = false;
+        this.showOnImport = false;
+
+        return this;
+    }
+
+    // Specify that the element should only be shown on forms.
+    public Password onlyOnForms() {
+        this.showOnIndex = false;
+        this.showOnDetail = false;
+        this.showOnCreation = true;
+        this.showOnUpdate = true;
+        this.showOnExport = false;
+        this.showOnImport = false;
+
+        return this;
+    }
+
+    // Specify that the element should only be shown on export file.
+    public Password onlyOnExport() {
+        this.showOnIndex = false;
+        this.showOnDetail = false;
+        this.showOnCreation = false;
+        this.showOnUpdate = false;
+        this.showOnExport = true;
+        this.showOnImport = false;
+
+        return this;
+    }
+
+    // Specify that the element should only be shown on import file.
+    public Password onlyOnImport() {
+        this.showOnIndex = false;
+        this.showOnDetail = false;
+        this.showOnCreation = false;
+        this.showOnUpdate = false;
+        this.showOnExport = false;
+        this.showOnImport = true;
+
+        return this;
+    }
+
+    // Specify that the element should be hidden from forms.
+    public Password exceptOnForms() {
+        this.showOnIndex = true;
+        this.showOnDetail = true;
+        this.showOnCreation = false;
+        this.showOnUpdate = false;
+        this.showOnExport = true;
+        this.showOnImport = true;
+
+        return this;
+    }
+
+    // Check for showing when updating.
+    public boolean isShownOnUpdate() {
+        return this.showOnUpdate;
+    }
+
+    // Check showing on index.
+    public boolean isShownOnIndex() {
+        return this.showOnIndex;
+    }
+
+    // Check showing on detail.
+    public boolean isShownOnDetail() {
+        return this.showOnDetail;
+    }
+
+    // Check for showing when creating.
+    public boolean isShownOnCreation() {
+        return this.showOnCreation;
+    }
+
+    // Check for showing when exporting.
+    public boolean isShownOnExport() {
+        return this.showOnExport;
+    }
+
+    // Check for showing when importing.
+    public boolean isShownOnImport() {
+        return this.showOnImport;
+    }
+
+    // 当前列值的枚举 valueEnum
+    public Map<?,?> getValueEnum() {
+        return null;
+    }
 }
