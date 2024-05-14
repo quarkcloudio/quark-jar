@@ -5,6 +5,9 @@ import java.util.Map;
 
 import org.apache.commons.lang3.ArrayUtils;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.quarkcloud.quarkadmin.commponent.Commponent;
 import io.quarkcloud.quarkadmin.commponent.form.Rule;
 import lombok.Data;
@@ -125,10 +128,10 @@ public class ImageCaptcha extends Commponent {
 	Rule[] frontendRules;
 
     // When组件
-	Object when;
+	When when;
 
     // When组件里的字段
-	Object[] whenItem;
+	WhenItem[] whenItem;
 
     // 在列表页展示
 	boolean showOnIndex;
@@ -310,6 +313,86 @@ public class ImageCaptcha extends Commponent {
         }
 
         this.frontendRules = frontendRules;
+
+        return this;
+    }
+
+    // 设置When组件数据
+    //
+    //	setWhen(1, func () interface{} {
+    //		return []interface{}{
+    //	       field.Text("name", "姓名"),
+    //	   }
+    //	})
+    //
+    //	setWhen(">", 1, func () interface{} {
+    //		return []interface{}{
+    //	       field.Text("name", "姓名"),
+    //	   }
+    //	})
+    public ImageCaptcha setWhen(Object option, Closure callback) {
+        this.setWhen("=", option, callback);
+        return this;
+    }
+
+    // 设置When组件数据
+    //
+    //	SetWhen(1, func () interface{} {
+    //		return []interface{}{
+    //	       field.Text("name", "姓名"),
+    //	   }
+    //	})
+    //
+    //	SetWhen(">", 1, func () interface{} {
+    //		return []interface{}{
+    //	       field.Text("name", "姓名"),
+    //	   }
+    //	})
+    public ImageCaptcha setWhen(String operator, Object option, Closure callback) {
+        When w = new When();
+        WhenItem i = new WhenItem();
+
+        i.body = callback.callback();
+        switch (operator) {
+        case "=":
+            i.condition = "<%=String(" + this.name + ") === '" + option + "' %>";
+            break;
+        case ">":
+            i.condition = "<%=String(" + this.name + ") > '" + option + "' %>";
+            break;
+        case "<":
+            i.condition = "<%=String(" + this.name + ") < '" + option + "' %>";
+            break;
+        case "<=":
+            i.condition = "<%=String(" + this.name + ") <= '" + option + "' %>";
+            break;
+        case ">=":
+            i.condition = "<%=String(" + this.name + ") => '" + option + "' %>";
+            break;
+        case "has":
+            i.condition = "<%=(String(" + this.name + ").indexOf('" + option + "') !=-1) %>";
+            break;
+        case "in":
+            ObjectMapper mapper = new ObjectMapper();
+            String jsonStr;
+            try {
+                jsonStr = mapper.writeValueAsString(option);
+                i.condition = "<%=(" + jsonStr + ".indexOf(" + this.name + ") !=-1) %>";
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+            break;
+        default:
+            i.condition = "<%=String(" + this.name + ") === '" + option + "' %>";
+            break;
+        }
+
+        i.conditionName = this.name;
+        i.conditionOperator = operator;
+        i.option = option;
+
+        this.whenItem = (WhenItem[]) ArrayUtils.addAll(this.whenItem, i);
+        this.when = w.setItems(this.whenItem);
 
         return this;
     }
