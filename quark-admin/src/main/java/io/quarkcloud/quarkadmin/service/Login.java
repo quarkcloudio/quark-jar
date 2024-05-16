@@ -14,6 +14,8 @@ import io.quarkcloud.quarkadmin.commponent.form.Field;
 import io.quarkcloud.quarkadmin.commponent.form.Rule;
 import io.quarkcloud.quarkadmin.commponent.icon.Icon;
 import io.quarkcloud.quarkadmin.commponent.message.Message;
+import io.quarkcloud.quarkadmin.entity.Admin;
+import io.quarkcloud.quarkadmin.mapper.AdminMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -36,6 +38,8 @@ public class Login {
 
     // 副标题
     public String subTitle;
+
+    public AdminMapper adminMapper;
 
     // 构造函数
     public Login() {
@@ -225,6 +229,20 @@ public class Login {
         }
 
         return fields;
+    }
+
+    // 执行登录
+    public Object handle(HttpServletRequest request) {
+
+        // 假设要查询 ID 为 1 的用户
+        Admin user = adminMapper.selectById(1);
+        if (user != null) {
+            System.out.println("User found: " + user);
+        } else {
+            System.out.println("User not found.");
+        }
+
+        return "abcd";
     }
 
     // 组件渲染
