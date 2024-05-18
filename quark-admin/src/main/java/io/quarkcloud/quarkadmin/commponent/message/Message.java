@@ -61,7 +61,7 @@ public class Message extends Commponent {
     // 返回失败
     public static Object error(String message) {
         return new Message().
-        setType("success").
+        setType("error").
         setContent(message);
     }
 

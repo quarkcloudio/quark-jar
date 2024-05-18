@@ -6,7 +6,6 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.LineCaptcha;
 import io.quarkcloud.quarkadmin.annotation.AdminLogin;
@@ -15,7 +14,6 @@ import io.quarkcloud.quarkadmin.commponent.form.Rule;
 import io.quarkcloud.quarkadmin.commponent.icon.Icon;
 import io.quarkcloud.quarkadmin.commponent.message.Message;
 import io.quarkcloud.quarkadmin.entity.Admin;
-import io.quarkcloud.quarkadmin.mapper.AdminMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -38,8 +36,6 @@ public class Login {
 
     // 副标题
     public String subTitle;
-
-    public AdminMapper adminMapper;
 
     // 构造函数
     public Login() {
@@ -233,16 +229,27 @@ public class Login {
 
     // 执行登录
     public Object handle(HttpServletRequest request) {
+        String username =request.getParameter("username");
+        String password =request.getParameter("password");
+        String captcha =request.getParameter("captcha");
 
-        // 假设要查询 ID 为 1 的用户
-        Admin user = adminMapper.selectById(1);
-        if (user != null) {
-            System.out.println("User found: " + user);
-        } else {
-            System.out.println("User not found.");
+        // 检查用户名
+        if (username.isEmpty()) {
+            return Message.error("用户名不能为空！");
         }
 
-        return "abcd";
+        // 检查密码
+        if (password.isEmpty()) {
+            return Message.error("密码不能为空！");
+        }
+
+        Admin admin = new Admin();
+        Admin adminInfo = admin.getByUsername("administrator1");
+        if (adminInfo==null) {
+            return Message.error("用户名或密码错误！");
+        }
+
+        return admin.getByUsername("administrator1");
     }
 
     // 组件渲染
