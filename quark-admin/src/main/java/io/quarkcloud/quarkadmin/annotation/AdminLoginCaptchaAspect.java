@@ -66,6 +66,12 @@ public class AdminLoginCaptchaAspect {
             return;
         }
 
+        // 获取验证码ID
+        Object id = getMap.get("id");
+        if (id==null) {
+            return;
+        }
+
         // 获取request对象
         Object request = getMap.get("request");
         if (request==null) {

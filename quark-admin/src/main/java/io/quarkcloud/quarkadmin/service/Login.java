@@ -6,6 +6,11 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.fasterxml.jackson.core.exc.StreamReadException;
+import com.fasterxml.jackson.databind.DatabindException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.LineCaptcha;
 import io.quarkcloud.quarkadmin.annotation.AdminLogin;
@@ -229,27 +234,54 @@ public class Login {
 
     // 执行登录
     public Object handle(HttpServletRequest request) {
-        String username =request.getParameter("username");
-        String password =request.getParameter("password");
-        String captcha =request.getParameter("captcha");
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> map = new HashMap<String, Object>();
+        try {
+           map = mapper.readValue(request.getReader(), Map.class);
+        } catch (StreamReadException e) {
+            e.printStackTrace();
+        } catch (DatabindException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (map.isEmpty()) {
+            return Message.error("参数错误！");
+        }
+
+        Object username = map.get("username");
+        Object password = map.get("password");
+        Object captcha = map.get("captcha");
 
         // 检查用户名
-        if (username.isEmpty()) {
+        if (username == null) {
             return Message.error("用户名不能为空！");
         }
 
         // 检查密码
-        if (password.isEmpty()) {
+        if (password == null) {
             return Message.error("密码不能为空！");
         }
 
+        // 检查验证码
+        if (captcha == null) {
+            return Message.error("验证码不能为空！");
+        }
+
+        Map<String,String> getCaptcha = (Map<String,String>) captcha;
+        String captchaValue = getCaptcha.get("value");
+        if (captchaValue.isEmpty()) {
+            return Message.error("验证码不能为空！");
+        }
+
         Admin admin = new Admin();
-        Admin adminInfo = admin.getByUsername("administrator1");
+        Admin adminInfo = admin.getByUsername((String) username);
         if (adminInfo==null) {
             return Message.error("用户名或密码错误！");
         }
 
-        return admin.getByUsername("administrator1");
+        return admin.getByUsername((String) username);
     }
 
     // 组件渲染

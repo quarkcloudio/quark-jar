@@ -53,9 +53,10 @@ public class AdminLoginController {
     @RequestMapping("/api/admin/login/{resource}/captcha/{id}")
     @ResponseBody
     @AdminLoginCaptcha
-    public Object captcha(@PathVariable("resource") String resource, HttpServletRequest request, HttpServletResponse response) {
+    public Object captcha(@PathVariable("resource") String resource,@PathVariable("id") String id, HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("resource", resource);
+        map.put("id", id);
         map.put("request", request);
         map.put("response", response);
 
