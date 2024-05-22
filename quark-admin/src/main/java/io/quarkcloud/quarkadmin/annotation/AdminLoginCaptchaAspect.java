@@ -12,9 +12,9 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 import io.quarkcloud.quarkcore.service.Config;
+import io.quarkcloud.quarkcore.service.Context;
 import io.quarkcloud.quarkcore.service.ClassLoader;
 
-import javax.imageio.ImageIO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -50,37 +50,22 @@ public class AdminLoginCaptchaAspect {
  
         // 得到方法上的注解
         AdminLoginCaptcha annotation = method.getAnnotation(AdminLoginCaptcha.class);
-        if (annotation==null) {
+        if (annotation == null) {
             return;
         }
 
         // 调用原方法
-        Object map = joinPoint.proceed();
+        Object context = joinPoint.proceed();
 
         // 获取返回值
-        Map<String, Object> getMap = (Map<String, Object>) map;
+        Context newContext = (Context) context;
+
+        // 设置连接点
+        newContext.setJoinPoint(joinPoint);
 
         // 获取资源名称
-        Object resource = getMap.get("resource");
-        if (resource==null) {
-            return;
-        }
-
-        // 获取验证码ID
-        Object id = getMap.get("id");
-        if (id==null) {
-            return;
-        }
-
-        // 获取request对象
-        Object request = getMap.get("request");
-        if (request==null) {
-            return;
-        }
-
-        // 获取response对象
-        Object response = getMap.get("response");
-        if (response==null) {
+        Object resource = newContext.getPathVariable("resource");
+        if (resource == null) {
             return;
         }
 
@@ -98,6 +83,6 @@ public class AdminLoginCaptchaAspect {
         ClassLoader classLoader = new ClassLoader(loadPackages[0]+resource);
 
         // 调用类方法
-        classLoader.doMethod("captcha",(HttpServletRequest) request, (HttpServletResponse) response);
+        classLoader.doMethod("captcha", newContext);
     }
 }

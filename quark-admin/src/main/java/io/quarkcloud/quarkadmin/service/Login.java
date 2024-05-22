@@ -19,6 +19,7 @@ import io.quarkcloud.quarkadmin.commponent.form.Rule;
 import io.quarkcloud.quarkadmin.commponent.icon.Icon;
 import io.quarkcloud.quarkadmin.commponent.message.Message;
 import io.quarkcloud.quarkadmin.entity.Admin;
+import io.quarkcloud.quarkcore.service.Context;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -132,7 +133,7 @@ public class Login {
     }
  
     // 获取字段
-    public Object[] fields(HttpServletRequest request) {
+    public Object[] fields(Context context) {
 
         return new Object[] {
             Field.
@@ -168,7 +169,7 @@ public class Login {
     }
 
     // 获取验证码ID
-    public Object captchaId(HttpServletRequest request) {
+    public Object captchaId(Context context) {
         Map<String,String> map = new HashMap<String,String>();
         map.put("captchaId", "default");
 
@@ -176,32 +177,32 @@ public class Login {
     }
 
     // 获取验证码
-    public void captcha(HttpServletRequest request, HttpServletResponse response) {
+    public void captcha(Context context) {
 
         //定义图形验证码的长、宽、验证码字符数、干扰线宽度
         LineCaptcha lineCaptcha = CaptchaUtil.createLineCaptcha(150, 40, 5, 4);
 
         try {
-            lineCaptcha.write(response.getOutputStream());
+            lineCaptcha.write(context.response.getOutputStream());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     // 包裹在组件内的创建页字段
-    public Object fieldsWithinComponents(HttpServletRequest request) {
+    public Object fieldsWithinComponents(Context context) {
 
         // 获取字段
-        Object[] fields = this.fields(request);
+        Object[] fields = this.fields(context);
 
         // 解析创建页表单组件内的字段
-        Object items = this.formFieldsParser(request, fields);
+        Object items = this.formFieldsParser(context, fields);
 
         return items;
     }
 
     // 解析创建页表单组件内的字段
-    public Object formFieldsParser(HttpServletRequest request, Object fields) {
+    public Object formFieldsParser(Context context, Object fields) {
         if (fields instanceof Object[]) {
             Arrays.stream((Object[]) fields).forEach(field -> {
                 boolean hasBody = false;
@@ -213,14 +214,14 @@ public class Login {
                     hasBody = false;
                 }
                 if (hasBody) {
-                    this.formFieldsParser(request, body);
+                    this.formFieldsParser(context, body);
                 } else {
                     try {
                         Object component = field.getClass().getSuperclass().getDeclaredField("component").get(field);
                         String getComponent = (String) component;
                         if(getComponent.contains("Field")) {
                             Method method = field.getClass().getMethod("buildFrontendRules",String.class);
-                            method.invoke(field, request.getQueryString());
+                            method.invoke(field, context.request.getQueryString());
                         }
                     } catch (NoSuchFieldException | NoSuchMethodException | SecurityException | IllegalAccessException | InvocationTargetException e) {
                         e.printStackTrace();
@@ -233,11 +234,11 @@ public class Login {
     }
 
     // 执行登录
-    public Object handle(HttpServletRequest request) {
+    public Object handle(Context context) {
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> map = new HashMap<String, Object>();
         try {
-           map = mapper.readValue(request.getReader(), Map.class);
+           map = mapper.readValue(context.request.getReader(), Map.class);
         } catch (StreamReadException e) {
             e.printStackTrace();
         } catch (DatabindException e) {
@@ -285,7 +286,7 @@ public class Login {
     }
 
     // 组件渲染
-    public Object render(HttpServletRequest request) {
+    public Object render(Context context) {
 
         // 登录表单组件
         io.quarkcloud.quarkadmin.commponent.login.Login login = new io.quarkcloud.quarkadmin.commponent.login.Login();
@@ -303,7 +304,7 @@ public class Login {
         subTitle = this.getSubTitle();
 
         // 获取组件内的字段
-        Object body = this.fieldsWithinComponents(request);
+        Object body = this.fieldsWithinComponents(context);
 
         // 设置组件属性
         login.

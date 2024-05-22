@@ -2,9 +2,6 @@ package io.quarkcloud.quarkcore.service;
 
 import java.lang.reflect.InvocationTargetException;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
 public class ClassLoader {
 
     // 类路径
@@ -79,7 +76,7 @@ public class ClassLoader {
     }
 
     // 执行指定方法
-    public Object doMethod(String methodName, HttpServletRequest request) {
+    public Object doMethod(String methodName, Context context) {
         Object classInstance = getInstance();
         if (classInstance==null) {
             return null;
@@ -89,35 +86,7 @@ public class ClassLoader {
         try {
             Class<?> clazz = Class.forName(classPath);
             try {
-                result = clazz.getMethod(methodName,HttpServletRequest.class).invoke(classInstance, request);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            } catch (SecurityException e) {
-                e.printStackTrace();
-            }
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        return result;
-    }
-
-    // 执行指定方法
-    public Object doMethod(String methodName, HttpServletRequest request, HttpServletResponse response) {
-        Object classInstance = getInstance();
-        if (classInstance==null) {
-            return null;
-        }
-
-        Object result = null;
-        try {
-            Class<?> clazz = Class.forName(classPath);
-            try {
-                result = clazz.getMethod(methodName,HttpServletRequest.class,HttpServletResponse.class).invoke(classInstance, request, response);
+                result = clazz.getMethod(methodName,Context.class).invoke(classInstance, context);
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             } catch (InvocationTargetException e) {

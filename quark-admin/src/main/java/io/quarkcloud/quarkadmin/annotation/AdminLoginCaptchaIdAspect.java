@@ -11,6 +11,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 import io.quarkcloud.quarkcore.service.Config;
+import io.quarkcloud.quarkcore.service.Context;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import io.quarkcloud.quarkcore.service.ClassLoader;
@@ -52,20 +53,17 @@ public class AdminLoginCaptchaIdAspect {
         }
 
         // 调用原方法
-        Object map = joinPoint.proceed();
+        Object context = joinPoint.proceed();
 
         // 获取返回值
-        Map<String, Object> getMap = (Map<String, Object>) map;
+        Context newContext = (Context) context;
+
+        // 设置连接点
+        newContext.setJoinPoint(joinPoint);
 
         // 获取资源名称
-        Object resource = getMap.get("resource");
-        if (resource==null) {
-            return joinPoint.proceed();
-        }
-
-        // 获取资源名称
-        Object request = getMap.get("request");
-        if (request==null) {
+        Object resource = newContext.getPathVariable("resource");
+        if (resource == null) {
             return joinPoint.proceed();
         }
 
@@ -83,6 +81,6 @@ public class AdminLoginCaptchaIdAspect {
         ClassLoader classLoader = new ClassLoader(loadPackages[0]+resource);
 
         // 调用类方法
-        return classLoader.doMethod("captchaId",(HttpServletRequest) request);
+        return classLoader.doMethod("captchaId", newContext);
     }
 }
