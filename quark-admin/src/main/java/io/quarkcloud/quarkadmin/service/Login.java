@@ -6,13 +6,6 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.fasterxml.jackson.core.exc.StreamReadException;
-import com.fasterxml.jackson.databind.DatabindException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import cn.hutool.cache.CacheUtil;
-import cn.hutool.cache.impl.TimedCache;
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.LineCaptcha;
 import cn.hutool.core.util.IdUtil;
@@ -261,18 +254,7 @@ public class Login {
 
     // 执行登录
     public Object handle(Context context) {
-        ObjectMapper mapper = new ObjectMapper();
-        Map<String, Object> map = new HashMap<String, Object>();
-        try {
-           map = mapper.readValue(context.request.getReader(), Map.class);
-        } catch (StreamReadException e) {
-            e.printStackTrace();
-        } catch (DatabindException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        Map<String, Object> map = context.getRequestBody(Map.class);
         if (map.isEmpty()) {
             return Message.error("参数错误！");
         }
@@ -296,7 +278,7 @@ public class Login {
             return Message.error("验证码不能为空！");
         }
 
-        Map<String,String> getCaptcha = (Map<String,String>) captcha;
+        Map<String, String> getCaptcha = (Map<String, String>) captcha;
         String id = getCaptcha.get("id");
         String captchaValue = getCaptcha.get("value");
         if (id.isEmpty()) {

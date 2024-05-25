@@ -1,5 +1,6 @@
 package io.quarkcloud.quarkcore.service;
 
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -9,6 +10,10 @@ import org.aspectj.lang.reflect.MethodSignature;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.fasterxml.jackson.core.exc.StreamReadException;
+import com.fasterxml.jackson.databind.DatabindException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.Data;
 
@@ -54,6 +59,7 @@ public class Context {
         return this.joinPointMethod.getAnnotation(annotationClass);
     }
 
+    // getPathVariable
     public String getPathVariable(String pathVariable) {
         RequestMapping requestMapping= this.getJoinPointAnnotation(RequestMapping.class);
         if (requestMapping == null) {
@@ -105,5 +111,22 @@ public class Context {
         }
         
         return pathVariables;
+    }
+
+    // getRequestBody
+    public <T> T getRequestBody(Class<T> valueType) {
+        ObjectMapper mapper = new ObjectMapper();
+        T map = null;
+        try {
+            map = mapper.readValue(request.getReader(), valueType);
+        } catch (StreamReadException e) {
+            e.printStackTrace();
+        } catch (DatabindException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return map;
     }
 }
