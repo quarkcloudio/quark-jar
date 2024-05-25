@@ -288,7 +288,7 @@ public class Login {
             return Message.error("验证码不能为空！");
         }
 
-        Object cacheCaptchaValue = Cache.getInstance().get(id);
+        Object cacheCaptchaValue = Cache.getInstance().get(id,false);
         if (cacheCaptchaValue == null) {
             return Message.error("验证码错误！");
         }
