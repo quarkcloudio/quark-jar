@@ -15,7 +15,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new AuthInterceptor())
-                .addPathPatterns("/api/admin") // 对"/api/admin"接口进行token验证
-                .excludePathPatterns("api/admin/login"); // 放行登录接口
+                .addPathPatterns("/api/admin/**") // 对"/api/admin/"进行拦截，需token验证
+                .excludePathPatterns("/api/admin/login/**"); // 放行接口
     }
 }
