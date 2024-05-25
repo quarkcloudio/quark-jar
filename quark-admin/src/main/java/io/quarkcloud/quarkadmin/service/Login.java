@@ -4,11 +4,14 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.LineCaptcha;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.jwt.JWT;
 import io.quarkcloud.quarkadmin.annotation.AdminLogin;
 import io.quarkcloud.quarkadmin.commponent.form.Field;
 import io.quarkcloud.quarkadmin.commponent.form.Rule;
@@ -17,6 +20,7 @@ import io.quarkcloud.quarkadmin.commponent.message.Message;
 import io.quarkcloud.quarkadmin.entity.Admin;
 import io.quarkcloud.quarkcore.service.Cache;
 import io.quarkcloud.quarkcore.service.Context;
+import io.quarkcloud.quarkcore.service.Env;
 
 public class Login {
 
@@ -304,7 +308,31 @@ public class Login {
             return Message.error("用户名或密码错误！");
         }
 
-        return admin.getByUsername((String) username);
+        // 创建 BCryptPasswordEncoder 实例
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        if (!encoder.matches((String) password, adminInfo.getPassword())) {
+            return Message.error("用户名或密码错误！");
+        }
+
+        // JWT密钥
+        String appKey = Env.getProperty("app.key");
+        String token = JWT.create()
+            .setPayload("id", adminInfo.getId())
+            .setPayload("username", adminInfo.getUsername())
+            .setPayload("nickname", adminInfo.getNickname())
+            .setPayload("sex", adminInfo.getSex())
+            .setPayload("email", adminInfo.getEmail())
+            .setPayload("phone", adminInfo.getPhone())
+            .setPayload("avatar", adminInfo.getAvatar())
+            .setPayload("guard_name", "admin")
+            .setKey(appKey.getBytes())
+            .setExpiresAt(new Date(System.currentTimeMillis() + 3600000))
+            .sign();
+
+        Map<String,String> result = new HashMap<>();
+        result.put("token", token);
+
+        return Message.success("登录成功！", result);
     }
 
     // 组件渲染
