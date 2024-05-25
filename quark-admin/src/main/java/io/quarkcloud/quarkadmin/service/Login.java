@@ -11,17 +11,19 @@ import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import cn.hutool.cache.CacheUtil;
+import cn.hutool.cache.impl.TimedCache;
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.LineCaptcha;
+import cn.hutool.core.util.IdUtil;
 import io.quarkcloud.quarkadmin.annotation.AdminLogin;
 import io.quarkcloud.quarkadmin.commponent.form.Field;
 import io.quarkcloud.quarkadmin.commponent.form.Rule;
 import io.quarkcloud.quarkadmin.commponent.icon.Icon;
 import io.quarkcloud.quarkadmin.commponent.message.Message;
 import io.quarkcloud.quarkadmin.entity.Admin;
+import io.quarkcloud.quarkcore.service.Cache;
 import io.quarkcloud.quarkcore.service.Context;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 public class Login {
 
@@ -171,16 +173,40 @@ public class Login {
     // 获取验证码ID
     public Object captchaId(Context context) {
         Map<String,String> map = new HashMap<String,String>();
-        map.put("captchaId", "default");
+
+        // 生成验证码ID
+        String simpleUUID = IdUtil.simpleUUID();
+
+        // 放入缓存
+        Cache.getInstance().put(simpleUUID, "uninitialized");
+
+        // 返回验证码ID
+        map.put("captchaId", simpleUUID);
 
         return Message.success("获取成功！", map);
     }
 
     // 获取验证码
     public void captcha(Context context) {
+        String id = context.getPathVariable("id");
+        if (id.isEmpty()) {
+            return;
+        }
 
-        //定义图形验证码的长、宽、验证码字符数、干扰线宽度
+        // 获取缓存
+        Object cacheValue = Cache.getInstance().get(id);
+        if (cacheValue == null) {
+            return;
+        }
+        if ((String) cacheValue != "uninitialized") {
+            return;
+        }
+
+        // 定义图形验证码的长、宽、验证码字符数、干扰线宽度
         LineCaptcha lineCaptcha = CaptchaUtil.createLineCaptcha(150, 40, 5, 4);
+
+        // 将验证码放到缓存
+        Cache.getInstance().put(id, lineCaptcha.getCode());
 
         try {
             lineCaptcha.write(context.response.getOutputStream());
@@ -271,14 +297,28 @@ public class Login {
         }
 
         Map<String,String> getCaptcha = (Map<String,String>) captcha;
+        String id = getCaptcha.get("id");
         String captchaValue = getCaptcha.get("value");
+        if (id.isEmpty()) {
+            return Message.error("验证码ID不能为空！");
+        }
         if (captchaValue.isEmpty()) {
             return Message.error("验证码不能为空！");
         }
 
+        Object cacheCaptchaValue = Cache.getInstance().get(id);
+        if (cacheCaptchaValue == null) {
+            return Message.error("验证码错误！");
+        }
+
+        String getCacheCaptchaValue = (String) cacheCaptchaValue;
+        if (!getCacheCaptchaValue.equalsIgnoreCase(captchaValue)) {
+            return Message.error("验证码错误！");
+        }
+
         Admin admin = new Admin();
         Admin adminInfo = admin.getByUsername((String) username);
-        if (adminInfo==null) {
+        if (adminInfo == null) {
             return Message.error("用户名或密码错误！");
         }
 
