@@ -1,9 +1,6 @@
 package io.quarkcloud.quarkadmin.annotation;
 
-import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
 import java.lang.reflect.Method;
-import java.util.Map;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -14,9 +11,6 @@ import org.springframework.stereotype.Component;
 import io.quarkcloud.quarkcore.service.Config;
 import io.quarkcloud.quarkcore.service.Context;
 import io.quarkcloud.quarkcore.service.ClassLoader;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 @Aspect
 @Component
