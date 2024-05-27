@@ -1,5 +1,6 @@
 package io.quarkcloud.quarkadmin.commponent.form;
 
+import io.quarkcloud.quarkadmin.commponent.form.fields.Cascader;
 import io.quarkcloud.quarkadmin.commponent.form.fields.ImageCaptcha;
 import io.quarkcloud.quarkadmin.commponent.form.fields.Password;
 import io.quarkcloud.quarkadmin.commponent.form.fields.Text;
@@ -28,5 +29,13 @@ public class Field {
 
     public static ImageCaptcha imageCaptcha(String name, String label) {
         return new ImageCaptcha().setName(name).setLabel(label);
+    }
+
+    public static Cascader cascader(String name) {
+        return new Cascader().setName(name);
+    }
+
+    public static Cascader cascader(String name, String label) {
+        return new Cascader().setName(name).setLabel(label);
     }
 }

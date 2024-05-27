@@ -52,7 +52,7 @@ public class AuthInterceptor implements HandlerInterceptor {
             return false;
         }
 
-        Long adminId = (Long) jwt.getPayload("id");
+        Long adminId = Long.parseLong(jwt.getPayload("id").toString());
         if (adminId != 1) {
             
         }
