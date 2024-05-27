@@ -8,7 +8,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.jwt.JWT;
-import cn.hutool.jwt.JWTHeader;
 import cn.hutool.jwt.JWTUtil;
 import cn.hutool.jwt.JWTValidator;
 import io.quarkcloud.quarkcore.service.Env;
