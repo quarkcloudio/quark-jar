@@ -8,6 +8,8 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.jwt.JWT;
+import cn.hutool.jwt.JWTHeader;
+import cn.hutool.jwt.JWTUtil;
 import cn.hutool.jwt.JWTValidator;
 import io.quarkcloud.quarkcore.service.Env;
 import jakarta.servlet.http.HttpServletRequest;
@@ -42,6 +44,18 @@ public class AuthInterceptor implements HandlerInterceptor {
         } catch (Exception e) {
             errorResponse(response, HttpStatus.UNAUTHORIZED, "token is expired");
             return false;
+        }
+
+        final JWT jwt = JWTUtil.parseToken(token);
+        String guardName = (String) jwt.getPayload("guard_name");
+        if (!guardName.equals("admin")) {
+            errorResponse(response, HttpStatus.UNAUTHORIZED, "401 Unauthozied");
+            return false;
+        }
+
+        Long adminId = (Long) jwt.getPayload("id");
+        if (adminId != 1) {
+            
         }
 
         return true; // 放行请求
