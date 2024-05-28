@@ -17,7 +17,7 @@ public class Commponent {
 	public String component;
 
     // 组件样式
-	public Map<String, ?> style;
+	public Map<String, Object> style;
 
     // 组件Key
     public void setComponentKey() {

@@ -20,10 +20,10 @@ import lombok.experimental.Accessors;
 public class ImageCaptcha extends Commponent {
 
     // 开启 grid 模式时传递给 Row, 仅在ProFormGroup, ProFormList, ProFormFieldSet 中有效，默认：{ gutter: 8 }
-	Map<String, ?> rowProps;
+	Map<String, Object> rowProps;
 
     // 开启 grid 模式时传递给 Col，默认：{ xs: 24 }
-	Map<String, ?> colProps;
+	Map<String, Object> colProps;
 
     // 是否是次要控件，只针对 LightFilter 下有效
 	boolean secondary; 
@@ -207,7 +207,7 @@ public class ImageCaptcha extends Commponent {
 	String placeholder;
 
     // 自定义样式
-	Map<String, ?> style = new HashMap<>();
+	Map<String, Object> style = new HashMap<>();
 
     // 获取验证码ID的URL
     String captchaIdUrl;

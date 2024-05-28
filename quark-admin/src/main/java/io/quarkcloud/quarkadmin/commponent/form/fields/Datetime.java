@@ -1,13 +1,15 @@
 package io.quarkcloud.quarkadmin.commponent.form.fields;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.lang3.ArrayUtils;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.apache.commons.lang3.ArrayUtils;
 
 import io.quarkcloud.quarkadmin.commponent.Commponent;
 import io.quarkcloud.quarkadmin.commponent.form.Rule;
@@ -18,206 +20,241 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class Password extends Commponent {
+public class Datetime extends Commponent {
 
-    // 开启 grid 模式时传递给 Row, 仅在ProFormGroup, ProFormList, ProFormFieldSet 中有效，默认：{ gutter: 8 }
-	Map<String, Object> rowProps;
+    // 开启 grid 模式时传递给 Row, 仅在ProFormGroup, ProFormList, ProFormFieldSet 中有效，默认：{
+    // gutter: 8 }
+    Map<String, Object> rowProps;
 
     // 开启 grid 模式时传递给 Col，默认：{ xs: 24 }
-	Map<String, Object> colProps;
+    Map<String, Object> colProps;
 
     // 是否是次要控件，只针对 LightFilter 下有效
-	boolean secondary; 
+    boolean secondary;
 
     // 配合 label 属性使用，表示是否显示 label 后面的冒号
-	boolean colon;
+    boolean colon;
 
     // 额外的提示信息，和 help 类似，当需要错误信息和提示文案同时出现时，可以使用这个。
-	String extra;
+    String extra;
 
     // 配合 valiTextStatus 属性使用，展示校验状态图标，建议只配合 Input 组件使用
-	boolean hasFeedback;
+    boolean hasFeedback;
 
     // 提示信息，如不设置，则会根据校验规则自动生成
-	String help;
+    String help;
 
     // 是否隐藏字段（依然会收集和校验字段）
-	boolean hidden;
+    boolean hidden;
 
     // 设置子元素默认值，如果与 Form 的 initialValues 冲突则以 Form 为准
-	Object initialValue;
+    Object initialValue;
 
     // label 标签的文本
-	String label;
+    String label;
 
     // 标签文本对齐方式
-	String labelAlign;
+    String labelAlign;
 
-    // label 标签布局，同 <Col> 组件，设置 span offset 值，如 {span: 3, offset: 12} 或 sm: {span: 3, offset: 12}。你可以通过 Form 的 labelCol 进行统一设置，不会作用于嵌套 Item。当和 Form 同时设置时，以 Item 为准
-	Object labelCol;
+    // label 标签布局，同 <Col> 组件，设置 span offset 值，如 {span: 3, offset: 12} 或 sm: {span:
+    // 3, offset: 12}。你可以通过 Form 的 labelCol 进行统一设置，不会作用于嵌套 Item。当和 Form 同时设置时，以 Item
+    // 为准
+    Object labelCol;
 
     // 字段名，支持数组
-	String name;
+    String name;
 
     // 为 true 时不带样式，作为纯字段控件使用
-	boolean noStyle;
+    boolean noStyle;
 
     // 必填样式设置。如不设置，则会根据校验规则自动生成
-	boolean required;
+    boolean required;
 
     // 会在 label 旁增加一个 icon，悬浮后展示配置的信息
-	String tooltip;
+    String tooltip;
 
     // 子节点的值的属性，如 Switch 的是 'checked'。该属性为 getValueProps 的封装，自定义 getValueProps 后会失效
-	String valuePropName;
+    String valuePropName;
 
-    // 需要为输入控件设置布局样式时，使用该属性，用法同 labelCol。你可以通过 Form 的 wrapperCol 进行统一设置，不会作用于嵌套 Item。当和 Form 同时设置时，以 Item 为准
-	Object wrapperCol;
+    // 需要为输入控件设置布局样式时，使用该属性，用法同 labelCol。你可以通过 Form 的 wrapperCol 进行统一设置，不会作用于嵌套
+    // Item。当和 Form 同时设置时，以 Item 为准
+    Object wrapperCol;
 
     // 列表页、详情页中列属性
-	Object column;
+    Object column;
 
     // 设置列的对齐方式,left | right | center，只在列表页、详情页中有效
-	String align;
+    String align;
 
     // （IE 下无效）列是否固定，可选 true (等效于 left) left rightr，只在列表页中有效
-	Object fixed;
+    Object fixed;
 
     // 表格列是否可编辑，只在列表页中有效
-	boolean editable;
+    boolean editable;
 
     // 是否自动缩略，只在列表页、详情页中有效
-	boolean ellipsis;
+    boolean ellipsis;
 
     // 是否支持复制，只在列表页、详情页中有效
-	boolean copyable;
+    boolean copyable;
 
     // 表头的筛选菜单项，当值为 true 时，自动使用 valueEnum 生成，只在列表页中有效
-	Object filters;
+    Object filters;
 
     // 查询表单中的权重，权重大排序靠前，只在列表页中有效
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-	int order;
+    int order;
 
     // 可排序列，只在列表页中有效
-	Object sorter;
+    Object sorter;
 
     // 包含列的数量，只在详情页中有效
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-	int span;
+    int span;
 
     // 设置列宽，只在列表页中有效
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-	int columnWidth;
+    int columnWidth;
 
     // 获取数据接口
-	String api;
+    String api;
 
     // 是否忽略保存到数据库，默认为 false
-	boolean ignore;
+    boolean ignore;
 
     // 全局校验规则
-	Rule[] rules;
+    Rule[] rules;
 
     // 创建页校验规则
-	Rule[] creationRules;
+    Rule[] creationRules;
 
     // 编辑页校验规则
-	Rule[] updateRules;
+    Rule[] updateRules;
 
     // 前端校验规则，设置字段的校验逻辑
-	Rule[] frontendRules;
+    Rule[] frontendRules;
 
     // When组件
-	When when;
+    When when;
 
     // When组件里的字段
-	WhenItem[] whenItem;
+    WhenItem[] whenItem;
 
     // 在列表页展示
-	boolean showOnIndex;
-    
+    boolean showOnIndex;
+
     // 在详情页展示
-	boolean showOnDetail;
+    boolean showOnDetail;
 
     // 在创建页面展示
-	boolean showOnCreation;
+    boolean showOnCreation;
 
     // 在编辑页面展示
-	boolean showOnUpdate;
+    boolean showOnUpdate;
 
     // 在导出的Excel上展示
-	boolean showOnExport;
+    boolean showOnExport;
 
     // 在导入Excel上展示
-	boolean showOnImport;
+    boolean showOnImport;
 
     // 回调函数
     @FunctionalInterface
-	interface Closure {
+    interface Closure {
         Object callback();
     }
 
-    // 带标签的 input，设置后置标签
-	Object addonAfter;
+    // 是否支持清除，默认true
+    boolean allowClear;
 
-    // 带标签的 input，设置前置标签
-	Object addonBefore;
-
-    // 可以点击清除图标删除内容
-	boolean allowClear;
+    // 自动获取焦点，默认false
+    boolean autoFocus;
 
     // 是否有边框，默认true
-	boolean bordered;
+    boolean bordered;
+
+    // 自定义类名
+    String className;
 
     // 默认的选中项
-	Object defaultValue;
+    Object defaultValue;
 
     // 禁用
-	Object disabled;
+    Object disabled;
 
-    // 输入框的 id
-	String id;
+    // 设置日期格式，为数组时支持多格式匹配，展示以第一个为准。
+    String format;
 
-    // 最大长度
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-	int maxLength;
+    // 额外的弹出日历 className
+    String popupClassName;
 
-    // 是否展示字数
-	boolean showCount;
+    // 设置输入框为只读（避免在移动设备上打开虚拟键盘）
+    boolean inputReadOnly;
 
-    // 设置校验状态,'error' | 'warning'
-	String status;
-    
-    // 带有前缀图标的 input
-	Object prefix;
+    // 国际化配置
+    Object locale;
 
-    // 控件大小。注：标准表单内的输入框大小限制为 middle，large | middle | small
-	String size;
+    // 日期面板的状态 time | date | month | year | decade
+    String mode;
 
-    // 带有后缀图标的 input
-	Object suffix;
+    // 自定义下一个图标
+    Object nextIcon;
 
-    // 声明 input 类型，同原生 input 标签的 type 属性，见：MDN(请直接使用 Input.TextArea 代替 type="textarea")
-	String type;
+    // 控制浮层显隐
+    boolean open;
+
+    // 设置选择器类型 date | week | month | quarter | year
+    String picker;
+
+    // 输入框占位文本
+    String placeholder;
+
+    // 浮层预设位置，bottomLeft bottomRight topLeft topRight
+    String placement;
+
+    // 额外的弹出日历样式
+    Object popupStyle;
+
+    // 自定义上一个图标
+    Object prevIcon;
+
+    // 输入框大小，large | middle | small
+    String size;
+
+    // 设置校验状态，'error' | 'warning'
+    String status;
+
+    // 自定义的选择框后缀图标
+    Object suffixIcon;
+
+    // 自定义 << 切换图标
+    Object superNextIcon;
+
+    // 自定义 >> 切换图标
+    Object superPrevIcon;
 
     // 指定选中项,string[] | number[]
-	Object value;
+    Object value;
 
-    // 占位符
-	String placeholder;
+    // 默认面板日期
+    String defaultPickerValue;
 
-    // 自定义样式
-	Map<String, Object> style = new HashMap<>();
+    // 当设定了 showTime 的时候，面板是否显示“此刻”按钮
+    boolean showNow;
 
-    public Password() {
-        this.component = "passwordField";
+    // 增加时间选择功能
+    Object showTime;
+
+    // 是否展示“今天”按钮
+    boolean showToday;
+
+    public Datetime() {
+        this.component = "dateField";
         this.setComponentKey();
     }
 
     // Field 的长度，我们归纳了常用的 Field 长度以及适合的场景，支持了一些枚举 "xs" , "s" , "m" , "l" , "x"
-    public Password setWidth(Object width) {
+    public Datetime setWidth(Object width) {
         Map<String, Object> style = new HashMap<>();
 
         this.style.forEach((key, value) -> {
@@ -231,12 +268,13 @@ public class Password extends Commponent {
 
     // 校验规则，设置字段的校验逻辑
     //
-    //	[]*rule.Rule{
-    //		rule.Required(true, "用户名必须填写"),
-    //		rule.Min(6, "用户名不能少于6个字符"),
-    //		rule.Max(20, "用户名不能超过20个字符"),
-    //	}
-    public Password setRules(Rule[] rules) {
+    // new Datetime().
+    // setRules(new Rule[]{
+    // rule.required(true, "用户名必须填写"), // 需要用户名字段不能为空
+    // rule.min(6, "用户名不能少于6个字符"), // 用户名最少需要6个字符
+    // rule.max(20, "用户名不能超过20个字符") // 用户名最多只能包含20个字符
+    // });
+    public Datetime setRules(Rule[] rules) {
         for (int i = 0; i < rules.length; i++) {
             rules[i] = rules[i].setName(name);
         }
@@ -247,10 +285,11 @@ public class Password extends Commponent {
 
     // 校验规则，只在创建表单提交时生效
     //
-    //	[]*rule.Rule{
-    //		rule.Unique("admins", "username", "用户名已存在"),
-    //	}
-    public Password setCreationRules(Rule[] rules) {
+    // new Datetime().
+    // setCreationRules(new Rule[]{
+    // rule.unique("admins", "username", "用户名已存在"),
+    // });
+    public Datetime setCreationRules(Rule[] rules) {
         for (int i = 0; i < rules.length; i++) {
             rules[i] = rules[i].setName(name);
         }
@@ -261,10 +300,11 @@ public class Password extends Commponent {
 
     // 校验规则，只在更新表单提交时生效
     //
-    //	[]*rule.Rule{
-    //		rule.Unique("admins", "username", "{id}", "用户名已存在"),
-    //	}
-    public Password setUpdateRules(Rule[] rules) {
+    // new Datetime().
+    // setUpdateRules(new Rule[]{
+    // rule.unique("admins", "username", "用户名已存在"),
+    // });
+    public Datetime setUpdateRules(Rule[] rules) {
         for (int i = 0; i < rules.length; i++) {
             rules[i] = rules[i].setName(name);
         }
@@ -274,15 +314,15 @@ public class Password extends Commponent {
     }
 
     // 生成前端验证规则
-    public Password buildFrontendRules(String path) {
-        Rule[] rules = new Rule[]{};
-        Rule[] creationRules = new Rule[]{};
-        Rule[] updateRules = new Rule[]{};
-        Rule[] frontendRules = new Rule[]{};
+    public Datetime buildFrontendRules(String path) {
+        Rule[] rules = new Rule[] {};
+        Rule[] creationRules = new Rule[] {};
+        Rule[] updateRules = new Rule[] {};
+        Rule[] frontendRules = new Rule[] {};
 
         String[] uri = path.split("/");
-        boolean isCreating = (uri[uri.length-1] == "create") || (uri[uri.length-1] == "store");
-        boolean isEditing = (uri[uri.length-1] == "edit") || (uri[uri.length-1] == "update");
+        boolean isCreating = (uri[uri.length - 1] == "create") || (uri[uri.length - 1] == "store");
+        boolean isEditing = (uri[uri.length - 1] == "edit") || (uri[uri.length - 1] == "update");
 
         if (this.rules.length > 0) {
             rules = Rule.convertToFrontendRules(this.rules);
@@ -313,74 +353,75 @@ public class Password extends Commponent {
         return this;
     }
 
+    // 表头的筛选菜单项，当值为 true 时，自动使用 valueEnum 生成，只在列表页中有效
+    public Datetime setFilters(boolean filters) {
+        this.filters = filters;
+
+        return this;
+    }
+
+    // 表头的筛选菜单项，当值为 true 时，自动使用 valueEnum 生成，只在列表页中有效
+    public Datetime setFilters(Map<String, String> filters) {
+        List<Map<String, String>> tmpFilters = new ArrayList<>();
+        filters.forEach((k, v) -> {
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("text", v);
+            map.put("value", k);
+            tmpFilters.add(map);
+        });
+        this.filters = tmpFilters;
+
+        return this;
+    }
+
     // 设置When组件数据
     //
-    //	setWhen(1, func () interface{} {
-    //		return []interface{}{
-    //	       field.Text("name", "姓名"),
-    //	   }
-    //	})
-    //
-    //	setWhen(">", 1, func () interface{} {
-    //		return []interface{}{
-    //	       field.Text("name", "姓名"),
-    //	   }
-    //	})
-    public Password setWhen(Object option, Closure callback) {
+    // new Datetime().setWhen(option, callback)
+    public Datetime setWhen(Object option, Closure callback) {
         this.setWhen("=", option, callback);
         return this;
     }
 
     // 设置When组件数据
     //
-    //	SetWhen(1, func () interface{} {
-    //		return []interface{}{
-    //	       field.Text("name", "姓名"),
-    //	   }
-    //	})
-    //
-    //	SetWhen(">", 1, func () interface{} {
-    //		return []interface{}{
-    //	       field.Text("name", "姓名"),
-    //	   }
-    //	})
-    public Password setWhen(String operator, Object option, Closure callback) {
+    // new Datetime().setWhen(">", option, callback)
+    public Datetime setWhen(String operator, Object option, Closure callback) {
         When w = new When();
         WhenItem i = new WhenItem();
 
         i.body = callback.callback();
         switch (operator) {
-        case "=":
-            i.condition = "<%=String(" + this.name + ") === '" + option + "' %>";
-            break;
-        case ">":
-            i.condition = "<%=String(" + this.name + ") > '" + option + "' %>";
-            break;
-        case "<":
-            i.condition = "<%=String(" + this.name + ") < '" + option + "' %>";
-            break;
-        case "<=":
-            i.condition = "<%=String(" + this.name + ") <= '" + option + "' %>";
-            break;
-        case ">=":
-            i.condition = "<%=String(" + this.name + ") => '" + option + "' %>";
-            break;
-        case "has":
-            i.condition = "<%=(String(" + this.name + ").indexOf('" + option + "') !=-1) %>";
-            break;
-        case "in":
-            ObjectMapper mapper = new ObjectMapper();
-            String jsonStr;
-            try {
-                jsonStr = mapper.writeValueAsString(option);
-                i.condition = "<%=(" + jsonStr + ".indexOf(" + this.name + ") !=-1) %>";
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-            break;
-        default:
-            i.condition = "<%=String(" + this.name + ") === '" + option + "' %>";
-            break;
+            case "=":
+                i.condition = "<%=String(" + this.name + ") === '" + option + "' %>";
+                break;
+            case ">":
+                i.condition = "<%=String(" + this.name + ") > '" + option + "' %>";
+                break;
+            case "<":
+                i.condition = "<%=String(" + this.name + ") < '" + option + "' %>";
+                break;
+            case "<=":
+                i.condition = "<%=String(" + this.name + ") <= '" + option + "' %>";
+                break;
+            case ">=":
+                i.condition = "<%=String(" + this.name + ") => '" + option + "' %>";
+                break;
+            case "has":
+                i.condition = "<%=(String(" + this.name + ").indexOf('" + option + "') !=-1) %>";
+                break;
+            case "in":
+                ObjectMapper mapper = new ObjectMapper();
+                String jsonStr;
+                try {
+                    jsonStr = mapper.writeValueAsString(option);
+                    i.condition = "<%=(" + jsonStr + ".indexOf(" + this.name + ") !=-1) %>";
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                i.condition = "<%=String(" + this.name + ") === '" + option + "' %>";
+                break;
         }
 
         i.conditionName = this.name;
@@ -394,91 +435,91 @@ public class Password extends Commponent {
     }
 
     // Specify that the element should be hidden from the index view.
-    public Password hideFromIndex(boolean callback) {
+    public Datetime hideFromIndex(boolean callback) {
         this.showOnIndex = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the detail view.
-    public Password hideFromDetail(boolean callback) {
+    public Datetime hideFromDetail(boolean callback) {
         this.showOnDetail = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the creation view.
-    public Password hideWhenCreating(boolean callback) {
+    public Datetime hideWhenCreating(boolean callback) {
         this.showOnCreation = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the update view.
-    public Password hideWhenUpdating(boolean callback) {
+    public Datetime hideWhenUpdating(boolean callback) {
         this.showOnUpdate = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the export file.
-    public Password hideWhenExporting(boolean callback) {
+    public Datetime hideWhenExporting(boolean callback) {
         this.showOnExport = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the import file.
-    public Password hideWhenImporting(boolean callback) {
+    public Datetime hideWhenImporting(boolean callback) {
         this.showOnImport = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the index view.
-    public Password onIndexShowing(boolean callback) {
+    public Datetime onIndexShowing(boolean callback) {
         this.showOnIndex = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the detail view.
-    public Password onDetailShowing(boolean callback) {
+    public Datetime onDetailShowing(boolean callback) {
         this.showOnDetail = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the creation view.
-    public Password showOnCreating(boolean callback) {
+    public Datetime showOnCreating(boolean callback) {
         this.showOnCreation = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the update view.
-    public Password showOnUpdating(boolean callback) {
+    public Datetime showOnUpdating(boolean callback) {
         this.showOnUpdate = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the export file.
-    public Password showOnExporting(boolean callback) {
+    public Datetime showOnExporting(boolean callback) {
         this.showOnExport = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the import file.
-    public Password showOnImporting(boolean callback) {
+    public Datetime showOnImporting(boolean callback) {
         this.showOnImport = callback;
 
         return this;
     }
 
     // Specify that the element should only be shown on the index view.
-    public Password onlyOnIndex() {
+    public Datetime onlyOnIndex() {
         this.showOnIndex = true;
         this.showOnDetail = false;
         this.showOnCreation = false;
@@ -490,7 +531,7 @@ public class Password extends Commponent {
     }
 
     // Specify that the element should only be shown on the detail view.
-    public Password onlyOnDetail() {
+    public Datetime onlyOnDetail() {
         this.showOnIndex = false;
         this.showOnDetail = true;
         this.showOnCreation = false;
@@ -502,7 +543,7 @@ public class Password extends Commponent {
     }
 
     // Specify that the element should only be shown on forms.
-    public Password onlyOnForms() {
+    public Datetime onlyOnForms() {
         this.showOnIndex = false;
         this.showOnDetail = false;
         this.showOnCreation = true;
@@ -514,7 +555,7 @@ public class Password extends Commponent {
     }
 
     // Specify that the element should only be shown on export file.
-    public Password onlyOnExport() {
+    public Datetime onlyOnExport() {
         this.showOnIndex = false;
         this.showOnDetail = false;
         this.showOnCreation = false;
@@ -526,7 +567,7 @@ public class Password extends Commponent {
     }
 
     // Specify that the element should only be shown on import file.
-    public Password onlyOnImport() {
+    public Datetime onlyOnImport() {
         this.showOnIndex = false;
         this.showOnDetail = false;
         this.showOnCreation = false;
@@ -538,7 +579,7 @@ public class Password extends Commponent {
     }
 
     // Specify that the element should be hidden from forms.
-    public Password exceptOnForms() {
+    public Datetime exceptOnForms() {
         this.showOnIndex = true;
         this.showOnDetail = true;
         this.showOnCreation = false;
@@ -580,7 +621,7 @@ public class Password extends Commponent {
     }
 
     // 当前列值的枚举 valueEnum
-    public Map<?,?> getValueEnum() {
+    public Map<?, ?> getValueEnum() {
         return null;
     }
 }
