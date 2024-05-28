@@ -57,6 +57,8 @@ public class AuthInterceptor implements HandlerInterceptor {
             
         }
 
+        System.out.println(adminId);
+
         return true; // 放行请求
     }
 

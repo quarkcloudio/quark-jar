@@ -2,9 +2,9 @@ package io.quarkcloud.quarkadmin.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import io.quarkcloud.quarkadmin.entity.CasbinRule;
+import io.quarkcloud.quarkadmin.entity.UserHasRole;
 
 @Mapper
-public interface CasbinRuleMapper extends BaseMapper<CasbinRule> {
+public interface UserHasRoleMapper extends BaseMapper<UserHasRole> {
 
 }
