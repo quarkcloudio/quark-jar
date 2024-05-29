@@ -25,7 +25,6 @@ public class Cascader extends Commponent {
     @Data
     public static class Option {
 
-        @JsonInclude(JsonInclude.Include.NON_DEFAULT)
         String label;
 
         Object value;

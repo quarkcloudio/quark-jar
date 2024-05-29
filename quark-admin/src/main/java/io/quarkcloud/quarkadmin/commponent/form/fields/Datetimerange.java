@@ -20,7 +20,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class Datetimerange extends Commponent {
+public class DatetimeRange extends Commponent {
 
     // 开启 grid 模式时传递给 Row, 仅在ProFormGroup, ProFormList, ProFormFieldSet 中有效，默认：{
     // gutter: 8 }
@@ -248,13 +248,13 @@ public class Datetimerange extends Commponent {
     // 是否展示“今天”按钮
     boolean showToday;
 
-    public Datetimerange() {
-        this.component = "dateField";
+    public DatetimeRange() {
+        this.component = "datetimeRangeField";
         this.setComponentKey();
     }
 
     // Field 的长度，我们归纳了常用的 Field 长度以及适合的场景，支持了一些枚举 "xs" , "s" , "m" , "l" , "x"
-    public Datetimerange setWidth(Object width) {
+    public DatetimeRange setWidth(Object width) {
         Map<String, Object> style = new HashMap<>();
 
         this.style.forEach((key, value) -> {
@@ -268,13 +268,13 @@ public class Datetimerange extends Commponent {
 
     // 校验规则，设置字段的校验逻辑
     //
-    // new Datetimerange().
+    // new DatetimeRange().
     // setRules(new Rule[]{
     // rule.required(true, "用户名必须填写"), // 需要用户名字段不能为空
     // rule.min(6, "用户名不能少于6个字符"), // 用户名最少需要6个字符
     // rule.max(20, "用户名不能超过20个字符") // 用户名最多只能包含20个字符
     // });
-    public Datetimerange setRules(Rule[] rules) {
+    public DatetimeRange setRules(Rule[] rules) {
         for (int i = 0; i < rules.length; i++) {
             rules[i] = rules[i].setName(name);
         }
@@ -285,11 +285,11 @@ public class Datetimerange extends Commponent {
 
     // 校验规则，只在创建表单提交时生效
     //
-    // new Datetimerange().
+    // new DatetimeRange().
     // setCreationRules(new Rule[]{
     // rule.unique("admins", "username", "用户名已存在"),
     // });
-    public Datetimerange setCreationRules(Rule[] rules) {
+    public DatetimeRange setCreationRules(Rule[] rules) {
         for (int i = 0; i < rules.length; i++) {
             rules[i] = rules[i].setName(name);
         }
@@ -300,11 +300,11 @@ public class Datetimerange extends Commponent {
 
     // 校验规则，只在更新表单提交时生效
     //
-    // new Datetimerange().
+    // new DatetimeRange().
     // setUpdateRules(new Rule[]{
     // rule.unique("admins", "username", "用户名已存在"),
     // });
-    public Datetimerange setUpdateRules(Rule[] rules) {
+    public DatetimeRange setUpdateRules(Rule[] rules) {
         for (int i = 0; i < rules.length; i++) {
             rules[i] = rules[i].setName(name);
         }
@@ -314,7 +314,7 @@ public class Datetimerange extends Commponent {
     }
 
     // 生成前端验证规则
-    public Datetimerange buildFrontendRules(String path) {
+    public DatetimeRange buildFrontendRules(String path) {
         Rule[] rules = new Rule[] {};
         Rule[] creationRules = new Rule[] {};
         Rule[] updateRules = new Rule[] {};
@@ -354,14 +354,14 @@ public class Datetimerange extends Commponent {
     }
 
     // 表头的筛选菜单项，当值为 true 时，自动使用 valueEnum 生成，只在列表页中有效
-    public Datetimerange setFilters(boolean filters) {
+    public DatetimeRange setFilters(boolean filters) {
         this.filters = filters;
 
         return this;
     }
 
     // 表头的筛选菜单项，当值为 true 时，自动使用 valueEnum 生成，只在列表页中有效
-    public Datetimerange setFilters(Map<String, String> filters) {
+    public DatetimeRange setFilters(Map<String, String> filters) {
         List<Map<String, String>> tmpFilters = new ArrayList<>();
         filters.forEach((k, v) -> {
             Map<String, String> map = new HashMap<String, String>();
@@ -376,16 +376,16 @@ public class Datetimerange extends Commponent {
 
     // 设置When组件数据
     //
-    // new Datetimerange().setWhen(option, callback)
-    public Datetimerange setWhen(Object option, Closure callback) {
+    // new DatetimeRange().setWhen(option, callback)
+    public DatetimeRange setWhen(Object option, Closure callback) {
         this.setWhen("=", option, callback);
         return this;
     }
 
     // 设置When组件数据
     //
-    // new Datetimerange().setWhen(">", option, callback)
-    public Datetimerange setWhen(String operator, Object option, Closure callback) {
+    // new DatetimeRange().setWhen(">", option, callback)
+    public DatetimeRange setWhen(String operator, Object option, Closure callback) {
         When w = new When();
         WhenItem i = new WhenItem();
 
@@ -435,91 +435,91 @@ public class Datetimerange extends Commponent {
     }
 
     // Specify that the element should be hidden from the index view.
-    public Datetimerange hideFromIndex(boolean callback) {
+    public DatetimeRange hideFromIndex(boolean callback) {
         this.showOnIndex = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the detail view.
-    public Datetimerange hideFromDetail(boolean callback) {
+    public DatetimeRange hideFromDetail(boolean callback) {
         this.showOnDetail = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the creation view.
-    public Datetimerange hideWhenCreating(boolean callback) {
+    public DatetimeRange hideWhenCreating(boolean callback) {
         this.showOnCreation = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the update view.
-    public Datetimerange hideWhenUpdating(boolean callback) {
+    public DatetimeRange hideWhenUpdating(boolean callback) {
         this.showOnUpdate = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the export file.
-    public Datetimerange hideWhenExporting(boolean callback) {
+    public DatetimeRange hideWhenExporting(boolean callback) {
         this.showOnExport = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the import file.
-    public Datetimerange hideWhenImporting(boolean callback) {
+    public DatetimeRange hideWhenImporting(boolean callback) {
         this.showOnImport = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the index view.
-    public Datetimerange onIndexShowing(boolean callback) {
+    public DatetimeRange onIndexShowing(boolean callback) {
         this.showOnIndex = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the detail view.
-    public Datetimerange onDetailShowing(boolean callback) {
+    public DatetimeRange onDetailShowing(boolean callback) {
         this.showOnDetail = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the creation view.
-    public Datetimerange showOnCreating(boolean callback) {
+    public DatetimeRange showOnCreating(boolean callback) {
         this.showOnCreation = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the update view.
-    public Datetimerange showOnUpdating(boolean callback) {
+    public DatetimeRange showOnUpdating(boolean callback) {
         this.showOnUpdate = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the export file.
-    public Datetimerange showOnExporting(boolean callback) {
+    public DatetimeRange showOnExporting(boolean callback) {
         this.showOnExport = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the import file.
-    public Datetimerange showOnImporting(boolean callback) {
+    public DatetimeRange showOnImporting(boolean callback) {
         this.showOnImport = callback;
 
         return this;
     }
 
     // Specify that the element should only be shown on the index view.
-    public Datetimerange onlyOnIndex() {
+    public DatetimeRange onlyOnIndex() {
         this.showOnIndex = true;
         this.showOnDetail = false;
         this.showOnCreation = false;
@@ -531,7 +531,7 @@ public class Datetimerange extends Commponent {
     }
 
     // Specify that the element should only be shown on the detail view.
-    public Datetimerange onlyOnDetail() {
+    public DatetimeRange onlyOnDetail() {
         this.showOnIndex = false;
         this.showOnDetail = true;
         this.showOnCreation = false;
@@ -543,7 +543,7 @@ public class Datetimerange extends Commponent {
     }
 
     // Specify that the element should only be shown on forms.
-    public Datetimerange onlyOnForms() {
+    public DatetimeRange onlyOnForms() {
         this.showOnIndex = false;
         this.showOnDetail = false;
         this.showOnCreation = true;
@@ -555,7 +555,7 @@ public class Datetimerange extends Commponent {
     }
 
     // Specify that the element should only be shown on export file.
-    public Datetimerange onlyOnExport() {
+    public DatetimeRange onlyOnExport() {
         this.showOnIndex = false;
         this.showOnDetail = false;
         this.showOnCreation = false;
@@ -567,7 +567,7 @@ public class Datetimerange extends Commponent {
     }
 
     // Specify that the element should only be shown on import file.
-    public Datetimerange onlyOnImport() {
+    public DatetimeRange onlyOnImport() {
         this.showOnIndex = false;
         this.showOnDetail = false;
         this.showOnCreation = false;
@@ -579,7 +579,7 @@ public class Datetimerange extends Commponent {
     }
 
     // Specify that the element should be hidden from forms.
-    public Datetimerange exceptOnForms() {
+    public DatetimeRange exceptOnForms() {
         this.showOnIndex = true;
         this.showOnDetail = true;
         this.showOnCreation = false;

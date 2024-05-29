@@ -20,7 +20,18 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class Datetime extends Commponent {
+public class Radio extends Commponent {
+
+    @Data
+    public static class Option {
+
+        String label;
+
+        Object value;
+
+        @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+        boolean disabled;
+    }
 
     // 开启 grid 模式时传递给 Row, 仅在ProFormGroup, ProFormList, ProFormFieldSet 中有效，默认：{
     // gutter: 8 }
@@ -164,97 +175,41 @@ public class Datetime extends Commponent {
         Object callback();
     }
 
-    // 是否支持清除，默认true
-    boolean allowClear;
+    // RadioButton 的风格样式，目前有描边和填色两种风格 outline | solid
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    Object buttonStyle;
 
-    // 自动获取焦点，默认false
-    boolean autoFocus;
-
-    // 是否有边框，默认true
-    boolean bordered;
-
-    // 自定义类名
-    String className;
-
-    // 默认的选中项
+    // 默认选中的选项
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object defaultValue;
 
-    // 禁用
-    Object disabled;
+    // 整组失效
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    boolean disabled;
 
-    // 设置日期格式，为数组时支持多格式匹配，展示以第一个为准。
-    String format;
+    // 可选项数据源
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    Option[] options;
 
-    // 额外的弹出日历 className
-    String popupClassName;
+    // 用于设置 Radio options 类型 default | button
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    String optionType;
 
-    // 设置输入框为只读（避免在移动设备上打开虚拟键盘）
-    boolean inputReadOnly;
-
-    // 国际化配置
-    Object locale;
-
-    // 日期面板的状态 time | date | month | year | decade
-    String mode;
-
-    // 自定义下一个图标
-    Object nextIcon;
-
-    // 控制浮层显隐
-    boolean open;
-
-    // 设置选择器类型 date | week | month | quarter | year
-    String picker;
-
-    // 输入框占位文本
-    String placeholder;
-
-    // 浮层预设位置，bottomLeft bottomRight topLeft topRight
-    String placement;
-
-    // 额外的弹出日历样式
-    Object popupStyle;
-
-    // 自定义上一个图标
-    Object prevIcon;
-
-    // 输入框大小，large | middle | small
+    // 大小，只对按钮样式生效, large | middle | small
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     String size;
 
-    // 设置校验状态，'error' | 'warning'
-    String status;
-
-    // 自定义的选择框后缀图标
-    Object suffixIcon;
-
-    // 自定义 << 切换图标
-    Object superNextIcon;
-
-    // 自定义 >> 切换图标
-    Object superPrevIcon;
-
     // 指定选中项,string[] | number[]
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object value;
 
-    // 默认面板日期
-    String defaultPickerValue;
-
-    // 当设定了 showTime 的时候，面板是否显示“此刻”按钮
-    boolean showNow;
-
-    // 增加时间选择功能
-    Object showTime;
-
-    // 是否展示“今天”按钮
-    boolean showToday;
-
-    public Datetime() {
-        this.component = "datetimeField";
+    public Radio() {
+        this.component = "radioField";
         this.setComponentKey();
     }
 
-    // Field 的长度，我们归纳了常用的 Field 长度以及适合的场景，支持了一些枚举 "xs" , "s" , "m" , "l" , "x"
-    public Datetime setWidth(Object width) {
+     // Field 的长度，我们归纳了常用的 Field 长度以及适合的场景，支持了一些枚举 "xs" , "s" , "m" , "l" , "x"
+     public Radio setWidth(Object width) {
         Map<String, Object> style = new HashMap<>();
 
         this.style.forEach((key, value) -> {
@@ -268,13 +223,13 @@ public class Datetime extends Commponent {
 
     // 校验规则，设置字段的校验逻辑
     //
-    // new Datetime().
+    // new Radio().
     // setRules(new Rule[]{
     // rule.required(true, "用户名必须填写"), // 需要用户名字段不能为空
     // rule.min(6, "用户名不能少于6个字符"), // 用户名最少需要6个字符
     // rule.max(20, "用户名不能超过20个字符") // 用户名最多只能包含20个字符
     // });
-    public Datetime setRules(Rule[] rules) {
+    public Radio setRules(Rule[] rules) {
         for (int i = 0; i < rules.length; i++) {
             rules[i] = rules[i].setName(name);
         }
@@ -285,11 +240,11 @@ public class Datetime extends Commponent {
 
     // 校验规则，只在创建表单提交时生效
     //
-    // new Datetime().
+    // new Radio().
     // setCreationRules(new Rule[]{
     // rule.unique("admins", "username", "用户名已存在"),
     // });
-    public Datetime setCreationRules(Rule[] rules) {
+    public Radio setCreationRules(Rule[] rules) {
         for (int i = 0; i < rules.length; i++) {
             rules[i] = rules[i].setName(name);
         }
@@ -300,11 +255,11 @@ public class Datetime extends Commponent {
 
     // 校验规则，只在更新表单提交时生效
     //
-    // new Datetime().
+    // new Radio().
     // setUpdateRules(new Rule[]{
     // rule.unique("admins", "username", "用户名已存在"),
     // });
-    public Datetime setUpdateRules(Rule[] rules) {
+    public Radio setUpdateRules(Rule[] rules) {
         for (int i = 0; i < rules.length; i++) {
             rules[i] = rules[i].setName(name);
         }
@@ -314,7 +269,7 @@ public class Datetime extends Commponent {
     }
 
     // 生成前端验证规则
-    public Datetime buildFrontendRules(String path) {
+    public Radio buildFrontendRules(String path) {
         Rule[] rules = new Rule[] {};
         Rule[] creationRules = new Rule[] {};
         Rule[] updateRules = new Rule[] {};
@@ -354,14 +309,14 @@ public class Datetime extends Commponent {
     }
 
     // 表头的筛选菜单项，当值为 true 时，自动使用 valueEnum 生成，只在列表页中有效
-    public Datetime setFilters(boolean filters) {
+    public Radio setFilters(boolean filters) {
         this.filters = filters;
 
         return this;
     }
 
     // 表头的筛选菜单项，当值为 true 时，自动使用 valueEnum 生成，只在列表页中有效
-    public Datetime setFilters(Map<String, String> filters) {
+    public Radio setFilters(Map<String, String> filters) {
         List<Map<String, String>> tmpFilters = new ArrayList<>();
         filters.forEach((k, v) -> {
             Map<String, String> map = new HashMap<String, String>();
@@ -376,16 +331,16 @@ public class Datetime extends Commponent {
 
     // 设置When组件数据
     //
-    // new Datetime().setWhen(option, callback)
-    public Datetime setWhen(Object option, Closure callback) {
+    // new Radio().setWhen(option, callback)
+    public Radio setWhen(Object option, Closure callback) {
         this.setWhen("=", option, callback);
         return this;
     }
 
     // 设置When组件数据
     //
-    // new Datetime().setWhen(">", option, callback)
-    public Datetime setWhen(String operator, Object option, Closure callback) {
+    // new Radio().setWhen(">", option, callback)
+    public Radio setWhen(String operator, Object option, Closure callback) {
         When w = new When();
         WhenItem i = new WhenItem();
 
@@ -435,91 +390,91 @@ public class Datetime extends Commponent {
     }
 
     // Specify that the element should be hidden from the index view.
-    public Datetime hideFromIndex(boolean callback) {
+    public Radio hideFromIndex(boolean callback) {
         this.showOnIndex = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the detail view.
-    public Datetime hideFromDetail(boolean callback) {
+    public Radio hideFromDetail(boolean callback) {
         this.showOnDetail = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the creation view.
-    public Datetime hideWhenCreating(boolean callback) {
+    public Radio hideWhenCreating(boolean callback) {
         this.showOnCreation = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the update view.
-    public Datetime hideWhenUpdating(boolean callback) {
+    public Radio hideWhenUpdating(boolean callback) {
         this.showOnUpdate = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the export file.
-    public Datetime hideWhenExporting(boolean callback) {
+    public Radio hideWhenExporting(boolean callback) {
         this.showOnExport = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the import file.
-    public Datetime hideWhenImporting(boolean callback) {
+    public Radio hideWhenImporting(boolean callback) {
         this.showOnImport = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the index view.
-    public Datetime onIndexShowing(boolean callback) {
+    public Radio onIndexShowing(boolean callback) {
         this.showOnIndex = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the detail view.
-    public Datetime onDetailShowing(boolean callback) {
+    public Radio onDetailShowing(boolean callback) {
         this.showOnDetail = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the creation view.
-    public Datetime showOnCreating(boolean callback) {
+    public Radio showOnCreating(boolean callback) {
         this.showOnCreation = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the update view.
-    public Datetime showOnUpdating(boolean callback) {
+    public Radio showOnUpdating(boolean callback) {
         this.showOnUpdate = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the export file.
-    public Datetime showOnExporting(boolean callback) {
+    public Radio showOnExporting(boolean callback) {
         this.showOnExport = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the import file.
-    public Datetime showOnImporting(boolean callback) {
+    public Radio showOnImporting(boolean callback) {
         this.showOnImport = callback;
 
         return this;
     }
 
     // Specify that the element should only be shown on the index view.
-    public Datetime onlyOnIndex() {
+    public Radio onlyOnIndex() {
         this.showOnIndex = true;
         this.showOnDetail = false;
         this.showOnCreation = false;
@@ -531,7 +486,7 @@ public class Datetime extends Commponent {
     }
 
     // Specify that the element should only be shown on the detail view.
-    public Datetime onlyOnDetail() {
+    public Radio onlyOnDetail() {
         this.showOnIndex = false;
         this.showOnDetail = true;
         this.showOnCreation = false;
@@ -543,7 +498,7 @@ public class Datetime extends Commponent {
     }
 
     // Specify that the element should only be shown on forms.
-    public Datetime onlyOnForms() {
+    public Radio onlyOnForms() {
         this.showOnIndex = false;
         this.showOnDetail = false;
         this.showOnCreation = true;
@@ -555,7 +510,7 @@ public class Datetime extends Commponent {
     }
 
     // Specify that the element should only be shown on export file.
-    public Datetime onlyOnExport() {
+    public Radio onlyOnExport() {
         this.showOnIndex = false;
         this.showOnDetail = false;
         this.showOnCreation = false;
@@ -567,7 +522,7 @@ public class Datetime extends Commponent {
     }
 
     // Specify that the element should only be shown on import file.
-    public Datetime onlyOnImport() {
+    public Radio onlyOnImport() {
         this.showOnIndex = false;
         this.showOnDetail = false;
         this.showOnCreation = false;
@@ -579,7 +534,7 @@ public class Datetime extends Commponent {
     }
 
     // Specify that the element should be hidden from forms.
-    public Datetime exceptOnForms() {
+    public Radio exceptOnForms() {
         this.showOnIndex = true;
         this.showOnDetail = true;
         this.showOnCreation = false;

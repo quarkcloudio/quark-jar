@@ -20,7 +20,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class Datetime extends Commponent {
+public class Number extends Commponent {
 
     // 开启 grid 模式时传递给 Row, 仅在ProFormGroup, ProFormList, ProFormFieldSet 中有效，默认：{
     // gutter: 8 }
@@ -164,97 +164,97 @@ public class Datetime extends Commponent {
         Object callback();
     }
 
-    // 是否支持清除，默认true
+    // 带标签的 input，设置后置标签
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    Object addonAfter;
+
+    // 带标签的 input，设置前置标签
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    Object addonBefore;
+
+    // 可以点击清除图标删除内容
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean allowClear;
 
-    // 自动获取焦点，默认false
-    boolean autoFocus;
-
     // 是否有边框，默认true
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean bordered;
 
-    // 自定义类名
-    String className;
+    // 是否显示增减按钮，也可设置自定义箭头图标
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    boolean controls;
+
+    // 小数点
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    String decimalSeparator;
 
     // 默认的选中项
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object defaultValue;
 
     // 禁用
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object disabled;
 
-    // 设置日期格式，为数组时支持多格式匹配，展示以第一个为准。
-    String format;
+    // 是否启用键盘快捷行为
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    boolean keyboard;
 
-    // 额外的弹出日历 className
-    String popupClassName;
+    // 最大值
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    int max;
 
-    // 设置输入框为只读（避免在移动设备上打开虚拟键盘）
-    boolean inputReadOnly;
+    // 最小值
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    int min;
 
-    // 国际化配置
-    Object locale;
+    // 数值精度，配置 formatter 时会以 formatter 为准
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    int precision;
 
-    // 日期面板的状态 time | date | month | year | decade
-    String mode;
+    // 只读
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    boolean readOnly;
 
-    // 自定义下一个图标
-    Object nextIcon;
-
-    // 控制浮层显隐
-    boolean open;
-
-    // 设置选择器类型 date | week | month | quarter | year
-    String picker;
-
-    // 输入框占位文本
-    String placeholder;
-
-    // 浮层预设位置，bottomLeft bottomRight topLeft topRight
-    String placement;
-
-    // 额外的弹出日历样式
-    Object popupStyle;
-
-    // 自定义上一个图标
-    Object prevIcon;
-
-    // 输入框大小，large | middle | small
-    String size;
-
-    // 设置校验状态，'error' | 'warning'
+    // 设置校验状态,'error' | 'warning'
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     String status;
 
-    // 自定义的选择框后缀图标
-    Object suffixIcon;
+    // 带有前缀图标的 input
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    Object prefix;
 
-    // 自定义 << 切换图标
-    Object superNextIcon;
+    // 控件大小。注：标准表单内的输入框大小限制为 middle，large | middle | small
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    String size;
 
-    // 自定义 >> 切换图标
-    Object superPrevIcon;
+    // 每次改变步数，可以为小数
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    Object step;
+
+    // 字符值模式，开启后支持高精度小数。同时 onChange 将返回 string 类型
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    boolean stringMode;
 
     // 指定选中项,string[] | number[]
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object value;
 
-    // 默认面板日期
-    String defaultPickerValue;
+    // 占位符
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    String placeholder;
 
-    // 当设定了 showTime 的时候，面板是否显示“此刻”按钮
-    boolean showNow;
+    // 自定义样式
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    Map<String, Object> style;
 
-    // 增加时间选择功能
-    Object showTime;
-
-    // 是否展示“今天”按钮
-    boolean showToday;
-
-    public Datetime() {
-        this.component = "datetimeField";
+    public Number() {
+        this.component = "inputNumberField";
         this.setComponentKey();
     }
 
     // Field 的长度，我们归纳了常用的 Field 长度以及适合的场景，支持了一些枚举 "xs" , "s" , "m" , "l" , "x"
-    public Datetime setWidth(Object width) {
+    public Number setWidth(Object width) {
         Map<String, Object> style = new HashMap<>();
 
         this.style.forEach((key, value) -> {
@@ -268,13 +268,13 @@ public class Datetime extends Commponent {
 
     // 校验规则，设置字段的校验逻辑
     //
-    // new Datetime().
+    // new Number().
     // setRules(new Rule[]{
     // rule.required(true, "用户名必须填写"), // 需要用户名字段不能为空
     // rule.min(6, "用户名不能少于6个字符"), // 用户名最少需要6个字符
     // rule.max(20, "用户名不能超过20个字符") // 用户名最多只能包含20个字符
     // });
-    public Datetime setRules(Rule[] rules) {
+    public Number setRules(Rule[] rules) {
         for (int i = 0; i < rules.length; i++) {
             rules[i] = rules[i].setName(name);
         }
@@ -285,11 +285,11 @@ public class Datetime extends Commponent {
 
     // 校验规则，只在创建表单提交时生效
     //
-    // new Datetime().
+    // new Number().
     // setCreationRules(new Rule[]{
     // rule.unique("admins", "username", "用户名已存在"),
     // });
-    public Datetime setCreationRules(Rule[] rules) {
+    public Number setCreationRules(Rule[] rules) {
         for (int i = 0; i < rules.length; i++) {
             rules[i] = rules[i].setName(name);
         }
@@ -300,11 +300,11 @@ public class Datetime extends Commponent {
 
     // 校验规则，只在更新表单提交时生效
     //
-    // new Datetime().
+    // new Number().
     // setUpdateRules(new Rule[]{
     // rule.unique("admins", "username", "用户名已存在"),
     // });
-    public Datetime setUpdateRules(Rule[] rules) {
+    public Number setUpdateRules(Rule[] rules) {
         for (int i = 0; i < rules.length; i++) {
             rules[i] = rules[i].setName(name);
         }
@@ -314,7 +314,7 @@ public class Datetime extends Commponent {
     }
 
     // 生成前端验证规则
-    public Datetime buildFrontendRules(String path) {
+    public Number buildFrontendRules(String path) {
         Rule[] rules = new Rule[] {};
         Rule[] creationRules = new Rule[] {};
         Rule[] updateRules = new Rule[] {};
@@ -354,14 +354,14 @@ public class Datetime extends Commponent {
     }
 
     // 表头的筛选菜单项，当值为 true 时，自动使用 valueEnum 生成，只在列表页中有效
-    public Datetime setFilters(boolean filters) {
+    public Number setFilters(boolean filters) {
         this.filters = filters;
 
         return this;
     }
 
     // 表头的筛选菜单项，当值为 true 时，自动使用 valueEnum 生成，只在列表页中有效
-    public Datetime setFilters(Map<String, String> filters) {
+    public Number setFilters(Map<String, String> filters) {
         List<Map<String, String>> tmpFilters = new ArrayList<>();
         filters.forEach((k, v) -> {
             Map<String, String> map = new HashMap<String, String>();
@@ -376,16 +376,16 @@ public class Datetime extends Commponent {
 
     // 设置When组件数据
     //
-    // new Datetime().setWhen(option, callback)
-    public Datetime setWhen(Object option, Closure callback) {
+    // new Number().setWhen(option, callback)
+    public Number setWhen(Object option, Closure callback) {
         this.setWhen("=", option, callback);
         return this;
     }
 
     // 设置When组件数据
     //
-    // new Datetime().setWhen(">", option, callback)
-    public Datetime setWhen(String operator, Object option, Closure callback) {
+    // new Number().setWhen(">", option, callback)
+    public Number setWhen(String operator, Object option, Closure callback) {
         When w = new When();
         WhenItem i = new WhenItem();
 
@@ -435,91 +435,91 @@ public class Datetime extends Commponent {
     }
 
     // Specify that the element should be hidden from the index view.
-    public Datetime hideFromIndex(boolean callback) {
+    public Number hideFromIndex(boolean callback) {
         this.showOnIndex = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the detail view.
-    public Datetime hideFromDetail(boolean callback) {
+    public Number hideFromDetail(boolean callback) {
         this.showOnDetail = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the creation view.
-    public Datetime hideWhenCreating(boolean callback) {
+    public Number hideWhenCreating(boolean callback) {
         this.showOnCreation = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the update view.
-    public Datetime hideWhenUpdating(boolean callback) {
+    public Number hideWhenUpdating(boolean callback) {
         this.showOnUpdate = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the export file.
-    public Datetime hideWhenExporting(boolean callback) {
+    public Number hideWhenExporting(boolean callback) {
         this.showOnExport = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the import file.
-    public Datetime hideWhenImporting(boolean callback) {
+    public Number hideWhenImporting(boolean callback) {
         this.showOnImport = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the index view.
-    public Datetime onIndexShowing(boolean callback) {
+    public Number onIndexShowing(boolean callback) {
         this.showOnIndex = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the detail view.
-    public Datetime onDetailShowing(boolean callback) {
+    public Number onDetailShowing(boolean callback) {
         this.showOnDetail = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the creation view.
-    public Datetime showOnCreating(boolean callback) {
+    public Number showOnCreating(boolean callback) {
         this.showOnCreation = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the update view.
-    public Datetime showOnUpdating(boolean callback) {
+    public Number showOnUpdating(boolean callback) {
         this.showOnUpdate = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the export file.
-    public Datetime showOnExporting(boolean callback) {
+    public Number showOnExporting(boolean callback) {
         this.showOnExport = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the import file.
-    public Datetime showOnImporting(boolean callback) {
+    public Number showOnImporting(boolean callback) {
         this.showOnImport = callback;
 
         return this;
     }
 
     // Specify that the element should only be shown on the index view.
-    public Datetime onlyOnIndex() {
+    public Number onlyOnIndex() {
         this.showOnIndex = true;
         this.showOnDetail = false;
         this.showOnCreation = false;
@@ -531,7 +531,7 @@ public class Datetime extends Commponent {
     }
 
     // Specify that the element should only be shown on the detail view.
-    public Datetime onlyOnDetail() {
+    public Number onlyOnDetail() {
         this.showOnIndex = false;
         this.showOnDetail = true;
         this.showOnCreation = false;
@@ -543,7 +543,7 @@ public class Datetime extends Commponent {
     }
 
     // Specify that the element should only be shown on forms.
-    public Datetime onlyOnForms() {
+    public Number onlyOnForms() {
         this.showOnIndex = false;
         this.showOnDetail = false;
         this.showOnCreation = true;
@@ -555,7 +555,7 @@ public class Datetime extends Commponent {
     }
 
     // Specify that the element should only be shown on export file.
-    public Datetime onlyOnExport() {
+    public Number onlyOnExport() {
         this.showOnIndex = false;
         this.showOnDetail = false;
         this.showOnCreation = false;
@@ -567,7 +567,7 @@ public class Datetime extends Commponent {
     }
 
     // Specify that the element should only be shown on import file.
-    public Datetime onlyOnImport() {
+    public Number onlyOnImport() {
         this.showOnIndex = false;
         this.showOnDetail = false;
         this.showOnCreation = false;
@@ -579,7 +579,7 @@ public class Datetime extends Commponent {
     }
 
     // Specify that the element should be hidden from forms.
-    public Datetime exceptOnForms() {
+    public Number exceptOnForms() {
         this.showOnIndex = true;
         this.showOnDetail = true;
         this.showOnCreation = false;

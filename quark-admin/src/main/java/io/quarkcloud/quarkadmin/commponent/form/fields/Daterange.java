@@ -20,7 +20,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class Daterange extends Commponent {
+public class DateRange extends Commponent {
 
     // 开启 grid 模式时传递给 Row, 仅在ProFormGroup, ProFormList, ProFormFieldSet 中有效，默认：{
     // gutter: 8 }
@@ -248,13 +248,13 @@ public class Daterange extends Commponent {
     // 是否展示“今天”按钮
     boolean showToday;
 
-    public Daterange() {
-        this.component = "dateField";
+    public DateRange() {
+        this.component = "dateRangeField";
         this.setComponentKey();
     }
 
     // Field 的长度，我们归纳了常用的 Field 长度以及适合的场景，支持了一些枚举 "xs" , "s" , "m" , "l" , "x"
-    public Daterange setWidth(Object width) {
+    public DateRange setWidth(Object width) {
         Map<String, Object> style = new HashMap<>();
 
         this.style.forEach((key, value) -> {
@@ -268,13 +268,13 @@ public class Daterange extends Commponent {
 
     // 校验规则，设置字段的校验逻辑
     //
-    // new Daterange().
+    // new DateRange().
     // setRules(new Rule[]{
     // rule.required(true, "用户名必须填写"), // 需要用户名字段不能为空
     // rule.min(6, "用户名不能少于6个字符"), // 用户名最少需要6个字符
     // rule.max(20, "用户名不能超过20个字符") // 用户名最多只能包含20个字符
     // });
-    public Daterange setRules(Rule[] rules) {
+    public DateRange setRules(Rule[] rules) {
         for (int i = 0; i < rules.length; i++) {
             rules[i] = rules[i].setName(name);
         }
@@ -285,11 +285,11 @@ public class Daterange extends Commponent {
 
     // 校验规则，只在创建表单提交时生效
     //
-    // new Daterange().
+    // new DateRange().
     // setCreationRules(new Rule[]{
     // rule.unique("admins", "username", "用户名已存在"),
     // });
-    public Daterange setCreationRules(Rule[] rules) {
+    public DateRange setCreationRules(Rule[] rules) {
         for (int i = 0; i < rules.length; i++) {
             rules[i] = rules[i].setName(name);
         }
@@ -300,11 +300,11 @@ public class Daterange extends Commponent {
 
     // 校验规则，只在更新表单提交时生效
     //
-    // new Daterange().
+    // new DateRange().
     // setUpdateRules(new Rule[]{
     // rule.unique("admins", "username", "用户名已存在"),
     // });
-    public Daterange setUpdateRules(Rule[] rules) {
+    public DateRange setUpdateRules(Rule[] rules) {
         for (int i = 0; i < rules.length; i++) {
             rules[i] = rules[i].setName(name);
         }
@@ -314,7 +314,7 @@ public class Daterange extends Commponent {
     }
 
     // 生成前端验证规则
-    public Daterange buildFrontendRules(String path) {
+    public DateRange buildFrontendRules(String path) {
         Rule[] rules = new Rule[] {};
         Rule[] creationRules = new Rule[] {};
         Rule[] updateRules = new Rule[] {};
@@ -354,14 +354,14 @@ public class Daterange extends Commponent {
     }
 
     // 表头的筛选菜单项，当值为 true 时，自动使用 valueEnum 生成，只在列表页中有效
-    public Daterange setFilters(boolean filters) {
+    public DateRange setFilters(boolean filters) {
         this.filters = filters;
 
         return this;
     }
 
     // 表头的筛选菜单项，当值为 true 时，自动使用 valueEnum 生成，只在列表页中有效
-    public Daterange setFilters(Map<String, String> filters) {
+    public DateRange setFilters(Map<String, String> filters) {
         List<Map<String, String>> tmpFilters = new ArrayList<>();
         filters.forEach((k, v) -> {
             Map<String, String> map = new HashMap<String, String>();
@@ -376,16 +376,16 @@ public class Daterange extends Commponent {
 
     // 设置When组件数据
     //
-    // new Daterange().setWhen(option, callback)
-    public Daterange setWhen(Object option, Closure callback) {
+    // new DateRange().setWhen(option, callback)
+    public DateRange setWhen(Object option, Closure callback) {
         this.setWhen("=", option, callback);
         return this;
     }
 
     // 设置When组件数据
     //
-    // new Daterange().setWhen(">", option, callback)
-    public Daterange setWhen(String operator, Object option, Closure callback) {
+    // new DateRange().setWhen(">", option, callback)
+    public DateRange setWhen(String operator, Object option, Closure callback) {
         When w = new When();
         WhenItem i = new WhenItem();
 
@@ -435,91 +435,91 @@ public class Daterange extends Commponent {
     }
 
     // Specify that the element should be hidden from the index view.
-    public Daterange hideFromIndex(boolean callback) {
+    public DateRange hideFromIndex(boolean callback) {
         this.showOnIndex = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the detail view.
-    public Daterange hideFromDetail(boolean callback) {
+    public DateRange hideFromDetail(boolean callback) {
         this.showOnDetail = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the creation view.
-    public Daterange hideWhenCreating(boolean callback) {
+    public DateRange hideWhenCreating(boolean callback) {
         this.showOnCreation = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the update view.
-    public Daterange hideWhenUpdating(boolean callback) {
+    public DateRange hideWhenUpdating(boolean callback) {
         this.showOnUpdate = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the export file.
-    public Daterange hideWhenExporting(boolean callback) {
+    public DateRange hideWhenExporting(boolean callback) {
         this.showOnExport = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the import file.
-    public Daterange hideWhenImporting(boolean callback) {
+    public DateRange hideWhenImporting(boolean callback) {
         this.showOnImport = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the index view.
-    public Daterange onIndexShowing(boolean callback) {
+    public DateRange onIndexShowing(boolean callback) {
         this.showOnIndex = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the detail view.
-    public Daterange onDetailShowing(boolean callback) {
+    public DateRange onDetailShowing(boolean callback) {
         this.showOnDetail = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the creation view.
-    public Daterange showOnCreating(boolean callback) {
+    public DateRange showOnCreating(boolean callback) {
         this.showOnCreation = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the update view.
-    public Daterange showOnUpdating(boolean callback) {
+    public DateRange showOnUpdating(boolean callback) {
         this.showOnUpdate = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the export file.
-    public Daterange showOnExporting(boolean callback) {
+    public DateRange showOnExporting(boolean callback) {
         this.showOnExport = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the import file.
-    public Daterange showOnImporting(boolean callback) {
+    public DateRange showOnImporting(boolean callback) {
         this.showOnImport = callback;
 
         return this;
     }
 
     // Specify that the element should only be shown on the index view.
-    public Daterange onlyOnIndex() {
+    public DateRange onlyOnIndex() {
         this.showOnIndex = true;
         this.showOnDetail = false;
         this.showOnCreation = false;
@@ -531,7 +531,7 @@ public class Daterange extends Commponent {
     }
 
     // Specify that the element should only be shown on the detail view.
-    public Daterange onlyOnDetail() {
+    public DateRange onlyOnDetail() {
         this.showOnIndex = false;
         this.showOnDetail = true;
         this.showOnCreation = false;
@@ -543,7 +543,7 @@ public class Daterange extends Commponent {
     }
 
     // Specify that the element should only be shown on forms.
-    public Daterange onlyOnForms() {
+    public DateRange onlyOnForms() {
         this.showOnIndex = false;
         this.showOnDetail = false;
         this.showOnCreation = true;
@@ -555,7 +555,7 @@ public class Daterange extends Commponent {
     }
 
     // Specify that the element should only be shown on export file.
-    public Daterange onlyOnExport() {
+    public DateRange onlyOnExport() {
         this.showOnIndex = false;
         this.showOnDetail = false;
         this.showOnCreation = false;
@@ -567,7 +567,7 @@ public class Daterange extends Commponent {
     }
 
     // Specify that the element should only be shown on import file.
-    public Daterange onlyOnImport() {
+    public DateRange onlyOnImport() {
         this.showOnIndex = false;
         this.showOnDetail = false;
         this.showOnCreation = false;
@@ -579,7 +579,7 @@ public class Daterange extends Commponent {
     }
 
     // Specify that the element should be hidden from forms.
-    public Daterange exceptOnForms() {
+    public DateRange exceptOnForms() {
         this.showOnIndex = true;
         this.showOnDetail = true;
         this.showOnCreation = false;

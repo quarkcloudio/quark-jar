@@ -20,7 +20,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class Datetime extends Commponent {
+public class Quarter extends Commponent {
 
     // 开启 grid 模式时传递给 Row, 仅在ProFormGroup, ProFormList, ProFormFieldSet 中有效，默认：{
     // gutter: 8 }
@@ -248,13 +248,13 @@ public class Datetime extends Commponent {
     // 是否展示“今天”按钮
     boolean showToday;
 
-    public Datetime() {
-        this.component = "datetimeField";
+    public Quarter() {
+        this.component = "quarterField";
         this.setComponentKey();
     }
 
     // Field 的长度，我们归纳了常用的 Field 长度以及适合的场景，支持了一些枚举 "xs" , "s" , "m" , "l" , "x"
-    public Datetime setWidth(Object width) {
+    public Quarter setWidth(Object width) {
         Map<String, Object> style = new HashMap<>();
 
         this.style.forEach((key, value) -> {
@@ -268,13 +268,13 @@ public class Datetime extends Commponent {
 
     // 校验规则，设置字段的校验逻辑
     //
-    // new Datetime().
+    // new Quarter().
     // setRules(new Rule[]{
     // rule.required(true, "用户名必须填写"), // 需要用户名字段不能为空
     // rule.min(6, "用户名不能少于6个字符"), // 用户名最少需要6个字符
     // rule.max(20, "用户名不能超过20个字符") // 用户名最多只能包含20个字符
     // });
-    public Datetime setRules(Rule[] rules) {
+    public Quarter setRules(Rule[] rules) {
         for (int i = 0; i < rules.length; i++) {
             rules[i] = rules[i].setName(name);
         }
@@ -285,11 +285,11 @@ public class Datetime extends Commponent {
 
     // 校验规则，只在创建表单提交时生效
     //
-    // new Datetime().
+    // new Quarter().
     // setCreationRules(new Rule[]{
     // rule.unique("admins", "username", "用户名已存在"),
     // });
-    public Datetime setCreationRules(Rule[] rules) {
+    public Quarter setCreationRules(Rule[] rules) {
         for (int i = 0; i < rules.length; i++) {
             rules[i] = rules[i].setName(name);
         }
@@ -300,11 +300,11 @@ public class Datetime extends Commponent {
 
     // 校验规则，只在更新表单提交时生效
     //
-    // new Datetime().
+    // new Quarter().
     // setUpdateRules(new Rule[]{
     // rule.unique("admins", "username", "用户名已存在"),
     // });
-    public Datetime setUpdateRules(Rule[] rules) {
+    public Quarter setUpdateRules(Rule[] rules) {
         for (int i = 0; i < rules.length; i++) {
             rules[i] = rules[i].setName(name);
         }
@@ -314,7 +314,7 @@ public class Datetime extends Commponent {
     }
 
     // 生成前端验证规则
-    public Datetime buildFrontendRules(String path) {
+    public Quarter buildFrontendRules(String path) {
         Rule[] rules = new Rule[] {};
         Rule[] creationRules = new Rule[] {};
         Rule[] updateRules = new Rule[] {};
@@ -354,14 +354,14 @@ public class Datetime extends Commponent {
     }
 
     // 表头的筛选菜单项，当值为 true 时，自动使用 valueEnum 生成，只在列表页中有效
-    public Datetime setFilters(boolean filters) {
+    public Quarter setFilters(boolean filters) {
         this.filters = filters;
 
         return this;
     }
 
     // 表头的筛选菜单项，当值为 true 时，自动使用 valueEnum 生成，只在列表页中有效
-    public Datetime setFilters(Map<String, String> filters) {
+    public Quarter setFilters(Map<String, String> filters) {
         List<Map<String, String>> tmpFilters = new ArrayList<>();
         filters.forEach((k, v) -> {
             Map<String, String> map = new HashMap<String, String>();
@@ -376,16 +376,16 @@ public class Datetime extends Commponent {
 
     // 设置When组件数据
     //
-    // new Datetime().setWhen(option, callback)
-    public Datetime setWhen(Object option, Closure callback) {
+    // new Quarter().setWhen(option, callback)
+    public Quarter setWhen(Object option, Closure callback) {
         this.setWhen("=", option, callback);
         return this;
     }
 
     // 设置When组件数据
     //
-    // new Datetime().setWhen(">", option, callback)
-    public Datetime setWhen(String operator, Object option, Closure callback) {
+    // new Quarter().setWhen(">", option, callback)
+    public Quarter setWhen(String operator, Object option, Closure callback) {
         When w = new When();
         WhenItem i = new WhenItem();
 
@@ -435,91 +435,91 @@ public class Datetime extends Commponent {
     }
 
     // Specify that the element should be hidden from the index view.
-    public Datetime hideFromIndex(boolean callback) {
+    public Quarter hideFromIndex(boolean callback) {
         this.showOnIndex = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the detail view.
-    public Datetime hideFromDetail(boolean callback) {
+    public Quarter hideFromDetail(boolean callback) {
         this.showOnDetail = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the creation view.
-    public Datetime hideWhenCreating(boolean callback) {
+    public Quarter hideWhenCreating(boolean callback) {
         this.showOnCreation = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the update view.
-    public Datetime hideWhenUpdating(boolean callback) {
+    public Quarter hideWhenUpdating(boolean callback) {
         this.showOnUpdate = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the export file.
-    public Datetime hideWhenExporting(boolean callback) {
+    public Quarter hideWhenExporting(boolean callback) {
         this.showOnExport = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the import file.
-    public Datetime hideWhenImporting(boolean callback) {
+    public Quarter hideWhenImporting(boolean callback) {
         this.showOnImport = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the index view.
-    public Datetime onIndexShowing(boolean callback) {
+    public Quarter onIndexShowing(boolean callback) {
         this.showOnIndex = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the detail view.
-    public Datetime onDetailShowing(boolean callback) {
+    public Quarter onDetailShowing(boolean callback) {
         this.showOnDetail = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the creation view.
-    public Datetime showOnCreating(boolean callback) {
+    public Quarter showOnCreating(boolean callback) {
         this.showOnCreation = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the update view.
-    public Datetime showOnUpdating(boolean callback) {
+    public Quarter showOnUpdating(boolean callback) {
         this.showOnUpdate = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the export file.
-    public Datetime showOnExporting(boolean callback) {
+    public Quarter showOnExporting(boolean callback) {
         this.showOnExport = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the import file.
-    public Datetime showOnImporting(boolean callback) {
+    public Quarter showOnImporting(boolean callback) {
         this.showOnImport = callback;
 
         return this;
     }
 
     // Specify that the element should only be shown on the index view.
-    public Datetime onlyOnIndex() {
+    public Quarter onlyOnIndex() {
         this.showOnIndex = true;
         this.showOnDetail = false;
         this.showOnCreation = false;
@@ -531,7 +531,7 @@ public class Datetime extends Commponent {
     }
 
     // Specify that the element should only be shown on the detail view.
-    public Datetime onlyOnDetail() {
+    public Quarter onlyOnDetail() {
         this.showOnIndex = false;
         this.showOnDetail = true;
         this.showOnCreation = false;
@@ -543,7 +543,7 @@ public class Datetime extends Commponent {
     }
 
     // Specify that the element should only be shown on forms.
-    public Datetime onlyOnForms() {
+    public Quarter onlyOnForms() {
         this.showOnIndex = false;
         this.showOnDetail = false;
         this.showOnCreation = true;
@@ -555,7 +555,7 @@ public class Datetime extends Commponent {
     }
 
     // Specify that the element should only be shown on export file.
-    public Datetime onlyOnExport() {
+    public Quarter onlyOnExport() {
         this.showOnIndex = false;
         this.showOnDetail = false;
         this.showOnCreation = false;
@@ -567,7 +567,7 @@ public class Datetime extends Commponent {
     }
 
     // Specify that the element should only be shown on import file.
-    public Datetime onlyOnImport() {
+    public Quarter onlyOnImport() {
         this.showOnIndex = false;
         this.showOnDetail = false;
         this.showOnCreation = false;
@@ -579,7 +579,7 @@ public class Datetime extends Commponent {
     }
 
     // Specify that the element should be hidden from forms.
-    public Datetime exceptOnForms() {
+    public Quarter exceptOnForms() {
         this.showOnIndex = true;
         this.showOnDetail = true;
         this.showOnCreation = false;
