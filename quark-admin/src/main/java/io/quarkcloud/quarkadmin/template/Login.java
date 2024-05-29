@@ -1,4 +1,4 @@
-package io.quarkcloud.quarkadmin.service;
+package io.quarkcloud.quarkadmin.template;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
