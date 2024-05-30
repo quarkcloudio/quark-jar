@@ -207,7 +207,7 @@ public class Icon extends Commponent {
 	String placeholder;
 
     // 自定义样式
-	Map<String, Object> style = new HashMap<>();
+	Map<String, Object> style;
 
     public Icon() {
         this.component = "iconField";

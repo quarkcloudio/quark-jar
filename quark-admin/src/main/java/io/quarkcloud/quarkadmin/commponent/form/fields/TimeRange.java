@@ -1,8 +1,9 @@
 package io.quarkcloud.quarkadmin.commponent.form.fields;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.lang3.ArrayUtils;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -17,211 +18,266 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class ImageCaptcha extends Commponent {
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+public class TimeRange extends Commponent {
 
-    // 开启 grid 模式时传递给 Row, 仅在ProFormGroup, ProFormList, ProFormFieldSet 中有效，默认：{ gutter: 8 }
-	Map<String, Object> rowProps;
+    // 开启 grid 模式时传递给 Row, 仅在ProFormGroup, ProFormList, ProFormFieldSet 中有效，默认：{
+    // gutter: 8 }
+    Map<String, Object> rowProps;
 
     // 开启 grid 模式时传递给 Col，默认：{ xs: 24 }
-	Map<String, Object> colProps;
+    Map<String, Object> colProps;
 
     // 是否是次要控件，只针对 LightFilter 下有效
-	boolean secondary; 
+    boolean secondary;
 
     // 配合 label 属性使用，表示是否显示 label 后面的冒号
-	boolean colon;
+    boolean colon;
 
     // 额外的提示信息，和 help 类似，当需要错误信息和提示文案同时出现时，可以使用这个。
-	String extra;
+    String extra;
 
     // 配合 valiTextStatus 属性使用，展示校验状态图标，建议只配合 Input 组件使用
-	boolean hasFeedback;
+    boolean hasFeedback;
 
     // 提示信息，如不设置，则会根据校验规则自动生成
-	String help;
+    String help;
 
     // 是否隐藏字段（依然会收集和校验字段）
-	boolean hidden;
+    boolean hidden;
 
     // 设置子元素默认值，如果与 Form 的 initialValues 冲突则以 Form 为准
-	Object initialValue;
+    Object initialValue;
 
     // label 标签的文本
-	String label;
+    String label;
 
     // 标签文本对齐方式
-	String labelAlign;
+    String labelAlign;
 
-    // label 标签布局，同 <Col> 组件，设置 span offset 值，如 {span: 3, offset: 12} 或 sm: {span: 3, offset: 12}。你可以通过 Form 的 labelCol 进行统一设置，不会作用于嵌套 Item。当和 Form 同时设置时，以 Item 为准
-	Object labelCol;
+    // label 标签布局，同 <Col> 组件，设置 span offset 值，如 {span: 3, offset: 12} 或 sm: {span:
+    // 3, offset: 12}。你可以通过 Form 的 labelCol 进行统一设置，不会作用于嵌套 Item。当和 Form 同时设置时，以 Item
+    // 为准
+    Object labelCol;
 
     // 字段名，支持数组
-	String name;
+    String name;
 
     // 为 true 时不带样式，作为纯字段控件使用
-	boolean noStyle;
+    boolean noStyle;
 
     // 必填样式设置。如不设置，则会根据校验规则自动生成
-	boolean required;
+    boolean required;
 
     // 会在 label 旁增加一个 icon，悬浮后展示配置的信息
-	String tooltip;
+    String tooltip;
 
     // 子节点的值的属性，如 Switch 的是 'checked'。该属性为 getValueProps 的封装，自定义 getValueProps 后会失效
-	String valuePropName;
+    String valuePropName;
 
-    // 需要为输入控件设置布局样式时，使用该属性，用法同 labelCol。你可以通过 Form 的 wrapperCol 进行统一设置，不会作用于嵌套 Item。当和 Form 同时设置时，以 Item 为准
-	Object wrapperCol;
+    // 需要为输入控件设置布局样式时，使用该属性，用法同 labelCol。你可以通过 Form 的 wrapperCol 进行统一设置，不会作用于嵌套
+    // Item。当和 Form 同时设置时，以 Item 为准
+    Object wrapperCol;
 
     // 列表页、详情页中列属性
-	Object column;
+    Object column;
 
     // 设置列的对齐方式,left | right | center，只在列表页、详情页中有效
-	String align;
+    String align;
 
     // （IE 下无效）列是否固定，可选 true (等效于 left) left rightr，只在列表页中有效
-	Object fixed;
+    Object fixed;
 
     // 表格列是否可编辑，只在列表页中有效
-	boolean editable;
+    boolean editable;
 
     // 是否自动缩略，只在列表页、详情页中有效
-	boolean ellipsis;
+    boolean ellipsis;
 
     // 是否支持复制，只在列表页、详情页中有效
-	boolean copyable;
+    boolean copyable;
 
     // 表头的筛选菜单项，当值为 true 时，自动使用 valueEnum 生成，只在列表页中有效
-	Object filters;
+    Object filters;
 
     // 查询表单中的权重，权重大排序靠前，只在列表页中有效
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-	int order;
+    int order;
 
     // 可排序列，只在列表页中有效
-	Object sorter;
+    Object sorter;
 
     // 包含列的数量，只在详情页中有效
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-	int span;
+    int span;
 
     // 设置列宽，只在列表页中有效
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-	int columnWidth;
+    int columnWidth;
 
     // 获取数据接口
-	String api;
+    String api;
 
     // 是否忽略保存到数据库，默认为 false
-	boolean ignore;
+    boolean ignore;
 
     // 全局校验规则
-	Rule[] rules;
+    Rule[] rules;
 
     // 创建页校验规则
-	Rule[] creationRules;
+    Rule[] creationRules;
 
     // 编辑页校验规则
-	Rule[] updateRules;
+    Rule[] updateRules;
 
     // 前端校验规则，设置字段的校验逻辑
-	Rule[] frontendRules;
+    Rule[] frontendRules;
 
     // When组件
-	When when;
+    When when;
 
     // When组件里的字段
-	WhenItem[] whenItem;
+    WhenItem[] whenItem;
 
     // 在列表页展示
-	boolean showOnIndex;
-    
+    boolean showOnIndex;
+
     // 在详情页展示
-	boolean showOnDetail;
+    boolean showOnDetail;
 
     // 在创建页面展示
-	boolean showOnCreation;
+    boolean showOnCreation;
 
     // 在编辑页面展示
-	boolean showOnUpdate;
+    boolean showOnUpdate;
 
     // 在导出的Excel上展示
-	boolean showOnExport;
+    boolean showOnExport;
 
     // 在导入Excel上展示
-	boolean showOnImport;
+    boolean showOnImport;
 
     // 回调函数
     @FunctionalInterface
-	interface Closure {
+    interface Closure {
         Object callback();
     }
 
-    // 带标签的 input，设置后置标签
-	Object addonAfter;
+    // 是否支持清除，默认true
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    boolean allowClear;
 
-    // 带标签的 input，设置前置标签
-	Object addonBefore;
-
-    // 可以点击清除图标删除内容
-	boolean allowClear;
+    // 自动获取焦点，默认false
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    boolean autoFocus;
 
     // 是否有边框，默认true
-	boolean bordered;
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    boolean bordered;
+
+    // 自定义类名
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    String className;
+
+    // 自定义的清除图标
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    Object clearIcon;
+
+    // 清除按钮的提示文案
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    String clearText;
 
     // 默认的选中项
-	Object defaultValue;
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    Object defaultValue;
 
     // 禁用
-	Object disabled;
-
-    // 输入框的 id
-	String id;
-
-    // 最大长度
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-	int maxLength;
+    Object disabled;
 
-    // 是否展示字数
-	boolean showCount;
+    // 不可选择的时间
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    Object disabledTimeRange;
 
-    // 设置校验状态,'error' | 'warning'
-	String status;
-    
-    // 带有前缀图标的 input
-	Object prefix;
+    // 设置日期格式，为数组时支持多格式匹配，展示以第一个为准。
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    String format;
 
-    // 控件大小。注：标准表单内的输入框大小限制为 middle，large | middle | small
-	String size;
+    // 隐藏禁止选择的选项
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    boolean hideDisabledOptions;
 
-    // 带有后缀图标的 input
-	Object suffix;
+    // 小时选项间隔
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    int hourStep;
 
-    // 声明 input 类型，同原生 input 标签的 type 属性，见：MDN(请直接使用 Input.TextArea 代替 type="textarea")
-	String type;
+    // 设置输入框为只读（避免在移动设备上打开虚拟键盘）
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    boolean inputReadOnly;
 
-    // 指定选中项,string[] | number[]
-	Object value;
+    // 分钟选项间隔
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    int minuteStep;
 
-    // 占位符
-	String placeholder;
+    // 控制浮层显隐
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    boolean open;
+
+    // 输入框占位文本
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    String placeholder;
+
+    // 浮层预设位置，bottomLeft bottomRight topLeft topRight
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    String placement;
+
+    // 额外的弹出日历 className
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    String popupClassName;
+
+    // 额外的弹出日历样式
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    Object popupStyle;
+
+    // 秒选项间隔
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    int secondStep;
+
+    // 面板是否显示“此刻”按钮
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    boolean showNow;
+
+    // 输入框大小，large | middle | small
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    String size;
+
+    // 设置校验状态，'error' | 'warning'
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    String status;
+
+    // 自定义的选择框后缀图标
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    Object suffixIcon;
+
+    // 使用 12 小时制，为 true 时 format 默认为 h:mm:ss a
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    boolean use12Hours;
 
     // 自定义样式
-	Map<String, Object> style;
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    Map<String, Object> style;
 
-    // 获取验证码ID的URL
-    String captchaIdUrl;
+    // 指定选中项,string[] | number[]
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    Object value;
 
-    // 获取验证码URL
-	String captchaUrl;
-
-    public ImageCaptcha() {
-        this.component = "imageCaptchaField";
+    public TimeRange() {
+        this.component = "timeRangeField";
         this.setComponentKey();
     }
 
     // Field 的长度，我们归纳了常用的 Field 长度以及适合的场景，支持了一些枚举 "xs" , "s" , "m" , "l" , "x"
-    public ImageCaptcha setWidth(Object width) {
+    public TimeRange setWidth(Object width) {
         Map<String, Object> style = new HashMap<>();
 
         this.style.forEach((key, value) -> {
@@ -235,12 +291,13 @@ public class ImageCaptcha extends Commponent {
 
     // 校验规则，设置字段的校验逻辑
     //
-    //	[]*rule.Rule{
-    //		rule.Required(true, "用户名必须填写"),
-    //		rule.Min(6, "用户名不能少于6个字符"),
-    //		rule.Max(20, "用户名不能超过20个字符"),
-    //	}
-    public ImageCaptcha setRules(Rule[] rules) {
+    // new TimeRange().
+    // setRules(new Rule[]{
+    // rule.required(true, "用户名必须填写"), // 需要用户名字段不能为空
+    // rule.min(6, "用户名不能少于6个字符"), // 用户名最少需要6个字符
+    // rule.max(20, "用户名不能超过20个字符") // 用户名最多只能包含20个字符
+    // });
+    public TimeRange setRules(Rule[] rules) {
         for (int i = 0; i < rules.length; i++) {
             rules[i] = rules[i].setName(name);
         }
@@ -251,10 +308,11 @@ public class ImageCaptcha extends Commponent {
 
     // 校验规则，只在创建表单提交时生效
     //
-    //	[]*rule.Rule{
-    //		rule.Unique("admins", "username", "用户名已存在"),
-    //	}
-    public ImageCaptcha setCreationRules(Rule[] rules) {
+    // new TimeRange().
+    // setCreationRules(new Rule[]{
+    // rule.unique("admins", "username", "用户名已存在"),
+    // });
+    public TimeRange setCreationRules(Rule[] rules) {
         for (int i = 0; i < rules.length; i++) {
             rules[i] = rules[i].setName(name);
         }
@@ -265,10 +323,11 @@ public class ImageCaptcha extends Commponent {
 
     // 校验规则，只在更新表单提交时生效
     //
-    //	[]*rule.Rule{
-    //		rule.Unique("admins", "username", "{id}", "用户名已存在"),
-    //	}
-    public ImageCaptcha setUpdateRules(Rule[] rules) {
+    // new TimeRange().
+    // setUpdateRules(new Rule[]{
+    // rule.unique("admins", "username", "用户名已存在"),
+    // });
+    public TimeRange setUpdateRules(Rule[] rules) {
         for (int i = 0; i < rules.length; i++) {
             rules[i] = rules[i].setName(name);
         }
@@ -278,15 +337,15 @@ public class ImageCaptcha extends Commponent {
     }
 
     // 生成前端验证规则
-    public ImageCaptcha buildFrontendRules(String path) {
-        Rule[] rules = new Rule[]{};
-        Rule[] creationRules = new Rule[]{};
-        Rule[] updateRules = new Rule[]{};
-        Rule[] frontendRules = new Rule[]{};
+    public TimeRange buildFrontendRules(String path) {
+        Rule[] rules = new Rule[] {};
+        Rule[] creationRules = new Rule[] {};
+        Rule[] updateRules = new Rule[] {};
+        Rule[] frontendRules = new Rule[] {};
 
         String[] uri = path.split("/");
-        boolean isCreating = (uri[uri.length-1] == "create") || (uri[uri.length-1] == "store");
-        boolean isEditing = (uri[uri.length-1] == "edit") || (uri[uri.length-1] == "update");
+        boolean isCreating = (uri[uri.length - 1] == "create") || (uri[uri.length - 1] == "store");
+        boolean isEditing = (uri[uri.length - 1] == "edit") || (uri[uri.length - 1] == "update");
 
         if (this.rules.length > 0) {
             rules = Rule.convertToFrontendRules(this.rules);
@@ -317,74 +376,75 @@ public class ImageCaptcha extends Commponent {
         return this;
     }
 
+    // 表头的筛选菜单项，当值为 true 时，自动使用 valueEnum 生成，只在列表页中有效
+    public TimeRange setFilters(boolean filters) {
+        this.filters = filters;
+
+        return this;
+    }
+
+    // 表头的筛选菜单项，当值为 true 时，自动使用 valueEnum 生成，只在列表页中有效
+    public TimeRange setFilters(Map<String, String> filters) {
+        List<Map<String, String>> tmpFilters = new ArrayList<>();
+        filters.forEach((k, v) -> {
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("text", v);
+            map.put("value", k);
+            tmpFilters.add(map);
+        });
+        this.filters = tmpFilters;
+
+        return this;
+    }
+
     // 设置When组件数据
     //
-    //	setWhen(1, func () interface{} {
-    //		return []interface{}{
-    //	       field.Text("name", "姓名"),
-    //	   }
-    //	})
-    //
-    //	setWhen(">", 1, func () interface{} {
-    //		return []interface{}{
-    //	       field.Text("name", "姓名"),
-    //	   }
-    //	})
-    public ImageCaptcha setWhen(Object option, Closure callback) {
+    // new TimeRange().setWhen(option, callback)
+    public TimeRange setWhen(Object option, Closure callback) {
         this.setWhen("=", option, callback);
         return this;
     }
 
     // 设置When组件数据
     //
-    //	SetWhen(1, func () interface{} {
-    //		return []interface{}{
-    //	       field.Text("name", "姓名"),
-    //	   }
-    //	})
-    //
-    //	SetWhen(">", 1, func () interface{} {
-    //		return []interface{}{
-    //	       field.Text("name", "姓名"),
-    //	   }
-    //	})
-    public ImageCaptcha setWhen(String operator, Object option, Closure callback) {
+    // new TimeRange().setWhen(">", option, callback)
+    public TimeRange setWhen(String operator, Object option, Closure callback) {
         When w = new When();
         WhenItem i = new WhenItem();
 
         i.body = callback.callback();
         switch (operator) {
-        case "=":
-            i.condition = "<%=String(" + this.name + ") === '" + option + "' %>";
-            break;
-        case ">":
-            i.condition = "<%=String(" + this.name + ") > '" + option + "' %>";
-            break;
-        case "<":
-            i.condition = "<%=String(" + this.name + ") < '" + option + "' %>";
-            break;
-        case "<=":
-            i.condition = "<%=String(" + this.name + ") <= '" + option + "' %>";
-            break;
-        case ">=":
-            i.condition = "<%=String(" + this.name + ") => '" + option + "' %>";
-            break;
-        case "has":
-            i.condition = "<%=(String(" + this.name + ").indexOf('" + option + "') !=-1) %>";
-            break;
-        case "in":
-            ObjectMapper mapper = new ObjectMapper();
-            String jsonStr;
-            try {
-                jsonStr = mapper.writeValueAsString(option);
-                i.condition = "<%=(" + jsonStr + ".indexOf(" + this.name + ") !=-1) %>";
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-            break;
-        default:
-            i.condition = "<%=String(" + this.name + ") === '" + option + "' %>";
-            break;
+            case "=":
+                i.condition = "<%=String(" + this.name + ") === '" + option + "' %>";
+                break;
+            case ">":
+                i.condition = "<%=String(" + this.name + ") > '" + option + "' %>";
+                break;
+            case "<":
+                i.condition = "<%=String(" + this.name + ") < '" + option + "' %>";
+                break;
+            case "<=":
+                i.condition = "<%=String(" + this.name + ") <= '" + option + "' %>";
+                break;
+            case ">=":
+                i.condition = "<%=String(" + this.name + ") => '" + option + "' %>";
+                break;
+            case "has":
+                i.condition = "<%=(String(" + this.name + ").indexOf('" + option + "') !=-1) %>";
+                break;
+            case "in":
+                ObjectMapper mapper = new ObjectMapper();
+                String jsonStr;
+                try {
+                    jsonStr = mapper.writeValueAsString(option);
+                    i.condition = "<%=(" + jsonStr + ".indexOf(" + this.name + ") !=-1) %>";
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                i.condition = "<%=String(" + this.name + ") === '" + option + "' %>";
+                break;
         }
 
         i.conditionName = this.name;
@@ -398,91 +458,91 @@ public class ImageCaptcha extends Commponent {
     }
 
     // Specify that the element should be hidden from the index view.
-    public ImageCaptcha hideFromIndex(boolean callback) {
+    public TimeRange hideFromIndex(boolean callback) {
         this.showOnIndex = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the detail view.
-    public ImageCaptcha hideFromDetail(boolean callback) {
+    public TimeRange hideFromDetail(boolean callback) {
         this.showOnDetail = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the creation view.
-    public ImageCaptcha hideWhenCreating(boolean callback) {
+    public TimeRange hideWhenCreating(boolean callback) {
         this.showOnCreation = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the update view.
-    public ImageCaptcha hideWhenUpdating(boolean callback) {
+    public TimeRange hideWhenUpdating(boolean callback) {
         this.showOnUpdate = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the export file.
-    public ImageCaptcha hideWhenExporting(boolean callback) {
+    public TimeRange hideWhenExporting(boolean callback) {
         this.showOnExport = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the import file.
-    public ImageCaptcha hideWhenImporting(boolean callback) {
+    public TimeRange hideWhenImporting(boolean callback) {
         this.showOnImport = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the index view.
-    public ImageCaptcha onIndexShowing(boolean callback) {
+    public TimeRange onIndexShowing(boolean callback) {
         this.showOnIndex = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the detail view.
-    public ImageCaptcha onDetailShowing(boolean callback) {
+    public TimeRange onDetailShowing(boolean callback) {
         this.showOnDetail = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the creation view.
-    public ImageCaptcha showOnCreating(boolean callback) {
+    public TimeRange showOnCreating(boolean callback) {
         this.showOnCreation = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the update view.
-    public ImageCaptcha showOnUpdating(boolean callback) {
+    public TimeRange showOnUpdating(boolean callback) {
         this.showOnUpdate = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the export file.
-    public ImageCaptcha showOnExporting(boolean callback) {
+    public TimeRange showOnExporting(boolean callback) {
         this.showOnExport = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the import file.
-    public ImageCaptcha showOnImporting(boolean callback) {
+    public TimeRange showOnImporting(boolean callback) {
         this.showOnImport = callback;
 
         return this;
     }
 
     // Specify that the element should only be shown on the index view.
-    public ImageCaptcha onlyOnIndex() {
+    public TimeRange onlyOnIndex() {
         this.showOnIndex = true;
         this.showOnDetail = false;
         this.showOnCreation = false;
@@ -494,7 +554,7 @@ public class ImageCaptcha extends Commponent {
     }
 
     // Specify that the element should only be shown on the detail view.
-    public ImageCaptcha onlyOnDetail() {
+    public TimeRange onlyOnDetail() {
         this.showOnIndex = false;
         this.showOnDetail = true;
         this.showOnCreation = false;
@@ -506,7 +566,7 @@ public class ImageCaptcha extends Commponent {
     }
 
     // Specify that the element should only be shown on forms.
-    public ImageCaptcha onlyOnForms() {
+    public TimeRange onlyOnForms() {
         this.showOnIndex = false;
         this.showOnDetail = false;
         this.showOnCreation = true;
@@ -518,7 +578,7 @@ public class ImageCaptcha extends Commponent {
     }
 
     // Specify that the element should only be shown on export file.
-    public ImageCaptcha onlyOnExport() {
+    public TimeRange onlyOnExport() {
         this.showOnIndex = false;
         this.showOnDetail = false;
         this.showOnCreation = false;
@@ -530,7 +590,7 @@ public class ImageCaptcha extends Commponent {
     }
 
     // Specify that the element should only be shown on import file.
-    public ImageCaptcha onlyOnImport() {
+    public TimeRange onlyOnImport() {
         this.showOnIndex = false;
         this.showOnDetail = false;
         this.showOnCreation = false;
@@ -542,7 +602,7 @@ public class ImageCaptcha extends Commponent {
     }
 
     // Specify that the element should be hidden from forms.
-    public ImageCaptcha exceptOnForms() {
+    public TimeRange exceptOnForms() {
         this.showOnIndex = true;
         this.showOnDetail = true;
         this.showOnCreation = false;
@@ -584,7 +644,7 @@ public class ImageCaptcha extends Commponent {
     }
 
     // 当前列值的枚举 valueEnum
-    public Map<?,?> getValueEnum() {
+    public Map<?, ?> getValueEnum() {
         return null;
     }
 }
