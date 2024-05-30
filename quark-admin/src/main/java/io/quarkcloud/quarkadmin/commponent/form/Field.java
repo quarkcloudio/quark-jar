@@ -2,6 +2,7 @@ package io.quarkcloud.quarkadmin.commponent.form;
 
 import io.quarkcloud.quarkadmin.commponent.form.fields.Cascader;
 import io.quarkcloud.quarkadmin.commponent.form.fields.Checkbox;
+import io.quarkcloud.quarkadmin.commponent.form.fields.Compact;
 import io.quarkcloud.quarkadmin.commponent.form.fields.Date;
 import io.quarkcloud.quarkadmin.commponent.form.fields.DateRange;
 import io.quarkcloud.quarkadmin.commponent.form.fields.Datetime;
@@ -14,6 +15,7 @@ import io.quarkcloud.quarkadmin.commponent.form.fields.File;
 import io.quarkcloud.quarkadmin.commponent.form.fields.Geofence;
 import io.quarkcloud.quarkadmin.commponent.form.fields.Group;
 import io.quarkcloud.quarkadmin.commponent.form.fields.Hidden;
+import io.quarkcloud.quarkadmin.commponent.form.fields.Icon;
 import io.quarkcloud.quarkadmin.commponent.form.fields.Id;
 import io.quarkcloud.quarkadmin.commponent.form.fields.Image;
 import io.quarkcloud.quarkadmin.commponent.form.fields.ImageCaptcha;
@@ -24,34 +26,23 @@ import io.quarkcloud.quarkadmin.commponent.form.fields.Password;
 import io.quarkcloud.quarkadmin.commponent.form.fields.Quarter;
 import io.quarkcloud.quarkadmin.commponent.form.fields.Radio;
 import io.quarkcloud.quarkadmin.commponent.form.fields.Search;
+import io.quarkcloud.quarkadmin.commponent.form.fields.SelectField;
+import io.quarkcloud.quarkadmin.commponent.form.fields.Selects;
+import io.quarkcloud.quarkadmin.commponent.form.fields.SmsCaptcha;
+import io.quarkcloud.quarkadmin.commponent.form.fields.Space;
+import io.quarkcloud.quarkadmin.commponent.form.fields.SwitchField;
 import io.quarkcloud.quarkadmin.commponent.form.fields.Text;
+import io.quarkcloud.quarkadmin.commponent.form.fields.Textarea;
+import io.quarkcloud.quarkadmin.commponent.form.fields.Time;
+import io.quarkcloud.quarkadmin.commponent.form.fields.TimeRange;
+import io.quarkcloud.quarkadmin.commponent.form.fields.Transfer;
+import io.quarkcloud.quarkadmin.commponent.form.fields.Tree;
+import io.quarkcloud.quarkadmin.commponent.form.fields.TreeSelect;
+import io.quarkcloud.quarkadmin.commponent.form.fields.Week;
+import io.quarkcloud.quarkadmin.commponent.form.fields.Year;
 import io.quarkcloud.quarkadmin.commponent.form.fields.Number;
 
 public class Field {
-
-    public static Text text(String name) {
-        return new Text().setName(name);
-    }
-
-    public static Text text(String name, String label) {
-        return new Text().setName(name).setLabel(label);
-    }
-
-    public static Password password(String name) {
-        return new Password().setName(name);
-    }
-
-    public static Password password(String name, String label) {
-        return new Password().setName(name).setLabel(label);
-    }
-
-    public static ImageCaptcha imageCaptcha(String name) {
-        return new ImageCaptcha().setName(name);
-    }
-
-    public static ImageCaptcha imageCaptcha(String name, String label) {
-        return new ImageCaptcha().setName(name).setLabel(label);
-    }
 
     public static Cascader cascader(String name) {
         return new Cascader().setName(name);
@@ -61,28 +52,20 @@ public class Field {
         return new Cascader().setName(name).setLabel(label);
     }
 
-    public static Id id(String name) {
-        return new Id().setName(name);
-    }
-
-    public static Id id(String name, String label) {
-        return new Id().setName(name).setLabel(label);
-    }
-
-    public static Hidden hidden(String name) {
-        return new Hidden().setName(name);
-    }
-
-    public static Hidden hidden(String name, String label) {
-        return new Hidden().setName(name).setLabel(label);
-    }
-
     public static Checkbox checkbox(String name) {
         return new Checkbox().setName(name);
     }
 
     public static Checkbox checkbox(String name, String label) {
         return new Checkbox().setName(name).setLabel(label);
+    }
+
+    public static Compact compact(String name) {
+        return new Compact().setName(name);
+    }
+
+    public static Compact compact(String name, String label) {
+        return new Compact().setName(name).setLabel(label);
     }
 
     public static Date date(String name) {
@@ -173,12 +156,44 @@ public class Field {
         return new Group().setName(name).setLabel(label);
     }
 
+    public static Hidden hidden(String name) {
+        return new Hidden().setName(name);
+    }
+
+    public static Hidden hidden(String name, String label) {
+        return new Hidden().setName(name).setLabel(label);
+    }
+
+    public static Icon icon(String name) {
+        return new Icon().setName(name);
+    }
+
+    public static Icon icon(String name, String label) {
+        return new Icon().setName(name).setLabel(label);
+    }
+
+    public static Id id(String name) {
+        return new Id().setName(name);
+    }
+
+    public static Id id(String name, String label) {
+        return new Id().setName(name).setLabel(label);
+    }
+
     public static Image image(String name) {
         return new Image().setName(name);
     }
 
     public static Image image(String name, String label) {
         return new Image().setName(name).setLabel(label);
+    }
+
+    public static ImageCaptcha imageCaptcha(String name) {
+        return new ImageCaptcha().setName(name);
+    }
+
+    public static ImageCaptcha imageCaptcha(String name, String label) {
+        return new ImageCaptcha().setName(name).setLabel(label);
     }
 
     public static List list(String name) {
@@ -189,11 +204,11 @@ public class Field {
         return new List().setName(name).setLabel(label);
     }
 
-    public static MapField mapfield(String name) {
+    public static MapField mapField(String name) {
         return new MapField().setName(name);
     }
 
-    public static MapField mapfield(String name, String label) {
+    public static MapField mapField(String name, String label) {
         return new MapField().setName(name).setLabel(label);
     }
 
@@ -211,6 +226,14 @@ public class Field {
 
     public static Number number(String name, String label) {
         return new Number().setName(name).setLabel(label);
+    }
+
+    public static Password password(String name) {
+        return new Password().setName(name);
+    }
+
+    public static Password password(String name, String label) {
+        return new Password().setName(name).setLabel(label);
     }
 
     public static Quarter quarter(String name) {
@@ -235,5 +258,117 @@ public class Field {
 
     public static Search search(String name, String label) {
         return new Search().setName(name).setLabel(label);
+    }
+
+    public static SelectField selectField(String name) {
+        return new SelectField().setName(name);
+    }
+
+    public static SelectField selectField(String name, String label) {
+        return new SelectField().setName(name).setLabel(label);
+    }
+
+    public static Selects selects(String name) {
+        return new Selects().setName(name);
+    }
+
+    public static Selects selects(String name, String label) {
+        return new Selects().setName(name).setLabel(label);
+    }
+
+    public static SmsCaptcha smsCaptcha(String name) {
+        return new SmsCaptcha().setName(name);
+    }
+
+    public static SmsCaptcha smsCaptcha(String name, String label) {
+        return new SmsCaptcha().setName(name).setLabel(label);
+    }
+
+    public static Space space(String name) {
+        return new Space().setName(name);
+    }
+
+    public static Space space(String name, String label) {
+        return new Space().setName(name).setLabel(label);
+    }
+
+    public static SwitchField switchField(String name) {
+        return new SwitchField().setName(name);
+    }
+
+    public static SwitchField switchField(String name, String label) {
+        return new SwitchField().setName(name).setLabel(label);
+    }
+
+    public static Text text(String name) {
+        return new Text().setName(name);
+    }
+
+    public static Text text(String name, String label) {
+        return new Text().setName(name).setLabel(label);
+    }
+
+    public static Textarea textarea(String name) {
+        return new Textarea().setName(name);
+    }
+
+    public static Textarea textarea(String name, String label) {
+        return new Textarea().setName(name).setLabel(label);
+    }
+
+    public static Time time(String name) {
+        return new Time().setName(name);
+    }
+
+    public static Time time(String name, String label) {
+        return new Time().setName(name).setLabel(label);
+    }
+
+    public static TimeRange timeRange(String name) {
+        return new TimeRange().setName(name);
+    }
+
+    public static TimeRange timeRange(String name, String label) {
+        return new TimeRange().setName(name).setLabel(label);
+    }
+
+    public static Transfer transfer(String name) {
+        return new Transfer().setName(name);
+    }
+
+    public static Transfer transfer(String name, String label) {
+        return new Transfer().setName(name).setLabel(label);
+    }
+
+    public static Tree tree(String name) {
+        return new Tree().setName(name);
+    }
+
+    public static Tree tree(String name, String label) {
+        return new Tree().setName(name).setLabel(label);
+    }
+
+    public static TreeSelect treeSelect(String name) {
+        return new TreeSelect().setName(name);
+    }
+
+    public static TreeSelect treeSelect(String name, String label) {
+        return new TreeSelect().setName(name).setLabel(label);
+    }
+
+    public static Week week(String name) {
+        return new Week().setName(name);
+    }
+
+    public static Week week(String name, String label) {
+        return new Week().setName(name).setLabel(label);
+    }
+
+    public static Year year(String name) {
+        return new Year().setName(name);
+    }
+
+    public static Year year(String name, String label) {
+        return new Year().setName(name).setLabel(label);
     }
 }

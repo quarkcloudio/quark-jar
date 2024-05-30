@@ -1,13 +1,19 @@
 package io.quarkcloud.quarkadmin.commponent.form.fields;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.commons.lang3.ArrayUtils;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.apache.commons.lang3.ArrayUtils;
 
 import io.quarkcloud.quarkadmin.commponent.Commponent;
 import io.quarkcloud.quarkadmin.commponent.form.Rule;
@@ -18,8 +24,28 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class Text extends Commponent {
+public class SelectField extends Commponent {
+
+    @Data
+    public static class Option {
+
+        String label;
+
+        Object value;
+
+        @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+        boolean disabled;
+    }
+
+    @Data
+    public static class FieldNames {
+
+        String label;
+
+        String value;
+
+        String children;
+    }
 
     // 开启 grid 模式时传递给 Row, 仅在ProFormGroup, ProFormList, ProFormFieldSet 中有效，默认：{
     // gutter: 8 }
@@ -163,66 +189,166 @@ public class Text extends Commponent {
         Object callback();
     }
 
-    // 带标签的 input，设置后置标签
-    Object addonAfter;
-
-    // 带标签的 input，设置前置标签
-    Object addonBefore;
-
-    // 可以点击清除图标删除内容
+    // 是否支持清除，默认true
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean allowClear;
 
+    // 是否在选中项后清空搜索框，只在 mode 为 multiple 或 tags 时有效
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    boolean autoClearSearchValue;
+
+    // 自动获取焦点，默认false
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    boolean autoFocus;
+
     // 是否有边框，默认true
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean bordered;
 
+    // 自定义的选择框清空图标
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    Object clearIcon;
+
+    // 是否默认高亮第一个选项
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    boolean defaultActiveFirstOption;
+
+    // 是否默认展开下拉菜单
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    boolean defaultOpen;
+
     // 默认的选中项
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object defaultValue;
 
-    // 禁用
-    Object disabled;
-
-    // 输入框的 id
-    String id;
-
-    // 最大长度
+    // 整组失效
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    int maxLength;
+    boolean disabled;
 
-    // 是否展示字数
-    boolean showCount;
+    // 下拉菜单的 className 属性
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    String popupClassName;
 
-    // 设置校验状态,'error' | 'warning'
-    String status;
+    // 下拉菜单和选择器同宽。默认将设置 min-width，当值小于选择框宽度时会被忽略。false 时会关闭虚拟滚动
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    Object dropdownMatchSelectWidth;
 
-    // 带有前缀图标的 input
-    Object prefix;
+    // 下拉菜单的 style 属性
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    Object dropdownStyle;
 
-    // 控件大小。注：标准表单内的输入框大小限制为 middle，large | middle | small
-    String size;
+    // 自定义 options 中 label value children 的字段
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    FieldNames fieldNames;
 
-    // 带有后缀图标的 input
-    Object suffix;
+    // 是否把每个选项的 label 包装到 value 中，会把 Select 的 value 类型从 string 变为 { value: string,
+    // label: ReactNode } 的格式
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    boolean labelInValue;
 
-    // 声明 input 类型，同原生 input 标签的 type 属性，见：MDN(请直接使用 Input.TextArea 代替
-    // type="textarea")
-    String type;
+    // 设置弹窗滚动高度 256
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    int listHeight;
 
-    // 指定选中项,string[] | number[]
-    Object value;
+    // 加载中状态
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    boolean loading;
 
-    // 占位符
+    // 最多显示多少个 tag，响应式模式会对性能产生损耗
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    int maxTagCount;
+
+    // 隐藏 tag 时显示的内容
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    String maxTagPlaceholder;
+
+    // 最大显示的 tag 文本长度
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    int maxTagTextLength;
+
+    // 自定义多选时当前选中的条目图标
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    Object menuItemSelectedIcon;
+
+    // 设置 Select 的模式为多选或标签 multiple | tags
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    String mode;
+
+    // 当下拉列表为空时显示的内容
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    String notFoundContent;
+
+    // 控制浮层显隐
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    boolean open;
+
+    // 可选项数据源
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    Option[] options;
+
+    // 输入框占位文本
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     String placeholder;
 
+    // 浮层预设位置，bottomLeft bottomRight topLeft topRight
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    String placement;
+
+    // 自定义的多选框清除图标
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    Object removeIcon;
+
+    // 设置搜索的值，需要与 showSearch 配合使用
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    String searchValue;
+
+    // 是否显示下拉小箭头
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    boolean showArrow;
+
+    // 在选择框中显示搜索框
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    boolean showSearch;
+
+    // 输入框大小，large | middle | small
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    String size;
+
+    // 设置校验状态，'error' | 'warning'
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    String status;
+
+    // 自定义的选择框后缀图标
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    Object suffixIcon;
+
+    // 自动分词的分隔符，仅在 mode="tags" 时生效
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    Object tokenSeparators;
+
+    // 指定选中项，string[] | number[]
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    Object value;
+
+    // 设置 false 时关闭虚拟滚动
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    boolean virtual;
+
+    // 单向联动
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    Map<String, String> load;
+
     // 自定义样式
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Map<String, Object> style;
 
-    public Text() {
-        this.component = "textField";
+    public SelectField() {
+        this.component = "selectField";
         this.setComponentKey();
     }
 
     // Field 的长度，我们归纳了常用的 Field 长度以及适合的场景，支持了一些枚举 "xs" , "s" , "m" , "l" , "x"
-    public Text setWidth(Object width) {
+    public SelectField setWidth(Object width) {
         Map<String, Object> style = new HashMap<>();
 
         this.style.forEach((key, value) -> {
@@ -236,13 +362,13 @@ public class Text extends Commponent {
 
     // 校验规则，设置字段的校验逻辑
     //
-    // new Text().
+    // new SelectField().
     // setRules(new Rule[]{
     // rule.required(true, "用户名必须填写"), // 需要用户名字段不能为空
     // rule.min(6, "用户名不能少于6个字符"), // 用户名最少需要6个字符
     // rule.max(20, "用户名不能超过20个字符") // 用户名最多只能包含20个字符
     // });
-    public Text setRules(Rule[] rules) {
+    public SelectField setRules(Rule[] rules) {
         for (int i = 0; i < rules.length; i++) {
             rules[i] = rules[i].setName(name);
         }
@@ -253,11 +379,11 @@ public class Text extends Commponent {
 
     // 校验规则，只在创建表单提交时生效
     //
-    // new Text().
+    // new SelectField().
     // setCreationRules(new Rule[]{
     // rule.unique("admins", "username", "用户名已存在"),
     // });
-    public Text setCreationRules(Rule[] rules) {
+    public SelectField setCreationRules(Rule[] rules) {
         for (int i = 0; i < rules.length; i++) {
             rules[i] = rules[i].setName(name);
         }
@@ -268,11 +394,11 @@ public class Text extends Commponent {
 
     // 校验规则，只在更新表单提交时生效
     //
-    // new Text().
+    // new SelectField().
     // setUpdateRules(new Rule[]{
     // rule.unique("admins", "username", "用户名已存在"),
     // });
-    public Text setUpdateRules(Rule[] rules) {
+    public SelectField setUpdateRules(Rule[] rules) {
         for (int i = 0; i < rules.length; i++) {
             rules[i] = rules[i].setName(name);
         }
@@ -282,7 +408,7 @@ public class Text extends Commponent {
     }
 
     // 生成前端验证规则
-    public Text buildFrontendRules(String path) {
+    public SelectField buildFrontendRules(String path) {
         Rule[] rules = new Rule[] {};
         Rule[] creationRules = new Rule[] {};
         Rule[] updateRules = new Rule[] {};
@@ -322,14 +448,14 @@ public class Text extends Commponent {
     }
 
     // 表头的筛选菜单项，当值为 true 时，自动使用 valueEnum 生成，只在列表页中有效
-    public Text setFilters(boolean filters) {
+    public SelectField setFilters(boolean filters) {
         this.filters = filters;
 
         return this;
     }
 
     // 表头的筛选菜单项，当值为 true 时，自动使用 valueEnum 生成，只在列表页中有效
-    public Text setFilters(Map<String, String> filters) {
+    public SelectField setFilters(Map<String, String> filters) {
         List<Map<String, String>> tmpFilters = new ArrayList<>();
         filters.forEach((k, v) -> {
             Map<String, String> map = new HashMap<String, String>();
@@ -344,16 +470,16 @@ public class Text extends Commponent {
 
     // 设置When组件数据
     //
-    // new Text().setWhen(option, callback)
-    public Text setWhen(Object option, Closure callback) {
+    // new SelectField().setWhen(option, callback)
+    public SelectField setWhen(Object option, Closure callback) {
         this.setWhen("=", option, callback);
         return this;
     }
 
     // 设置When组件数据
     //
-    // new Text().setWhen(">", option, callback)
-    public Text setWhen(String operator, Object option, Closure callback) {
+    // new SelectField().setWhen(">", option, callback)
+    public SelectField setWhen(String operator, Object option, Closure callback) {
         When w = new When();
         WhenItem i = new WhenItem();
 
@@ -403,91 +529,91 @@ public class Text extends Commponent {
     }
 
     // Specify that the element should be hidden from the index view.
-    public Text hideFromIndex(boolean callback) {
+    public SelectField hideFromIndex(boolean callback) {
         this.showOnIndex = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the detail view.
-    public Text hideFromDetail(boolean callback) {
+    public SelectField hideFromDetail(boolean callback) {
         this.showOnDetail = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the creation view.
-    public Text hideWhenCreating(boolean callback) {
+    public SelectField hideWhenCreating(boolean callback) {
         this.showOnCreation = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the update view.
-    public Text hideWhenUpdating(boolean callback) {
+    public SelectField hideWhenUpdating(boolean callback) {
         this.showOnUpdate = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the export file.
-    public Text hideWhenExporting(boolean callback) {
+    public SelectField hideWhenExporting(boolean callback) {
         this.showOnExport = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the import file.
-    public Text hideWhenImporting(boolean callback) {
+    public SelectField hideWhenImporting(boolean callback) {
         this.showOnImport = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the index view.
-    public Text onIndexShowing(boolean callback) {
+    public SelectField onIndexShowing(boolean callback) {
         this.showOnIndex = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the detail view.
-    public Text onDetailShowing(boolean callback) {
+    public SelectField onDetailShowing(boolean callback) {
         this.showOnDetail = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the creation view.
-    public Text showOnCreating(boolean callback) {
+    public SelectField showOnCreating(boolean callback) {
         this.showOnCreation = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the update view.
-    public Text showOnUpdating(boolean callback) {
+    public SelectField showOnUpdating(boolean callback) {
         this.showOnUpdate = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the export file.
-    public Text showOnExporting(boolean callback) {
+    public SelectField showOnExporting(boolean callback) {
         this.showOnExport = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the import file.
-    public Text showOnImporting(boolean callback) {
+    public SelectField showOnImporting(boolean callback) {
         this.showOnImport = callback;
 
         return this;
     }
 
     // Specify that the element should only be shown on the index view.
-    public Text onlyOnIndex() {
+    public SelectField onlyOnIndex() {
         this.showOnIndex = true;
         this.showOnDetail = false;
         this.showOnCreation = false;
@@ -499,7 +625,7 @@ public class Text extends Commponent {
     }
 
     // Specify that the element should only be shown on the detail view.
-    public Text onlyOnDetail() {
+    public SelectField onlyOnDetail() {
         this.showOnIndex = false;
         this.showOnDetail = true;
         this.showOnCreation = false;
@@ -511,7 +637,7 @@ public class Text extends Commponent {
     }
 
     // Specify that the element should only be shown on forms.
-    public Text onlyOnForms() {
+    public SelectField onlyOnForms() {
         this.showOnIndex = false;
         this.showOnDetail = false;
         this.showOnCreation = true;
@@ -523,7 +649,7 @@ public class Text extends Commponent {
     }
 
     // Specify that the element should only be shown on export file.
-    public Text onlyOnExport() {
+    public SelectField onlyOnExport() {
         this.showOnIndex = false;
         this.showOnDetail = false;
         this.showOnCreation = false;
@@ -535,7 +661,7 @@ public class Text extends Commponent {
     }
 
     // Specify that the element should only be shown on import file.
-    public Text onlyOnImport() {
+    public SelectField onlyOnImport() {
         this.showOnIndex = false;
         this.showOnDetail = false;
         this.showOnCreation = false;
@@ -547,7 +673,7 @@ public class Text extends Commponent {
     }
 
     // Specify that the element should be hidden from forms.
-    public Text exceptOnForms() {
+    public SelectField exceptOnForms() {
         this.showOnIndex = true;
         this.showOnDetail = true;
         this.showOnCreation = false;
@@ -591,5 +717,84 @@ public class Text extends Commponent {
     // 当前列值的枚举 valueEnum
     public Map<?, ?> getValueEnum() {
         return null;
+    }
+
+    public SelectField setLoad(String field, String api) {
+
+        this.load.put("field", field);
+        this.load.put("api", api);
+
+        return this;
+    }
+
+    // 根据value值获取Option的Label
+    public String getOptionLabel(Object value) {
+
+        List<?> values = new ArrayList<>();
+
+        // Check if value is a string and contains JSON structure
+        if (value instanceof String) {
+            String stringValue = (String) value;
+            if (stringValue.contains("[") || stringValue.contains("{")) {
+                try {
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    values = objectMapper.readValue(stringValue, List.class);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        // Collect values if not already done
+        if (values.isEmpty()) {
+            values = List.of(value);
+        }
+
+        // Find matching labels
+        List<String> labels = values.stream()
+                .flatMap(val -> Stream.of(options).filter(option -> Objects.equals(val, option.getValue())))
+                .map(Option::getLabel)
+                .collect(Collectors.toList());
+
+        // Join labels into a single string
+        return String.join(",", labels);
+    }
+
+    // 根据label值获取Option的Value
+    public Object getOptionValue(String label) {
+        List<Object> values = new ArrayList<>();
+        List<String> labels = new ArrayList<>();
+
+        // Split labels by commas and add to list
+        if (label.contains(",")) {
+            labels.addAll(Arrays.asList(label.split(",")));
+        } else if (label.contains("，")) {
+            labels.addAll(Arrays.asList(label.split("，")));
+        } else {
+            labels.add(label);
+        }
+
+        // Find matching values
+        if (labels.size() > 1) {
+            values = labels.stream()
+                    .flatMap(lbl -> Stream.of(options).filter(option -> Objects.equals(option.getLabel(), lbl)))
+                    .map(Option::getValue)
+                    .collect(Collectors.toList());
+        } else {
+            values = Stream.of(options)
+                    .filter(option -> Objects.equals(option.getLabel(), label))
+                    .map(Option::getValue)
+                    .collect(Collectors.toList());
+        }
+
+        // Return values if more than one, otherwise single value
+        return values.size() > 1 ? values : values.isEmpty() ? null : values.get(0);
+    }
+
+    // 获取Option的Labels
+    public String getOptionLabels() {
+        return Arrays.stream(options)
+                .map(Option::getLabel)
+                .collect(Collectors.joining(","));
     }
 }

@@ -19,7 +19,56 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class Text extends Commponent {
+public class Tree extends Commponent {
+
+    @Data
+    public static class FieldNames {
+
+        String title;
+
+        String key;
+
+        String children;
+    }
+
+    @Data
+    public static class TreeData {
+
+        // 当树为 checkable 时，设置独立节点是否展示 Checkbox
+        @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+        boolean checkable;
+
+        // 禁掉 checkbox
+        @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+        boolean disableCheckbox;
+
+        // 禁掉响应
+        @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+        boolean disabled;
+
+        // 自定义图标。可接收组件，props 为当前节点 props
+        @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+        Object icon;
+
+        // 设置为叶子节点 (设置了 loadData 时有效)。为 false 时会强制将其作为父节点
+        @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+        boolean isLeaf;
+
+        // 被树的 (default)ExpandedKeys / (default)CheckedKeys / (default)SelectedKeys
+        // 属性所用。注意：整个树范围内的所有节点的 key 值不能重复！
+        Object key;
+
+        // 设置节点是否可被选中
+        @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+        boolean selectable;
+
+        // 标题
+        String title;
+
+        // 子节点
+        @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+        TreeData[] children;
+    }
 
     // 开启 grid 模式时传递给 Row, 仅在ProFormGroup, ProFormList, ProFormFieldSet 中有效，默认：{
     // gutter: 8 }
@@ -163,66 +212,132 @@ public class Text extends Commponent {
         Object callback();
     }
 
-    // 带标签的 input，设置后置标签
-    Object addonAfter;
+    // 是否自动展开父节点、
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    boolean autoExpandParent;
 
-    // 带标签的 input，设置前置标签
-    Object addonBefore;
+    // 是否节点占据一行
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    boolean blockNode;
 
-    // 可以点击清除图标删除内容
-    boolean allowClear;
+    // 节点前添加 Checkbox 复选框
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    boolean checkable;
 
-    // 是否有边框，默认true
-    boolean bordered;
+    // （受控）选中复选框的树节点
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    Object[] checkedKeys;
 
-    // 默认的选中项
+    // checkable 状态下节点选择完全受控（父子节点选中状态不再关联）
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    boolean checkStrictly;
+
+    // 默认选中复选框的树节点
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    Object[] defaultCheckedKeys;
+
+    // 默认展开所有树节点
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    boolean defaultExpandAll;
+
+    // 默认展开指定的树节点
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    Object[] defaultExpandedKeys;
+
+    // 默认展开父节点
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    boolean defaultExpandParent;
+
+    // 默认选中的树节点
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    Object[] defaultSelectedKeys;
+
+    // 默认选中的选项
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object defaultValue;
 
-    // 禁用
-    Object disabled;
-
-    // 输入框的 id
-    String id;
-
-    // 最大长度
+    // 整组失效
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    int maxLength;
+    boolean disabled;
 
-    // 是否展示字数
-    boolean showCount;
+    // 设置节点可拖拽
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    boolean draggable;
 
-    // 设置校验状态,'error' | 'warning'
-    String status;
+    // （受控）展开指定的树节点
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    Object[] expandedKeys;
 
-    // 带有前缀图标的 input
-    Object prefix;
+    // 自定义 options 中 label value children 的字段
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    FieldNames fieldNames;
 
-    // 控件大小。注：标准表单内的输入框大小限制为 middle，large | middle | small
-    String size;
+    // 设置虚拟滚动容器高度
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    int height;
 
-    // 带有后缀图标的 input
-    Object suffix;
+    // 自定义树节点图标
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    Object icon;
 
-    // 声明 input 类型，同原生 input 标签的 type 属性，见：MDN(请直接使用 Input.TextArea 代替
-    // type="textarea")
-    String type;
+    // 支持点选多个节点（节点本身）
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    boolean multiple;
 
-    // 指定选中项,string[] | number[]
-    Object value;
-
-    // 占位符
+    // 占位文本
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     String placeholder;
 
+    // 添加在 Tree 最外层的 className
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    String rootClassName;
+
+    // 添加在 Tree 最外层的 style
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    Object rootStyle;
+
+    // 是否可选中
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    boolean selectable;
+
+    // （受控）设置选中的树节点
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    Object[] selectedKeys;
+
+    // 是否展示 TreeNode title 前的图标
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    boolean showIcon;
+
+    // 是否展示连接线
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    boolean showLine;
+
+    // 自定义树节点的展开/折叠图标
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    Object switcherIcon;
+
+    // treeNodes 数据，如果设置则不需要手动构造 TreeNode 节点
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    TreeData[] treeData;
+
+    // 指定当前选中的条目，多选时为一个数组。（value 数组引用未变化时，Select 不会更新）
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    Object value;
+
+    // 设置 false 时关闭虚拟滚动
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    boolean virtual;
+
     // 自定义样式
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Map<String, Object> style;
 
-    public Text() {
-        this.component = "textField";
-        this.setComponentKey();
+    public Tree() {
+        this.component = "treeField";
     }
 
     // Field 的长度，我们归纳了常用的 Field 长度以及适合的场景，支持了一些枚举 "xs" , "s" , "m" , "l" , "x"
-    public Text setWidth(Object width) {
+    public Tree setWidth(Object width) {
         Map<String, Object> style = new HashMap<>();
 
         this.style.forEach((key, value) -> {
@@ -236,13 +351,13 @@ public class Text extends Commponent {
 
     // 校验规则，设置字段的校验逻辑
     //
-    // new Text().
+    // new Tree().
     // setRules(new Rule[]{
     // rule.required(true, "用户名必须填写"), // 需要用户名字段不能为空
     // rule.min(6, "用户名不能少于6个字符"), // 用户名最少需要6个字符
     // rule.max(20, "用户名不能超过20个字符") // 用户名最多只能包含20个字符
     // });
-    public Text setRules(Rule[] rules) {
+    public Tree setRules(Rule[] rules) {
         for (int i = 0; i < rules.length; i++) {
             rules[i] = rules[i].setName(name);
         }
@@ -253,11 +368,11 @@ public class Text extends Commponent {
 
     // 校验规则，只在创建表单提交时生效
     //
-    // new Text().
+    // new Tree().
     // setCreationRules(new Rule[]{
     // rule.unique("admins", "username", "用户名已存在"),
     // });
-    public Text setCreationRules(Rule[] rules) {
+    public Tree setCreationRules(Rule[] rules) {
         for (int i = 0; i < rules.length; i++) {
             rules[i] = rules[i].setName(name);
         }
@@ -268,11 +383,11 @@ public class Text extends Commponent {
 
     // 校验规则，只在更新表单提交时生效
     //
-    // new Text().
+    // new Tree().
     // setUpdateRules(new Rule[]{
     // rule.unique("admins", "username", "用户名已存在"),
     // });
-    public Text setUpdateRules(Rule[] rules) {
+    public Tree setUpdateRules(Rule[] rules) {
         for (int i = 0; i < rules.length; i++) {
             rules[i] = rules[i].setName(name);
         }
@@ -282,7 +397,7 @@ public class Text extends Commponent {
     }
 
     // 生成前端验证规则
-    public Text buildFrontendRules(String path) {
+    public Tree buildFrontendRules(String path) {
         Rule[] rules = new Rule[] {};
         Rule[] creationRules = new Rule[] {};
         Rule[] updateRules = new Rule[] {};
@@ -322,14 +437,14 @@ public class Text extends Commponent {
     }
 
     // 表头的筛选菜单项，当值为 true 时，自动使用 valueEnum 生成，只在列表页中有效
-    public Text setFilters(boolean filters) {
+    public Tree setFilters(boolean filters) {
         this.filters = filters;
 
         return this;
     }
 
     // 表头的筛选菜单项，当值为 true 时，自动使用 valueEnum 生成，只在列表页中有效
-    public Text setFilters(Map<String, String> filters) {
+    public Tree setFilters(Map<String, String> filters) {
         List<Map<String, String>> tmpFilters = new ArrayList<>();
         filters.forEach((k, v) -> {
             Map<String, String> map = new HashMap<String, String>();
@@ -344,16 +459,16 @@ public class Text extends Commponent {
 
     // 设置When组件数据
     //
-    // new Text().setWhen(option, callback)
-    public Text setWhen(Object option, Closure callback) {
+    // new Tree().setWhen(option, callback)
+    public Tree setWhen(Object option, Closure callback) {
         this.setWhen("=", option, callback);
         return this;
     }
 
     // 设置When组件数据
     //
-    // new Text().setWhen(">", option, callback)
-    public Text setWhen(String operator, Object option, Closure callback) {
+    // new Tree().setWhen(">", option, callback)
+    public Tree setWhen(String operator, Object option, Closure callback) {
         When w = new When();
         WhenItem i = new WhenItem();
 
@@ -403,91 +518,91 @@ public class Text extends Commponent {
     }
 
     // Specify that the element should be hidden from the index view.
-    public Text hideFromIndex(boolean callback) {
+    public Tree hideFromIndex(boolean callback) {
         this.showOnIndex = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the detail view.
-    public Text hideFromDetail(boolean callback) {
+    public Tree hideFromDetail(boolean callback) {
         this.showOnDetail = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the creation view.
-    public Text hideWhenCreating(boolean callback) {
+    public Tree hideWhenCreating(boolean callback) {
         this.showOnCreation = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the update view.
-    public Text hideWhenUpdating(boolean callback) {
+    public Tree hideWhenUpdating(boolean callback) {
         this.showOnUpdate = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the export file.
-    public Text hideWhenExporting(boolean callback) {
+    public Tree hideWhenExporting(boolean callback) {
         this.showOnExport = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the import file.
-    public Text hideWhenImporting(boolean callback) {
+    public Tree hideWhenImporting(boolean callback) {
         this.showOnImport = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the index view.
-    public Text onIndexShowing(boolean callback) {
+    public Tree onIndexShowing(boolean callback) {
         this.showOnIndex = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the detail view.
-    public Text onDetailShowing(boolean callback) {
+    public Tree onDetailShowing(boolean callback) {
         this.showOnDetail = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the creation view.
-    public Text showOnCreating(boolean callback) {
+    public Tree showOnCreating(boolean callback) {
         this.showOnCreation = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the update view.
-    public Text showOnUpdating(boolean callback) {
+    public Tree showOnUpdating(boolean callback) {
         this.showOnUpdate = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the export file.
-    public Text showOnExporting(boolean callback) {
+    public Tree showOnExporting(boolean callback) {
         this.showOnExport = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the import file.
-    public Text showOnImporting(boolean callback) {
+    public Tree showOnImporting(boolean callback) {
         this.showOnImport = callback;
 
         return this;
     }
 
     // Specify that the element should only be shown on the index view.
-    public Text onlyOnIndex() {
+    public Tree onlyOnIndex() {
         this.showOnIndex = true;
         this.showOnDetail = false;
         this.showOnCreation = false;
@@ -499,7 +614,7 @@ public class Text extends Commponent {
     }
 
     // Specify that the element should only be shown on the detail view.
-    public Text onlyOnDetail() {
+    public Tree onlyOnDetail() {
         this.showOnIndex = false;
         this.showOnDetail = true;
         this.showOnCreation = false;
@@ -511,7 +626,7 @@ public class Text extends Commponent {
     }
 
     // Specify that the element should only be shown on forms.
-    public Text onlyOnForms() {
+    public Tree onlyOnForms() {
         this.showOnIndex = false;
         this.showOnDetail = false;
         this.showOnCreation = true;
@@ -523,7 +638,7 @@ public class Text extends Commponent {
     }
 
     // Specify that the element should only be shown on export file.
-    public Text onlyOnExport() {
+    public Tree onlyOnExport() {
         this.showOnIndex = false;
         this.showOnDetail = false;
         this.showOnCreation = false;
@@ -535,7 +650,7 @@ public class Text extends Commponent {
     }
 
     // Specify that the element should only be shown on import file.
-    public Text onlyOnImport() {
+    public Tree onlyOnImport() {
         this.showOnIndex = false;
         this.showOnDetail = false;
         this.showOnCreation = false;
@@ -547,7 +662,7 @@ public class Text extends Commponent {
     }
 
     // Specify that the element should be hidden from forms.
-    public Text exceptOnForms() {
+    public Tree exceptOnForms() {
         this.showOnIndex = true;
         this.showOnDetail = true;
         this.showOnCreation = false;
