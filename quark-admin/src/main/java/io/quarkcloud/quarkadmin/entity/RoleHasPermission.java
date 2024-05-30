@@ -16,7 +16,7 @@ public class RoleHasPermission extends Model<RoleHasPermission> {
     private Long roleId;
 
     // 权限ID
-    private String permissionId;
+    private Long permissionId;
 
     // 守卫名称
     private String guardName;
