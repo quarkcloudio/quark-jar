@@ -11,7 +11,7 @@
  Target Server Version : 50738
  File Encoding         : 65001
 
- Date: 27/05/2024 09:54:58
+ Date: 30/05/2024 15:54:18
 */
 
 SET NAMES utf8mb4;
@@ -68,27 +68,6 @@ CREATE TABLE `admins`  (
 -- Records of admins
 -- ----------------------------
 INSERT INTO `admins` VALUES (1, 'administrator', '超级管理员', 1, 'admin@yourweb.com', '10086', '$2a$04$d/gRv3MdXWSByWOFp0xqce0g.RSyp3c91PCLcEIIX9rsJ/l2QocsW', '', '', '2024-05-16 17:10:19.457', 1, '2024-05-16 17:10:19.458', '2024-05-16 17:10:19.458', NULL);
-
--- ----------------------------
--- Table structure for casbin_rules
--- ----------------------------
-DROP TABLE IF EXISTS `casbin_rules`;
-CREATE TABLE `casbin_rules`  (
-  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `ptype` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
-  `v0` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
-  `v1` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
-  `v2` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
-  `v3` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
-  `v4` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
-  `v5` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `unique_index`(`ptype`, `v0`, `v1`, `v2`, `v3`, `v4`, `v5`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of casbin_rules
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for configs
@@ -170,6 +149,24 @@ CREATE TABLE `files`  (
 
 -- ----------------------------
 -- Records of files
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for menu_has_permissions
+-- ----------------------------
+DROP TABLE IF EXISTS `menu_has_permissions`;
+CREATE TABLE `menu_has_permissions`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `menu_id` bigint(20) NOT NULL,
+  `permission_id` bigint(20) NOT NULL,
+  `guard_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT 'admin',
+  `created_at` datetime(3) NULL DEFAULT NULL,
+  `updated_at` datetime(3) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of menu_has_permissions
 -- ----------------------------
 
 -- ----------------------------
@@ -287,6 +284,24 @@ CREATE TABLE `pictures`  (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for role_has_permissions
+-- ----------------------------
+DROP TABLE IF EXISTS `role_has_permissions`;
+CREATE TABLE `role_has_permissions`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `role_id` bigint(20) NOT NULL,
+  `permission_id` bigint(20) NOT NULL,
+  `guard_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT 'admin',
+  `created_at` datetime(3) NULL DEFAULT NULL,
+  `updated_at` datetime(3) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of role_has_permissions
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for roles
 -- ----------------------------
 DROP TABLE IF EXISTS `roles`;
@@ -301,6 +316,24 @@ CREATE TABLE `roles`  (
 
 -- ----------------------------
 -- Records of roles
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for user_has_roles
+-- ----------------------------
+DROP TABLE IF EXISTS `user_has_roles`;
+CREATE TABLE `user_has_roles`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `uid` bigint(20) NOT NULL,
+  `role_id` bigint(20) NOT NULL,
+  `guard_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT 'admin',
+  `created_at` datetime(3) NULL DEFAULT NULL,
+  `updated_at` datetime(3) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of user_has_roles
 -- ----------------------------
 
 -- ----------------------------
