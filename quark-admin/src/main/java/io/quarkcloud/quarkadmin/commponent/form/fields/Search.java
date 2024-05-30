@@ -20,8 +20,19 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class MapField extends Commponent {
-    
+public class Search extends Commponent {
+
+    @Data
+    public static class Option {
+
+        String label;
+
+        Object value;
+
+        @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+        boolean disabled;
+    }
+
     // 开启 grid 模式时传递给 Row, 仅在ProFormGroup, ProFormList, ProFormFieldSet 中有效，默认：{
     // gutter: 8 }
     Map<String, Object> rowProps;
@@ -164,6 +175,14 @@ public class MapField extends Commponent {
         Object callback();
     }
 
+    // 可以点击清除图标删除内容
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    boolean allowClear;
+
+    // 占位符
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    String placeholder;
+
     // 默认选中的选项
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object defaultValue;
@@ -172,37 +191,53 @@ public class MapField extends Commponent {
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean disabled;
 
+    // 可选项数据源
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    Option[] options;
+
+    // 用于设置 Search options 类型 default | button
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    String optionType;
+
+    // 大小，只对按钮样式生效, large | middle | small
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    String size;
+
+    // 指定选中项,string[] | number[]
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    Object value;
+
     // 自定义样式
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Map<String, Object> style;
 
-    // 指定选中项,string[] | number[]
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    Map<String, Object> value;
-
-    // 缩放级别
-    int zoom;
-
-    // 地图Key
-    String mapKey;
-
-    // 地图安全密钥
-    String mapSecurityJsCode;
-
-    public MapField() {
-        this.component = "mapField";
+    public Search() {
+        this.component = "searchField";
         this.setComponentKey();
+    }
+
+    // Field 的长度，我们归纳了常用的 Field 长度以及适合的场景，支持了一些枚举 "xs" , "s" , "m" , "l" , "x"
+    public Search setWidth(Object width) {
+        Map<String, Object> style = new HashMap<>();
+
+        this.style.forEach((key, value) -> {
+            style.put(key, value);
+        });
+        style.put("width", width);
+        this.style = style;
+
+        return this;
     }
 
     // 校验规则，设置字段的校验逻辑
     //
-    // new Mapfield().
+    // new Search().
     // setRules(new Rule[]{
     // rule.required(true, "用户名必须填写"), // 需要用户名字段不能为空
     // rule.min(6, "用户名不能少于6个字符"), // 用户名最少需要6个字符
     // rule.max(20, "用户名不能超过20个字符") // 用户名最多只能包含20个字符
     // });
-    public MapField setRules(Rule[] rules) {
+    public Search setRules(Rule[] rules) {
         for (int i = 0; i < rules.length; i++) {
             rules[i] = rules[i].setName(name);
         }
@@ -213,11 +248,11 @@ public class MapField extends Commponent {
 
     // 校验规则，只在创建表单提交时生效
     //
-    // new Mapfield().
+    // new Search().
     // setCreationRules(new Rule[]{
     // rule.unique("admins", "username", "用户名已存在"),
     // });
-    public MapField setCreationRules(Rule[] rules) {
+    public Search setCreationRules(Rule[] rules) {
         for (int i = 0; i < rules.length; i++) {
             rules[i] = rules[i].setName(name);
         }
@@ -228,11 +263,11 @@ public class MapField extends Commponent {
 
     // 校验规则，只在更新表单提交时生效
     //
-    // new Mapfield().
+    // new Search().
     // setUpdateRules(new Rule[]{
     // rule.unique("admins", "username", "用户名已存在"),
     // });
-    public MapField setUpdateRules(Rule[] rules) {
+    public Search setUpdateRules(Rule[] rules) {
         for (int i = 0; i < rules.length; i++) {
             rules[i] = rules[i].setName(name);
         }
@@ -242,7 +277,7 @@ public class MapField extends Commponent {
     }
 
     // 生成前端验证规则
-    public MapField buildFrontendRules(String path) {
+    public Search buildFrontendRules(String path) {
         Rule[] rules = new Rule[] {};
         Rule[] creationRules = new Rule[] {};
         Rule[] updateRules = new Rule[] {};
@@ -282,14 +317,14 @@ public class MapField extends Commponent {
     }
 
     // 表头的筛选菜单项，当值为 true 时，自动使用 valueEnum 生成，只在列表页中有效
-    public MapField setFilters(boolean filters) {
+    public Search setFilters(boolean filters) {
         this.filters = filters;
 
         return this;
     }
 
     // 表头的筛选菜单项，当值为 true 时，自动使用 valueEnum 生成，只在列表页中有效
-    public MapField setFilters(Map<String, String> filters) {
+    public Search setFilters(Map<String, String> filters) {
         List<Map<String, String>> tmpFilters = new ArrayList<>();
         filters.forEach((k, v) -> {
             Map<String, String> map = new HashMap<String, String>();
@@ -304,16 +339,16 @@ public class MapField extends Commponent {
 
     // 设置When组件数据
     //
-    // new Mapfield().setWhen(option, callback)
-    public MapField setWhen(Object option, Closure callback) {
+    // new Search().setWhen(option, callback)
+    public Search setWhen(Object option, Closure callback) {
         this.setWhen("=", option, callback);
         return this;
     }
 
     // 设置When组件数据
     //
-    // new Mapfield().setWhen(">", option, callback)
-    public MapField setWhen(String operator, Object option, Closure callback) {
+    // new Search().setWhen(">", option, callback)
+    public Search setWhen(String operator, Object option, Closure callback) {
         When w = new When();
         WhenItem i = new WhenItem();
 
@@ -363,91 +398,91 @@ public class MapField extends Commponent {
     }
 
     // Specify that the element should be hidden from the index view.
-    public MapField hideFromIndex(boolean callback) {
+    public Search hideFromIndex(boolean callback) {
         this.showOnIndex = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the detail view.
-    public MapField hideFromDetail(boolean callback) {
+    public Search hideFromDetail(boolean callback) {
         this.showOnDetail = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the creation view.
-    public MapField hideWhenCreating(boolean callback) {
+    public Search hideWhenCreating(boolean callback) {
         this.showOnCreation = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the update view.
-    public MapField hideWhenUpdating(boolean callback) {
+    public Search hideWhenUpdating(boolean callback) {
         this.showOnUpdate = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the export file.
-    public MapField hideWhenExporting(boolean callback) {
+    public Search hideWhenExporting(boolean callback) {
         this.showOnExport = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the import file.
-    public MapField hideWhenImporting(boolean callback) {
+    public Search hideWhenImporting(boolean callback) {
         this.showOnImport = !callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the index view.
-    public MapField onIndexShowing(boolean callback) {
+    public Search onIndexShowing(boolean callback) {
         this.showOnIndex = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the detail view.
-    public MapField onDetailShowing(boolean callback) {
+    public Search onDetailShowing(boolean callback) {
         this.showOnDetail = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the creation view.
-    public MapField showOnCreating(boolean callback) {
+    public Search showOnCreating(boolean callback) {
         this.showOnCreation = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the update view.
-    public MapField showOnUpdating(boolean callback) {
+    public Search showOnUpdating(boolean callback) {
         this.showOnUpdate = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the export file.
-    public MapField showOnExporting(boolean callback) {
+    public Search showOnExporting(boolean callback) {
         this.showOnExport = callback;
 
         return this;
     }
 
     // Specify that the element should be hidden from the import file.
-    public MapField showOnImporting(boolean callback) {
+    public Search showOnImporting(boolean callback) {
         this.showOnImport = callback;
 
         return this;
     }
 
     // Specify that the element should only be shown on the index view.
-    public MapField onlyOnIndex() {
+    public Search onlyOnIndex() {
         this.showOnIndex = true;
         this.showOnDetail = false;
         this.showOnCreation = false;
@@ -459,7 +494,7 @@ public class MapField extends Commponent {
     }
 
     // Specify that the element should only be shown on the detail view.
-    public MapField onlyOnDetail() {
+    public Search onlyOnDetail() {
         this.showOnIndex = false;
         this.showOnDetail = true;
         this.showOnCreation = false;
@@ -471,7 +506,7 @@ public class MapField extends Commponent {
     }
 
     // Specify that the element should only be shown on forms.
-    public MapField onlyOnForms() {
+    public Search onlyOnForms() {
         this.showOnIndex = false;
         this.showOnDetail = false;
         this.showOnCreation = true;
@@ -483,7 +518,7 @@ public class MapField extends Commponent {
     }
 
     // Specify that the element should only be shown on export file.
-    public MapField onlyOnExport() {
+    public Search onlyOnExport() {
         this.showOnIndex = false;
         this.showOnDetail = false;
         this.showOnCreation = false;
@@ -495,7 +530,7 @@ public class MapField extends Commponent {
     }
 
     // Specify that the element should only be shown on import file.
-    public MapField onlyOnImport() {
+    public Search onlyOnImport() {
         this.showOnIndex = false;
         this.showOnDetail = false;
         this.showOnCreation = false;
@@ -507,7 +542,7 @@ public class MapField extends Commponent {
     }
 
     // Specify that the element should be hidden from forms.
-    public MapField exceptOnForms() {
+    public Search exceptOnForms() {
         this.showOnIndex = true;
         this.showOnDetail = true;
         this.showOnCreation = false;
@@ -551,40 +586,5 @@ public class MapField extends Commponent {
     // 当前列值的枚举 valueEnum
     public Map<?, ?> getValueEnum() {
         return null;
-    }
-
-    // 地图宽度
-    public MapField setWidth(Object width) {
-        Map<String, Object> style = new HashMap<>();
-
-        this.style.forEach((key, value) -> {
-            style.put(key, value);
-        });
-        style.put("width", width);
-        this.style = style;
-
-        return this;
-    }
-
-    // 地图高度
-    public MapField setHeight(Object height) {
-        Map<String, Object> style = new HashMap<>();
-
-        this.style.forEach((key, value) -> {
-            style.put(key, value);
-        });
-        style.put("height", height);
-        this.style = style;
-
-        return this;
-    }
-
-    // 坐标位置
-    public MapField SetPosition(String longitude, String latitude) {
-
-        this.value.put("longitude", longitude);
-        this.value.put("latitude", latitude);
-
-        return this;
     }
 }

@@ -1,9 +1,13 @@
 package io.quarkcloud.quarkadmin.commponent.form.fields;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -208,8 +212,8 @@ public class Radio extends Commponent {
         this.setComponentKey();
     }
 
-     // Field 的长度，我们归纳了常用的 Field 长度以及适合的场景，支持了一些枚举 "xs" , "s" , "m" , "l" , "x"
-     public Radio setWidth(Object width) {
+    // Field 的长度，我们归纳了常用的 Field 长度以及适合的场景，支持了一些枚举 "xs" , "s" , "m" , "l" , "x"
+    public Radio setWidth(Object width) {
         Map<String, Object> style = new HashMap<>();
 
         this.style.forEach((key, value) -> {
@@ -578,5 +582,76 @@ public class Radio extends Commponent {
     // 当前列值的枚举 valueEnum
     public Map<?, ?> getValueEnum() {
         return null;
+    }
+
+    // 根据value值获取Option的Label
+    public String getOptionLabel(Object value) {
+
+        List<?> values = new ArrayList<>();
+
+        // Check if value is a string and contains JSON structure
+        if (value instanceof String) {
+            String stringValue = (String) value;
+            if (stringValue.contains("[") || stringValue.contains("{")) {
+                try {
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    values = objectMapper.readValue(stringValue, List.class);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        // Collect values if not already done
+        if (values.isEmpty()) {
+            values = List.of(value);
+        }
+
+        // Find matching labels
+        List<String> labels = values.stream()
+                .flatMap(val -> Stream.of(options).filter(option -> Objects.equals(val, option.getValue())))
+                .map(Option::getLabel)
+                .collect(Collectors.toList());
+
+        // Join labels into a single string
+        return String.join(",", labels);
+    }
+
+    // 根据label值获取Option的Value
+    public Object getOptionValue(String label) {
+        List<Object> values = new ArrayList<>();
+        List<String> labels = new ArrayList<>();
+
+        // Split labels by commas and add to list
+        if (label.contains(",")) {
+            labels.addAll(Arrays.asList(label.split(",")));
+        } else if (label.contains("，")) {
+            labels.addAll(Arrays.asList(label.split("，")));
+        } else {
+            labels.add(label);
+        }
+
+        // Find matching values
+        if (labels.size() > 1) {
+            values = labels.stream()
+                    .flatMap(lbl -> Stream.of(options).filter(option -> Objects.equals(option.getLabel(), lbl)))
+                    .map(Option::getValue)
+                    .collect(Collectors.toList());
+        } else {
+            values = Stream.of(options)
+                    .filter(option -> Objects.equals(option.getLabel(), label))
+                    .map(Option::getValue)
+                    .collect(Collectors.toList());
+        }
+
+        // Return values if more than one, otherwise single value
+        return values.size() > 1 ? values : values.isEmpty() ? null : values.get(0);
+    }
+
+    // 获取Option的Labels
+    public String getOptionLabels() {
+        return Arrays.stream(options)
+                .map(Option::getLabel)
+                .collect(Collectors.joining(","));
     }
 }

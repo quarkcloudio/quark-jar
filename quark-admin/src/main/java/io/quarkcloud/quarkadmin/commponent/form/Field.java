@@ -18,11 +18,12 @@ import io.quarkcloud.quarkadmin.commponent.form.fields.Id;
 import io.quarkcloud.quarkadmin.commponent.form.fields.Image;
 import io.quarkcloud.quarkadmin.commponent.form.fields.ImageCaptcha;
 import io.quarkcloud.quarkadmin.commponent.form.fields.List;
-import io.quarkcloud.quarkadmin.commponent.form.fields.Mapfield;
+import io.quarkcloud.quarkadmin.commponent.form.fields.MapField;
 import io.quarkcloud.quarkadmin.commponent.form.fields.Month;
 import io.quarkcloud.quarkadmin.commponent.form.fields.Password;
 import io.quarkcloud.quarkadmin.commponent.form.fields.Quarter;
 import io.quarkcloud.quarkadmin.commponent.form.fields.Radio;
+import io.quarkcloud.quarkadmin.commponent.form.fields.Search;
 import io.quarkcloud.quarkadmin.commponent.form.fields.Text;
 import io.quarkcloud.quarkadmin.commponent.form.fields.Number;
 
@@ -188,12 +189,12 @@ public class Field {
         return new List().setName(name).setLabel(label);
     }
 
-    public static Mapfield mapfield(String name) {
-        return new Mapfield().setName(name);
+    public static MapField mapfield(String name) {
+        return new MapField().setName(name);
     }
 
-    public static Mapfield mapfield(String name, String label) {
-        return new Mapfield().setName(name).setLabel(label);
+    public static MapField mapfield(String name, String label) {
+        return new MapField().setName(name).setLabel(label);
     }
 
     public static Month month(String name) {
@@ -226,5 +227,13 @@ public class Field {
 
     public static Radio radio(String name, String label) {
         return new Radio().setName(name).setLabel(label);
+    }
+
+    public static Search search(String name) {
+        return new Search().setName(name);
+    }
+
+    public static Search search(String name, String label) {
+        return new Search().setName(name).setLabel(label);
     }
 }
