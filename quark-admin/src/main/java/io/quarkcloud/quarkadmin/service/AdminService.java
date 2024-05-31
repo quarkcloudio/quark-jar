@@ -8,8 +8,10 @@ import io.quarkcloud.quarkadmin.entity.Role;
 
 public interface AdminService extends IService<Admin> {
 
+    public boolean checkPermission(Long adminId, String urlPath, String method);
+
     // 根据用户id获取权限列表
-    public List<Permission> getPremissionsById(Long adminId);
+    public List<Permission> getPermissionsById(Long adminId);
 
     // 根据用户id获取角色列表
     public List<Role> getRolesById(Long adminId);
