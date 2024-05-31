@@ -2,6 +2,7 @@ package io.quarkcloud.quarkadmin.commponent.form.fields;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
@@ -13,17 +14,17 @@ import lombok.experimental.Accessors;
 public class When {
 
     // 组件标识
-	String componentKey;
+    String componentKey;
 
     // 组件名称
-	String component;
+    String component;
 
     // When组件中需要解析的元素
-	WhenItem[] items;
+    List<WhenItem> items;
 
     public When() {
         this.component = "whenField";
-        this.setComponentKey("",true);
+        this.setComponentKey("", true);
     }
 
     // 组件Key
@@ -36,10 +37,10 @@ public class When {
             MessageDigest md;
             try {
                 md = MessageDigest.getInstance("MD5");
-                
+
                 // 计算消息的摘要
                 byte[] digest = md.digest(defaultKey.getBytes());
-                
+
                 // 将摘要转换为十六进制字符串
                 defaultKey = bytesToHex(digest);
             } catch (NoSuchAlgorithmException e) {

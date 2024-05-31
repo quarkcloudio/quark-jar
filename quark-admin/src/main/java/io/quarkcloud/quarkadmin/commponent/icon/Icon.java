@@ -15,7 +15,7 @@ public class Icon extends Commponent {
     public String scriptUrl;
 
     // 给所有的 svg 图标 <Icon /> 组件设置额外的属性
-    public Map<String,?> extraCommonProps;
+    public Map<String, Object> extraCommonProps;
 
     // 计算后的 svg 类名
     public String className;

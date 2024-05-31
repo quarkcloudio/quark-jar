@@ -1,5 +1,8 @@
 package io.quarkcloud.quarkadmin.commponent.form;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -13,64 +16,60 @@ public class Rule {
 
     // 需要验证的字段名称
     @JsonIgnore
-	String name;
+    String name;
 
     // 规则类型，max | min | unique | required
     @JsonIgnore
-	String ruleType;
+    String ruleType;
 
     // 仅在 type 为 array 类型时有效，用于指定数组元素的校验规
-	Object defaultField;
+    Object defaultField;
 
     // 是否匹配枚举中的值（需要将 type 设置为 enum）
-	Object[] Enum;
-    
+    List<Object> Enum;
+
     // 仅在 type 为 array 或 object 类型时有效，用于指定子元素的校验规则
-	Object[] fields;
-    
+    List<Object> fields;
+
     // string 类型时为字符串长度；number 类型时为确定数字； array 类型时为数组长度
-	int len;
-    
+    int len;
+
     // 必须设置 type：string 类型为字符串最大长度；number 类型时为最大值；array 类型时为数组最大长度
-	int max;
-    
+    int max;
+
     // 错误信息，不设置时会通过模板自动生成
-	String message;
+    String message;
 
     // 必须设置 type：string 类型为字符串最小长度；number 类型时为最小值；array 类型时为数组最小长度
-	int min;
+    int min;
 
     // 正则表达式匹配
-	String pattern;
+    String pattern;
 
     // 是否为必选字段
-	boolean required;
+    boolean required;
 
     // type：unique时，指定验证的表名
     @JsonIgnore
-	String uniqueTable;
+    String uniqueTable;
 
     // type：unique时，指定需验证表中的字段
     @JsonIgnore
-	String uniqueTableField;
+    String uniqueTableField;
 
     // type：unique时，忽略符合条件验证的列，例如：{id}
     @JsonIgnore
-	String uniqueIgnoreValue;
+    String uniqueIgnoreValue;
 
-    // 字段类型，string | number | boolean | method | regexp | integer | float | array | object | enum | date | url | hex | email | any
+    // 字段类型，string | number | boolean | method | regexp | integer | float | array |
+    // object | enum | date | url | hex | email | any
     String type;
 
     // 转换前端验证规则，剔除前端不支持的unique
-    public static Rule[] convertToFrontendRules(Rule[] rules) {
-        Rule[] newRules = new Rule[rules.length+1];
-        for (int i = 0; i < rules.length; i++) {
-            if (rules[i].ruleType != "unique") {
-                newRules[i] = rules[i];
-            }
-        }
-
-        return newRules;
+    public static List<Rule> convertToFrontendRules(List<Rule> rules) {
+        return rules.stream()
+                .filter(rule -> !rule.getRuleType().equals("unique"))
+                .collect(Collectors.toList());
     }
 
     // 必须设置 type：string 类型；为字符串最大长度；number 类型时为最大值；array 类型时为数组最大长度
@@ -157,7 +156,8 @@ public class Rule {
         return rule.setRequired().setMessage(message);
     }
 
-    // 设置unique验证类型，插入数据时：Unique("admins", "username", "用户名已存在")，更新数据时：Unique("admins", "username", "{id}", "用户名已存在")
+    // 设置unique验证类型，插入数据时：Unique("admins", "username",
+    // "用户名已存在")，更新数据时：Unique("admins", "username", "{id}", "用户名已存在")
     public static Rule unique(String uniqueTable, String uniqueTableField, String message) {
         Rule rule = new Rule();
         rule.setUnique(uniqueTable, uniqueTableField);
@@ -166,7 +166,8 @@ public class Rule {
         return rule;
     }
 
-    // 设置unique验证类型，插入数据时：Unique("admins", "username", "用户名已存在")，更新数据时：Unique("admins", "username", "{id}", "用户名已存在")
+    // 设置unique验证类型，插入数据时：Unique("admins", "username",
+    // "用户名已存在")，更新数据时：Unique("admins", "username", "{id}", "用户名已存在")
     public static Rule unique(String uniqueTable, String uniqueTableField, String uniqueIgnoreValue, String message) {
         Rule rule = new Rule();
         rule.setUnique(uniqueTable, uniqueTableField, uniqueIgnoreValue);

@@ -1,5 +1,6 @@
 package io.quarkcloud.quarkadmin.commponent.form;
 
+import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -25,13 +26,13 @@ public class Form extends Commponent {
 
     public String backgroundImageUrl;
 
-    public Map<String,?> values;
+    public Map<String, Object> values;
 
-    public Map<String,?> initialValues;
+    public Map<String, Object> initialValues;
 
     public Object body;
 
-    public Object[] actions;
+    public List<Object> actions;
 
     public Form() {
         this.component = "form";

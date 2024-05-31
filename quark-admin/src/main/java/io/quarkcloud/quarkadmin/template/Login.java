@@ -87,7 +87,7 @@ public class Login {
         if (annotationClass == null) {
             return redirect;
         }
- 
+
         // 注解值为空返回默认值
         if (annotationClass.redirect().isEmpty()) {
             return redirect;
@@ -104,7 +104,7 @@ public class Login {
         if (annotationClass == null) {
             return title;
         }
- 
+
         // 注解值为空返回默认值
         if (annotationClass.title().isEmpty()) {
             return title;
@@ -130,46 +130,28 @@ public class Login {
         // 获取注解值
         return annotationClass.subTitle();
     }
- 
+
     // 获取字段
     public Object[] fields(Context context) {
 
         return new Object[] {
-            Field.
-            text("username").
-            setRules(new Rule[]{
-				Rule.required(true, "请输入用户名"),
-			}).
-            setPlaceholder("用户名").
-            setWidth("100%").
-            setSize("large").
-            setPrefix(new Icon().setType("icon-user")),
+                Field.text("username").setRules(Arrays.asList(Rule.required(true, "请输入用户名"))).setPlaceholder("用户名")
+                        .setWidth("100%").setSize("large").setPrefix(new Icon().setType("icon-user")),
 
-            Field.password("password").
-            setRules(new Rule[]{
-				Rule.required(true, "请输入密码"),
-			}).
-            setPlaceholder("密码").
-            setWidth("100%").
-            setSize("large").
-            setPrefix(new Icon().setType("icon-lock")),
+                Field.password("password").setRules(Arrays.asList(Rule.required(true, "请输入密码"))).setPlaceholder("密码")
+                        .setWidth("100%").setSize("large").setPrefix(new Icon().setType("icon-lock")),
 
-            Field.imageCaptcha("captcha").
-            setRules(new Rule[]{
-				Rule.required(true, "请输入验证码"),
-			}).
-            setPlaceholder("验证码").
-            setWidth("100%").
-            setSize("large").
-            setCaptchaIdUrl("/api/admin/login/index/captchaId").
-            setCaptchaUrl("/api/admin/login/index/captcha/{id}").
-            setPrefix(new Icon().setType("icon-safetycertificate")),
+                Field.imageCaptcha("captcha").setRules(Arrays.asList(Rule.required(true, "请输入验证码")))
+                        .setPlaceholder("验证码").setWidth("100%").setSize("large")
+                        .setCaptchaIdUrl("/api/admin/login/index/captchaId")
+                        .setCaptchaUrl("/api/admin/login/index/captcha/{id}")
+                        .setPrefix(new Icon().setType("icon-safetycertificate")),
         };
     }
 
     // 获取验证码ID
     public Object captchaId(Context context) {
-        Map<String,String> map = new HashMap<String,String>();
+        Map<String, String> map = new HashMap<String, String>();
 
         // 生成验证码ID
         String simpleUUID = IdUtil.simpleUUID();
@@ -242,11 +224,12 @@ public class Login {
                     try {
                         Object component = field.getClass().getSuperclass().getDeclaredField("component").get(field);
                         String getComponent = (String) component;
-                        if(getComponent.contains("Field")) {
-                            Method method = field.getClass().getMethod("buildFrontendRules",String.class);
+                        if (getComponent.contains("Field")) {
+                            Method method = field.getClass().getMethod("buildFrontendRules", String.class);
                             method.invoke(field, context.request.getQueryString());
                         }
-                    } catch (NoSuchFieldException | NoSuchMethodException | SecurityException | IllegalAccessException | InvocationTargetException e) {
+                    } catch (NoSuchFieldException | NoSuchMethodException | SecurityException | IllegalAccessException
+                            | InvocationTargetException e) {
                         e.printStackTrace();
                     }
                 }
@@ -292,7 +275,7 @@ public class Login {
             return Message.error("验证码不能为空！");
         }
 
-        Object cacheCaptchaValue = Cache.getInstance().get(id,false);
+        Object cacheCaptchaValue = Cache.getInstance().get(id, false);
         if (cacheCaptchaValue == null) {
             return Message.error("验证码错误！");
         }
@@ -317,19 +300,19 @@ public class Login {
         // JWT密钥
         String appKey = Env.getProperty("app.key");
         String token = JWT.create()
-            .setPayload("id", adminInfo.getId())
-            .setPayload("username", adminInfo.getUsername())
-            .setPayload("nickname", adminInfo.getNickname())
-            .setPayload("sex", adminInfo.getSex())
-            .setPayload("email", adminInfo.getEmail())
-            .setPayload("phone", adminInfo.getPhone())
-            .setPayload("avatar", adminInfo.getAvatar())
-            .setPayload("guard_name", "admin")
-            .setKey(appKey.getBytes())
-            .setExpiresAt(new Date(System.currentTimeMillis() + 3600000))
-            .sign();
+                .setPayload("id", adminInfo.getId())
+                .setPayload("username", adminInfo.getUsername())
+                .setPayload("nickname", adminInfo.getNickname())
+                .setPayload("sex", adminInfo.getSex())
+                .setPayload("email", adminInfo.getEmail())
+                .setPayload("phone", adminInfo.getPhone())
+                .setPayload("avatar", adminInfo.getAvatar())
+                .setPayload("guard_name", "admin")
+                .setKey(appKey.getBytes())
+                .setExpiresAt(new Date(System.currentTimeMillis() + 3600000))
+                .sign();
 
-        Map<String,String> result = new HashMap<>();
+        Map<String, String> result = new HashMap<>();
         result.put("token", token);
 
         return Message.success("登录成功！", result);
@@ -340,7 +323,7 @@ public class Login {
 
         // 登录表单组件
         io.quarkcloud.quarkadmin.commponent.login.Login login = new io.quarkcloud.quarkadmin.commponent.login.Login();
-        
+
         // 获取接口
         api = this.getApi();
 
@@ -357,13 +340,7 @@ public class Login {
         Object body = this.fieldsWithinComponents(context);
 
         // 设置组件属性
-        login.
-        setApi(api).
-        setRedirect(redirect).
-        setLogo(logo).
-        setTitle(title).
-        setSubTitle(subTitle).
-        setBody(body);
+        login.setApi(api).setRedirect(redirect).setLogo(logo).setTitle(title).setSubTitle(subTitle).setBody(body);
 
         return login;
     }

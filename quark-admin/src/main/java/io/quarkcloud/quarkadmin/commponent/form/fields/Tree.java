@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.commons.lang3.ArrayUtils;
+import java.util.function.Function;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -171,22 +172,22 @@ public class Tree extends Commponent {
     boolean ignore;
 
     // 全局校验规则
-    Rule[] rules;
+    List<Rule> rules;
 
     // 创建页校验规则
-    Rule[] creationRules;
+    List<Rule> creationRules;
 
     // 编辑页校验规则
-    Rule[] updateRules;
+    List<Rule> updateRules;
 
     // 前端校验规则，设置字段的校验逻辑
-    Rule[] frontendRules;
+    List<Rule> frontendRules;
 
     // When组件
     When when;
 
     // When组件里的字段
-    WhenItem[] whenItem;
+    List<WhenItem> whenItem;
 
     // 在列表页展示
     boolean showOnIndex;
@@ -226,7 +227,7 @@ public class Tree extends Commponent {
 
     // （受控）选中复选框的树节点
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    Object[] checkedKeys;
+    List<Object> checkedKeys;
 
     // checkable 状态下节点选择完全受控（父子节点选中状态不再关联）
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
@@ -234,7 +235,7 @@ public class Tree extends Commponent {
 
     // 默认选中复选框的树节点
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    Object[] defaultCheckedKeys;
+    List<Object> defaultCheckedKeys;
 
     // 默认展开所有树节点
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
@@ -242,7 +243,7 @@ public class Tree extends Commponent {
 
     // 默认展开指定的树节点
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    Object[] defaultExpandedKeys;
+    List<Object> defaultExpandedKeys;
 
     // 默认展开父节点
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
@@ -250,7 +251,7 @@ public class Tree extends Commponent {
 
     // 默认选中的树节点
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    Object[] defaultSelectedKeys;
+    List<Object> defaultSelectedKeys;
 
     // 默认选中的选项
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
@@ -266,7 +267,7 @@ public class Tree extends Commponent {
 
     // （受控）展开指定的树节点
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    Object[] expandedKeys;
+    List<Object> expandedKeys;
 
     // 自定义 options 中 label value children 的字段
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
@@ -302,7 +303,7 @@ public class Tree extends Commponent {
 
     // （受控）设置选中的树节点
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    Object[] selectedKeys;
+    List<Object> selectedKeys;
 
     // 是否展示 TreeNode title 前的图标
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
@@ -318,7 +319,7 @@ public class Tree extends Commponent {
 
     // treeNodes 数据，如果设置则不需要手动构造 TreeNode 节点
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    TreeData[] treeData;
+    List<TreeData> treeData;
 
     // 指定当前选中的条目，多选时为一个数组。（value 数组引用未变化时，Select 不会更新）
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
@@ -334,6 +335,8 @@ public class Tree extends Commponent {
 
     public Tree() {
         this.component = "treeField";
+        this.setComponentKey();
+        this.style = new HashMap<>();
     }
 
     // Field 的长度，我们归纳了常用的 Field 长度以及适合的场景，支持了一些枚举 "xs" , "s" , "m" , "l" , "x"
@@ -352,15 +355,14 @@ public class Tree extends Commponent {
     // 校验规则，设置字段的校验逻辑
     //
     // new Tree().
-    // setRules(new Rule[]{
+    // setRules(Arrays.asList(
     // rule.required(true, "用户名必须填写"), // 需要用户名字段不能为空
     // rule.min(6, "用户名不能少于6个字符"), // 用户名最少需要6个字符
     // rule.max(20, "用户名不能超过20个字符") // 用户名最多只能包含20个字符
-    // });
-    public Tree setRules(Rule[] rules) {
-        for (int i = 0; i < rules.length; i++) {
-            rules[i] = rules[i].setName(name);
-        }
+    // ));
+    public Tree setRules(List<Rule> rules) {
+
+        rules.forEach(rule -> rule.setName(name));
         this.rules = rules;
 
         return this;
@@ -369,13 +371,12 @@ public class Tree extends Commponent {
     // 校验规则，只在创建表单提交时生效
     //
     // new Tree().
-    // setCreationRules(new Rule[]{
+    // setCreationRules(Arrays.asList(
     // rule.unique("admins", "username", "用户名已存在"),
-    // });
-    public Tree setCreationRules(Rule[] rules) {
-        for (int i = 0; i < rules.length; i++) {
-            rules[i] = rules[i].setName(name);
-        }
+    // ));
+    public Tree setCreationRules(List<Rule> rules) {
+
+        rules.forEach(rule -> rule.setName(name));
         this.creationRules = rules;
 
         return this;
@@ -384,13 +385,12 @@ public class Tree extends Commponent {
     // 校验规则，只在更新表单提交时生效
     //
     // new Tree().
-    // setUpdateRules(new Rule[]{
+    // setUpdateRules(Arrays.asList(
     // rule.unique("admins", "username", "用户名已存在"),
-    // });
-    public Tree setUpdateRules(Rule[] rules) {
-        for (int i = 0; i < rules.length; i++) {
-            rules[i] = rules[i].setName(name);
-        }
+    // ));
+    public Tree setUpdateRules(List<Rule> rules) {
+
+        rules.forEach(rule -> rule.setName(name));
         this.updateRules = rules;
 
         return this;
@@ -398,40 +398,27 @@ public class Tree extends Commponent {
 
     // 生成前端验证规则
     public Tree buildFrontendRules(String path) {
-        Rule[] rules = new Rule[] {};
-        Rule[] creationRules = new Rule[] {};
-        Rule[] updateRules = new Rule[] {};
-        Rule[] frontendRules = new Rule[] {};
+
+        List<Rule> rules = new ArrayList<>();
+        List<Rule> creationRules = new ArrayList<>();
+        List<Rule> updateRules = new ArrayList<>();
+        List<Rule> frontendRules = new ArrayList<>();
 
         String[] uri = path.split("/");
-        boolean isCreating = (uri[uri.length - 1] == "create") || (uri[uri.length - 1] == "store");
-        boolean isEditing = (uri[uri.length - 1] == "edit") || (uri[uri.length - 1] == "update");
+        boolean isCreating = (uri[uri.length - 1].equals("create")) || (uri[uri.length - 1].equals("store"));
+        boolean isEditing = (uri[uri.length - 1].equals("edit")) || (uri[uri.length - 1].equals("update"));
 
-        if (this.rules.length > 0) {
-            rules = Rule.convertToFrontendRules(this.rules);
+        Function<List<Rule>, List<Rule>> convertToFrontendRules = Rule::convertToFrontendRules;
+
+        frontendRules.addAll(convertToFrontendRules.apply(rules));
+
+        if (isCreating) {
+            frontendRules.addAll(convertToFrontendRules.apply(creationRules));
         }
 
-        if (isCreating && this.creationRules.length > 0) {
-            creationRules = Rule.convertToFrontendRules(this.creationRules);
+        if (isEditing) {
+            frontendRules.addAll(convertToFrontendRules.apply(updateRules));
         }
-
-        if (isEditing && this.updateRules.length > 0) {
-            updateRules = Rule.convertToFrontendRules(this.updateRules);
-        }
-
-        if (rules.length > 0) {
-            frontendRules = (Rule[]) ArrayUtils.addAll(frontendRules, rules);
-        }
-
-        if (creationRules.length > 0) {
-            frontendRules = (Rule[]) ArrayUtils.addAll(frontendRules, creationRules);
-        }
-
-        if (updateRules.length > 0) {
-            frontendRules = (Rule[]) ArrayUtils.addAll(frontendRules, updateRules);
-        }
-
-        this.frontendRules = frontendRules;
 
         return this;
     }
@@ -469,50 +456,54 @@ public class Tree extends Commponent {
     //
     // new Tree().setWhen(">", option, callback)
     public Tree setWhen(String operator, Object option, Closure callback) {
-        When w = new When();
-        WhenItem i = new WhenItem();
 
-        i.body = callback.callback();
+        WhenItem item = new WhenItem();
+
+        item.body = callback.callback();
+        item.conditionName = this.name;
+        item.conditionOperator = operator;
+        item.option = option;
+
+        StringBuilder conditionBuilder = new StringBuilder();
+        conditionBuilder.append("<%=String(").append(this.name).append(")");
+
         switch (operator) {
             case "=":
-                i.condition = "<%=String(" + this.name + ") === '" + option + "' %>";
+                conditionBuilder.append(" === '").append(option).append("' %>");
                 break;
             case ">":
-                i.condition = "<%=String(" + this.name + ") > '" + option + "' %>";
+                conditionBuilder.append(" > '").append(option).append("' %>");
                 break;
             case "<":
-                i.condition = "<%=String(" + this.name + ") < '" + option + "' %>";
+                conditionBuilder.append(" < '").append(option).append("' %>");
                 break;
             case "<=":
-                i.condition = "<%=String(" + this.name + ") <= '" + option + "' %>";
+                conditionBuilder.append(" <= '").append(option).append("' %>");
                 break;
             case ">=":
-                i.condition = "<%=String(" + this.name + ") => '" + option + "' %>";
+                conditionBuilder.append(" >= '").append(option).append("' %>");
                 break;
             case "has":
-                i.condition = "<%=(String(" + this.name + ").indexOf('" + option + "') !=-1) %>";
+                conditionBuilder.append(".indexOf('").append(option).append("') !=-1) %>");
                 break;
             case "in":
                 ObjectMapper mapper = new ObjectMapper();
                 String jsonStr;
                 try {
                     jsonStr = mapper.writeValueAsString(option);
-                    i.condition = "<%=(" + jsonStr + ".indexOf(" + this.name + ") !=-1) %>";
+                    conditionBuilder.append(jsonStr).append(".indexOf(").append(this.name).append(") !=-1) %>");
                 } catch (JsonProcessingException e) {
                     e.printStackTrace();
                 }
                 break;
             default:
-                i.condition = "<%=String(" + this.name + ") === '" + option + "' %>";
+                conditionBuilder.append(" === '").append(option).append("' %>");
                 break;
         }
 
-        i.conditionName = this.name;
-        i.conditionOperator = operator;
-        i.option = option;
-
-        this.whenItem = (WhenItem[]) ArrayUtils.addAll(this.whenItem, i);
-        this.when = w.setItems(this.whenItem);
+        item.condition = conditionBuilder.toString();
+        whenItem.add(item);
+        when.setItems(whenItem);
 
         return this;
     }

@@ -6,14 +6,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.apache.commons.lang3.ArrayUtils;
 
 import io.quarkcloud.quarkadmin.commponent.Commponent;
 import io.quarkcloud.quarkadmin.commponent.form.Rule;
@@ -138,22 +136,22 @@ public class Checkbox extends Commponent {
     boolean ignore;
 
     // 全局校验规则
-    Rule[] rules;
+    List<Rule> rules;
 
     // 创建页校验规则
-    Rule[] creationRules;
+    List<Rule> creationRules;
 
     // 编辑页校验规则
-    Rule[] updateRules;
+    List<Rule> updateRules;
 
     // 前端校验规则，设置字段的校验逻辑
-    Rule[] frontendRules;
+    List<Rule> frontendRules;
 
     // When组件
     When when;
 
     // When组件里的字段
-    WhenItem[] whenItem;
+    List<WhenItem> whenItem;
 
     // 在列表页展示
     boolean showOnIndex;
@@ -186,7 +184,7 @@ public class Checkbox extends Commponent {
     Object disabled;
 
     // 可选项数据源
-    Option[] options;
+    List<Option> options;
 
     // 指定选中项，string[] | number[]
     Object value;
@@ -194,6 +192,7 @@ public class Checkbox extends Commponent {
     public Checkbox() {
         this.component = "checkboxField";
         this.setComponentKey();
+        this.style = new HashMap<>();
     }
 
     // Field 的长度，我们归纳了常用的 Field 长度以及适合的场景，支持了一些枚举 "xs" , "s" , "m" , "l" , "x"
@@ -212,15 +211,14 @@ public class Checkbox extends Commponent {
     // 校验规则，设置字段的校验逻辑
     //
     // new Checkbox().
-    // setRules(new Rule[]{
+    // setRules(Arrays.asList(
     // rule.required(true, "用户名必须填写"), // 需要用户名字段不能为空
     // rule.min(6, "用户名不能少于6个字符"), // 用户名最少需要6个字符
     // rule.max(20, "用户名不能超过20个字符") // 用户名最多只能包含20个字符
-    // });
-    public Checkbox setRules(Rule[] rules) {
-        for (int i = 0; i < rules.length; i++) {
-            rules[i] = rules[i].setName(name);
-        }
+    // ));
+    public Checkbox setRules(List<Rule> rules) {
+
+        rules.forEach(rule -> rule.setName(name));
         this.rules = rules;
 
         return this;
@@ -229,13 +227,12 @@ public class Checkbox extends Commponent {
     // 校验规则，只在创建表单提交时生效
     //
     // new Checkbox().
-    // setCreationRules(new Rule[]{
+    // setCreationRules(Arrays.asList(
     // rule.unique("admins", "username", "用户名已存在"),
-    // });
-    public Checkbox setCreationRules(Rule[] rules) {
-        for (int i = 0; i < rules.length; i++) {
-            rules[i] = rules[i].setName(name);
-        }
+    // ));
+    public Checkbox setCreationRules(List<Rule> rules) {
+
+        rules.forEach(rule -> rule.setName(name));
         this.creationRules = rules;
 
         return this;
@@ -244,13 +241,12 @@ public class Checkbox extends Commponent {
     // 校验规则，只在更新表单提交时生效
     //
     // new Checkbox().
-    // setUpdateRules(new Rule[]{
+    // setUpdateRules(Arrays.asList(
     // rule.unique("admins", "username", "用户名已存在"),
-    // });
-    public Checkbox setUpdateRules(Rule[] rules) {
-        for (int i = 0; i < rules.length; i++) {
-            rules[i] = rules[i].setName(name);
-        }
+    // ));
+    public Checkbox setUpdateRules(List<Rule> rules) {
+
+        rules.forEach(rule -> rule.setName(name));
         this.updateRules = rules;
 
         return this;
@@ -258,40 +254,27 @@ public class Checkbox extends Commponent {
 
     // 生成前端验证规则
     public Checkbox buildFrontendRules(String path) {
-        Rule[] rules = new Rule[] {};
-        Rule[] creationRules = new Rule[] {};
-        Rule[] updateRules = new Rule[] {};
-        Rule[] frontendRules = new Rule[] {};
+
+        List<Rule> rules = new ArrayList<>();
+        List<Rule> creationRules = new ArrayList<>();
+        List<Rule> updateRules = new ArrayList<>();
+        List<Rule> frontendRules = new ArrayList<>();
 
         String[] uri = path.split("/");
-        boolean isCreating = (uri[uri.length - 1] == "create") || (uri[uri.length - 1] == "store");
-        boolean isEditing = (uri[uri.length - 1] == "edit") || (uri[uri.length - 1] == "update");
+        boolean isCreating = (uri[uri.length - 1].equals("create")) || (uri[uri.length - 1].equals("store"));
+        boolean isEditing = (uri[uri.length - 1].equals("edit")) || (uri[uri.length - 1].equals("update"));
 
-        if (this.rules.length > 0) {
-            rules = Rule.convertToFrontendRules(this.rules);
+        Function<List<Rule>, List<Rule>> convertToFrontendRules = Rule::convertToFrontendRules;
+
+        frontendRules.addAll(convertToFrontendRules.apply(rules));
+
+        if (isCreating) {
+            frontendRules.addAll(convertToFrontendRules.apply(creationRules));
         }
 
-        if (isCreating && this.creationRules.length > 0) {
-            creationRules = Rule.convertToFrontendRules(this.creationRules);
+        if (isEditing) {
+            frontendRules.addAll(convertToFrontendRules.apply(updateRules));
         }
-
-        if (isEditing && this.updateRules.length > 0) {
-            updateRules = Rule.convertToFrontendRules(this.updateRules);
-        }
-
-        if (rules.length > 0) {
-            frontendRules = (Rule[]) ArrayUtils.addAll(frontendRules, rules);
-        }
-
-        if (creationRules.length > 0) {
-            frontendRules = (Rule[]) ArrayUtils.addAll(frontendRules, creationRules);
-        }
-
-        if (updateRules.length > 0) {
-            frontendRules = (Rule[]) ArrayUtils.addAll(frontendRules, updateRules);
-        }
-
-        this.frontendRules = frontendRules;
 
         return this;
     }
@@ -329,50 +312,54 @@ public class Checkbox extends Commponent {
     //
     // new Checkbox().setWhen(">", option, callback)
     public Checkbox setWhen(String operator, Object option, Closure callback) {
-        When w = new When();
-        WhenItem i = new WhenItem();
 
-        i.body = callback.callback();
+        WhenItem item = new WhenItem();
+
+        item.body = callback.callback();
+        item.conditionName = this.name;
+        item.conditionOperator = operator;
+        item.option = option;
+
+        StringBuilder conditionBuilder = new StringBuilder();
+        conditionBuilder.append("<%=String(").append(this.name).append(")");
+
         switch (operator) {
             case "=":
-                i.condition = "<%=String(" + this.name + ") === '" + option + "' %>";
+                conditionBuilder.append(" === '").append(option).append("' %>");
                 break;
             case ">":
-                i.condition = "<%=String(" + this.name + ") > '" + option + "' %>";
+                conditionBuilder.append(" > '").append(option).append("' %>");
                 break;
             case "<":
-                i.condition = "<%=String(" + this.name + ") < '" + option + "' %>";
+                conditionBuilder.append(" < '").append(option).append("' %>");
                 break;
             case "<=":
-                i.condition = "<%=String(" + this.name + ") <= '" + option + "' %>";
+                conditionBuilder.append(" <= '").append(option).append("' %>");
                 break;
             case ">=":
-                i.condition = "<%=String(" + this.name + ") => '" + option + "' %>";
+                conditionBuilder.append(" >= '").append(option).append("' %>");
                 break;
             case "has":
-                i.condition = "<%=(String(" + this.name + ").indexOf('" + option + "') !=-1) %>";
+                conditionBuilder.append(".indexOf('").append(option).append("') !=-1) %>");
                 break;
             case "in":
                 ObjectMapper mapper = new ObjectMapper();
                 String jsonStr;
                 try {
                     jsonStr = mapper.writeValueAsString(option);
-                    i.condition = "<%=(" + jsonStr + ".indexOf(" + this.name + ") !=-1) %>";
+                    conditionBuilder.append(jsonStr).append(".indexOf(").append(this.name).append(") !=-1) %>");
                 } catch (JsonProcessingException e) {
                     e.printStackTrace();
                 }
                 break;
             default:
-                i.condition = "<%=String(" + this.name + ") === '" + option + "' %>";
+                conditionBuilder.append(" === '").append(option).append("' %>");
                 break;
         }
 
-        i.conditionName = this.name;
-        i.conditionOperator = operator;
-        i.option = option;
-
-        this.whenItem = (WhenItem[]) ArrayUtils.addAll(this.whenItem, i);
-        this.when = w.setItems(this.whenItem);
+        item.condition = conditionBuilder.toString();
+        whenItem.add(item);
+        when.setItems(whenItem);
 
         return this;
     }
@@ -593,7 +580,7 @@ public class Checkbox extends Commponent {
 
         // Find matching labels
         List<String> labels = values.stream()
-                .flatMap(val -> Stream.of(options).filter(option -> Objects.equals(val, option.getValue())))
+                .flatMap(val -> options.stream().filter(option -> Objects.equals(val, option.getValue())))
                 .map(Option::getLabel)
                 .collect(Collectors.toList());
 
@@ -603,6 +590,7 @@ public class Checkbox extends Commponent {
 
     // 根据label值获取Option的Value
     public Object getOptionValue(String label) {
+
         List<Object> values = new ArrayList<>();
         List<String> labels = new ArrayList<>();
 
@@ -618,11 +606,11 @@ public class Checkbox extends Commponent {
         // Find matching values
         if (labels.size() > 1) {
             values = labels.stream()
-                    .flatMap(lbl -> Stream.of(options).filter(option -> Objects.equals(option.getLabel(), lbl)))
+                    .flatMap(lbl -> options.stream().filter(option -> Objects.equals(option.getLabel(), lbl)))
                     .map(Option::getValue)
                     .collect(Collectors.toList());
         } else {
-            values = Stream.of(options)
+            values = options.stream()
                     .filter(option -> Objects.equals(option.getLabel(), label))
                     .map(Option::getValue)
                     .collect(Collectors.toList());
@@ -634,7 +622,7 @@ public class Checkbox extends Commponent {
 
     // 获取Option的Labels
     public String getOptionLabels() {
-        return Arrays.stream(options)
+        return options.stream()
                 .map(Option::getLabel)
                 .collect(Collectors.joining(","));
     }
