@@ -1,7 +1,7 @@
 package io.quarkcloud.quarkadmin.commponent.action;
 
-import io.quarkcloud.quarkadmin.commponent.Commponent;
 
+import io.quarkcloud.quarkadmin.commponent.Commponent;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -38,7 +38,8 @@ public class Action extends Commponent {
     // 按钮类型，primary | ghost | dashed | link | text | default
     public String type;
 
-    // 【必填】这是 action 最核心的配置，来指定该 action 的作用类型，支持：ajax、link、url、drawer、dialog、confirm、cancel、prev、next、copy、close。
+    // 【必填】这是 action 最核心的配置，来指定该 action
+    // 的作用类型，支持：ajax、link、url、drawer、dialog、confirm、cancel、prev、next、copy、close。
     public String actionType;
 
     // 当action 的作用类型为submit的时候，可以指定提交哪个表格，submitForm为提交表单的key值，为空时提交当前表单
@@ -74,6 +75,8 @@ public class Action extends Commponent {
     public Action() {
         this.component = "action";
         this.setComponentKey();
+        this.size = "default";
+        this.type = "default";
     }
 
     // 设置按钮图标
@@ -210,6 +213,18 @@ public class Action extends Commponent {
         return this;
     }
 
+    // 弹窗
+    public Action setModal(Object callback) {
+
+        return this;
+    }
+
+    // 抽屉
+    public Action setDrawer(Object callback) {
+
+        return this;
+    }
+
     // 设置行为前的确认操作
     public Action setWithConfirm(String title, String text, String confirmType) {
 
@@ -220,7 +235,7 @@ public class Action extends Commponent {
         return this;
     }
 
-    //  执行行为的接口链接
+    // 执行行为的接口链接
     public Action setApi(String api) {
 
         this.api = api;

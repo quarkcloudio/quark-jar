@@ -1,5 +1,6 @@
-package io.quarkcloud.quarkadmin.commponent.modal;
+package io.quarkcloud.quarkadmin.commponent.drawer;
 
+import java.util.HashMap;
 import java.util.List;
 
 import io.quarkcloud.quarkadmin.commponent.Commponent;
@@ -10,22 +11,31 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class Modal extends Commponent {
+public class Drawer extends Commponent {
 
     // 标题
     public String title;
 
-    // 垂直居中展示 Modal
-    public boolean centered;
+    // Modal body 样式
+    public Object bodyStyle;
 
     // 是否显示右上角的关闭按钮
     public boolean closable;
 
+    // 可用于设置 Drawer 包裹内容部分的样式
+    public Object contentWrapperStyle;
+
     // 关闭时销毁 Modal 里的子元素
     public boolean destroyOnClose;
 
-    // 设置按钮形状，可选值为 circle、 round 或者不设
-    public boolean focusTriggerAfterClose;
+    // 用于设置 Drawer 弹出层的样式
+    public Object drawerStyle;
+
+    // 抽屉页脚部件的样式
+    public Object footerStyle;
+
+    // 高度, 在 placement 为 top 或 bottom 时使用
+    public int height;
 
     // 是否支持键盘 esc 关闭
     public boolean keyboard;
@@ -35,6 +45,9 @@ public class Modal extends Commponent {
 
     // 点击蒙层是否允许关闭
     public boolean maskClosable;
+
+    // 遮罩样式
+    public Object maskStyle;
 
     // 对话框是否可见
     public boolean open;
@@ -48,17 +61,27 @@ public class Modal extends Commponent {
     // 弹窗行为
     public List<Object> actions;
 
+    // 抽屉的方向,top | right | bottom | left
+    public String placement;
+
     // 容器控件里面的内容
     public Object body;
 
-    public Modal() {
-        this.component = "modal";
+    public Drawer() {
+        this.component = "drawer";
         this.setComponentKey();
         this.closable = true;
+        this.footerStyle = new HashMap<>() {
+            {
+                put("textAlign", "right");
+            }
+        };
+        this.height = 256;
         this.keyboard = true;
         this.mask = true;
         this.maskClosable = true;
-        this.width = 520;
+        this.placement = "right";
+        this.width = 256;
         this.zIndex = 1000;
     }
 }
