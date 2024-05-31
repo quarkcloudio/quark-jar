@@ -20,20 +20,20 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     private RoleHasPermissionMapper roleHasPermissionMapper;
 
     // 权限表
-    private PermissionMapper premissionMapper;
+    private PermissionMapper permissionMapper;
 
     // 根据角色id获取权限列表
-    public List<Permission> getPremissionsById(Long roleId) {
+    public List<Permission> getPermissionsById(Long roleId) {
         QueryWrapper<Permission> queryWrapper = new QueryWrapper<>();
-        List<Long> premissionIds= this.getPremissionIdsById(roleId);
+        List<Long> PermissionIds= this.getPermissionIdsById(roleId);
 
-        queryWrapper.in("id", premissionIds);
+        queryWrapper.in("id", PermissionIds);
 
-        return premissionMapper.selectList(queryWrapper);
+        return permissionMapper.selectList(queryWrapper);
     }
 
     // 根据角色id获取权限ID列表
-    public List<Long> getPremissionIdsById(Long roleId) {
+    public List<Long> getPermissionIdsById(Long roleId) {
         List<Long> list = new ArrayList<>();
         QueryWrapper<RoleHasPermission> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("role_id", roleId);

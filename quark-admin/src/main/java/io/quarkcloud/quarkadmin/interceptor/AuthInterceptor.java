@@ -10,12 +10,17 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.jwt.JWT;
 import cn.hutool.jwt.JWTUtil;
 import cn.hutool.jwt.JWTValidator;
+import io.quarkcloud.quarkadmin.service.AdminService;
+import io.quarkcloud.quarkadmin.service.impl.AdminServiceImpl;
 import io.quarkcloud.quarkcore.service.Env;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 public class AuthInterceptor implements HandlerInterceptor {
     
+    // 注入AdminService
+    private AdminService adminService;
+
     @SuppressWarnings("null")
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -52,12 +57,17 @@ public class AuthInterceptor implements HandlerInterceptor {
             return false;
         }
 
+        adminService = new AdminServiceImpl();
         Long adminId = Long.parseLong(jwt.getPayload("id").toString());
         if (adminId != 1) {
-            
+            boolean checkResult = adminService.checkPermission(adminId, request.getPathInfo(), request.getMethod());
+            if (!checkResult) {
+                errorResponse(response, HttpStatus.UNAUTHORIZED, "403 Forbidden");
+                return false;
+            }
         }
 
-        System.out.println(adminId);
+        System.out.println(request.getPathInfo());
 
         return true; // 放行请求
     }

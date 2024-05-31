@@ -26,25 +26,26 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     // 用户角色
     private RoleService roleService;
 
-    // 根据用户id获取权限列表
-    public List<Permission> checkPremission(Long adminId, String permissionName) {
-        List<Permission> list = new ArrayList<>();
-        List<Long> roleIds= this.getRoleIdsById(adminId);
-        this.roleService = new RoleServiceImpl();
-        for (Long roleId : roleIds) {
-            list.addAll(roleService.getPremissionsById(roleId));
+    // 根据用户id，判断是否有访问权限
+    public boolean checkPermission(Long adminId, String urlPath, String method) {
+        boolean hasPermission = false;
+        List<Permission> permissions = this.getPermissionsById(adminId);
+        for (Permission permission : permissions) {
+            if (permission.getPath().equals(urlPath) && permission.getMethod().equals(method)) {
+                hasPermission = true;
+            }
         }
 
-        return list;
+        return hasPermission;
     }
 
     // 根据用户id获取权限列表
-    public List<Permission> getPremissionsById(Long adminId) {
+    public List<Permission> getPermissionsById(Long adminId) {
         List<Permission> list = new ArrayList<>();
         List<Long> roleIds= this.getRoleIdsById(adminId);
         this.roleService = new RoleServiceImpl();
         for (Long roleId : roleIds) {
-            list.addAll(roleService.getPremissionsById(roleId));
+            list.addAll(roleService.getPermissionsById(roleId));
         }
 
         return list;
