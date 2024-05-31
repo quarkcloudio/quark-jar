@@ -60,14 +60,12 @@ public class AuthInterceptor implements HandlerInterceptor {
         adminService = new AdminServiceImpl();
         Long adminId = Long.parseLong(jwt.getPayload("id").toString());
         if (adminId != 1) {
-            boolean checkResult = adminService.checkPermission(adminId, request.getPathInfo(), request.getMethod());
+            boolean checkResult = adminService.checkPermission(adminId, request.getRequestURI(), request.getMethod());
             if (!checkResult) {
                 errorResponse(response, HttpStatus.UNAUTHORIZED, "403 Forbidden");
                 return false;
             }
         }
-
-        System.out.println(request.getPathInfo());
 
         return true; // 放行请求
     }
