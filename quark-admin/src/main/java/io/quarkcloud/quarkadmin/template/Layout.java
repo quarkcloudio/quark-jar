@@ -5,9 +5,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import io.quarkcloud.quarkadmin.annotation.AdminLayout;
 import io.quarkcloud.quarkcore.service.Context;
 
 public class Layout {
+
+    // 注解实例
+    protected AdminLayout annotationClass = null;
 
     // layout 的左上角 的 title
     public String title;
