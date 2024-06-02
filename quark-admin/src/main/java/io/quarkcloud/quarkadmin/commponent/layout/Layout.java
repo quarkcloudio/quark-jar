@@ -21,7 +21,7 @@ public class Layout extends Commponent {
 	String title;
 
     // layout 的左上角 logo
-	String logo;
+	Object logo;
 
     // layout 的加载态
 	boolean loading;
