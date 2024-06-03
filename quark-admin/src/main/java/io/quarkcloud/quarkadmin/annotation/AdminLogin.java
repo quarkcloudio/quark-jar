@@ -12,11 +12,11 @@ public @interface AdminLogin {
     // api
     String api() default "";
 
-    // redirect
-    String redirect() default "";
-
     // logo
     String logo() default "";
+
+    // redirect
+    String redirect() default "";
 
     // title
     String title() default "";

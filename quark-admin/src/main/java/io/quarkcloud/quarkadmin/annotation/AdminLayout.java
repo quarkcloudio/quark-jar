@@ -14,7 +14,4 @@ public @interface AdminLayout {
 
     // title
     String title() default "";
-
-    // subTitle
-    String subTitle() default "";
 }
