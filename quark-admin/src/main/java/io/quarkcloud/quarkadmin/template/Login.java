@@ -13,10 +13,10 @@ import cn.hutool.captcha.LineCaptcha;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.jwt.JWT;
 import io.quarkcloud.quarkadmin.annotation.AdminLogin;
-import io.quarkcloud.quarkadmin.commponent.form.Field;
-import io.quarkcloud.quarkadmin.commponent.form.Rule;
-import io.quarkcloud.quarkadmin.commponent.icon.Icon;
-import io.quarkcloud.quarkadmin.commponent.message.Message;
+import io.quarkcloud.quarkadmin.component.form.Field;
+import io.quarkcloud.quarkadmin.component.form.Rule;
+import io.quarkcloud.quarkadmin.component.icon.Icon;
+import io.quarkcloud.quarkadmin.component.message.Message;
 import io.quarkcloud.quarkadmin.entity.Admin;
 import io.quarkcloud.quarkcore.service.Cache;
 import io.quarkcloud.quarkcore.service.Context;
@@ -339,7 +339,7 @@ public class Login {
     public Object render(Context context) {
 
         // 登录表单组件
-        io.quarkcloud.quarkadmin.commponent.login.Login login = new io.quarkcloud.quarkadmin.commponent.login.Login();
+        io.quarkcloud.quarkadmin.component.login.Login login = new io.quarkcloud.quarkadmin.component.login.Login();
 
         // 获取接口
         api = this.getApi();
