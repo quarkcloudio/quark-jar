@@ -111,7 +111,7 @@ public class Layout {
         rightMenus = null;
     }
 
-    // 获取接口
+    // 获取标题
     public String getTitle() {
 
         // 检查是否存在注解
@@ -128,17 +128,74 @@ public class Layout {
         return annotationClass.title();
     }
 
+    // 获取Logo
+    public Object getLogo() {
+
+        // 检查是否存在注解
+        if (annotationClass == null) {
+            return logo;
+        }
+
+        // 注解值为空返回默认值
+        if (annotationClass.logo().isEmpty()) {
+            return logo;
+        }
+
+        // 获取注解值
+        return annotationClass.logo();
+    }
+
+    // 获取layout的头部行为
+    public Object getActions() {
+        return actions;
+    }
+
+    /**
+     * 获取当前布局模式。
+     * 
+     * @return 当前布局的字符串表示。布局模式可能包括但不限于：side（侧边导航）、top（顶部导航）、mix（混合模式）。
+     */
+    public String getLayout() {
+        return layout;
+    }
+
+    /**
+     * 获取是否启用拆分菜单的设置
+     * 
+     * @return 如果返回true，则表示启用拆分菜单；如果返回false，则表示不启用拆分菜单。
+     */
+    public boolean getSplitMenus() {
+        return splitMenus;
+    }
+
     // 组件渲染
     public Object render(Context context) {
 
         // 登录表单组件
         io.quarkcloud.quarkadmin.component.layout.Layout component = new io.quarkcloud.quarkadmin.component.layout.Layout();
 
-        // 获取接口
+        // 获取标题
         title = this.getTitle();
 
+        // 获取Logo
+        logo = this.getLogo();
+
+        // 获取layout的头部行为
+        actions = this.getActions();
+
+        // 获取layout 的菜单模式,side：右侧导航，top：顶部导航，mix：混合模式
+        layout = this.getLayout();
+
+        // 获取是否启用拆分菜单的设置
+        splitMenus = this.getSplitMenus();
+
         // 设置组件属性
-        component.setTitle(title);
+        component.
+            setTitle(title).
+            setLogo(logo).
+            setActions(actions).
+            setLayout(layout).
+            setSplitMenus(splitMenus);
 
         return component;
     }
