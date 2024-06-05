@@ -1,6 +1,7 @@
 package io.quarkcloud.quarkadmin.component.footer;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.quarkcloud.quarkadmin.component.Component;
@@ -17,7 +18,7 @@ public class Footer extends Component {
     public String copyright;
 
     // 版权信息
-    public Map<String, Object>[] links;
+    public List<Map<String, Object>> links;
 
     public Footer() {
         this.component = "footer";
