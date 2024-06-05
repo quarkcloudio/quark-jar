@@ -2,6 +2,7 @@ package io.quarkcloud.quarkadmin.component.action;
 
 
 import java.util.HashMap;
+import java.util.Map;
 
 import io.quarkcloud.quarkadmin.component.Component;
 import lombok.Data;
@@ -240,9 +241,15 @@ public class Action extends Component {
 
     // 执行行为的接口链接
     public Action setApi(String api) {
-
         this.api = api;
         this.actionType = "ajax";
+
+        return this;
+    }
+
+    // 组件Style
+    public Action setStyle(Map<String, Object> style) {
+        this.style = style;
 
         return this;
     }

@@ -2,10 +2,12 @@ package io.quarkcloud.quarkadmin.template;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import io.quarkcloud.quarkadmin.annotation.AdminLayout;
+import io.quarkcloud.quarkadmin.component.action.Action;
 import io.quarkcloud.quarkadmin.component.footer.Footer;
 import io.quarkcloud.quarkcore.service.Context;
 
@@ -56,7 +58,7 @@ public class Layout {
     // 友情链接
     public List<Map<String, Object>> links;
 
-    // 头部菜单
+    // 右上角菜单
     public List<Object> rightMenus;
 
     // 构造函数
@@ -109,7 +111,25 @@ public class Layout {
         );
 
         // 右上角菜单
-        rightMenus = null;
+        rightMenus = Arrays.asList(
+            new Action().
+                setLabel("个人设置").
+                setActionType("link").
+                setType("link", false).
+                setIcon("setting").
+                setStyle(Map.of("color","rgb(0 0 0 / 88%)")).
+                setHref("#/layout/index?api=/api/admin/account/setting/form").
+                setSize("small"),
+
+            new Action().
+                setLabel("退出登录").
+                setActionType("ajax").
+                setType("link", false).
+                setIcon("logout").
+                setStyle(Map.of("color","rgb(0 0 0 / 88%)")).
+                setApi("/api/admin/logout/index/handle").
+                setSize("small")
+        );
     }
 
     // 获取标题
@@ -340,12 +360,21 @@ public class Layout {
     }
 
     /**
-     * 获取网站版权 "QuarkJar"
+     * 获取友情链接
      * 
-     * @return "QuarkJar"
+     * @return 友情链接
      */
     public List<Map<String, Object>> getLinks() {
         return links;
+    }
+
+    /**
+     * 获取右上角菜单
+     * 
+     * @return "右上角菜单"
+     */
+    public List<Object> getRightMenus() {
+        return rightMenus;
     }
 
     // 组件渲染
@@ -409,6 +438,7 @@ public class Layout {
             setIconfontUrl(iconfontUrl).
             setLocale(locale).
             setSiderWidth(siderWidth).
+            setRightMenus(rightMenus).
             setFooter(footer);
 
         return component;
