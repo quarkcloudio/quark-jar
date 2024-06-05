@@ -111,9 +111,35 @@ public class Layout {
         rightMenus = null;
     }
 
+    // 获取接口
+    public String getTitle() {
+
+        // 检查是否存在注解
+        if (annotationClass == null) {
+            return title;
+        }
+
+        // 注解值为空返回默认值
+        if (annotationClass.title().isEmpty()) {
+            return title;
+        }
+
+        // 获取注解值
+        return annotationClass.title();
+    }
+
     // 组件渲染
     public Object render(Context context) {
 
-        return null;
+        // 登录表单组件
+        io.quarkcloud.quarkadmin.component.layout.Layout component = new io.quarkcloud.quarkadmin.component.layout.Layout();
+
+        // 获取接口
+        title = this.getTitle();
+
+        // 设置组件属性
+        component.setTitle(title);
+
+        return component;
     }
 }
