@@ -422,6 +422,9 @@ public class Layout {
         // 友情链接
         links = this.getLinks();
 
+        // 获取右上角菜单
+        rightMenus = this.getRightMenus();
+
         // 页脚信息
         Footer footer = new Footer().setCopyright(copyright).setLinks(links);
 
