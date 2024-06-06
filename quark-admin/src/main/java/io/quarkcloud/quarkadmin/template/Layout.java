@@ -6,9 +6,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.hutool.jwt.JWT;
 import io.quarkcloud.quarkadmin.annotation.AdminLayout;
 import io.quarkcloud.quarkadmin.component.action.Action;
 import io.quarkcloud.quarkadmin.component.footer.Footer;
+import io.quarkcloud.quarkadmin.service.AdminService;
+import io.quarkcloud.quarkadmin.service.impl.AdminServiceImpl;
 import io.quarkcloud.quarkcore.service.Context;
 
 public class Layout {
@@ -375,6 +378,23 @@ public class Layout {
      */
     public List<Object> getRightMenus() {
         return rightMenus;
+    }
+
+    /**
+     * 获取权限菜单
+     * 
+     * @return "权限菜单"
+     */
+    public List<?> getMenus(Context context) {
+        AdminService adminService = new AdminServiceImpl();
+
+        // 获取当前登录用户Token
+        JWT jwt = context.parseToken();
+
+        // 获取当前登录用户ID
+        Long adminId = Long.parseLong(jwt.getPayload("id").toString());
+
+        return adminService.getMenusById(adminId);
     }
 
     // 组件渲染

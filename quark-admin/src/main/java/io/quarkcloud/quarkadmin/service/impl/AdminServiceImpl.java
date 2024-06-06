@@ -6,6 +6,7 @@ import java.util.List;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.quarkcloud.quarkadmin.entity.Admin;
+import io.quarkcloud.quarkadmin.entity.Menu;
 import io.quarkcloud.quarkadmin.entity.Permission;
 import io.quarkcloud.quarkadmin.entity.Role;
 import io.quarkcloud.quarkadmin.entity.UserHasRole;
@@ -72,6 +73,16 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
         List<UserHasRole> userHasRoles = userHasRoleMapper.selectList(queryWrapper);
         for (UserHasRole userHasRole : userHasRoles) {
             list.add(userHasRole.getRoleId());
+        }
+
+        return list;
+    }
+
+    // 根据用户id获取菜单列表
+    public List<Menu> getMenusById(Long adminId) {
+        List<Menu> list = new ArrayList<>();
+        if (adminId == 1) {
+            
         }
 
         return list;

@@ -9,12 +9,18 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.jwt.JWT;
+import cn.hutool.jwt.JWTUtil;
+import cn.hutool.jwt.JWTValidator;
 import lombok.Data;
 
 @Data
@@ -128,5 +134,36 @@ public class Context {
         }
 
         return map;
+    }
+
+    // 解析token
+    public JWT parseToken() {
+
+        // 从请求头中获取令牌
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return null;
+        }
+
+        String token = authHeader.substring("Bearer ".length());
+
+        // JWT密钥
+        String appKey = Env.getProperty("app.key");
+
+        // 验证Token是否合法
+        if (!JWT.of(token).setKey(appKey.getBytes()).verify()) {
+            return null;
+        }
+
+        // 验证Token是否过期
+        try {
+            JWTValidator.of(token).validateDate(DateUtil.date());
+        } catch (Exception e) {
+            return null;
+        }
+
+        final JWT jwt = JWTUtil.parseToken(token);
+
+        return jwt;
     }
 }
