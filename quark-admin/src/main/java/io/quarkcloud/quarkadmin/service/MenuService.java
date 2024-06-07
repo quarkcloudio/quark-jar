@@ -6,6 +6,6 @@ import io.quarkcloud.quarkadmin.entity.Menu;
 
 public interface MenuService extends IService<Menu> {
 
-    // 根据用户id获取菜单列表
-    public List<Menu> getListByUserId(String userId);
+    // 获取菜单列表
+    public List<Menu> getList();
 }

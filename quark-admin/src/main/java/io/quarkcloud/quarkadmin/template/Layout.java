@@ -2,9 +2,10 @@ package io.quarkcloud.quarkadmin.template;
 
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.fasterxml.jackson.databind.node.ArrayNode;
 
 import cn.hutool.jwt.JWT;
 import io.quarkcloud.quarkadmin.annotation.AdminLayout;
@@ -385,7 +386,7 @@ public class Layout {
      * 
      * @return "权限菜单"
      */
-    public List<?> getMenus(Context context) {
+    public ArrayNode getMenus(Context context) {
         AdminService adminService = new AdminServiceImpl();
 
         // 获取当前登录用户Token
@@ -394,7 +395,7 @@ public class Layout {
         // 获取当前登录用户ID
         Long adminId = Long.parseLong(jwt.getPayload("id").toString());
 
-        return adminService.getMenusById(adminId);
+        return adminService.getMenuTreeById(adminId);
     }
 
     // 组件渲染
@@ -445,6 +446,9 @@ public class Layout {
         // 获取右上角菜单
         rightMenus = this.getRightMenus();
 
+        // 获取右上角菜单
+        ArrayNode menus = this.getMenus(context);
+
         // 页脚信息
         Footer footer = new Footer().setCopyright(copyright).setLinks(links);
 
@@ -462,6 +466,7 @@ public class Layout {
             setLocale(locale).
             setSiderWidth(siderWidth).
             setRightMenus(rightMenus).
+            setMenu(menus).
             setFooter(footer);
 
         return component;

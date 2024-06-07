@@ -5,6 +5,9 @@ import java.util.List;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+
 import io.quarkcloud.quarkadmin.entity.Admin;
 import io.quarkcloud.quarkadmin.entity.Menu;
 import io.quarkcloud.quarkadmin.entity.Permission;
@@ -14,7 +17,9 @@ import io.quarkcloud.quarkadmin.mapper.AdminMapper;
 import io.quarkcloud.quarkadmin.mapper.RoleMapper;
 import io.quarkcloud.quarkadmin.mapper.UserHasRoleMapper;
 import io.quarkcloud.quarkadmin.service.AdminService;
+import io.quarkcloud.quarkadmin.service.MenuService;
 import io.quarkcloud.quarkadmin.service.RoleService;
+import io.quarkcloud.quarkcore.util.Lister;
 
 public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements AdminService {
     
@@ -81,10 +86,24 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     // 根据用户id获取菜单列表
     public List<Menu> getMenusById(Long adminId) {
         List<Menu> list = new ArrayList<>();
+        MenuService menuService = new MenuServiceImpl();
         if (adminId == 1) {
-            
+            list = menuService.getList();
         }
 
         return list;
+    }
+
+    // 根据用户id获取菜单Tree
+    public ArrayNode getMenuTreeById(Long adminId) {
+        List<Menu> list = getMenusById(adminId);
+        ArrayNode menuTree = new ObjectMapper().createArrayNode();
+        try {
+            menuTree = Lister.listToTree(list, "id", "pid", "routes", 0);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        return menuTree;
     }
 }

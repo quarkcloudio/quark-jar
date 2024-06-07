@@ -62,20 +62,4 @@ public class Menu extends Model<Menu> {
 
     // 更新时间
     private Date updatedAt;
-
-    // 根据权限查询菜单
-    public List<Menu> getListByPermission(long permissionId) {
-
-        // 创建查询器
-        QueryWrapper<Menu> queryWrapper = new QueryWrapper<>();
-
-        // 条件
-        queryWrapper.eq("permission_id", permissionId);
-
-        // 查询
-        List<Menu> menus = this.selectList(queryWrapper);
-
-        // 返回数据
-        return menus;
-    }
 }
