@@ -3,6 +3,9 @@ package io.quarkcloud.quarkadmin.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,16 +23,25 @@ import io.quarkcloud.quarkadmin.service.AdminService;
 import io.quarkcloud.quarkadmin.service.MenuService;
 import io.quarkcloud.quarkadmin.service.RoleService;
 import io.quarkcloud.quarkcore.util.Lister;
+import jakarta.annotation.Resource;
 
+@Service
 public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements AdminService {
     
+    // 管理员
+    @Resource
+    private AdminMapper adminMapper;
+
     // 用户角色关联表
+    @Resource
     private UserHasRoleMapper userHasRoleMapper;
 
     // 用户角色关联表
+    @Resource
     private RoleMapper roleMapper;
 
     // 用户角色
+    @Autowired
     private RoleService roleService;
 
     // 根据用户id，判断是否有访问权限
@@ -49,7 +61,6 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     public List<Permission> getPermissionsById(Long adminId) {
         List<Permission> list = new ArrayList<>();
         List<Long> roleIds= this.getRoleIdsById(adminId);
-        this.roleService = new RoleServiceImpl();
         for (Long roleId : roleIds) {
             list.addAll(roleService.getPermissionsById(roleId));
         }
@@ -105,5 +116,14 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
         }
 
         return menuTree;
+    }
+
+    // 根据账号查询
+    public Admin getByUsername(String username) {
+        QueryWrapper<Admin> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("username", username);
+        Admin adminInfo = adminMapper.selectOne(queryWrapper);
+
+        return adminInfo;
     }
 }

@@ -27,4 +27,7 @@ public interface AdminService extends IService<Admin> {
 
     // 根据用户id获取菜单Tree
     public ArrayNode getMenuTreeById(Long adminId);
+
+    // 根据账号查询
+    public Admin getByUsername(String username);
 }

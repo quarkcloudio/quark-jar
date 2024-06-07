@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @TableName("admins")
-public class Admin extends Model<Admin> {
+public class Admin {
 
     // 主键
     private Long id;
@@ -51,20 +51,4 @@ public class Admin extends Model<Admin> {
 
     // 删除时间
     private Date deletedAt;
-
-    // 根据账号查询
-    public Admin getByUsername(String username) {
-
-        // 创建查询器
-        QueryWrapper<Admin> queryWrapper = new QueryWrapper<>();
-
-        // 条件
-        queryWrapper.eq("username", username);
-
-        // 查询
-        Admin adminInfo = this.selectOne(queryWrapper);
-
-        // 返回数据
-        return adminInfo;
-    }
 }
