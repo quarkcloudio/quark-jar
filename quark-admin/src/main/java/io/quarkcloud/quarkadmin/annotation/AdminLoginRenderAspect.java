@@ -73,9 +73,9 @@ public class AdminLoginRenderAspect {
 
         // 加载类，暂时只支持加载一个配置
         String[] loadPackages = getLoadPackages();
-        ClassLoader classLoader = new ClassLoader(loadPackages[0]+resource);
+        ClassLoader classLoader = new ClassLoader();
 
         // 调用类方法
-        return classLoader.doMethod("render", newContext);
+        return classLoader.setClassPath(loadPackages[0]+resource).doMethod("render", newContext);
     }
 }

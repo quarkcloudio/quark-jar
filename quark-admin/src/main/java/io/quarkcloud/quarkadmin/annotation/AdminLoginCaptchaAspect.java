@@ -74,9 +74,9 @@ public class AdminLoginCaptchaAspect {
 
         // 加载类，暂时只支持加载一个配置
         String[] loadPackages = getLoadPackages();
-        ClassLoader classLoader = new ClassLoader(loadPackages[0]+resource);
+        ClassLoader classLoader = new ClassLoader();
 
         // 调用类方法
-        classLoader.doMethod("captcha", newContext);
+        classLoader.setClassPath(loadPackages[0]+resource).doMethod("captcha", newContext);
     }
 }
