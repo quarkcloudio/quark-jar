@@ -140,34 +140,34 @@ public class Login {
     public Object[] fields(Context context) {
 
         return new Object[] {
-                Field.text("username").
-                setRules(Arrays.asList(
-                    Rule.required(true, "请输入用户名"
-                ))).
-                setPlaceholder("用户名").
-                setWidth("100%").
-                setSize("large").
-                setPrefix(new Icon().setType("icon-user")),
+            Field.text("username").
+            setRules(Arrays.asList(
+                Rule.required(true, "请输入用户名"
+            ))).
+            setPlaceholder("用户名").
+            setWidth("100%").
+            setSize("large").
+            setPrefix(new Icon().setType("icon-user")),
 
-                Field.password("password").
-                setRules(Arrays.asList(
-                    Rule.required(true, "请输入密码")
-                )).
-                setPlaceholder("密码").
-                setWidth("100%").
-                setSize("large").
-                setPrefix(new Icon().setType("icon-lock")),
+            Field.password("password").
+            setRules(Arrays.asList(
+                Rule.required(true, "请输入密码")
+            )).
+            setPlaceholder("密码").
+            setWidth("100%").
+            setSize("large").
+            setPrefix(new Icon().setType("icon-lock")),
 
-                Field.imageCaptcha("captcha").
-                setRules(Arrays.asList(
-                    Rule.required(true, "请输入验证码")
-                )).
-                setPlaceholder("验证码").
-                setWidth("100%").
-                setSize("large").
-                setCaptchaIdUrl("/api/admin/login/index/captchaId").
-                setCaptchaUrl("/api/admin/login/index/captcha/{id}").
-                setPrefix(new Icon().setType("icon-safetycertificate")),
+            Field.imageCaptcha("captcha").
+            setRules(Arrays.asList(
+                Rule.required(true, "请输入验证码")
+            )).
+            setPlaceholder("验证码").
+            setWidth("100%").
+            setSize("large").
+            setCaptchaIdUrl("/api/admin/login/index/captchaId").
+            setCaptchaUrl("/api/admin/login/index/captcha/{id}").
+            setPrefix(new Icon().setType("icon-safetycertificate")),
         };
     }
 
