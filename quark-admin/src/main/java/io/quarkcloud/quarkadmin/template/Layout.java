@@ -72,6 +72,11 @@ public class Layout {
     // 构造函数
     public Layout() {
 
+        // 获取注解对象
+        if (getClass().isAnnotationPresent(AdminLayout.class)) {
+            annotationClass = getClass().getAnnotation(AdminLayout.class);
+        }
+
         // layout 的左上角 的 title
         title = "QuarkJar";
 

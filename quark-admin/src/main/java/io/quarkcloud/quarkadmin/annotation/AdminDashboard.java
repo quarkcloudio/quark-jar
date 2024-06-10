@@ -9,6 +9,12 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AdminDashboard {
 
-    // layout 的左上角 的 title
+    // 页面标题
     String title() default "";
+
+    // 页面子标题
+    String subTitle() default "";
+
+    // 页面是否携带返回Icon
+    boolean backIcon() default false;
 }
