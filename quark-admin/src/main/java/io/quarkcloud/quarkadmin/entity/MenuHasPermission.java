@@ -2,12 +2,11 @@ package io.quarkcloud.quarkadmin.entity;
 
 import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
 
 @Data
 @TableName("menu_has_permissions")
-public class MenuHasPermission extends Model<MenuHasPermission> {
+public class MenuHasPermission{
 
     // 主键
     private Long id;

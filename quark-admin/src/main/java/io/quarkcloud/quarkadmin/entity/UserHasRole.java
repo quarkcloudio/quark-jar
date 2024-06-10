@@ -2,12 +2,11 @@ package io.quarkcloud.quarkadmin.entity;
 
 import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
 
 @Data
 @TableName("user_has_roles")
-public class UserHasRole extends Model<UserHasRole> {
+public class UserHasRole {
 
     // 主键
     private Long id;

@@ -2,12 +2,11 @@ package io.quarkcloud.quarkadmin.entity;
 
 import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
 
 @Data
 @TableName("permissions")
-public class Permission extends Model<Permission> {
+public class Permission {
 
     // 主键
     private Long id;
