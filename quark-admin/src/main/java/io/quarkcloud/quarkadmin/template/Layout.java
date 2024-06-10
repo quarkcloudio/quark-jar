@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
 import cn.hutool.jwt.JWT;
@@ -16,6 +18,9 @@ import io.quarkcloud.quarkadmin.service.impl.AdminServiceImpl;
 import io.quarkcloud.quarkcore.service.Context;
 
 public class Layout {
+
+    @Autowired
+    AdminService adminService;
 
     // 注解实例
     protected AdminLayout annotationClass = null;
@@ -387,8 +392,6 @@ public class Layout {
      * @return "权限菜单"
      */
     public ArrayNode getMenus(Context context) {
-        AdminService adminService = new AdminServiceImpl();
-
         // 获取当前登录用户Token
         JWT jwt = context.parseToken();
 

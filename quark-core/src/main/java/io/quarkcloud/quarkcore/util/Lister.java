@@ -1,6 +1,5 @@
 package io.quarkcloud.quarkcore.util;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -10,31 +9,13 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class Lister {
 
-    // Convert generic list of Node objects to ArrayNode
-    public static <T> ArrayNode listToArrayNode(List<T> list, ObjectMapper mapper) throws IllegalAccessException {
-        ArrayNode arrayNode = mapper.createArrayNode();
-        for (T obj : list) {
-            ObjectNode jsonNode = mapper.createObjectNode();
-            for (Field field : obj.getClass().getDeclaredFields()) {
-                field.setAccessible(true);
-                if (field.getType() == int.class) {
-                    jsonNode.put(field.getName(), (int) field.get(obj));
-                } else if (field.getType() == String.class) {
-                    jsonNode.put(field.getName(), (String) field.get(obj));
-                }
-            }
-            arrayNode.add(jsonNode);
-        }
-        return arrayNode;
-    }
-
     // Convert generic list of Node objects to Tree
     public static <T> ArrayNode listToTree(List<T> list, String pk, String pid, String child, int root) throws IllegalAccessException {
         ObjectMapper mapper = new ObjectMapper();
         ArrayNode arrayNode = mapper.createArrayNode();
 
-        // Convert list to ArrayNode
-        arrayNode = listToArrayNode(list, mapper);
+        // Convert List to ArrayNode
+        arrayNode = mapper.valueToTree(list);
 
         // Convert ArrayNode to Tree
         ArrayNode treeList = parserToTree(arrayNode, pk, pid, child, root);

@@ -6,7 +6,7 @@ import io.quarkcloud.quarkadmin.annotation.AdminLogin;
 import io.quarkcloud.quarkadmin.template.Login;
 
 @AdminLogin(title="QuarkJar")
-@Component
+@Component(value = "loginIndex")
 public class Index extends Login {
 
     // 构造函数

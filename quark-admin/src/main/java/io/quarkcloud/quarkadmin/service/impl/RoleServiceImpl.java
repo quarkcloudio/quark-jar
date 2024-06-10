@@ -15,14 +15,17 @@ import io.quarkcloud.quarkadmin.mapper.PermissionMapper;
 import io.quarkcloud.quarkadmin.mapper.RoleHasPermissionMapper;
 import io.quarkcloud.quarkadmin.mapper.RoleMapper;
 import io.quarkcloud.quarkadmin.service.RoleService;
+import jakarta.annotation.Resource;
 
 @Service
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
     
     // 角色权限关联表
+    @Resource
     private RoleHasPermissionMapper roleHasPermissionMapper;
 
     // 权限表
+    @Resource
     private PermissionMapper permissionMapper;
 
     // 根据角色id获取权限列表

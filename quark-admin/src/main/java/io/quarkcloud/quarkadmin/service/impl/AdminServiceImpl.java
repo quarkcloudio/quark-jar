@@ -44,6 +44,10 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     @Autowired
     private RoleService roleService;
 
+    // 菜单服务
+    @Autowired
+    private MenuService menuService;
+
     // 根据用户id，判断是否有访问权限
     public boolean checkPermission(Long adminId, String urlPath, String method) {
         boolean hasPermission = false;
@@ -97,7 +101,6 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     // 根据用户id获取菜单列表
     public List<Menu> getMenusById(Long adminId) {
         List<Menu> list = new ArrayList<>();
-        MenuService menuService = new MenuServiceImpl();
         if (adminId == 1) {
             list = menuService.getList();
         }

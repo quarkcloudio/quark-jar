@@ -3,6 +3,7 @@ package io.quarkcloud.quarkadmin.entity;
 import java.util.Date;
 import java.util.List;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
@@ -37,6 +38,7 @@ public class Menu extends Model<Menu> {
     private String path;
 
     // 是否显示
+    @TableField(value = "`show`")
     private boolean show;
 
     // 是否为引擎路由
@@ -49,6 +51,7 @@ public class Menu extends Model<Menu> {
     private boolean status;
 
     // 组件key
+    @TableField(value = "`key`")
     private String key;
 
     // 语言

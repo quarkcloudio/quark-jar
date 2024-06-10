@@ -10,14 +10,17 @@ import io.quarkcloud.quarkadmin.entity.Menu;
 import io.quarkcloud.quarkadmin.mapper.MenuHasPermissionMapper;
 import io.quarkcloud.quarkadmin.mapper.MenuMapper;
 import io.quarkcloud.quarkadmin.service.MenuService;
+import jakarta.annotation.Resource;
 
 @Service
 public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements MenuService {
     
     // 菜单
+    @Resource
     private MenuMapper menuMapper;
 
     // 菜单权限关联
+    @Resource
     private MenuHasPermissionMapper menuHasPermissionMapper;
 
     // 获取菜单列表
