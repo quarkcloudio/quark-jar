@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 public class AdminDashboardController {
+    
     @RequestMapping("/api/admin/dashboard/{resource}/index")
     @ResponseBody
     public Object index(HttpServletRequest request, HttpServletResponse response) {

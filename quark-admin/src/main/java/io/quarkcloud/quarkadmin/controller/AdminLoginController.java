@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 public class AdminLoginController {
+    
     @RequestMapping("/api/admin/login/{resource}/index")
     @ResponseBody
     @AdminLoginRender
