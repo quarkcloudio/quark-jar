@@ -403,7 +403,7 @@ public class Layout {
     // 组件渲染
     public Object render(Context context) {
 
-        // 登录表单组件
+        // Layout组件
         io.quarkcloud.quarkadmin.component.layout.Layout component = new io.quarkcloud.quarkadmin.component.layout.Layout();
 
         // 获取标题
