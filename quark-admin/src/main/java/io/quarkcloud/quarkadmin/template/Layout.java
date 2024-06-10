@@ -210,7 +210,7 @@ public class Layout {
      * 
      * @return 如果返回true，则表示启用拆分菜单；如果返回false，则表示不启用拆分菜单。
      */
-    public boolean getSplitMenus() {
+    public boolean isSplitMenus() {
         
         // 检查是否存在注解
         if (annotationClass == null) {
@@ -266,7 +266,7 @@ public class Layout {
      * 
      * @return 是否固定导航
      */
-    public boolean getFixedHeader() {
+    public boolean isFixedHeader() {
         
         // 检查是否存在注解
         if (annotationClass == null) {
@@ -282,7 +282,7 @@ public class Layout {
      * 
      * @return 是否固定 header 到顶部
      */
-    public boolean getFixSiderbar() {
+    public boolean isFixSiderbar() {
         
         // 检查是否存在注解
         if (annotationClass == null) {
@@ -424,16 +424,16 @@ public class Layout {
         layout = this.getLayout();
 
         // 获取是否启用拆分菜单的设置
-        splitMenus = this.getSplitMenus();
+        splitMenus = this.isSplitMenus();
 
         // layout 的内容模式,Fluid：定宽 1200px，Fixed：自适应
         contentWidth = this.getContentWidth();
 
         // 获取是否固定 header 到顶部
-        fixedHeader = this.getFixedHeader();
+        fixedHeader = this.isFixedHeader();
 
         // 获取是否固定导航
-        fixSiderbar = this.getFixSiderbar();
+        fixSiderbar = this.isFixSiderbar();
 
         // 获取使用 IconFont 的图标配置
         iconfontUrl = this.getIconfontUrl();

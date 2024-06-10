@@ -119,7 +119,7 @@ public class Dashboard {
 
     // 组件渲染
     public Object render(Context context) {
-        Object component = this.pageComponentRender(context, "acdd");
+        Object component = this.pageComponentRender(context, "abcd");
 
         return component;
     }
