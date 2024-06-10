@@ -1,17 +1,14 @@
 package io.quarkcloud.quarkadmin.entity;
 
 import java.util.Date;
-import java.util.List;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
 
 @Data
 @TableName("menus")
-public class Menu extends Model<Menu> {
+public class Menu {
 
     // 主键
     private Long id;

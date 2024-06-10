@@ -14,7 +14,6 @@ import io.quarkcloud.quarkadmin.annotation.AdminLayout;
 import io.quarkcloud.quarkadmin.component.action.Action;
 import io.quarkcloud.quarkadmin.component.footer.Footer;
 import io.quarkcloud.quarkadmin.service.AdminService;
-import io.quarkcloud.quarkadmin.service.impl.AdminServiceImpl;
 import io.quarkcloud.quarkcore.service.Context;
 
 public class Layout {

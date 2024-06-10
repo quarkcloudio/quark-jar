@@ -2,6 +2,7 @@ package io.quarkcloud.quarkadmin.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -108,10 +109,32 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
         return list;
     }
 
+    public boolean hasMenu(List<Menu> menus, long id) {
+        return menus.stream().anyMatch(menu -> menu.getId() == id);
+    }
+
     // 根据用户id获取菜单Tree
     public ArrayNode getMenuTreeById(Long adminId) {
         List<Menu> list = getMenusById(adminId);
         ArrayNode menuTree = new ObjectMapper().createArrayNode();
+
+        List<Menu> newMenus = new ArrayList<>();
+
+        for (Menu v : list) {
+            v.setKey(UUID.randomUUID().toString());
+            v.setLocale("menu" + v.getPath().replace("/", "."));
+
+            v.setHideInMenu(!v.isShow());
+
+            if (v.getType() == 2 && v.isEngine()) {
+                v.setPath("/layout/index?api=" + v.getPath());
+            }
+
+            if (!this.hasMenu(newMenus, v.getId()) && v.getType() != 3) {
+                newMenus.add(v);
+            }
+        }
+
         try {
             menuTree = Lister.listToTree(list, "id", "pid", "routes", 0);
         } catch (IllegalAccessException e) {
