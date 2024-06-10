@@ -1,6 +1,10 @@
 package io.quarkcloud.quarkadmin.template;
 
+import java.util.List;
+
 import io.quarkcloud.quarkadmin.annotation.AdminDashboard;
+import io.quarkcloud.quarkadmin.component.pagecontainer.PageContainer;
+import io.quarkcloud.quarkadmin.component.pagecontainer.PageHeader;
 import io.quarkcloud.quarkcore.service.Context;
 
 public class Dashboard {
@@ -26,7 +30,7 @@ public class Dashboard {
         }
     
         // 页面标题
-        title = "QuarkJar";
+        title = "仪表盘";
     }
 
     // 获取标题
@@ -64,7 +68,7 @@ public class Dashboard {
     }
 
     // 获取页面是否携带返回Icon
-    public boolean getBackIcon() {
+    public boolean isBackIcon() {
 
         // 检查是否存在注解
         if (annotationClass == null) {
@@ -75,9 +79,48 @@ public class Dashboard {
         return annotationClass.backIcon();
     }
 
+    // 内容
+    public List<Object> cards(Context ctx) {
+        return null;
+    }
+
+    // 页面组件渲染
+    public Object pageComponentRender(Context ctx, Object body) {
+
+        // 页面容器组件渲染
+        return this.pageContainerComponentRender(ctx, body);
+    }
+
+    // 页面容器组件渲染
+    public Object pageContainerComponentRender(Context ctx, Object body) {
+
+        // 页面标题
+        String title = this.getTitle();
+
+        // 页面子标题
+        String subTitle = this.getSubTitle();
+
+        // 页面是否携带返回Icon
+        boolean backIcon = this.isBackIcon();
+
+        // 设置头部
+        PageHeader header = new PageHeader()
+                .setTitle(title)
+                .setSubTitle(subTitle);
+
+        if (!backIcon) {
+            header.setBackIcon(false);
+        }
+
+        return new PageContainer()
+                .setHeader(header)
+                .setBody(body);
+    }
+
     // 组件渲染
     public Object render(Context context) {
+        Object component = this.pageComponentRender(context, "acdd");
 
-        return "admin/dashboard/index";
+        return component;
     }
 }

@@ -25,5 +25,4 @@ public class Footer extends Component {
         this.setComponentKey();
         this.style = new HashMap<>();
     }
-
 }
