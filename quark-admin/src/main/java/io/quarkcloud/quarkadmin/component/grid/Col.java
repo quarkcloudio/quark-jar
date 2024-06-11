@@ -1,6 +1,7 @@
 package io.quarkcloud.quarkadmin.component.grid;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import io.quarkcloud.quarkadmin.component.Component;
 import lombok.Data;
@@ -61,4 +62,10 @@ public class Col extends Component {
         this.push = 0;
     }
 
+    // 组件Style
+    public Col setStyle(Map<String, Object> style) {
+        this.style = style;
+
+        return this;
+    }
 }

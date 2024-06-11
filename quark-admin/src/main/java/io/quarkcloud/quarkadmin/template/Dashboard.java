@@ -1,10 +1,20 @@
 package io.quarkcloud.quarkadmin.template;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.quarkcloud.quarkadmin.annotation.AdminDashboard;
+import io.quarkcloud.quarkadmin.component.message.Message;
 import io.quarkcloud.quarkadmin.component.pagecontainer.PageContainer;
 import io.quarkcloud.quarkadmin.component.pagecontainer.PageHeader;
+import io.quarkcloud.quarkadmin.component.card.Card;
+import io.quarkcloud.quarkadmin.component.descriptions.Descriptions;
+import io.quarkcloud.quarkadmin.component.grid.Col;
+import io.quarkcloud.quarkadmin.component.grid.Row;
+import io.quarkcloud.quarkadmin.component.statistic.Statistic;
+import io.quarkcloud.quarkadmin.template.metrics.Metrics;
 import io.quarkcloud.quarkcore.service.Context;
 
 public class Dashboard {
@@ -80,7 +90,7 @@ public class Dashboard {
     }
 
     // 内容
-    public List<Object> cards(Context ctx) {
+    public List<Metrics> cards(Context ctx) {
         return null;
     }
 
@@ -119,8 +129,47 @@ public class Dashboard {
 
     // 组件渲染
     public Object render(Context context) {
-        Object component = this.pageComponentRender(context, "abcd");
+        List<Metrics> cards = this.cards(context);
+        if (cards == null) {
+            return "请实现Cards内容";
+        }
 
-        return component;
+        List<Object> cols = new ArrayList<>();
+        List<Object> body = new ArrayList<>();
+        int colNum = 0;
+        for (int i = 0; i < cards.size(); i++) {
+            Metrics v = cards.get(i);
+            Card item = new Card();
+
+            item = item.setBody(v.calculate());
+
+            int col = v.getCol();
+            Col colInfo = new Col().setSpan(col).setBody(item);
+            cols.add(colInfo);
+            colNum += col;
+
+            if (colNum % 24 == 0) {
+                Row row = new Row().setGutter(8).setBody(cols);
+                if (i != 0) {
+                    Map<String, Object> style = new HashMap<>();
+                    style.put("marginTop", "20px");
+                    row = row.setStyle(style);
+                }
+                body.add(row);
+                cols = new ArrayList<>();
+            }
+        }
+
+        if (!cols.isEmpty()) {
+            Row row = new Row().setGutter(8).setBody(cols);
+            if (colNum > 24) {
+                Map<String, Object> style = new HashMap<>();
+                style.put("marginTop", "20px");
+                row = row.setStyle(style);
+            }
+            body.add(row);
+        }
+
+        return this.pageComponentRender(context, body);
     }
 }
