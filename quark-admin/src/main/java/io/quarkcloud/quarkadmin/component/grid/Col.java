@@ -3,6 +3,8 @@ package io.quarkcloud.quarkadmin.component.grid;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import io.quarkcloud.quarkadmin.component.Component;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,30 +25,39 @@ public class Col extends Component {
     public int order;
 
     // 栅格向左移动格数
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public int pull;
 
     // 栅格向右移动格数
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public int push;
 
     // 栅格占位格数，为 0 时相当于 display: none
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public int span;
 
     // 屏幕 < 576px 响应式栅格，可为栅格数或一个包含其他属性的对象
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public Object xs;
 
     // 屏幕 ≥ 576px 响应式栅格，可为栅格数或一个包含其他属性的对象
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public Object sm;
 
     // 屏幕 ≥ 768px 响应式栅格，可为栅格数或一个包含其他属性的对象
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public Object md;
 
     // 屏幕 ≥ 992px 响应式栅格，可为栅格数或一个包含其他属性的对象
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public Object lg;
 
     // 屏幕 ≥ 1200px 响应式栅格，可为栅格数或一个包含其他属性的对象
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public Object xl;
 
     // 屏幕 ≥ 1600px 响应式栅格，可为栅格数或一个包含其他属性的对象
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public Object xxl;
 
     // 卡牌内容
