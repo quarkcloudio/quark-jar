@@ -2,11 +2,15 @@ package io.quarkcloud.quarkadmin.entity;
 
 import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
+
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper=false)
 @TableName("admins")
-public class Admin {
+public class Admin extends Model<Admin> {
 
     // 主键
     private Long id;
