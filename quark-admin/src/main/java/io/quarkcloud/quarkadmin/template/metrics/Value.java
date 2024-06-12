@@ -10,8 +10,8 @@ public class Value implements Metrics {
     // 列数
     public int col;
 
-    public Statistic count(long count) {
-        return result(count);
+    public Statistic value(long value) {
+        return result(value);
     }
 
     public String getTitle() {
