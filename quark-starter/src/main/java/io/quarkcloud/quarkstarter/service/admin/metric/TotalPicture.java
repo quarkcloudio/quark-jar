@@ -1,6 +1,7 @@
 package io.quarkcloud.quarkstarter.service.admin.metric;
 
 import java.util.Map;
+import io.quarkcloud.quarkadmin.entity.Picture;
 import io.quarkcloud.quarkadmin.template.metrics.Value;
 
 public class TotalPicture extends Value {
@@ -13,6 +14,8 @@ public class TotalPicture extends Value {
 
     // 计算
     public Object calculate() {
-        return this.value(12).setValueStyle(Map.of("color", "#cf1322"));
+        long count = new Picture().selectCount(null);
+        
+        return this.value(count).setValueStyle(Map.of("color", "#cf1322"));
     }
 }

@@ -1,6 +1,8 @@
 package io.quarkcloud.quarkstarter.service.admin.metric;
 
 import java.util.Map;
+
+import io.quarkcloud.quarkadmin.entity.File;
 import io.quarkcloud.quarkadmin.template.metrics.Value;
 
 public class TotalFile extends Value {
@@ -13,6 +15,8 @@ public class TotalFile extends Value {
 
     // 计算
     public Object calculate() {
-        return this.value(12).setValueStyle(Map.of("color", "#cf1322"));
+        long count = new File().selectCount(null);
+
+        return this.value(count).setValueStyle(Map.of("color", "#cf1322"));
     }
 }
