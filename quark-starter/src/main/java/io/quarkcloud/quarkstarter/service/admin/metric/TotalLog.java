@@ -1,6 +1,8 @@
 package io.quarkcloud.quarkstarter.service.admin.metric;
 
 import java.util.Map;
+
+import io.quarkcloud.quarkadmin.entity.ActionLog;
 import io.quarkcloud.quarkadmin.template.metrics.Value;
 
 public class TotalLog extends Value {
@@ -13,6 +15,7 @@ public class TotalLog extends Value {
 
     // 计算
     public Object calculate() {
-        return this.value(12).setValueStyle(Map.of("color", "#999999"));
+        long count = new ActionLog().selectCount(null);
+        return this.value(count).setValueStyle(Map.of("color", "#999999"));
     }
 }
