@@ -13,16 +13,16 @@ import lombok.EqualsAndHashCode;
 public class File extends Model<File> {
 
     // 主键
-    private long id;
+    private Long id;
 
     // 对象类型
     private String objType;
 
     // 对象Id
-    private long objId;
+    private Long objId;
 
     // 文件分类id
-    private long fileCategorId;
+    private Long fileCategorId;
 
     // 排序
     private int sort;
@@ -31,7 +31,7 @@ public class File extends Model<File> {
     private String name;
 
     // 状态
-    private long size;
+    private Long size;
 
     // 文件扩展名
     private String ext;
