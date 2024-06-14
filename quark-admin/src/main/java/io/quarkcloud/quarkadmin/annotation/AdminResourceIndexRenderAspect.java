@@ -76,6 +76,6 @@ public class AdminResourceIndexRenderAspect {
         ClassLoader classLoader = new ClassLoader();
 
         // 调用类方法
-        return classLoader.setClassPath(loadPackages[0]+resource).doMethod("render", newContext);
+        return classLoader.setClassPath(loadPackages[0]+resource).doMethod("indexRender", newContext);
     }
 }

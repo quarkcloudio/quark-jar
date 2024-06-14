@@ -1,5 +1,7 @@
 package io.quarkcloud.quarkadmin.template;
 
+import java.util.Map;
+
 import io.quarkcloud.quarkadmin.annotation.AdminResource;
 import io.quarkcloud.quarkadmin.component.pagecontainer.PageContainer;
 import io.quarkcloud.quarkadmin.component.pagecontainer.PageHeader;
@@ -12,12 +14,51 @@ public class Resource {
 
     // 页面标题
     public String title;
-
+    
     // 页面子标题
     public String subTitle;
-
+    
     // 页面是否携带返回Icon
-	public boolean backIcon;
+    public boolean backIcon;
+    
+    // 列表页分页配置
+    public Object perPage;
+    
+    // 表单页Form实例
+    public Object form;
+    
+    // 列表页Table实例
+    public Object table;
+    
+    // 列表页表格标题后缀
+    public String tableTitleSuffix;
+    
+    // 列表页表格行为列显示文字，既字段的列名
+    public String tableActionColumnTitle;
+    
+    // 列表页表格行为列的宽度
+    public int tableActionColumnWidth;
+    
+    // 列表页表格是否轮询数据
+    public int tablePolling;
+    
+    // 全局排序规则
+    public String queryOrder;
+    
+    // 列表页排序规则
+    public String indexQueryOrder;
+    
+    // 导出数据排序规则
+    public String exportQueryOrder;
+    
+    // 挂载模型
+    public Object model;
+    
+    // 注入的字段数据
+    public Map<String, Object> field;
+    
+    // 是否具有导出功能
+    public boolean withExport;
 
     // 构造函数
     public Resource() {
@@ -108,7 +149,7 @@ public class Resource {
     }
 
     // 组件渲染
-    public Object render(Context context) {
+    public Object indexRender(Context context) {
         return this.pageComponentRender(context, "abcd");
     }
 }
