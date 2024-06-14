@@ -5,6 +5,7 @@ import java.util.Map;
 import io.quarkcloud.quarkadmin.annotation.AdminResource;
 import io.quarkcloud.quarkadmin.component.pagecontainer.PageContainer;
 import io.quarkcloud.quarkadmin.component.pagecontainer.PageHeader;
+import io.quarkcloud.quarkadmin.component.table.Table;
 import io.quarkcloud.quarkcore.service.Context;
 
 public class Resource {
@@ -68,7 +69,7 @@ public class Resource {
             annotationClass = getClass().getAnnotation(AdminResource.class);
         }
     }
-    
+
     // 获取标题
     public String getTitle() {
         if (annotationClass == null || annotationClass.title().isEmpty()) {
@@ -198,8 +199,67 @@ public class Resource {
                 .setBody(body);
     }
 
+    // 列表页组件渲染
+    public Object indexComponentRender(Context ctx, Object data) {
+        Object component;
+        Table table = new Table();
+
+        // 列表标题
+        String tableTitle = indexTableTitle(ctx);
+
+        // 列表页轮询数据
+        int tablePolling = this.getTablePolling();
+
+        // 列表页表格主体
+        Object tableExtraRender = indexTableExtraRender(ctx);
+
+        // 列表页工具栏
+        Object tableToolBar = indexTableToolBar(ctx);
+
+        // 列表页表格列
+        Object tableColumns = indexTableColumns(ctx);
+
+        // 列表页批量操作
+        Object indexTableAlertActions = indexTableAlertActions(ctx);
+
+        // 列表页搜索栏
+        Object indexSearches = indexSearches(ctx);
+
+        // 表格组件
+        table.setPolling(tablePolling)
+             .setTitle(tableTitle)
+             .setTableExtraRender(tableExtraRender)
+             .setToolBar(tableToolBar)
+             .setColumns(tableColumns)
+             .setBatchActions(indexTableAlertActions)
+             .setSearches(indexSearches);
+
+        // 获取分页
+        Object perPage = this.getPerPage();
+        if (perPage == null) {
+            return table.setDatasource(data);
+        }
+
+        // 不分页，直接返回数据
+        if (!(perPage instanceof Integer)) {
+            return table.setDatasource(data);
+        } else {
+            Map<String, Object> dataMap = (Map<String, Object>) data;
+            int current = (int) dataMap.get("currentPage");
+            int perPageValue = (int) dataMap.get("perPage");
+            long total = (long) dataMap.get("total");
+            Object items = dataMap.get("items");
+
+            component = table.setPagination(current, perPageValue, (int) total, 1).setDatasource(items);
+        }
+
+        return component;
+    }
+
     // 组件渲染
     public Object indexRender(Context context) {
-        return this.pageComponentRender(context, "abcd");
+        Object body = indexComponentRender(context, "xxx");
+
+        return this.pageComponentRender(context, body);
     }
 }
