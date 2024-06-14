@@ -68,51 +68,101 @@ public class Resource {
             annotationClass = getClass().getAnnotation(AdminResource.class);
         }
     }
-
+    
     // 获取标题
     public String getTitle() {
-
-        // 检查是否存在注解
-        if (annotationClass == null) {
+        if (annotationClass == null || annotationClass.title().isEmpty()) {
             return title;
         }
-
-        // 注解值为空返回默认值
-        if (annotationClass.title().isEmpty()) {
-            return title;
-        }
-
-        // 获取注解值
         return annotationClass.title();
     }
 
-    // 获取页面子标题
+    // 获取子标题
     public String getSubTitle() {
-
-        // 检查是否存在注解
-        if (annotationClass == null) {
+        if (annotationClass == null || annotationClass.subTitle().isEmpty()) {
             return subTitle;
         }
-
-        // 注解值为空返回默认值
-        if (annotationClass.subTitle().isEmpty()) {
-            return subTitle;
-        }
-
-        // 获取注解值
         return annotationClass.subTitle();
     }
 
-    // 获取页面是否携带返回Icon
+    // 获取是否携带返回Icon
     public boolean isBackIcon() {
-
-        // 检查是否存在注解
         if (annotationClass == null) {
             return backIcon;
         }
-
-        // 获取注解值
         return annotationClass.backIcon();
+    }
+
+    // 获取列表页分页配置
+    public Object getPerPage() {
+        if (annotationClass == null || annotationClass.perPage() == 0) {
+            return perPage;
+        }
+        return annotationClass.perPage();
+    }
+
+    // 获取表格标题后缀
+    public String getTableTitleSuffix() {
+        if (annotationClass == null || annotationClass.tableTitleSuffix().isEmpty()) {
+            return tableTitleSuffix;
+        }
+        return annotationClass.tableTitleSuffix();
+    }
+
+    // 获取表格行为列显示文字
+    public String getTableActionColumnTitle() {
+        if (annotationClass == null || annotationClass.tableActionColumnTitle().isEmpty()) {
+            return tableActionColumnTitle;
+        }
+        return annotationClass.tableActionColumnTitle();
+    }
+
+    // 获取表格行为列的宽度
+    public int getTableActionColumnWidth() {
+        if (annotationClass == null || annotationClass.tableActionColumnWidth() == 0) {
+            return tableActionColumnWidth;
+        }
+        return annotationClass.tableActionColumnWidth();
+    }
+
+    // 获取表格是否轮询数据
+    public int getTablePolling() {
+        if (annotationClass == null || annotationClass.tablePolling() == 0) {
+            return tablePolling;
+        }
+        return annotationClass.tablePolling();
+    }
+
+    // 获取全局排序规则
+    public String getQueryOrder() {
+        if (annotationClass == null || annotationClass.queryOrder().isEmpty()) {
+            return queryOrder;
+        }
+        return annotationClass.queryOrder();
+    }
+
+    // 获取列表页排序规则
+    public String getIndexQueryOrder() {
+        if (annotationClass == null || annotationClass.indexQueryOrder().isEmpty()) {
+            return indexQueryOrder;
+        }
+        return annotationClass.indexQueryOrder();
+    }
+
+    // 获取导出数据排序规则
+    public String getExportQueryOrder() {
+        if (annotationClass == null || annotationClass.exportQueryOrder().isEmpty()) {
+            return exportQueryOrder;
+        }
+        return annotationClass.exportQueryOrder();
+    }
+
+    // 获取是否具有导出功能
+    public boolean isWithExport() {
+        if (annotationClass == null) {
+            return withExport;
+        }
+        return annotationClass.withExport();
     }
 
     // 页面组件渲染
