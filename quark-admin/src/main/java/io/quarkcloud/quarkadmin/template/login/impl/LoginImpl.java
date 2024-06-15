@@ -1,4 +1,4 @@
-package io.quarkcloud.quarkadmin.template;
+package io.quarkcloud.quarkadmin.template.login.impl;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -21,11 +21,12 @@ import io.quarkcloud.quarkadmin.component.icon.Icon;
 import io.quarkcloud.quarkadmin.component.message.Message;
 import io.quarkcloud.quarkadmin.entity.Admin;
 import io.quarkcloud.quarkadmin.service.AdminService;
+import io.quarkcloud.quarkadmin.template.login.Login;
 import io.quarkcloud.quarkcore.service.Cache;
 import io.quarkcloud.quarkcore.service.Context;
 import io.quarkcloud.quarkcore.service.Env;
 
-public class Login {
+public class LoginImpl implements Login {
 
     @Autowired
     AdminService adminService;
@@ -49,7 +50,7 @@ public class Login {
     public String subTitle;
 
     // 构造函数
-    public Login() {
+    public LoginImpl() {
 
         // 获取注解对象
         if (getClass().isAnnotationPresent(AdminLogin.class)) {

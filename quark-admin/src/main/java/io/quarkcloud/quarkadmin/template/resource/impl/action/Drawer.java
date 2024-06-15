@@ -1,0 +1,47 @@
+package io.quarkcloud.quarkadmin.template.resource.impl.action;
+
+import io.quarkcloud.quarkcore.service.Context;
+
+public class Drawer extends ActionImpl {
+
+    // 抽屉弹出层宽度
+    private int width;
+
+    // 关闭时销毁弹出层里的子元素
+    private boolean destroyOnClose;
+
+    // 初始化
+    public Drawer(Context ctx) {
+        this.setActionType("drawer");
+        this.width = 520;
+    }
+
+    // 宽度
+    public int getWidth() {
+        return this.width;
+    }
+
+    // 关闭时销毁 Modal 里的子元素
+    public boolean getDestroyOnClose() {
+        return this.destroyOnClose;
+    }
+
+    // 内容
+    public Object getBody(Context ctx) {
+        return null;
+    }
+
+    // 弹窗行为
+    public Object[] getActions(Context ctx) {
+        return new Object[]{};
+    }
+
+    // Setters
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public void setDestroyOnClose(boolean destroyOnClose) {
+        this.destroyOnClose = destroyOnClose;
+    }
+}

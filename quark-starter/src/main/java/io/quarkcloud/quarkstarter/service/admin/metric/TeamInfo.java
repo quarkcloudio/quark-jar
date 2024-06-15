@@ -1,8 +1,8 @@
 package io.quarkcloud.quarkstarter.service.admin.metric;
 
-import io.quarkcloud.quarkadmin.template.metrics.Descriptions;
 import java.util.Arrays;
 import io.quarkcloud.quarkadmin.component.descriptions.Field;
+import io.quarkcloud.quarkadmin.template.metrics.impl.Descriptions;
 
 public class TeamInfo extends Descriptions {
 

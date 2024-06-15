@@ -1,4 +1,4 @@
-package io.quarkcloud.quarkadmin.template;
+package io.quarkcloud.quarkadmin.template.layout.impl;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -14,9 +14,10 @@ import io.quarkcloud.quarkadmin.annotation.AdminLayout;
 import io.quarkcloud.quarkadmin.component.action.Action;
 import io.quarkcloud.quarkadmin.component.footer.Footer;
 import io.quarkcloud.quarkadmin.service.AdminService;
+import io.quarkcloud.quarkadmin.template.layout.Layout;
 import io.quarkcloud.quarkcore.service.Context;
 
-public class Layout {
+public class LayoutImpl implements Layout {
 
     @Autowired
     AdminService adminService;
@@ -70,7 +71,7 @@ public class Layout {
     public List<Object> rightMenus;
 
     // 构造函数
-    public Layout() {
+    public LayoutImpl() {
 
         // 获取注解对象
         if (getClass().isAnnotationPresent(AdminLayout.class)) {

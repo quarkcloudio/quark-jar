@@ -1,14 +1,20 @@
-package io.quarkcloud.quarkadmin.template;
+package io.quarkcloud.quarkadmin.template.resource.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import io.quarkcloud.quarkadmin.annotation.AdminResource;
 import io.quarkcloud.quarkadmin.component.pagecontainer.PageContainer;
 import io.quarkcloud.quarkadmin.component.pagecontainer.PageHeader;
 import io.quarkcloud.quarkadmin.component.table.Table;
+import io.quarkcloud.quarkadmin.component.table.ToolBar;
 import io.quarkcloud.quarkcore.service.Context;
+import io.quarkcloud.quarkadmin.template.resource.Action;
+import io.quarkcloud.quarkadmin.template.resource.Resource;
+import io.quarkcloud.quarkadmin.template.resource.core.ResolveAction;
 
-public class Resource {
+public class ResourceImpl implements Resource {
 
     // 注解实例
     protected AdminResource annotationClass = null;
@@ -62,7 +68,7 @@ public class Resource {
     public boolean withExport;
 
     // 构造函数
-    public Resource() {
+    public ResourceImpl() {
 
         // 获取注解对象
         if (getClass().isAnnotationPresent(AdminResource.class)) {
@@ -166,6 +172,56 @@ public class Resource {
         return annotationClass.withExport();
     }
 
+    // 设置单列字段
+    public ResourceImpl setField(Map<String, Object> field) {
+        this.field = field;
+        return this;
+    }
+
+    // 字段
+    public List<Object> fields(Context ctx) {
+        return null;
+    }
+
+    // 搜索
+    public List<Object> searches(Context ctx) {
+        return null;
+    }
+
+    // 行为
+    public List<Action> actions(Context ctx) {
+        return null;
+    }
+
+    // 菜单
+    public Map<String, Object> menus(Context ctx) {
+        return null;
+    }
+
+    // 数据导出前回调
+    public List<Object> beforeExporting(Context ctx, List<Map<String, Object>> list) {
+        List<Object> result = new ArrayList<>();
+        for (Map<String, Object> v : list) {
+            result.add(v);
+        }
+        return result;
+    }
+
+    // 数据导入前回调
+    public List<List<Object>> beforeImporting(Context ctx, List<List<Object>> list) {
+        return list;
+    }
+
+    // 表格行内编辑执行完之后回调
+    public Object afterEditable(Context ctx, Object id, String field, Object value) {
+        return null;
+    }
+
+    // 行为执行完之后回调
+    public Object afterAction(Context ctx, String uriKey, Object query) {
+        return null;
+    }
+
     // 页面组件渲染
     public Object pageComponentRender(Context ctx, Object body) {
 
@@ -199,6 +255,42 @@ public class Resource {
                 .setBody(body);
     }
 
+    // 列表页表格主体
+    public Object indexTableExtraRender(Context ctx) {
+        return null;
+    }
+
+    // 列表页工具栏
+    public Object indexTableToolBar(Context ctx) {
+        Object tableActions = new ResolveAction(actions(ctx), ctx).getIndexTableActions();
+
+        return new ToolBar().
+            setTitle(indexTableTitle(ctx)).
+            setActions(tableActions);
+    }
+
+    // 列表页表格列
+    public Object indexTableColumns(Context ctx) {
+        return null;
+    }
+
+    // 列表页批量操作
+    public Object indexTableAlertActions(Context ctx) {
+        return null;
+    }
+
+    // 列表页搜索栏
+    public Object indexSearches(Context ctx) {
+        return null;
+    }
+
+    // 列表页标题
+    public String indexTableTitle(Context ctx) {
+
+        // 返回拼接后的标题
+        return this.getTitle() + this.getTableTitleSuffix();
+    }
+
     // 列表页组件渲染
     public Object indexComponentRender(Context ctx, Object data) {
         Object component;
@@ -208,7 +300,7 @@ public class Resource {
         String tableTitle = indexTableTitle(ctx);
 
         // 列表页轮询数据
-        int tablePolling = this.getTablePolling();
+        int tablePolling = getTablePolling();
 
         // 列表页表格主体
         Object tableExtraRender = indexTableExtraRender(ctx);

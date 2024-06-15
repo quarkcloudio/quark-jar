@@ -2,7 +2,7 @@ package io.quarkcloud.quarkstarter.service.admin.metric;
 
 import java.util.Map;
 import io.quarkcloud.quarkadmin.entity.Admin;
-import io.quarkcloud.quarkadmin.template.metrics.Value;
+import io.quarkcloud.quarkadmin.template.metrics.impl.Value;
 
 public class TotalAdmin extends Value {
 

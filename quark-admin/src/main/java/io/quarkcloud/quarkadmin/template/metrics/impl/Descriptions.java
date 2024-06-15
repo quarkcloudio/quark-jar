@@ -1,4 +1,6 @@
-package io.quarkcloud.quarkadmin.template.metrics;
+package io.quarkcloud.quarkadmin.template.metrics.impl;
+
+import io.quarkcloud.quarkadmin.template.metrics.Metrics;
 
 public class Descriptions implements Metrics {
 

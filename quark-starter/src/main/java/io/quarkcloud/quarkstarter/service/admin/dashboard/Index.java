@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import io.quarkcloud.quarkadmin.template.Dashboard;
+import io.quarkcloud.quarkadmin.template.dashboard.impl.DashboardImpl;
 import io.quarkcloud.quarkadmin.template.metrics.Metrics;
 import io.quarkcloud.quarkcore.service.Context;
 import io.quarkcloud.quarkstarter.service.admin.metric.SystemInfo;
@@ -16,7 +16,7 @@ import io.quarkcloud.quarkstarter.service.admin.metric.TotalLog;
 import io.quarkcloud.quarkstarter.service.admin.metric.TotalPicture;
 
 @Component(value = "dashboardIndex")
-public class Index extends Dashboard {
+public class Index extends DashboardImpl {
 
     // 构造函数
     public Index() {

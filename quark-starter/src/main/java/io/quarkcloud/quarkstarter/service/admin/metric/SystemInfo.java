@@ -1,12 +1,11 @@
 package io.quarkcloud.quarkstarter.service.admin.metric;
 
-import io.quarkcloud.quarkadmin.template.metrics.Descriptions;
-
 import java.lang.management.ManagementFactory;
 import com.sun.management.OperatingSystemMXBean;
 import java.util.Arrays;
 import org.springframework.boot.SpringBootVersion;
 import io.quarkcloud.quarkadmin.component.descriptions.Field;
+import io.quarkcloud.quarkadmin.template.metrics.impl.Descriptions;
 
 public class SystemInfo extends Descriptions {
 

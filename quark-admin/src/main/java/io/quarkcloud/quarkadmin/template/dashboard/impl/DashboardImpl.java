@@ -1,4 +1,4 @@
-package io.quarkcloud.quarkadmin.template;
+package io.quarkcloud.quarkadmin.template.dashboard.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,10 +11,11 @@ import io.quarkcloud.quarkadmin.component.pagecontainer.PageHeader;
 import io.quarkcloud.quarkadmin.component.card.Card;
 import io.quarkcloud.quarkadmin.component.grid.Col;
 import io.quarkcloud.quarkadmin.component.grid.Row;
+import io.quarkcloud.quarkadmin.template.dashboard.Dashboard;
 import io.quarkcloud.quarkadmin.template.metrics.Metrics;
 import io.quarkcloud.quarkcore.service.Context;
 
-public class Dashboard {
+public class DashboardImpl implements Dashboard {
 
     // 注解实例
     protected AdminDashboard annotationClass = null;
@@ -29,7 +30,7 @@ public class Dashboard {
 	public boolean backIcon;
 
     // 构造函数
-    public Dashboard() {
+    public DashboardImpl() {
 
         // 获取注解对象
         if (getClass().isAnnotationPresent(AdminDashboard.class)) {

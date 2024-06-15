@@ -1,6 +1,7 @@
-package io.quarkcloud.quarkadmin.template.metrics;
+package io.quarkcloud.quarkadmin.template.metrics.impl;
 
 import io.quarkcloud.quarkadmin.component.statistic.Statistic;
+import io.quarkcloud.quarkadmin.template.metrics.Metrics;
 
 public class Value implements Metrics {
     
