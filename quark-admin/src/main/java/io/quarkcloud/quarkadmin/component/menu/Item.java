@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import io.quarkcloud.quarkadmin.component.Component;
 import io.quarkcloud.quarkadmin.component.modal.Modal;
+import io.quarkcloud.quarkadmin.component.drawer.Drawer;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -147,21 +148,21 @@ public class Item extends Component {
 
     // 回调函数
     @FunctionalInterface
-    interface Closure {
-        Object callback();
+    interface Closure<T> {
+        Object callback(T clazz);
     }
 
     // Set modal
-    public Item setModal(Closure callback) {
+    public Item setModal(Closure<Modal> closure) {
         Modal modal = new Modal();
-        this.modal = ((Modal) callback).apply(modal);
+        this.modal = closure.callback(modal);
         return this;
     }
 
     // Set drawer
-    public Item setDrawer(Object callback) {
-        drawer.Component component = new drawer.Component().init();
-        this.drawer = ((drawer.Component) callback).apply(component);
+    public Item setDrawer(Closure<Drawer> closure) {
+        Drawer drawer = new Drawer();
+        this.drawer = closure.callback(drawer);
         return this;
     }
 
