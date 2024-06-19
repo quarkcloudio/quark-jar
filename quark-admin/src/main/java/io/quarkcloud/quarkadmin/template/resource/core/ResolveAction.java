@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.quarkcloud.quarkadmin.component.drawer.Drawer;
+import io.quarkcloud.quarkadmin.component.modal.Modal;
 import io.quarkcloud.quarkadmin.template.resource.Action;
 import io.quarkcloud.quarkadmin.template.resource.impl.action.Link;
 import io.quarkcloud.quarkcore.service.Context;
@@ -19,6 +20,9 @@ public class ResolveAction {
 
     // context
     public Context context;
+
+    // 构造函数
+    public ResolveAction() {}
 
     // 构造函数
     public ResolveAction(List<Action> actions, Context context) {
@@ -112,22 +116,22 @@ public class ResolveAction {
                 break;
 
             case "modal":
-                Modaler modalActioner = (Modaler) item;
+            Modal modalActioner = (Modal) action;
 
                 // 宽度
                 int modalWidth = modalActioner.getWidth();
 
                 // 关闭时销毁 Modal 里的子元素
-                boolean modalDestroyOnClose = modalActioner.getDestroyOnClose();
+                boolean modalDestroyOnClose = modalActioner.isDestroyOnClose();
 
                 // 内容
-                Object modalBody = modalActioner.getBody(ctx);
+                Object modalBody = modalActioner.getBody();
 
                 // 弹窗行为
-                List<ActionComponent> modalActions = modalActioner.getActions(ctx);
+                List<Object> modalActions = modalActioner.getActions();
 
                 // 设置弹窗
-                actioncomponent.setModal(modal -> modal
+                actioncomponent.setModal(new Modal()
                     .setTitle(name)
                     .setWidth(modalWidth)
                     .setBody(modalBody)

@@ -75,6 +75,11 @@ public class Action extends Component {
     // 是否具有loading
     public boolean withLoading;
 
+    @FunctionalInterface
+    interface Closure {
+        Object callback();
+    }
+
     public Action() {
         this.component = "action";
         this.setComponentKey();
@@ -218,13 +223,13 @@ public class Action extends Component {
     }
 
     // 弹窗
-    public Action setModal(Object callback) {
+    public Action setModal(Closure callback) {
 
         return this;
     }
 
     // 抽屉
-    public Action setDrawer(Object callback) {
+    public Action setDrawer(Closure callback) {
 
         return this;
     }

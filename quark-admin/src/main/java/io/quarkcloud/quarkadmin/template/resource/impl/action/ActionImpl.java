@@ -8,30 +8,30 @@ import io.quarkcloud.quarkcore.service.Context;
 
 public class ActionImpl implements Action {
     
-    private String name;
-    private String reload;
-    private List<String> apiParams;
-    private String api;
-    private String actionType;
-    private String submitForm;
-    private String icon;
-    private String type;
-    private String size;
-    private boolean withLoading;
-    private Object fields;
-    private String confirmTitle;
-    private String confirmText;
-    private String confirmType;
-    private boolean onlyOnIndex;
-    private boolean onlyOnForm;
-    private boolean onlyOnDetail;
-    private boolean showOnIndex;
-    private boolean showOnIndexTableRow;
-    private boolean showOnIndexTableAlert;
-    private boolean showOnForm;
-    private boolean showOnFormExtra;
-    private boolean showOnDetail;
-    private boolean showOnDetailExtra;
+    public String name;
+    public String reload;
+    public List<String> apiParams;
+    public String api;
+    public String actionType;
+    public String submitForm;
+    public String icon;
+    public String type;
+    public String size;
+    public boolean withLoading;
+    public Object fields;
+    public String confirmTitle;
+    public String confirmText;
+    public String confirmType;
+    public boolean onlyOnIndex;
+    public boolean onlyOnForm;
+    public boolean onlyOnDetail;
+    public boolean showOnIndex;
+    public boolean showOnIndexTableRow;
+    public boolean showOnIndexTableAlert;
+    public boolean showOnForm;
+    public boolean showOnFormExtra;
+    public boolean showOnDetail;
+    public boolean showOnDetailExtra;
 
     // 执行行为句柄
     public Object handle(Context ctx, Object query) throws Exception {
