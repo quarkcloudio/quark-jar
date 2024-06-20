@@ -2,6 +2,8 @@ package io.quarkcloud.quarkadmin.template.resource;
 
 import java.util.List;
 
+import io.quarkcloud.quarkcore.service.Context;
+
 public interface Action {
 
     // 行为key
@@ -38,7 +40,7 @@ public interface Action {
     String getIcon();
 
     // 行为表单字段
-    Object getFields();
+    Object getFields(Context ctx);
 
     // 确认标题
     String getConfirmTitle();

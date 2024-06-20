@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.quarkcloud.quarkadmin.component.Component;
+import io.quarkcloud.quarkadmin.component.drawer.Drawer;
+import io.quarkcloud.quarkadmin.component.modal.Modal;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -76,8 +78,8 @@ public class Action extends Component {
     public boolean withLoading;
 
     @FunctionalInterface
-    interface Closure {
-        Object callback();
+    public interface Closure<T> {
+        Action callback(T obj);
     }
 
     public Action() {
@@ -223,13 +225,17 @@ public class Action extends Component {
     }
 
     // 弹窗
-    public Action setModal(Closure callback) {
+    public Action setModal(Closure closure) {
+        Modal modal= new Modal();
+        this.modal = closure.callback(modal);
 
         return this;
     }
 
     // 抽屉
-    public Action setDrawer(Closure callback) {
+    public Action setDrawer(Closure closure) {
+        Drawer drawer= new Drawer();
+        this.drawer = closure.callback(drawer);
 
         return this;
     }

@@ -6,7 +6,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 
+import io.quarkcloud.quarkadmin.component.action.Action.Closure;
 import io.quarkcloud.quarkadmin.component.drawer.Drawer;
 import io.quarkcloud.quarkadmin.component.modal.Modal;
 import io.quarkcloud.quarkadmin.template.resource.Action;
@@ -116,7 +118,7 @@ public class ResolveAction {
                 break;
 
             case "modal":
-            Modal modalActioner = (Modal) action;
+                io.quarkcloud.quarkadmin.template.resource.impl.action.Modal modalActioner = (io.quarkcloud.quarkadmin.template.resource.impl.action.Modal) action;
 
                 // 宽度
                 int modalWidth = modalActioner.getWidth();
@@ -125,52 +127,60 @@ public class ResolveAction {
                 boolean modalDestroyOnClose = modalActioner.isDestroyOnClose();
 
                 // 内容
-                Object modalBody = modalActioner.getBody();
+                Object modalBody = modalActioner.getBody(ctx);
 
                 // 弹窗行为
-                List<Object> modalActions = modalActioner.getActions();
+                List<Object> modalActions = modalActioner.getActions(ctx);
+
+                // 构建弹窗
+                Closure<Modal> modalClosure = (Modal modal) -> {
+                    modal.setTitle(name).
+                    setWidth(modalWidth).
+                    setBody(modalBody).
+                    setActions(modalActions).
+                    setDestroyOnClose(modalDestroyOnClose);
+                };
 
                 // 设置弹窗
-                actioncomponent.setModal(new Modal()
-                    .setTitle(name)
-                    .setWidth(modalWidth)
-                    .setBody(modalBody)
-                    .setActions(modalActions)
-                    .setDestroyOnClose(modalDestroyOnClose));
+                actioncomponent.setModal(modalClosure);
                 break;
 
             case "drawer":
-                Drawer drawerActioner = (Drawer) item;
+                io.quarkcloud.quarkadmin.template.resource.impl.action.Drawer drawerActioner = (io.quarkcloud.quarkadmin.template.resource.impl.action.Drawer) action;
 
                 // 宽度
                 int drawerWidth = drawerActioner.getWidth();
 
                 // 关闭时销毁 Drawer 里的子元素
-                boolean drawerDestroyOnClose = drawerActioner.getDestroyOnClose();
+                boolean drawerDestroyOnClose = drawerActioner.isDestroyOnClose();
 
                 // 内容
                 Object drawerBody = drawerActioner.getBody(ctx);
 
                 // 弹窗行为
-                List<ActionComponent> drawerActions = drawerActioner.getActions(ctx);
+                List<Object> drawerActions = drawerActioner.getActions(ctx);
 
                 // 构建弹窗
-                actioncomponent.setDrawer(drawer -> drawer
-                    .setTitle(name)
-                    .setWidth(drawerWidth)
-                    .setBody(drawerBody)
-                    .setActions(drawerActions)
-                    .setDestroyOnClose(drawerDestroyOnClose));
+                Closure<Drawer> drawerClosure = (Drawer drawer) -> {
+                    drawer.setTitle(name).
+                    setWidth(drawerWidth).
+                    setBody(drawerBody).
+                    setActions(drawerActions).
+                    setDestroyOnClose(drawerDestroyOnClose);
+                };
+
+                // 构建弹窗
+                actioncomponent.setDrawer(drawerClosure);
                 break;
 
             case "modalForm":
-                ModalFormer modalFormerActioner = (ModalFormer) item;
+                io.quarkcloud.quarkadmin.template.resource.impl.action.ModalForm modalFormerActioner = (io.quarkcloud.quarkadmin.template.resource.impl.action.ModalForm) action;
 
                 // 表单数据接口
                 String initApi = buildFormInitApi(ctx, params, uriKey);
 
                 // 字段
-                List<FormField> modalFormFields = modalFormerActioner.getFields(ctx);
+                Object modalFormFields = modalFormerActioner.getFields(ctx);
 
                 // 解析表单组件内的字段
                 List<FormField> formFields = formFieldsParser(ctx, modalFormFields);
@@ -223,7 +233,7 @@ public class ResolveAction {
                 break;
 
             case "drawerForm":
-                DrawerFormer drawerFormerActioner = (DrawerFormer) item;
+                DrawerFormer drawerFormerActioner = (DrawerFormer) action;
 
                 // 表单数据接口
                 String initApiDrawer = buildFormInitApi(ctx, params, uriKey);
@@ -279,7 +289,7 @@ public class ResolveAction {
                 break;
 
             case "dropdown":
-                Dropdowner dropdownActioner = (Dropdowner) item;
+                Dropdowner dropdownActioner = (Dropdowner) action;
 
                 // 获取下拉菜单
                 List<MenuItem> overlay = dropdownActioner.getMenu(ctx);
@@ -371,4 +381,28 @@ public class ResolveAction {
 
         return api;
     }
+
+    // 构建表单初始化数据接口
+    public String buildFormInitApi(Context ctx, List<String> params, String uriKey) {
+        // 拼接参数
+        String paramsUri = "";
+        if (!params.isEmpty()) {
+            StringJoiner joiner = new StringJoiner("&", "?", "");
+            for (String param : params) {
+                joiner.add(param + "=${" + param + "}");
+            }
+            paramsUri = joiner.toString();
+        }
+
+        // 构建基本 API 路径
+        String api = ctx.getRequest().getRequestURI().replace("/index", "/action/" + uriKey + "/values");
+
+        // 处理不同页面接口的情况
+        api = api.replace("/create", "/action/" + uriKey + "/values");
+        api = api.replace("/edit", "/action/" + uriKey + "/values");
+        api = api.replace("/detail", "/action/" + uriKey + "/values");
+
+        return api + paramsUri;
+    }
+
 }

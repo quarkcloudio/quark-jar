@@ -4,7 +4,7 @@ import java.util.List;
 
 import io.quarkcloud.quarkcore.service.Context;
 
-public class Drawer extends ActionImpl {
+public class Modal extends ActionImpl {
 
     // 抽屉弹出层宽度
     private int width;
@@ -13,8 +13,8 @@ public class Drawer extends ActionImpl {
     private boolean destroyOnClose;
 
     // 初始化
-    public Drawer(Context ctx) {
-        this.setActionType("drawer");
+    public Modal(Context ctx) {
+        this.setActionType("modal");
         this.width = 520;
     }
 
