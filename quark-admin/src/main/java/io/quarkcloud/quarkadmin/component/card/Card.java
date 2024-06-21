@@ -1,8 +1,10 @@
 package io.quarkcloud.quarkadmin.component.card;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import io.quarkcloud.quarkadmin.component.Component;
+import io.quarkcloud.quarkadmin.component.grid.Col;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -64,5 +66,11 @@ public class Card extends Component{
         this.layout = "default";
         this.colSpan = 24;
         this.gutter = 0;
+    }
+
+    // 组件Style
+    public Card setStyle(Map<String, Object> style) {
+        this.style = style;
+        return this;
     }
 }

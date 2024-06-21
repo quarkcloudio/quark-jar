@@ -76,7 +76,6 @@ public class Col extends Component {
     // 组件Style
     public Col setStyle(Map<String, Object> style) {
         this.style = style;
-
         return this;
     }
 }

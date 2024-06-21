@@ -1,6 +1,7 @@
 package io.quarkcloud.quarkadmin.component.chart;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import io.quarkcloud.quarkadmin.component.Component;
 import lombok.Data;
@@ -63,6 +64,12 @@ public class Line extends Component {
     // 折线图表
     public Line newLine(Object data) {
         this.data = data;
+        return this;
+    }
+
+    // 组件Style
+    public Line setStyle(Map<String, Object> style) {
+        this.style = style;
         return this;
     }
 }

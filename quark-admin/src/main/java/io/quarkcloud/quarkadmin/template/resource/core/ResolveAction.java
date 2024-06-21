@@ -10,6 +10,7 @@ import java.util.StringJoiner;
 
 import io.quarkcloud.quarkadmin.component.action.Action.Closure;
 import io.quarkcloud.quarkadmin.component.drawer.Drawer;
+import io.quarkcloud.quarkadmin.component.form.Form;
 import io.quarkcloud.quarkadmin.component.modal.Modal;
 import io.quarkcloud.quarkadmin.template.resource.Action;
 import io.quarkcloud.quarkadmin.template.resource.impl.action.Link;
@@ -180,10 +181,10 @@ public class ResolveAction {
                 String initApi = buildFormInitApi(ctx, params, uriKey);
 
                 // 字段
-                Object modalFormFields = modalFormerActioner.getFields(ctx);
+                List<Object> modalFormFields = modalFormerActioner.getFields(ctx);
 
                 // 解析表单组件内的字段
-                List<FormField> formFields = formFieldsParser(ctx, modalFormFields);
+                List<Object> formFields = new ResolveField().formFieldsParser(ctx, modalFormFields);
 
                 // 表单初始数据
                 Map<String, Object> modalFormData = new HashMap<>();
@@ -195,9 +196,13 @@ public class ResolveAction {
                 boolean modalFormDestroyOnClose = modalFormerActioner.getDestroyOnClose();
 
                 // 构建表单组件
-                FormComponent formComponent = new FormComponent()
-                    .setKey(uriKey, false)
-                    .setStyle(new HashMap<String, Object>() {{
+                Form formComponent = new Form();
+
+                // 设置组件key
+                formComponent.setComponentKey(uriKey, false);
+
+                // 设置表单组件
+                formComponent.setStyle(new HashMap<String, Object>() {{
                         put("paddingTop", "24px");
                     }})
                     .setApi(api)

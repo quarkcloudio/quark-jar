@@ -18,7 +18,7 @@ public class ActionImpl implements Action {
     public String type;
     public String size;
     public boolean withLoading;
-    public Object fields;
+    public List<Object> fields;
     public String confirmTitle;
     public String confirmText;
     public String confirmType;
@@ -97,7 +97,7 @@ public class ActionImpl implements Action {
     }
 
     // 行为表单字段
-    public Object getFields(Context ctx) {
+    public List<Object> getFields(Context ctx) {
         return fields;
     }
 
@@ -167,7 +167,7 @@ public class ActionImpl implements Action {
     }
 
     // 行为表单字段
-    public void setFields(Object fields) {
+    public void setFields(List<Object> fields) {
         this.fields = fields;
     }
 

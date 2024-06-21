@@ -40,7 +40,7 @@ public interface Action {
     String getIcon();
 
     // 行为表单字段
-    Object getFields(Context ctx);
+    List<Object> getFields(Context ctx);
 
     // 确认标题
     String getConfirmTitle();
@@ -82,7 +82,7 @@ public interface Action {
     void setIcon(String icon);
 
     // 行为表单字段
-    void setFields(Object fields);
+    void setFields(List<Object> fields);
 
     // 确认标题
     void setConfirmTitle(String confirmTitle);
