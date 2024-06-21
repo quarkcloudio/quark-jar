@@ -1,6 +1,5 @@
 package io.quarkcloud.quarkadmin.component.form;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,9 +17,6 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 public class Form extends Component {
-
-    // 组件类型
-    private String component;
 
     // 表单标题
     private String title;
@@ -94,9 +90,6 @@ public class Form extends Component {
     // 表单行为
     private List<Object> actions;
 
-    // 组件Key
-    private String componentKey;
-
     // 样式
     private Map<String, Object> style;
 
@@ -124,7 +117,7 @@ public class Form extends Component {
     }
 
     // 设置样式
-    public Component setStyle(Map<String, Object> style) {
+    public Form setStyle(Map<String, Object> style) {
         this.style = style;
         return this;
     }
