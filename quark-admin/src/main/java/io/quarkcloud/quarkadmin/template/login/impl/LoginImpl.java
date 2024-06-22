@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -139,9 +140,8 @@ public class LoginImpl implements Login {
     }
 
     // 获取字段
-    public Object[] fields(Context context) {
-
-        return new Object[] {
+    public List<Object> fields(Context context) {
+        return Arrays.asList(
             Field.text("username").
             setRules(Arrays.asList(
                 Rule.required(true, "请输入用户名"
@@ -169,8 +169,8 @@ public class LoginImpl implements Login {
             setSize("large").
             setCaptchaIdUrl("/api/admin/login/index/captchaId").
             setCaptchaUrl("/api/admin/login/index/captcha/{id}").
-            setPrefix(new Icon().setType("icon-safetycertificate")),
-        };
+            setPrefix(new Icon().setType("icon-safetycertificate"))
+        );
     }
 
     // 获取验证码ID
@@ -222,7 +222,7 @@ public class LoginImpl implements Login {
     public Object fieldsWithinComponents(Context context) {
 
         // 获取字段
-        Object[] fields = this.fields(context);
+        List<Object> fields = this.fields(context);
 
         // 解析创建页表单组件内的字段
         Object items = this.formFieldsParser(context, fields);
@@ -232,8 +232,8 @@ public class LoginImpl implements Login {
 
     // 解析创建页表单组件内的字段
     public Object formFieldsParser(Context context, Object fields) {
-        if (fields instanceof Object[]) {
-            Arrays.stream((Object[]) fields).forEach(field -> {
+        if (fields instanceof List) {
+            ((List<Object>) fields).forEach(field -> {
                 boolean hasBody = false;
                 Object body = new Object();
                 try {

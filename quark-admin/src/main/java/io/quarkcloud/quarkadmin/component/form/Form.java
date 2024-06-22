@@ -85,7 +85,7 @@ public class Form extends Component {
     private String initApi;
 
     // 表单项
-    private List<Object> body;
+    private Object body;
 
     // 表单行为
     private List<Object> actions;

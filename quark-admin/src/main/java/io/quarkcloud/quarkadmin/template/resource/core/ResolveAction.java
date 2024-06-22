@@ -183,7 +183,7 @@ public class ResolveAction {
                 List<Object> modalFormFields = modalFormerActioner.fields(ctx);
 
                 // 解析表单组件内的字段
-                List<Object> formFields = new ResolveField().formFieldsParser(ctx, modalFormFields);
+                Object formFields = new ResolveField().formFieldsParser(ctx, modalFormFields);
 
                 // 表单初始数据
                 Map<String, Object> modalFormData = new HashMap<>();
@@ -256,10 +256,10 @@ public class ResolveAction {
                 String initApiDrawer = buildFormInitApi(ctx, params, uriKey);
 
                 // 字段
-                List<Object> drawerFormFields = drawerFormerActioner.fields(ctx);
+                Object drawerFormFields = drawerFormerActioner.fields(ctx);
 
                 // 解析表单组件内的字段
-                List<Object> drawerFormFieldComponents = new ResolveField().formFieldsParser(ctx, drawerFormFields);
+                Object drawerFormFieldComponents = new ResolveField().formFieldsParser(ctx, drawerFormFields);
 
                 // 表单初始数据
                 Map<String, Object> drawerFormData = new HashMap<>();

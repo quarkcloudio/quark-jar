@@ -1,6 +1,9 @@
 package io.quarkcloud.quarkadmin.template.resource.core;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import io.quarkcloud.quarkcore.service.Context;
@@ -86,7 +89,35 @@ public class ResolveField {
     }
 
     // 解析表单组件内的字段
-    public List<Object> formFieldsParser(Context ctx, List<Object> fields) {
+    public Object formFieldsParser(Context ctx, Object fields) {
+        if (fields instanceof List) {
+            ((List<Object>) fields).forEach(field -> {
+                boolean hasBody = false;
+                Object body = new Object();
+                try {
+                    body = field.getClass().getField("body").get(field);
+                    hasBody = true;
+                } catch (NoSuchFieldException | IllegalAccessException e) {
+                    hasBody = false;
+                }
+                if (hasBody) {
+                    this.formFieldsParser(context, body);
+                } else {
+                    try {
+                        Object component = field.getClass().getSuperclass().getDeclaredField("component").get(field);
+                        String getComponent = (String) component;
+                        if (getComponent.contains("Field")) {
+                            Method method = field.getClass().getMethod("buildFrontendRules", String.class);
+                            method.invoke(field, context.request.getQueryString());
+                        }
+                    } catch (NoSuchFieldException | NoSuchMethodException | SecurityException | IllegalAccessException
+                            | InvocationTargetException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+
         return fields;
     }
 

@@ -1,5 +1,7 @@
 package io.quarkcloud.quarkadmin.template.login;
 
+import java.util.List;
+
 import io.quarkcloud.quarkcore.service.Context;
 
 public interface Login {
@@ -17,7 +19,7 @@ public interface Login {
     public String getSubTitle();
 
     // 获取字段
-    public Object[] fields(Context context);
+    public List<Object> fields(Context context);
 
     // 获取验证码ID
     public Object captchaId(Context context);
