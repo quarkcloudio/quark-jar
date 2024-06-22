@@ -238,27 +238,23 @@ public class List extends Component {
 
     // 生成前端验证规则
     public List buildFrontendRules(String path) {
-
-        java.util.List<Rule> rules = new ArrayList<>();
-        java.util.List<Rule> creationRules = new ArrayList<>();
-        java.util.List<Rule> updateRules = new ArrayList<>();
         java.util.List<Rule> frontendRules = new ArrayList<>();
-
         String[] uri = path.split("/");
         boolean isCreating = (uri[uri.length - 1].equals("create")) || (uri[uri.length - 1].equals("store"));
         boolean isEditing = (uri[uri.length - 1].equals("edit")) || (uri[uri.length - 1].equals("update"));
 
         Function<java.util.List<Rule>, java.util.List<Rule>> convertToFrontendRules = Rule::convertToFrontendRules;
-
-        frontendRules.addAll(convertToFrontendRules.apply(rules));
+        frontendRules.addAll(convertToFrontendRules.apply(this.rules));
 
         if (isCreating) {
-            frontendRules.addAll(convertToFrontendRules.apply(creationRules));
+            frontendRules.addAll(convertToFrontendRules.apply(this.creationRules));
         }
 
         if (isEditing) {
-            frontendRules.addAll(convertToFrontendRules.apply(updateRules));
+            frontendRules.addAll(convertToFrontendRules.apply(this.updateRules));
         }
+        
+        this.frontendRules = frontendRules;
 
         return this;
     }

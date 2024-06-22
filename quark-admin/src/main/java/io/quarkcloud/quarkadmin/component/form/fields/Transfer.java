@@ -333,27 +333,23 @@ public class Transfer extends Component {
 
     // 生成前端验证规则
     public Transfer buildFrontendRules(String path) {
-
-        List<Rule> rules = new ArrayList<>();
-        List<Rule> creationRules = new ArrayList<>();
-        List<Rule> updateRules = new ArrayList<>();
         List<Rule> frontendRules = new ArrayList<>();
-
         String[] uri = path.split("/");
         boolean isCreating = (uri[uri.length - 1].equals("create")) || (uri[uri.length - 1].equals("store"));
         boolean isEditing = (uri[uri.length - 1].equals("edit")) || (uri[uri.length - 1].equals("update"));
 
         Function<List<Rule>, List<Rule>> convertToFrontendRules = Rule::convertToFrontendRules;
-
-        frontendRules.addAll(convertToFrontendRules.apply(rules));
+        frontendRules.addAll(convertToFrontendRules.apply(this.rules));
 
         if (isCreating) {
-            frontendRules.addAll(convertToFrontendRules.apply(creationRules));
+            frontendRules.addAll(convertToFrontendRules.apply(this.creationRules));
         }
 
         if (isEditing) {
-            frontendRules.addAll(convertToFrontendRules.apply(updateRules));
+            frontendRules.addAll(convertToFrontendRules.apply(this.updateRules));
         }
+        
+        this.frontendRules = frontendRules;
 
         return this;
     }

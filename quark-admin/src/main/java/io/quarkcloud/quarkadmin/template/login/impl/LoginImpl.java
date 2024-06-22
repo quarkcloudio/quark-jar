@@ -233,7 +233,7 @@ public class LoginImpl implements Login {
     // 解析创建页表单组件内的字段
     public Object formFieldsParser(Context context, Object fields) {
         if (fields instanceof List) {
-            ((List<Object>) fields).forEach(field -> {
+            ((List<Object>) fields).stream().forEach(field -> {
                 boolean hasBody = false;
                 Object body = new Object();
                 try {
