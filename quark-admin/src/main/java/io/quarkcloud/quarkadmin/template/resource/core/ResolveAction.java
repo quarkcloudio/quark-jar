@@ -13,7 +13,6 @@ import io.quarkcloud.quarkadmin.component.dropdown.Dropdown;
 import io.quarkcloud.quarkadmin.component.form.Form;
 import io.quarkcloud.quarkadmin.component.modal.Modal;
 import io.quarkcloud.quarkadmin.template.resource.Action;
-import io.quarkcloud.quarkadmin.template.resource.impl.action.Link;
 import io.quarkcloud.quarkcore.service.Context;
 
 public class ResolveAction {
@@ -106,7 +105,7 @@ public class ResolveAction {
 
         switch (actionType) {
             case "link":
-                Link linkActioner = (Link) action;
+                io.quarkcloud.quarkadmin.template.resource.impl.action.Link linkActioner = (io.quarkcloud.quarkadmin.template.resource.impl.action.Link) action;
 
                 // 是否显示箭头图标
                 String href = linkActioner.getHref(ctx);
