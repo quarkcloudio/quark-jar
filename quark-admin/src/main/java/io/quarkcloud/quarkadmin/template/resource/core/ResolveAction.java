@@ -11,6 +11,7 @@ import io.quarkcloud.quarkadmin.component.action.Action.Closure;
 import io.quarkcloud.quarkadmin.component.drawer.Drawer;
 import io.quarkcloud.quarkadmin.component.dropdown.Dropdown;
 import io.quarkcloud.quarkadmin.component.form.Form;
+import io.quarkcloud.quarkadmin.component.form.fields.Space;
 import io.quarkcloud.quarkadmin.component.modal.Modal;
 import io.quarkcloud.quarkadmin.template.resource.Action;
 import io.quarkcloud.quarkcore.service.Context;
@@ -34,14 +35,135 @@ public class ResolveAction {
 
     // 列表行为
     public Object getIndexTableActions() {
-        List<Object> result = new ArrayList<>();
+        List<Object> items = new ArrayList<>();
+
+        // 判断是否为空
+        if (actions == null) {
+            return items;
+        }
+
+        // 遍历
         for (Action action : actions) {
             if (action.shownOnIndex()) {
-                result.add(buildAction(context, action));
+                items.add(buildAction(context, action));
             }
         }
 
-        return result;
+        return new Space().setBody(items);
+    }
+
+    // 表格行内行为
+    public Object getIndexTableRowActions() {
+        List<Object> items = new ArrayList<>();
+
+        // 判断是否为空
+        if (actions == null) {
+            return items;
+        }
+
+        // 遍历
+        for (Action action : actions) {
+            if (action.shownOnIndexTableRow()) {
+                items.add(buildAction(context, action));
+            }
+        }
+
+        return items;
+    }
+    
+    // 表格多选弹出层行为
+    public Object getIndexTableAlertActions() {
+        List<Object> items = new ArrayList<>();
+
+        // 判断是否为空
+        if (actions == null) {
+            return items;
+        }
+
+        // 遍历
+        for (Action action : actions) {
+            if (action.shownOnIndexTableAlert()) {
+                items.add(buildAction(context, action));
+            }
+        }
+
+        return items;
+    }
+    
+    // 表单页行为
+    public Object getFormActions() {
+        List<Object> items = new ArrayList<>();
+
+        // 判断是否为空
+        if (actions == null) {
+            return items;
+        }
+
+        // 遍历
+        for (Action action : actions) {
+            if (action.shownOnForm()) {
+                items.add(buildAction(context, action));
+            }
+        }
+
+        return items;
+    }
+
+    // 表单页右上角自定义区域行为
+    public Object getFormExtraActions() {
+        List<Object> items = new ArrayList<>();
+
+        // 判断是否为空
+        if (actions == null) {
+            return items;
+        }
+
+        // 遍历
+        for (Action action : actions) {
+            if (action.shownOnFormExtra()) {
+                items.add(buildAction(context, action));
+            }
+        }
+
+        return items;
+    }
+
+    // 详情页行为
+    public Object getDetailActions() {
+        List<Object> items = new ArrayList<>();
+
+        // 判断是否为空
+        if (actions == null) {
+            return items;
+        }
+
+        // 遍历
+        for (Action action : actions) {
+            if (action.shownOnDetail()) {
+                items.add(buildAction(context, action));
+            }
+        }
+
+        return items;
+    }
+
+    // 详情页右上角自定义区域行为
+    public Object getDetailExtraActions() {
+        List<Object> items = new ArrayList<>();
+
+        // 判断是否为空
+        if (actions == null) {
+            return items;
+        }
+
+        // 遍历
+        for (Action action : actions) {
+            if (action.shownOnDetailExtra()) {
+                items.add(buildAction(context, action));
+            }
+        }
+
+        return items;
     }
 
     // 构建行为
