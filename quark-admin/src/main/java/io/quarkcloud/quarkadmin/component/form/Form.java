@@ -166,13 +166,13 @@ public class Form extends Component {
     }
 
     // 表单默认值，只有初始化以及重置时生效
-    public Component setInitialValues(Map<String, Object> initialValues) {
+    public Form setInitialValues(Map<String, Object> initialValues) {
         Map<String, Object> data = initialValues;
         return this;
     }
 
     // 表单布局，horizontal | vertical
-    public Component setLayout(String layout) {
+    public Form setLayout(String layout) {
         if (layout.equals("vertical")) {
             this.labelCol = null;
             this.wrapperCol = null;
@@ -183,7 +183,7 @@ public class Form extends Component {
     }
 
     // 需要为输入控件设置布局样式时，使用该属性，用法同 labelCol
-    public Component setWrapperCol(Map<String, Object> wrapperCol) {
+    public Form setWrapperCol(Map<String, Object> wrapperCol) {
         if (this.layout.equals("vertical")) {
             throw new IllegalArgumentException("If layout set vertical mode, can't set wrapperCol!");
         }
@@ -192,7 +192,7 @@ public class Form extends Component {
     }
 
     // 表单按钮布局样式,默认：['offset' => 2, 'span' => 22 ]
-    public Component setButtonWrapperCol(Map<String, Object> buttonWrapperCol) {
+    public Form setButtonWrapperCol(Map<String, Object> buttonWrapperCol) {
         if (this.layout.equals("vertical")) {
             throw new IllegalArgumentException("If layout set vertical mode, can't set buttonWrapperCol!");
         }

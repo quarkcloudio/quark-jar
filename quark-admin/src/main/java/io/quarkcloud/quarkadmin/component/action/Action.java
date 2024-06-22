@@ -79,7 +79,7 @@ public class Action extends Component {
 
     @FunctionalInterface
     public interface Closure<T> {
-        Action callback(T obj);
+        T callback(T obj);
     }
 
     public Action() {

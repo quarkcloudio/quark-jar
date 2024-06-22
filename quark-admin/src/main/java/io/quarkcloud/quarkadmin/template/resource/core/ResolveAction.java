@@ -10,6 +10,7 @@ import java.util.StringJoiner;
 
 import io.quarkcloud.quarkadmin.component.action.Action.Closure;
 import io.quarkcloud.quarkadmin.component.drawer.Drawer;
+import io.quarkcloud.quarkadmin.component.dropdown.Dropdown;
 import io.quarkcloud.quarkadmin.component.form.Form;
 import io.quarkcloud.quarkadmin.component.modal.Modal;
 import io.quarkcloud.quarkadmin.template.resource.Action;
@@ -135,7 +136,7 @@ public class ResolveAction {
 
                 // 构建弹窗
                 Closure<Modal> modalClosure = (Modal modal) -> {
-                    modal.setTitle(name).
+                    return modal.setTitle(name).
                     setWidth(modalWidth).
                     setBody(modalBody).
                     setActions(modalActions).
@@ -163,7 +164,7 @@ public class ResolveAction {
 
                 // 构建弹窗
                 Closure<Drawer> drawerClosure = (Drawer drawer) -> {
-                    drawer.setTitle(name).
+                    return drawer.setTitle(name).
                     setWidth(drawerWidth).
                     setBody(drawerBody).
                     setActions(drawerActions).
@@ -223,31 +224,44 @@ public class ResolveAction {
                 String modalFormSubmitText = modalFormerActioner.getSubmitText();
 
                 // 弹窗行为
-                List<ActionComponent> modalFormActions = Arrays.asList(
-                    new ActionComponent().init().setLabel(modalFormCancelText).setActionType("cancel"),
-                    new ActionComponent().init().setLabel(modalFormSubmitText).setWithLoading(true).setReload(reload).setActionType("submit").setType("primary", false).setSubmitForm(uriKey)
+                List<Object> modalFormActions = Arrays.asList(
+                    new io.quarkcloud.quarkadmin.component.action.Action().
+                    setLabel(modalFormCancelText).
+                    setActionType("cancel"),
+
+                    new io.quarkcloud.quarkadmin.component.action.Action().
+                    setLabel(modalFormSubmitText).
+                    setWithLoading(true).
+                    setReload(reload).
+                    setActionType("submit").
+                    setType("primary", false).
+                    setSubmitForm(uriKey)
                 );
 
+                // 构建弹窗
+                Closure<Modal> modalFormClosure = (Modal modal) -> {
+                    return modal.setTitle(name).
+                    setWidth(modalFormWidth).
+                    setBody(formComponent).
+                    setActions(modalFormActions).
+                    setDestroyOnClose(modalFormDestroyOnClose);
+                };
+
                 // 设置弹窗
-                actioncomponent.setActionType("modal").setModal(modal -> modal
-                    .setTitle(name)
-                    .setWidth(modalFormWidth)
-                    .setBody(formComponent)
-                    .setActions(modalFormActions)
-                    .setDestroyOnClose(modalFormDestroyOnClose));
+                actioncomponent.setActionType("modal").setModal(modalFormClosure);
                 break;
 
             case "drawerForm":
-                DrawerFormer drawerFormerActioner = (DrawerFormer) action;
+                io.quarkcloud.quarkadmin.template.resource.impl.action.DrawerForm drawerFormerActioner = (io.quarkcloud.quarkadmin.template.resource.impl.action.DrawerForm) action;
 
                 // 表单数据接口
                 String initApiDrawer = buildFormInitApi(ctx, params, uriKey);
 
                 // 字段
-                List<FormField> drawerFormFields = drawerFormerActioner.getFields(ctx);
+                List<Object> drawerFormFields = drawerFormerActioner.getFields(ctx);
 
                 // 解析表单组件内的字段
-                List<FormField> drawerFormFieldComponents = formFieldsParser(ctx, drawerFormFields);
+                List<Object> drawerFormFieldComponents = new ResolveField().formFieldsParser(ctx, drawerFormFields);
 
                 // 表单初始数据
                 Map<String, Object> drawerFormData = new HashMap<>();
@@ -259,9 +273,13 @@ public class ResolveAction {
                 boolean drawerFormDestroyOnClose = drawerFormerActioner.getDestroyOnClose();
 
                 // 构建表单组件
-                FormComponent drawerFormComponent = new FormComponent()
-                    .setKey(uriKey, false)
-                    .setApi(api)
+                Form drawerFormComponent = new Form();
+
+                // 设置组件key
+                drawerFormComponent.setComponentKey(uriKey, false);
+
+                // 构建表单组件
+                drawerFormComponent.setApi(api)
                     .setInitApi(initApiDrawer)
                     .setBody(drawerFormFieldComponents)
                     .setInitialValues(drawerFormData)
@@ -279,25 +297,37 @@ public class ResolveAction {
                 String drawerFormSubmitText = drawerFormerActioner.getSubmitText();
 
                 // 弹窗行为
-                List<ActionComponent> drawerFormActions = Arrays.asList(
-                    new ActionComponent().init().setLabel(drawerFormCancelText).setActionType("cancel"),
-                    new ActionComponent().init().setLabel(drawerFormSubmitText).setWithLoading(true).setReload(reload).setActionType("submit").setType("primary", false).setSubmitForm(uriKey)
+                List<Object> drawerFormActions = Arrays.asList(
+                    new io.quarkcloud.quarkadmin.component.action.Action().
+                    setLabel(drawerFormCancelText).
+                    setActionType("cancel"),
+
+                    new io.quarkcloud.quarkadmin.component.action.Action().
+                    setLabel(drawerFormSubmitText).
+                    setWithLoading(true).
+                    setReload(reload).
+                    setActionType("submit").
+                    setType("primary", false).
+                    setSubmitForm(uriKey)
                 );
 
+                Closure<Drawer> drawerFormClosure = (Drawer drawer) -> {
+                    return drawer.setTitle(name).
+                    setWidth(drawerFormWidth).
+                    setBody(drawerFormComponent).
+                    setActions(drawerFormActions).
+                    setDestroyOnClose(drawerFormDestroyOnClose);
+                };
+
                 // 设置弹窗
-                getAction = getAction.setActionType("drawer").setDrawer(drawer -> drawer
-                    .setTitle(name)
-                    .setWidth(drawerFormWidth)
-                    .setBody(drawerFormComponent)
-                    .setActions(drawerFormActions)
-                    .setDestroyOnClose(drawerFormDestroyOnClose));
+                actioncomponent.setActionType("drawer").setDrawer(drawerFormClosure);
                 break;
 
             case "dropdown":
-                Dropdowner dropdownActioner = (Dropdowner) action;
+                io.quarkcloud.quarkadmin.template.resource.impl.action.Dropdown dropdownActioner = (io.quarkcloud.quarkadmin.template.resource.impl.action.Dropdown) action;
 
                 // 获取下拉菜单
-                List<MenuItem> overlay = dropdownActioner.getMenu(ctx);
+                Object overlay = dropdownActioner.getMenu(ctx);
 
                 // 下拉根元素的样式
                 Map<String, Object> overlayStyle = dropdownActioner.getOverlayStyle();
@@ -312,8 +342,7 @@ public class ResolveAction {
                 boolean arrow = dropdownActioner.getArrow();
 
                 // 构建行为
-                DropdownComponent dropdownAction = new DropdownComponent()
-                    .init()
+                Dropdown dropdownAction = new Dropdown()
                     .setLabel(name)
                     .setMenu(overlay)
                     .setOverlayStyle(overlayStyle)
