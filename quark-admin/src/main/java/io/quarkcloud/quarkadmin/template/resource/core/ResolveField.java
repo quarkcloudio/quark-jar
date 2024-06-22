@@ -5,6 +5,8 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import io.quarkcloud.quarkadmin.template.resource.Action;
 import io.quarkcloud.quarkcore.service.Context;
 
 public class ResolveField {
@@ -135,18 +137,105 @@ public class ResolveField {
     // 导出字段
     public List<Object> exportFields(Context ctx) {
         List<Object> items = new ArrayList<>();
+
+        // 获取字段
+        fields = this.getFields(ctx);
+
+        // 判断是否为空
+        if (fields == null) {
+            return items;
+        }
+
+        // 遍历
+        for (Object field : fields) {
+            Object isShown = new Object();
+            boolean hasMethod = false;
+            try {
+                isShown = field.getClass().getMethod("IsShownOnExport").invoke(field);
+                hasMethod = true;
+            } catch (Exception e) {
+                hasMethod = false;
+            }
+
+            if (hasMethod) {
+                if (isShown instanceof Boolean) {
+                    if ((Boolean) isShown) {
+                        items.add(field);
+                    }
+                }
+            }
+        }
+
         return items;
     }
 
     // 导入字段
     public List<Object> importFields(Context ctx) {
         List<Object> items = new ArrayList<>();
+
+        // 获取字段
+        fields = this.getFields(ctx);
+
+        // 判断是否为空
+        if (fields == null) {
+            return items;
+        }
+
+        // 遍历
+        for (Object field : fields) {
+            Object isShown = new Object();
+            boolean hasMethod = false;
+            try {
+                isShown = field.getClass().getMethod("isShownOnImport").invoke(field);
+                hasMethod = true;
+            } catch (Exception e) {
+                hasMethod = false;
+            }
+
+            if (hasMethod) {
+                if (isShown instanceof Boolean) {
+                    if ((Boolean) isShown) {
+                        items.add(field);
+                    }
+                }
+            }
+        }
+
         return items;
     }
 
     // 不包含When组件内字段的导入字段
     public List<Object> importFieldsWithoutWhen(Context ctx) {
         List<Object> items = new ArrayList<>();
+
+        // 获取字段
+        fields = this.getFieldsWithoutWhen(ctx);
+
+        // 判断是否为空
+        if (fields == null) {
+            return items;
+        }
+
+        // 遍历
+        for (Object field : fields) {
+            Object isShown = new Object();
+            boolean hasMethod = false;
+            try {
+                isShown = field.getClass().getMethod("isShownOnImport").invoke(field);
+                hasMethod = true;
+            } catch (Exception e) {
+                hasMethod = false;
+            }
+
+            if (hasMethod) {
+                if (isShown instanceof Boolean) {
+                    if ((Boolean) isShown) {
+                        items.add(field);
+                    }
+                }
+            }
+        }
+
         return items;
     }
 
