@@ -180,7 +180,7 @@ public class ResolveAction {
                 String initApi = buildFormInitApi(ctx, params, uriKey);
 
                 // 字段
-                List<Object> modalFormFields = modalFormerActioner.getFields(ctx);
+                List<Object> modalFormFields = modalFormerActioner.fields(ctx);
 
                 // 解析表单组件内的字段
                 List<Object> formFields = new ResolveField().formFieldsParser(ctx, modalFormFields);
@@ -256,7 +256,7 @@ public class ResolveAction {
                 String initApiDrawer = buildFormInitApi(ctx, params, uriKey);
 
                 // 字段
-                List<Object> drawerFormFields = drawerFormerActioner.getFields(ctx);
+                List<Object> drawerFormFields = drawerFormerActioner.fields(ctx);
 
                 // 解析表单组件内的字段
                 List<Object> drawerFormFieldComponents = new ResolveField().formFieldsParser(ctx, drawerFormFields);

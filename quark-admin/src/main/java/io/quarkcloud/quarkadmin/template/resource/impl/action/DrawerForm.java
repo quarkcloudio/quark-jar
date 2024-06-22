@@ -1,6 +1,7 @@
 package io.quarkcloud.quarkadmin.template.resource.impl.action;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.quarkcloud.quarkcore.service.Context;
@@ -29,8 +30,8 @@ public class DrawerForm extends ActionImpl {
     }
 
     // 表单字段
-    public Object[] fields(Context ctx) {
-        return new Object[]{};
+    public List<Object> fields(Context ctx) {
+        return null;
     }
 
     // 表单数据（异步获取）

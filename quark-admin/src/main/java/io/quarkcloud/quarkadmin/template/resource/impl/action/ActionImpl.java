@@ -97,7 +97,7 @@ public class ActionImpl implements Action {
     }
 
     // 行为表单字段
-    public List<Object> getFields(Context ctx) {
+    public List<Object> fields(Context ctx) {
         return fields;
     }
 
