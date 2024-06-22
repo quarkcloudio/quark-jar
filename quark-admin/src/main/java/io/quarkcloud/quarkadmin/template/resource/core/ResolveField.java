@@ -152,23 +152,106 @@ public class ResolveField {
 
     // 获取字段
     public List<Object> getFields(Context ctx) {
-        return null;
+        return this.findFields(fields, true);
     }
 
     // 获取不包含When组件的字段
     public List<Object> getFieldsWithoutWhen(Context ctx) {
-        return null;
+        return this.findFields(fields, false);
     }
 
-    // 查找字段
-    public List<Object> findFields(List<Object> fields, boolean when) {
+    public List<Object> findFields(Object fields, boolean when) {
         List<Object> items = new ArrayList<>();
+
+        if (fields instanceof List<?>) {
+            List<?> fieldsList = (List<?>) fields;
+            for (Object v : fieldsList) {
+                boolean hasBody = false;
+                Object body = new Object();
+                try {
+                    body = v.getClass().getField("body").get(v);
+                    hasBody = true;
+                } catch (NoSuchFieldException | IllegalAccessException e) {
+                    hasBody = false;
+                }
+                if (hasBody) {
+                    List<Object> getItems = findFields(body, true);
+                    if (getItems != null && !getItems.isEmpty()) {
+                        items.addAll(getItems);
+                    }
+                } else {
+                    Object component;
+                    try {
+                        component = v.getClass().getSuperclass().getDeclaredField("component").get(v);
+                        String getComponent = (String) component;
+                        if (getComponent != null && getComponent.contains("field")) {
+                            items.add(v);
+                            if (when) {
+                                List<Object> whenFields = getWhenFields(v);
+                                if (!whenFields.isEmpty()) {
+                                    items.addAll(whenFields);
+                                }
+                            }
+                        }
+                    } catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException
+                            | SecurityException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
         return items;
     }
 
     // 获取When组件中的字段
     public List<Object> getWhenFields(Object item) {
         List<Object> items = new ArrayList<>();
+        try {
+            item.getClass().getDeclaredField("when");
+        } catch (NoSuchFieldException e) {
+            return items;
+        }
+
+        Object getWhen = new Object();
+        try {
+            getWhen = item.getClass().getMethod("getWhen").invoke(item);
+        } catch (Exception e) {
+            return items;
+        }
+
+        Object whenItems = new Object();
+        boolean hasWhenItems = false;
+        try {
+            whenItems = getWhen.getClass().getField("items").get(getWhen);
+        } catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
+            e.printStackTrace();
+        }
+        if (!hasWhenItems) {
+            return items;
+        }
+
+        if (whenItems instanceof List<?>) {
+            List<?> whenItemsList = (List<?>) whenItems;
+            for (Object v : whenItemsList) {
+                Object body = new Object();
+                boolean hasBody = false;
+                try {
+                    body = v.getClass().getField("body").get(v);
+                    hasBody = true;
+                } catch (NoSuchFieldException | IllegalAccessException e) {
+                    hasBody = false;
+                }
+                if (hasBody) {
+                    if (body instanceof List<?>) {
+                        items.addAll((List<?>) body);
+                    } else {
+                        items.add(body);
+                    }
+                }
+            }
+        }
+
         return items;
     }
 }
