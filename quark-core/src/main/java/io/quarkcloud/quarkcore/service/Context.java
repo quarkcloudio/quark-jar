@@ -61,6 +61,16 @@ public class Context {
         return this.joinPointMethod.getAnnotation(annotationClass);
     }
 
+    // getRequestMapping
+    public String[] getRequestMapping() {
+        RequestMapping requestMapping= this.getJoinPointAnnotation(RequestMapping.class);
+        if (requestMapping == null) {
+            return null;
+        }
+
+        return requestMapping.value();
+    }
+
     // getPathVariable
     public String getPathVariable(String pathVariable) {
         RequestMapping requestMapping= this.getJoinPointAnnotation(RequestMapping.class);

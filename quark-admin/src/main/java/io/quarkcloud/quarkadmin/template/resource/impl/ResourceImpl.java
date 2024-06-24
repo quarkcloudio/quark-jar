@@ -6,8 +6,14 @@ import java.util.Map;
 
 import io.quarkcloud.quarkcore.service.Context;
 import io.quarkcloud.quarkadmin.annotation.AdminResource;
+import io.quarkcloud.quarkadmin.component.form.Field;
+import io.quarkcloud.quarkadmin.component.form.fields.Cascader;
+import io.quarkcloud.quarkadmin.component.form.fields.Radio;
+import io.quarkcloud.quarkadmin.component.form.fields.SelectField;
+import io.quarkcloud.quarkadmin.component.form.fields.TreeSelect;
 import io.quarkcloud.quarkadmin.component.pagecontainer.PageContainer;
 import io.quarkcloud.quarkadmin.component.pagecontainer.PageHeader;
+import io.quarkcloud.quarkadmin.component.table.Search;
 import io.quarkcloud.quarkadmin.component.table.Table;
 import io.quarkcloud.quarkadmin.component.table.ToolBar;
 import io.quarkcloud.quarkadmin.template.resource.Action;
@@ -281,7 +287,115 @@ public class ResourceImpl implements Resource {
 
     // 列表页搜索栏
     public Object indexSearches(Context ctx) {
-        return null;
+
+        // 获取搜索项
+        List<Object> searches = this.searches(ctx);
+
+        // 初始化搜索组件
+        Search search = new Search();
+
+        // 是否包含导出功能
+        boolean withExport = this.isWithExport();
+        if (withExport) {
+            String resource = ctx.getPathVariable("resource");
+            String[] paths = ctx.getRequestMapping();
+            for (String path : paths) {
+                search.setExportText("导出").setExportApi(path.replace(":resource", resource));
+            }
+        }
+
+        // 解析搜索项
+        for (Object v : searches) {
+
+            // 搜索项实例
+            Object field = new Object();
+
+            // 获取搜索实例
+            io.quarkcloud.quarkadmin.template.resource.impl.search.SearchImpl searcher = (io.quarkcloud.quarkadmin.template.resource.impl.search.SearchImpl) v;
+
+            // 获取组件名称
+            String component = searcher.getComponent();
+
+            // 获取label标签文本
+            String label = searcher.getName();
+
+            // 获取字段名，支持数组
+            String name = searcher.getColumn(v);
+
+            // 获取接口
+            String api = searcher.getApi();
+
+            // 获取属性
+            Object options = searcher.options(ctx);
+
+            // 根据组件类型构建组件
+            switch (component) {
+                case "textField":
+                    field = Field.
+                        text(name, label).
+                        setWidth(null);
+                    break;
+                case "selectField":
+                    field = Field.
+                        select(name, label).
+                        setWidth(null).
+                        setOptions((List<SelectField.Option>) options);
+                    break;
+                case "radioField":
+                    field = Field.
+                        radio(name, label).
+                        setOptions((List<Radio.Option>) options).
+                        setOptionType("button").
+                        setButtonStyle("solid");
+                    break;
+                case "multipleSelectField":
+                    field = Field.
+                        select(name, label).
+                        setMode("multiple").
+                        setWidth(null).
+                        setOptions((List<SelectField.Option>) options);
+                    break;
+                case "dateField":
+                    field = Field.
+                        date(name, label).
+                        setWidth(null);
+                    break;
+                case "datetimeField":
+                    field = Field.
+                        datetime(name, label).
+                        setWidth(null);
+                    break;
+                case "dateRangeField":
+                    field = Field.
+                        dateRange(name, label).
+                        setWidth(null);
+                    break;
+                case "datetimeRangeField":
+                    field = Field.
+                        datetimeRange(name, label).
+                        setWidth(null);
+                    break;
+                case "cascaderField":
+                    field = Field.
+                        cascader(name, label).
+                        setApi(api).
+                        setWidth(null).
+                        setOptions((List<Cascader.Option>) options);
+                    break;
+                case "treeSelectField":
+                    field = Field.
+                        treeSelect(name, label).
+                        setWidth(null).
+                        setTreeData((List<TreeSelect.TreeData>) options);
+                    break;
+            }
+
+            if (field != null) {
+                search.setItems(field);
+            }
+        }
+
+        return search;
     }
 
     // 列表页标题

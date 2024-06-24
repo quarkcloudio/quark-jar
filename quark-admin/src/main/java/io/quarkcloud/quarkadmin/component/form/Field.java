@@ -260,6 +260,14 @@ public class Field {
         return new Search().setName(name).setLabel(label);
     }
 
+    public static SelectField select(String name) {
+        return new SelectField().setName(name);
+    }
+
+    public static SelectField select(String name, String label) {
+        return new SelectField().setName(name).setLabel(label);
+    }
+
     public static SelectField selectField(String name) {
         return new SelectField().setName(name);
     }
