@@ -304,6 +304,10 @@ public class ResourceImpl implements Resource {
             }
         }
 
+        if (searches == null) {
+            return search;
+        }
+
         // 解析搜索项
         for (Object v : searches) {
 
@@ -466,7 +470,7 @@ public class ResourceImpl implements Resource {
 
     // 组件渲染
     public Object indexRender(Context context) {
-        Object body = indexComponentRender(context, "xxx");
+        Object body = indexComponentRender(context, null);
         return this.pageComponentRender(context, body);
     }
 }
