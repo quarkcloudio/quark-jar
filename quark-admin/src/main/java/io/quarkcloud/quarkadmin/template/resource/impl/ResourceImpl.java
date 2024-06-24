@@ -294,6 +294,8 @@ public class ResourceImpl implements Resource {
     // 列表页组件渲染
     public Object indexComponentRender(Context ctx, Object data) {
         Object component;
+
+        // 表格组件
         Table table = new Table();
 
         // 列表标题
