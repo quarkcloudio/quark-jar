@@ -1,6 +1,7 @@
 package io.quarkcloud.quarkadmin.component.descriptions;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import io.quarkcloud.quarkadmin.component.Component;
 import lombok.Data;
@@ -58,4 +59,9 @@ public class Descriptions extends Component {
         this.size = "default";
     }
 
+    // 组件Style
+    public Descriptions setStyle(Map<String, Object> style) {
+        this.style = style;
+        return this;
+    }
 }

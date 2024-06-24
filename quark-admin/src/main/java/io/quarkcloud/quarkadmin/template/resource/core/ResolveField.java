@@ -9,6 +9,7 @@ import java.util.Map;
 import io.quarkcloud.quarkadmin.component.form.fields.SelectField;
 import io.quarkcloud.quarkadmin.component.form.fields.SwitchField;
 import io.quarkcloud.quarkadmin.component.form.fields.TreeSelect;
+import io.quarkcloud.quarkadmin.component.descriptions.Descriptions;
 import io.quarkcloud.quarkadmin.component.form.fields.Cascader;
 import io.quarkcloud.quarkadmin.component.form.fields.Checkbox;
 import io.quarkcloud.quarkadmin.component.form.fields.Radio;
@@ -29,8 +30,11 @@ public class ResolveField {
     // 表格行为列宽度
     public int tableActionColumnWidth;
 
-    // 列表行为列
+    // 列表行为
     public List<Object> tableRowActions;
+
+    // 详情页行为
+    public List<Object> detailActions;
 
     // 构造函数
     public ResolveField() {}
@@ -53,9 +57,15 @@ public class ResolveField {
         return this;
     }
 
-    // 列表行为列
+    // 列表行为
     public ResolveField setTableRowActions(List<Object> tableRowActions) {
         this.tableRowActions = tableRowActions;
+        return this;
+    }
+
+    // 列表行为
+    public ResolveField setDetailActions(List<Object> detailActions) {
+        this.detailActions = detailActions;
         return this;
     }
 
@@ -76,7 +86,7 @@ public class ResolveField {
             Object isShown = new Object();
             boolean hasMethod = false;
             try {
-                isShown = field.getClass().getMethod("IsShownOnIndex").invoke(field);
+                isShown = field.getClass().getMethod("isShownOnIndex").invoke(field);
                 hasMethod = true;
             } catch (Exception e) {
                 hasMethod = false;
@@ -260,46 +270,286 @@ public class ResolveField {
     // 创建页字段
     public List<Object> creationFields(Context ctx) {
         List<Object> items = new ArrayList<>();
+
+        // 获取字段
+        fields = this.getFields(ctx);
+
+        // 判断是否为空
+        if (fields == null) {
+            return items;
+        }
+
+        // 遍历
+        for (Object field : fields) {
+            Object isShown = new Object();
+            boolean hasMethod = false;
+            try {
+                isShown = field.getClass().getMethod("isShownOnCreation").invoke(field);
+                hasMethod = true;
+            } catch (Exception e) {
+                hasMethod = false;
+            }
+
+            if (hasMethod) {
+                if (isShown instanceof Boolean) {
+                    if ((Boolean) isShown) {
+                        items.add(field);
+                    }
+                }
+            }
+        }
+
         return items;
     }
 
     // 不包含When组件内字段的创建页字段
     public List<Object> creationFieldsWithoutWhen(Context ctx) {
         List<Object> items = new ArrayList<>();
+
+        // 获取字段
+        fields = this.getFieldsWithoutWhen(ctx);
+
+        // 判断是否为空
+        if (fields == null) {
+            return items;
+        }
+
+        // 遍历
+        for (Object field : fields) {
+            Object isShown = new Object();
+            boolean hasMethod = false;
+            try {
+                isShown = field.getClass().getMethod("isShownOnCreation").invoke(field);
+                hasMethod = true;
+            } catch (Exception e) {
+                hasMethod = false;
+            }
+
+            if (hasMethod) {
+                if (isShown instanceof Boolean) {
+                    if ((Boolean) isShown) {
+                        items.add(field);
+                    }
+                }
+            }
+        }
+
         return items;
     }
 
     // 包裹在组件内的创建页字段
     public List<Object> creationFieldsWithinComponents(Context ctx) {
-        return null;
+        List<Object> items = creationFormFieldsParser(ctx, fields);
+        return items;
     }
 
     // 解析创建页表单组件内的字段
-    public List<Object> creationFormFieldsParser(Context ctx, List<Object> fields) {
+    public List<Object> creationFormFieldsParser(Context ctx, Object fields) {
         List<Object> items = new ArrayList<>();
+
+        // 解析字段
+        if (fields instanceof List<?>) {
+            List<?> fieldList = (List<?>) fields;
+            for (Object obj : fieldList) {
+                try {
+                    // 检查是否有Body字段
+                    boolean hasBody = obj.getClass().getField("body") != null;
+
+                    if (hasBody) {
+                        // 获取Body字段的内容值
+                        Object body = obj.getClass().getField("body").get(obj);
+
+                        // 递归解析值
+                        Object parsedFields = creationFormFieldsParser(ctx, body);
+
+                        // 更新Body字段的值
+                        obj.getClass().getField("body").set(obj, parsedFields);
+
+                        items.add(obj);
+                    } else {
+                        // 获取Component字段的值
+                        String component = (String) obj.getClass().getSuperclass().getDeclaredField("component").get(obj);
+
+                        // 如果Component包含"Field"，则进行进一步处理
+                        if (component.contains("field")) {
+
+                            // 判断是否在创建页面显示
+                            Object isShown = new Object();
+                            boolean hasMethod = false;
+                            try {
+                                isShown = obj.getClass().getMethod("isShownOnCreation").invoke(obj);
+                                hasMethod = true;
+                            } catch (Exception e) {
+                                hasMethod = false;
+                            }
+                
+                            if (hasMethod) {
+                                if (isShown instanceof Boolean) {
+                                    if ((Boolean) isShown) {
+                                        try {
+                                            Method method = obj.getClass().getMethod("buildFrontendRules", String.class);
+                                            method.invoke(obj, context.request.getQueryString());
+                                        } catch (NoSuchMethodException | SecurityException | IllegalAccessException
+                                                | InvocationTargetException e) {
+                                            e.printStackTrace();
+                                        }
+                                        items.add(obj);
+                                    }
+                                }
+                            }
+                        } else {
+                            items.add(obj);
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
         return items;
     }
 
     // 编辑页字段
     public List<Object> updateFields(Context ctx) {
         List<Object> items = new ArrayList<>();
+
+        // 获取字段
+        fields = this.getFields(ctx);
+
+        // 判断是否为空
+        if (fields == null) {
+            return items;
+        }
+
+        // 遍历
+        for (Object field : fields) {
+            Object isShown = new Object();
+            boolean hasMethod = false;
+            try {
+                isShown = field.getClass().getMethod("isShownOnUpdate").invoke(field);
+                hasMethod = true;
+            } catch (Exception e) {
+                hasMethod = false;
+            }
+
+            if (hasMethod) {
+                if (isShown instanceof Boolean) {
+                    if ((Boolean) isShown) {
+                        items.add(field);
+                    }
+                }
+            }
+        }
+
         return items;
     }
 
     // 不包含When组件内字段的编辑页字段
     public List<Object> updateFieldsWithoutWhen(Context ctx) {
         List<Object> items = new ArrayList<>();
+
+        // 获取字段
+        fields = this.getFieldsWithoutWhen(ctx);
+
+        // 判断是否为空
+        if (fields == null) {
+            return items;
+        }
+
+        // 遍历
+        for (Object field : fields) {
+            Object isShown = new Object();
+            boolean hasMethod = false;
+            try {
+                isShown = field.getClass().getMethod("isShownOnUpdate").invoke(field);
+                hasMethod = true;
+            } catch (Exception e) {
+                hasMethod = false;
+            }
+
+            if (hasMethod) {
+                if (isShown instanceof Boolean) {
+                    if ((Boolean) isShown) {
+                        items.add(field);
+                    }
+                }
+            }
+        }
+
         return items;
     }
 
     // 包裹在组件内的编辑页字段
     public List<Object> updateFieldsWithinComponents(Context ctx) {
-        return null;
+        List<Object> items = updateFormFieldsParser(ctx, fields);
+        return items;
     }
 
     // 解析编辑页表单组件内的字段
-    public List<Object> updateFormFieldsParser(Context ctx, List<Object> fields) {
+    public List<Object> updateFormFieldsParser(Context ctx, Object fields) {
         List<Object> items = new ArrayList<>();
+
+        // 解析字段
+        if (fields instanceof List<?>) {
+            List<?> fieldList = (List<?>) fields;
+            for (Object obj : fieldList) {
+                try {
+                    // 检查是否有Body字段
+                    boolean hasBody = obj.getClass().getField("body") != null;
+
+                    if (hasBody) {
+                        // 获取Body字段的内容值
+                        Object body = obj.getClass().getField("body").get(obj);
+
+                        // 递归解析值
+                        Object parsedFields = updateFormFieldsParser(ctx, body);
+
+                        // 更新Body字段的值
+                        obj.getClass().getField("body").set(obj, parsedFields);
+
+                        items.add(obj);
+                    } else {
+                        // 获取Component字段的值
+                        String component = (String) obj.getClass().getSuperclass().getDeclaredField("component").get(obj);
+
+                        // 如果Component包含"Field"，则进行进一步处理
+                        if (component.contains("field")) {
+
+                            // 判断是否在创建页面显示
+                            Object isShown = new Object();
+                            boolean hasMethod = false;
+                            try {
+                                isShown = obj.getClass().getMethod("isShownOnUpdate").invoke(obj);
+                                hasMethod = true;
+                            } catch (Exception e) {
+                                hasMethod = false;
+                            }
+                
+                            if (hasMethod) {
+                                if (isShown instanceof Boolean) {
+                                    if ((Boolean) isShown) {
+                                        try {
+                                            Method method = obj.getClass().getMethod("buildFrontendRules", String.class);
+                                            method.invoke(obj, context.request.getQueryString());
+                                        } catch (NoSuchMethodException | SecurityException | IllegalAccessException
+                                                | InvocationTargetException e) {
+                                            e.printStackTrace();
+                                        }
+                                        items.add(obj);
+                                    }
+                                }
+                            }
+                        } else {
+                            items.add(obj);
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
         return items;
     }
 
@@ -339,12 +589,115 @@ public class ResolveField {
     // 详情页字段
     public List<Object> detailFields(Context ctx) {
         List<Object> items = new ArrayList<>();
+
+        // 获取字段
+        fields = this.getFields(ctx);
+
+        // 判断是否为空
+        if (fields == null) {
+            return items;
+        }
+
+        // 遍历
+        for (Object field : fields) {
+            Object isShown = new Object();
+            boolean hasMethod = false;
+            try {
+                isShown = field.getClass().getMethod("isShownOnDetail").invoke(field);
+                hasMethod = true;
+            } catch (Exception e) {
+                hasMethod = false;
+            }
+
+            if (hasMethod) {
+                if (isShown instanceof Boolean) {
+                    if ((Boolean) isShown) {
+                        items.add(field);
+                    }
+                }
+            }
+        }
+
         return items;
     }
 
     // 包裹在组件内的详情页字段
     public Object detailFieldsWithinComponents(Context ctx, Map<String, Object> data) {
         List<Object> items = new ArrayList<>();
+        String componentType = "description";
+
+        for (Object v : fields) {
+            try {
+                // 检查是否有Body字段
+                boolean hasBody = v.getClass().getField("body") != null;
+
+                // 解析body数据
+                if (hasBody) {
+                    Object body = v.getClass().getField("body").get(v);
+                    List<Object> subItems = new ArrayList<>();
+                    for (Object sv : (List<?>) body) {
+                        Object isShown = new Object();
+                        boolean hasMethod = false;
+                        try {
+                            isShown = sv.getClass().getMethod("isShownOnDetail").invoke(sv);
+                            hasMethod = true;
+                        } catch (Exception e) {
+                            hasMethod = false;
+                        }
+            
+                        if (hasMethod) {
+                            if (isShown instanceof Boolean) {
+                                if ((Boolean) isShown) {
+                                    Object getColumn = fieldToColumn(ctx, sv);
+                                    subItems.add(getColumn);
+                                }
+                            }
+                        }
+                    }
+
+                    Object descriptions = new Descriptions()
+                        .setStyle(Map.of("padding", "24px"))
+                        .setTitle("")
+                        .setColumn(2)
+                        .setColumns(subItems)
+                        .setDataSource(data)
+                        .setActions(detailActions);
+
+                    v.getClass().getMethod("setBody", Object.class).invoke(v, descriptions);
+                    items.add(v);
+                } else {
+                    Object isShown = new Object();
+                    boolean hasMethod = false;
+                    try {
+                        isShown = v.getClass().getMethod("isShownOnDetail").invoke(v);
+                        hasMethod = true;
+                    } catch (Exception e) {
+                        hasMethod = false;
+                    }
+                    if (hasMethod) {
+                        if (isShown instanceof Boolean) {
+                            if ((Boolean) isShown) {
+                                Object getColumn = fieldToColumn(ctx, v);
+                                items.add(getColumn);
+                            }
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        if ("description".equals(componentType)) {
+            return new Descriptions()
+                .setStyle(Map.of("padding", "24px"))
+                .setTitle("")
+                .setColumn(2)
+                .setColumns(items)
+                .setDataSource(data)
+                .setActions(detailActions);
+        }
+
         return items;
     }
 
