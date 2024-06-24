@@ -53,7 +53,7 @@ public class ResolveAction {
     }
 
     // 表格行内行为
-    public Object getIndexTableRowActions() {
+    public List<Object> getIndexTableRowActions() {
         List<Object> items = new ArrayList<>();
 
         // 判断是否为空

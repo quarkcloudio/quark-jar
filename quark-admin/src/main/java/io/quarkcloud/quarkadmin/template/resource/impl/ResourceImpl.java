@@ -19,6 +19,7 @@ import io.quarkcloud.quarkadmin.component.table.ToolBar;
 import io.quarkcloud.quarkadmin.template.resource.Action;
 import io.quarkcloud.quarkadmin.template.resource.Resource;
 import io.quarkcloud.quarkadmin.template.resource.core.ResolveAction;
+import io.quarkcloud.quarkadmin.template.resource.core.ResolveField;
 
 public class ResourceImpl implements Resource {
 
@@ -277,7 +278,21 @@ public class ResourceImpl implements Resource {
 
     // 列表页表格列
     public Object indexTableColumns(Context ctx) {
-        return null;
+
+        // 获取行为
+        List<Action> getActions = actions(ctx);
+
+        // 获取字段
+        List<Object> getFields = fields(ctx);
+
+        // 获取表格行为
+        List<Object> tableActions = new ResolveAction(getActions, ctx).getIndexTableRowActions();
+
+        return new ResolveField(getFields, ctx).
+            setTableActionColumnTitle(tableActionColumnTitle).
+            setTableActionColumnWidth(tableActionColumnWidth).
+            setTableRowActions(tableActions).
+            indexTableColumns(ctx);
     }
 
     // 列表页批量操作
