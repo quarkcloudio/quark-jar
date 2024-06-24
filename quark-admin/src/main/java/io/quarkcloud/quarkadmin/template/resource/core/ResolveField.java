@@ -9,11 +9,11 @@ import java.util.Map;
 import io.quarkcloud.quarkadmin.component.form.fields.SelectField;
 import io.quarkcloud.quarkadmin.component.form.fields.SwitchField;
 import io.quarkcloud.quarkadmin.component.form.fields.TreeSelect;
-import io.quarkcloud.quarkadmin.component.descriptions.Descriptions;
 import io.quarkcloud.quarkadmin.component.form.fields.Cascader;
 import io.quarkcloud.quarkadmin.component.form.fields.Checkbox;
 import io.quarkcloud.quarkadmin.component.form.fields.Radio;
 import io.quarkcloud.quarkadmin.component.table.Column;
+import io.quarkcloud.quarkadmin.component.descriptions.Descriptions;
 import io.quarkcloud.quarkcore.service.Context;
 
 public class ResolveField {
