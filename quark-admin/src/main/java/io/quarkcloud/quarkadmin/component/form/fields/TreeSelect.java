@@ -719,4 +719,9 @@ public class TreeSelect extends Component {
     public Map<?, ?> getValueEnum() {
         return null;
     }
+
+    // 当前可选项
+    public List<TreeData> getOptions() {
+        return this.treeData;
+    }
 }

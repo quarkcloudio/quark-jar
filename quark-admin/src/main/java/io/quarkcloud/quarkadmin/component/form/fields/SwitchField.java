@@ -578,11 +578,14 @@ public class SwitchField extends Component {
 
     // 获取Option的Labels
     public String getOptionLabels() {
-
         if (this.checkedChildren instanceof String && this.unCheckedChildren instanceof String) {
             return this.checkedChildren + "," + this.unCheckedChildren;
         }
-
         return "";
+    }
+
+    // 当前可选项
+    public Object getOptions() {
+        return Map.of(0, this.unCheckedChildren,1, this.checkedChildren);
     }
 }
