@@ -15,6 +15,7 @@ import io.quarkcloud.quarkadmin.component.form.fields.Radio;
 import io.quarkcloud.quarkadmin.component.table.Column;
 import io.quarkcloud.quarkadmin.component.descriptions.Descriptions;
 import io.quarkcloud.quarkcore.service.Context;
+import io.quarkcloud.quarkcore.util.Reflect;
 
 public class ResolveField {
 
@@ -72,35 +73,16 @@ public class ResolveField {
     // 列表字段
     public List<Object> indexFields(Context ctx) {
         List<Object> items = new ArrayList<>();
-
-        // 获取字段
         fields = this.getFields(ctx);
-
-        // 判断是否为空
         if (fields == null) {
             return items;
         }
-
-        // 遍历
         for (Object field : fields) {
-            Object isShown = new Object();
-            boolean hasMethod = false;
-            try {
-                isShown = field.getClass().getMethod("isShownOnIndex").invoke(field);
-                hasMethod = true;
-            } catch (Exception e) {
-                hasMethod = false;
-            }
-
-            if (hasMethod) {
-                if (isShown instanceof Boolean) {
-                    if ((Boolean) isShown) {
-                        items.add(field);
-                    }
-                }
+            Object isShown = new Reflect(field).invoke("isShownOnIndex");
+            if (isShown!=null && (Boolean) isShown) {
+                items.add(field);
             }
         }
-
         return items;
     }
 
@@ -270,70 +252,32 @@ public class ResolveField {
     // 创建页字段
     public List<Object> creationFields(Context ctx) {
         List<Object> items = new ArrayList<>();
-
-        // 获取字段
         fields = this.getFields(ctx);
-
-        // 判断是否为空
         if (fields == null) {
             return items;
         }
-
-        // 遍历
         for (Object field : fields) {
-            Object isShown = new Object();
-            boolean hasMethod = false;
-            try {
-                isShown = field.getClass().getMethod("isShownOnCreation").invoke(field);
-                hasMethod = true;
-            } catch (Exception e) {
-                hasMethod = false;
-            }
-
-            if (hasMethod) {
-                if (isShown instanceof Boolean) {
-                    if ((Boolean) isShown) {
-                        items.add(field);
-                    }
-                }
+            Object isShown = new Reflect(field).invoke("isShownOnCreation");
+            if (isShown!=null && (Boolean) isShown) {
+                items.add(field);
             }
         }
-
         return items;
     }
 
     // 不包含When组件内字段的创建页字段
     public List<Object> creationFieldsWithoutWhen(Context ctx) {
         List<Object> items = new ArrayList<>();
-
-        // 获取字段
         fields = this.getFieldsWithoutWhen(ctx);
-
-        // 判断是否为空
         if (fields == null) {
             return items;
         }
-
-        // 遍历
         for (Object field : fields) {
-            Object isShown = new Object();
-            boolean hasMethod = false;
-            try {
-                isShown = field.getClass().getMethod("isShownOnCreation").invoke(field);
-                hasMethod = true;
-            } catch (Exception e) {
-                hasMethod = false;
-            }
-
-            if (hasMethod) {
-                if (isShown instanceof Boolean) {
-                    if ((Boolean) isShown) {
-                        items.add(field);
-                    }
-                }
+            Object isShown = new Reflect(field).invoke("isShownOnCreation");
+            if (isShown!=null && (Boolean) isShown) {
+                items.add(field);
             }
         }
-
         return items;
     }
 
@@ -413,70 +357,32 @@ public class ResolveField {
     // 编辑页字段
     public List<Object> updateFields(Context ctx) {
         List<Object> items = new ArrayList<>();
-
-        // 获取字段
         fields = this.getFields(ctx);
-
-        // 判断是否为空
         if (fields == null) {
             return items;
         }
-
-        // 遍历
         for (Object field : fields) {
-            Object isShown = new Object();
-            boolean hasMethod = false;
-            try {
-                isShown = field.getClass().getMethod("isShownOnUpdate").invoke(field);
-                hasMethod = true;
-            } catch (Exception e) {
-                hasMethod = false;
-            }
-
-            if (hasMethod) {
-                if (isShown instanceof Boolean) {
-                    if ((Boolean) isShown) {
-                        items.add(field);
-                    }
-                }
+            Object isShown = new Reflect(field).invoke("isShownOnUpdate");
+            if (isShown!=null && (Boolean) isShown) {
+                items.add(field);
             }
         }
-
         return items;
     }
 
     // 不包含When组件内字段的编辑页字段
     public List<Object> updateFieldsWithoutWhen(Context ctx) {
         List<Object> items = new ArrayList<>();
-
-        // 获取字段
         fields = this.getFieldsWithoutWhen(ctx);
-
-        // 判断是否为空
         if (fields == null) {
             return items;
         }
-
-        // 遍历
         for (Object field : fields) {
-            Object isShown = new Object();
-            boolean hasMethod = false;
-            try {
-                isShown = field.getClass().getMethod("isShownOnUpdate").invoke(field);
-                hasMethod = true;
-            } catch (Exception e) {
-                hasMethod = false;
-            }
-
-            if (hasMethod) {
-                if (isShown instanceof Boolean) {
-                    if ((Boolean) isShown) {
-                        items.add(field);
-                    }
-                }
+            Object isShown = new Reflect(field).invoke("isShownOnUpdate");
+            if (isShown!=null && (Boolean) isShown) {
+                items.add(field);
             }
         }
-
         return items;
     }
 
@@ -589,35 +495,16 @@ public class ResolveField {
     // 详情页字段
     public List<Object> detailFields(Context ctx) {
         List<Object> items = new ArrayList<>();
-
-        // 获取字段
         fields = this.getFields(ctx);
-
-        // 判断是否为空
         if (fields == null) {
             return items;
         }
-
-        // 遍历
         for (Object field : fields) {
-            Object isShown = new Object();
-            boolean hasMethod = false;
-            try {
-                isShown = field.getClass().getMethod("isShownOnDetail").invoke(field);
-                hasMethod = true;
-            } catch (Exception e) {
-                hasMethod = false;
-            }
-
-            if (hasMethod) {
-                if (isShown instanceof Boolean) {
-                    if ((Boolean) isShown) {
-                        items.add(field);
-                    }
-                }
+            Object isShown = new Reflect(field).invoke("isShownOnDetail");
+            if (isShown!=null && (Boolean) isShown) {
+                items.add(field);
             }
         }
-
         return items;
     }
 
@@ -629,29 +516,18 @@ public class ResolveField {
         for (Object v : fields) {
             try {
                 // 检查是否有Body字段
-                boolean hasBody = v.getClass().getField("body") != null;
+                Reflect bodyReflect = new Reflect(v);
+                boolean bodyFieldExist = bodyReflect.checkFieldExist("body");
 
                 // 解析body数据
-                if (hasBody) {
-                    Object body = v.getClass().getField("body").get(v);
+                if (bodyFieldExist) {
+                    Object body = bodyReflect.getFieldValue();
                     List<Object> subItems = new ArrayList<>();
                     for (Object sv : (List<?>) body) {
-                        Object isShown = new Object();
-                        boolean hasMethod = false;
-                        try {
-                            isShown = sv.getClass().getMethod("isShownOnDetail").invoke(sv);
-                            hasMethod = true;
-                        } catch (Exception e) {
-                            hasMethod = false;
-                        }
-            
-                        if (hasMethod) {
-                            if (isShown instanceof Boolean) {
-                                if ((Boolean) isShown) {
-                                    Object getColumn = fieldToColumn(ctx, sv);
-                                    subItems.add(getColumn);
-                                }
-                            }
+                        Object isShown = new Reflect(sv).invoke("isShownOnDetail");
+                        if (isShown!=null && (Boolean) isShown) {
+                            Object getColumn = fieldToColumn(ctx, sv);
+                            items.add(getColumn);
                         }
                     }
 
@@ -666,21 +542,10 @@ public class ResolveField {
                     v.getClass().getMethod("setBody", Object.class).invoke(v, descriptions);
                     items.add(v);
                 } else {
-                    Object isShown = new Object();
-                    boolean hasMethod = false;
-                    try {
-                        isShown = v.getClass().getMethod("isShownOnDetail").invoke(v);
-                        hasMethod = true;
-                    } catch (Exception e) {
-                        hasMethod = false;
-                    }
-                    if (hasMethod) {
-                        if (isShown instanceof Boolean) {
-                            if ((Boolean) isShown) {
-                                Object getColumn = fieldToColumn(ctx, v);
-                                items.add(getColumn);
-                            }
-                        }
+                    Object isShown = new Reflect(v).invoke("isShownOnDetail");
+                    if (isShown!=null && (Boolean) isShown) {
+                        Object getColumn = fieldToColumn(ctx, v);
+                        items.add(getColumn);
                     }
                 }
             } catch (Exception e) {
@@ -704,105 +569,48 @@ public class ResolveField {
     // 导出字段
     public List<Object> exportFields(Context ctx) {
         List<Object> items = new ArrayList<>();
-
-        // 获取字段
         fields = this.getFields(ctx);
-
-        // 判断是否为空
         if (fields == null) {
             return items;
         }
-
-        // 遍历
         for (Object field : fields) {
-            Object isShown = new Object();
-            boolean hasMethod = false;
-            try {
-                isShown = field.getClass().getMethod("IsShownOnExport").invoke(field);
-                hasMethod = true;
-            } catch (Exception e) {
-                hasMethod = false;
-            }
-
-            if (hasMethod) {
-                if (isShown instanceof Boolean) {
-                    if ((Boolean) isShown) {
-                        items.add(field);
-                    }
-                }
+            Object isShown = new Reflect(field).invoke("isShownOnExport");
+            if (isShown!=null && (Boolean) isShown) {
+                items.add(field);
             }
         }
-
         return items;
     }
 
     // 导入字段
     public List<Object> importFields(Context ctx) {
         List<Object> items = new ArrayList<>();
-
-        // 获取字段
         fields = this.getFields(ctx);
-
-        // 判断是否为空
         if (fields == null) {
             return items;
         }
-
-        // 遍历
         for (Object field : fields) {
-            Object isShown = new Object();
-            boolean hasMethod = false;
-            try {
-                isShown = field.getClass().getMethod("isShownOnImport").invoke(field);
-                hasMethod = true;
-            } catch (Exception e) {
-                hasMethod = false;
-            }
-
-            if (hasMethod) {
-                if (isShown instanceof Boolean) {
-                    if ((Boolean) isShown) {
-                        items.add(field);
-                    }
-                }
+            Object isShown = new Reflect(field).invoke("isShownOnImport");
+            if (isShown!=null && (Boolean) isShown) {
+                items.add(field);
             }
         }
-
         return items;
     }
 
     // 不包含When组件内字段的导入字段
     public List<Object> importFieldsWithoutWhen(Context ctx) {
         List<Object> items = new ArrayList<>();
-
-        // 获取字段
         fields = this.getFieldsWithoutWhen(ctx);
-
-        // 判断是否为空
         if (fields == null) {
             return items;
         }
-
-        // 遍历
         for (Object field : fields) {
-            Object isShown = new Object();
-            boolean hasMethod = false;
-            try {
-                isShown = field.getClass().getMethod("isShownOnImport").invoke(field);
-                hasMethod = true;
-            } catch (Exception e) {
-                hasMethod = false;
-            }
-
-            if (hasMethod) {
-                if (isShown instanceof Boolean) {
-                    if ((Boolean) isShown) {
-                        items.add(field);
-                    }
-                }
+            Object isShown = new Reflect(field).invoke("isShownOnImport");
+            if (isShown!=null && (Boolean) isShown) {
+                items.add(field);
             }
         }
-
         return items;
     }
 
@@ -818,29 +626,21 @@ public class ResolveField {
 
     public List<Object> findFields(Object fields, boolean when) {
         List<Object> items = new ArrayList<>();
-
         if (fields instanceof List<?>) {
             List<?> fieldsList = (List<?>) fields;
             for (Object v : fieldsList) {
-                boolean hasBody = false;
-                Object body = new Object();
-                try {
-                    body = v.getClass().getField("body").get(v);
-                    hasBody = true;
-                } catch (NoSuchFieldException | IllegalAccessException e) {
-                    hasBody = false;
-                }
-                if (hasBody) {
+                Reflect bodyReflect = new Reflect(v);
+                boolean bodyFieldExist = bodyReflect.checkFieldExist("body");
+                if (bodyFieldExist) {
+                    Object body = bodyReflect.getFieldValue();
                     List<Object> getItems = findFields(body, true);
                     if (getItems != null && !getItems.isEmpty()) {
                         items.addAll(getItems);
                     }
                 } else {
-                    Object component;
                     try {
-                        component = v.getClass().getSuperclass().getDeclaredField("component").get(v);
-                        String getComponent = (String) component;
-                        if (getComponent != null && getComponent.contains("Field")) {
+                        String component = (String) v.getClass().getSuperclass().getDeclaredField("component").get(v);
+                        if (component != null && component.contains("Field")) {
                             items.add(v);
                             if (when) {
                                 List<Object> whenFields = getWhenFields(v);
@@ -863,42 +663,33 @@ public class ResolveField {
     // 获取When组件中的字段
     public List<Object> getWhenFields(Object item) {
         List<Object> items = new ArrayList<>();
-        try {
-            item.getClass().getDeclaredField("when");
-        } catch (NoSuchFieldException e) {
+
+        // 反射
+        Reflect itemReflect = new Reflect(item);
+
+        // 是否存在getWhen方法
+        boolean getWhenMethodExist = itemReflect.checkMethodExist("getWhen");
+        if (!getWhenMethodExist) {
             return items;
         }
 
-        Object getWhen = new Object();
-        try {
-            getWhen = item.getClass().getMethod("getWhen").invoke(item);
-        } catch (Exception e) {
+        // 获取When组件
+        Object getWhen = itemReflect.invoke("getWhen");
+
+        // 判断是否存在items字段
+        Reflect whenReflect = new Reflect(getWhen);
+        boolean itemsFieldExist = whenReflect.checkFieldExist("items");
+        if (!itemsFieldExist) {
             return items;
         }
-
-        Object whenItems = new Object();
-        boolean hasWhenItems = false;
-        try {
-            whenItems = getWhen.getClass().getField("items").get(getWhen);
-        } catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
-            e.printStackTrace();
-        }
-        if (!hasWhenItems) {
-            return items;
-        }
-
+        Object whenItems = whenReflect.getFieldValue("items");
         if (whenItems instanceof List<?>) {
             List<?> whenItemsList = (List<?>) whenItems;
             for (Object v : whenItemsList) {
-                Object body = new Object();
-                boolean hasBody = false;
-                try {
-                    body = v.getClass().getField("body").get(v);
-                    hasBody = true;
-                } catch (NoSuchFieldException | IllegalAccessException e) {
-                    hasBody = false;
-                }
-                if (hasBody) {
+                Reflect bodyReflect = new Reflect(v);
+                boolean bodyFieldExist = bodyReflect.checkFieldExist("body");
+                if (bodyFieldExist) {
+                    Object body = bodyReflect.getFieldValue();
                     if (body instanceof List<?>) {
                         items.addAll((List<?>) body);
                     } else {
