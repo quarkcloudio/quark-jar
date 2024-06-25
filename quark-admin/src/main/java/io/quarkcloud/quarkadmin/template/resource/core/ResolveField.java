@@ -371,7 +371,7 @@ public class ResolveField {
                         String component = (String) obj.getClass().getSuperclass().getDeclaredField("component").get(obj);
 
                         // 如果Component包含"Field"，则进行进一步处理
-                        if (component.contains("field")) {
+                        if (component.contains("Field")) {
 
                             // 判断是否在创建页面显示
                             Object isShown = new Object();
@@ -514,7 +514,7 @@ public class ResolveField {
                         String component = (String) obj.getClass().getSuperclass().getDeclaredField("component").get(obj);
 
                         // 如果Component包含"Field"，则进行进一步处理
-                        if (component.contains("field")) {
+                        if (component.contains("Field")) {
 
                             // 判断是否在创建页面显示
                             Object isShown = new Object();
@@ -840,7 +840,7 @@ public class ResolveField {
                     try {
                         component = v.getClass().getSuperclass().getDeclaredField("component").get(v);
                         String getComponent = (String) component;
-                        if (getComponent != null && getComponent.contains("field")) {
+                        if (getComponent != null && getComponent.contains("Field")) {
                             items.add(v);
                             if (when) {
                                 List<Object> whenFields = getWhenFields(v);

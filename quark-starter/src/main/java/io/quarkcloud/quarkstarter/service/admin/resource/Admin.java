@@ -18,6 +18,9 @@ public class Admin extends ResourceImpl {
 
     // 字段
     public List<Object> fields(Context ctx) {
-        return Arrays.asList(Field.text("name", "名称"));
+        return Arrays.asList(
+            Field.text("username", "用户名"),
+            Field.text("nickname", "昵称")
+        );
     }
 }

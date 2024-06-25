@@ -293,11 +293,14 @@ public class ResourceImpl implements Resource {
         // 获取表格行为
         List<Object> tableActions = new ResolveAction(getActions, ctx).getIndexTableRowActions();
 
-        return new ResolveField(getFields, ctx).
+        // 获取表格列
+        List<Object> tableColumns = new ResolveField(getFields, ctx).
             setTableActionColumnTitle(tableActionColumnTitle).
             setTableActionColumnWidth(tableActionColumnWidth).
             setTableRowActions(tableActions).
             indexTableColumns(ctx);
+
+        return tableColumns;
     }
 
     // 列表页批量操作
