@@ -13,15 +13,7 @@ import io.quarkcloud.quarkcore.service.Context;
 public class Admin extends ResourceImpl {
 
     public Admin() {
-        super();
         this.title = "管理员";
-        this.tableTitleSuffix = "列表";
-        this.tableActionColumnTitle = "操作";
-        this.tableActionColumnWidth = 200;
-        this.tablePolling = 3000;
-        this.withExport = true;
-        this.backIcon = true;
-        this.queryOrder= "id desc";
     }
 
     // 字段

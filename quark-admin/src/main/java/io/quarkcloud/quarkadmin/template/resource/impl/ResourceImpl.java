@@ -81,6 +81,11 @@ public class ResourceImpl implements Resource {
         if (getClass().isAnnotationPresent(AdminResource.class)) {
             annotationClass = getClass().getAnnotation(AdminResource.class);
         }
+
+        this.tableTitleSuffix = "列表";
+        this.tableActionColumnTitle = "操作";
+        this.tableActionColumnWidth = 200;
+        this.backIcon = true;
     }
 
     // 获取标题
