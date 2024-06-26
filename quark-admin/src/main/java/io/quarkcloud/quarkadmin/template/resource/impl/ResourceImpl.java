@@ -493,7 +493,6 @@ public class ResourceImpl implements Resource {
 
     // 组件渲染
     public Object indexRender(Context context) {
-        Object body = indexComponentRender(context, null);
-        return this.pageComponentRender(context, body);
+        return this.pageComponentRender(context, indexComponentRender(context, null));
     }
 }
