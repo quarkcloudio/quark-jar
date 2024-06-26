@@ -6,15 +6,10 @@ import io.quarkcloud.quarkadmin.template.resource.Search;
 import io.quarkcloud.quarkcore.service.Context;
 
 public class SearchImpl implements Search {
-    private String column;
-    private String name;
-    private String component;
-    private String api;
-
-    // 初始化
-    public SearchImpl(Context ctx) {
-        this.component = "textField";
-    }
+    public String column;
+    public String name;
+    public String component;
+    public String api;
 
     // 获取字段名
     public String getColumn(Object search) {
