@@ -29,59 +29,156 @@ public class Reflect {
 
     // 检查字段是否存在
     public boolean checkFieldExist() {
+        boolean checkResult = false;
+
+        // 检查字段名
         if (fieldName==null || obj==null) {
-            return false;
+            return checkResult;
         }
+
+        // 检查字段
         try {
             Field field = obj.getClass().getDeclaredField(fieldName);
-            return field != null; // 字段存在
+            if (field != null) {
+                checkResult = true;
+            }
         } catch (NoSuchFieldException e) {
-            return false; // 字段不存在
+            checkResult = false;
         }
+        if (checkResult) {
+            return checkResult;
+        }
+
+        // 检查父类字段
+        try {
+            Field superField = obj.getClass().getSuperclass().getDeclaredField(fieldName);
+            if (superField != null) {
+                checkResult = true;
+            }
+        } catch (NoSuchFieldException e) {
+            checkResult = false;
+        }
+
+        return checkResult;
     }
 
     // 检查字段是否存在
     public boolean checkFieldExist(String fieldName) {
+        boolean checkResult = false;
+
+        // 检查字段名
         if (fieldName==null || obj==null) {
-            return false;
+            return checkResult;
         }
 
+        // 检查字段
         try {
             Field field = obj.getClass().getDeclaredField(fieldName);
-            return field != null; // 字段存在
+            if (field != null) {
+                checkResult = true;
+            }
         } catch (NoSuchFieldException e) {
-            return false; // 字段不存在
+            checkResult = false;
         }
+        if (checkResult) {
+            return checkResult;
+        }
+
+        // 检查父类字段
+        try {
+            Field superField = obj.getClass().getSuperclass().getDeclaredField(fieldName);
+            if (superField != null) {
+                checkResult = true;
+            }
+        } catch (NoSuchFieldException e) {
+            checkResult = false;
+        }
+
+        return checkResult;
     }
 
     // 获取字段值
     public Object getFieldValue() {
+        Field field;
         if (fieldName==null || obj==null) {
-            return false;
+            return null;
         }
         try {
-            Field field = obj.getClass().getDeclaredField(fieldName);
-            field.setAccessible(true); // 使私有字段可访问
-            return field.get(obj); // 获取字段的值
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
-            return null; // 字段不存在或不可访问
+            field = obj.getClass().getDeclaredField(fieldName);
+        } catch (NoSuchFieldException e) {
+            field = null;
         }
+        if (field!=null) {
+            field.setAccessible(true);
+            try {
+                return field.get(obj);
+            } catch (IllegalArgumentException | IllegalAccessException e) {
+                return null;
+            }
+        }
+
+        // 检查父类字段
+        try {
+            Field superField = obj.getClass().getSuperclass().getDeclaredField(fieldName);
+            if (superField != null) {
+                field = superField;
+            }
+        } catch (NoSuchFieldException e) {
+            field = null;
+        }
+
+        if (field!=null) {
+            field.setAccessible(true); // 使私有字段可访问
+            try {
+                return field.get(obj);
+            } catch (IllegalArgumentException | IllegalAccessException e) {
+                return null;
+            }
+        }
+
+        return null;
     }
 
     // 获取字段值
     public Object getFieldValue(String fieldName) {
+        Field field;
         if (fieldName==null || obj==null) {
-            return false;
+            return null;
         }
         try {
-            Field field = obj.getClass().getDeclaredField(fieldName);
-            field.setAccessible(true); // 使私有字段可访问
-            return field.get(obj); // 获取字段的值
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
-            return null; // 字段不存在或不可访问
+            field = obj.getClass().getDeclaredField(fieldName);
+        } catch (NoSuchFieldException e) {
+            field = null;
         }
+        if (field!=null) {
+            field.setAccessible(true);
+            try {
+                return field.get(obj);
+            } catch (IllegalArgumentException | IllegalAccessException e) {
+                return null;
+            }
+        }
+
+        // 检查父类字段
+        try {
+            Field superField = obj.getClass().getSuperclass().getDeclaredField(fieldName);
+            if (superField != null) {
+                field = superField;
+            }
+        } catch (NoSuchFieldException e) {
+            field = null;
+        }
+
+        if (field!=null) {
+            field.setAccessible(true); // 使私有字段可访问
+            try {
+                return field.get(obj);
+            } catch (IllegalArgumentException | IllegalAccessException e) {
+                return null;
+            }
+        }
+
+        return null;
     }
 
     // 检查方法是否存在

@@ -122,128 +122,120 @@ public class ResolveField {
     // 将表单项转换为表格列
     public Object fieldToColumn(Context ctx, Object field) {
         Column column = null;
+        Reflect reflect = new Reflect(field);
+        
+        // 获取字段属性
+        String name = (String) reflect.getFieldValue("name");
+        String label = (String) reflect.getFieldValue("label");
+        String component = (String) reflect.getFieldValue("component");
+        String align = (String) reflect.getFieldValue("align");
+        Object fixed = reflect.getFieldValue("getField");
+        boolean editable = (boolean) reflect.getFieldValue("editable");
+        boolean ellipsis = (boolean) reflect.getFieldValue("ellipsis");
+        boolean copyable = (boolean) reflect.getFieldValue("copyable");
+        Object filters =  reflect.getFieldValue("filters");
+        int order = (int) reflect.getFieldValue("order");
+        Object sorter = reflect.getFieldValue("sorter");
+        int span = (int) reflect.getFieldValue("span");
+        int columnWidth = (int) reflect.getFieldValue("columnWidth");
 
-        // 使用反射获取字段的各种属性
-        try {
-            // 获取字段的具体类型
-            Class<?> fieldClass = field.getClass();
+        // 创建一个通用列对象
+        column = new Column()
+            .setTitle(label)
+            .setAttribute(name)
+            .setAlign(align)
+            .setFixed((String) fixed)
+            .setEllipsis(ellipsis)
+            .setCopyable(copyable)
+            .setFilters(filters)
+            .setOrder(order)
+            .setSorter(sorter)
+            .setSpan(span)
+            .setWidth(columnWidth);
 
-            // 获取字段名、标签、组件类型、对齐方式、固定属性等
-            String name = (String) fieldClass.getField("name").get(field);
-            String label = (String) fieldClass.getField("label").get(field);
-            String component = (String) fieldClass.getField("component").get(field);
-            String align = (String) fieldClass.getField("align").get(field);
-            Object fixed = fieldClass.getField("fixed").get(field);
-            boolean editable = (boolean) fieldClass.getField("editable").get(field);
-            boolean ellipsis = (boolean) fieldClass.getField("ellipsis").get(field);
-            boolean copyable = (boolean) fieldClass.getField("copyable").get(field);
-            Object filters = fieldClass.getField("filters").get(field);
-            int order = (int) fieldClass.getField("order").get(field);
-            Object sorter = fieldClass.getField("sorter").get(field);
-            int span = (int) fieldClass.getField("span").get(field);
-            int columnWidth = (int) fieldClass.getField("columnWidth").get(field);
-
-            // 创建一个通用列对象
-            column = new Column()
-                .setTitle(label)
-                .setAttribute(name)
-                .setAlign(align)
-                .setFixed((String) fixed)
-                .setEllipsis(ellipsis)
-                .setCopyable(copyable)
-                .setFilters(filters)
-                .setOrder(order)
-                .setSorter(sorter)
-                .setSpan(span)
-                .setWidth(columnWidth);
-
-            // 根据组件类型设置特定的值类型和字段属性
-            switch (component) {
-                case "idField":
-                    boolean onIndexDisplayed = (boolean) fieldClass.getField("onIndexDisplayed").get(field);
-                    if (onIndexDisplayed) {
-                        column.setValueType("text");
-                    } else {
-                        return null;
-                    }
-                    break;
-                case "hiddenField":
+        // 根据组件类型设置特定的值类型和字段属性
+        switch (component) {
+            case "idField":
+                boolean onIndexDisplayed = (boolean) reflect.getFieldValue("onIndexDisplayed");
+                if (onIndexDisplayed) {
+                    column.setValueType("text");
+                } else {
                     return null;
-                case "textField":
-                    column.setValueType("text");
-                case "textAreaField":
-                    column.setValueType("text");
-                    break;
-                case "treeSelectField":
-                    List<?> treeOptions = ((TreeSelect) field).getOptions();
-                    column.setValueType("treeSelect")
-                        .setFieldProps(Map.of("options", treeOptions));
-                    break;
-                case "cascaderField":
-                    List<?> cascaderOptions = ((Cascader) field).getOptions();
-                    column.setValueType("cascader")
-                        .setFieldProps(Map.of("options", cascaderOptions));
-                    break;
-                case "selectField":
-                    List<?> selectOptions = ((SelectField) field).getOptions();
-                    column.setValueType("select")
-                        .setFieldProps(Map.of("options", selectOptions));
-                    
-                    // 如果设置了过滤项，设置值的枚举
-                    if (filters instanceof Boolean && (boolean) filters) {
-                        Object valueEnum = ((SelectField) field).getValueEnum();
-                        column.setValueEnum(valueEnum);
-                    }
-                    break;
-                case "checkboxField":
-                    List<?> checkboxOptions = ((Checkbox) field).getOptions();
-                    column.setValueType("checkbox")
-                        .setFieldProps(Map.of("options", checkboxOptions));
-                    
-                    // 如果设置了过滤项，设置值的枚举
-                    if (filters instanceof Boolean && (boolean) filters) {
-                        Object valueEnum = ((Checkbox) field).getValueEnum();
-                        column.setValueEnum(valueEnum);
-                    }
-                    break;
-                case "radioField":
-                    List<?> radioOptions = ((Radio) field).getOptions();
-                    column.setValueType("radio")
-                        .setFieldProps(Map.of("options", radioOptions));
-                    
-                    // 如果设置了过滤项，设置值的枚举
-                    if (filters instanceof Boolean && (boolean) filters) {
-                        Object valueEnum = ((Radio) field).getValueEnum();
-                        column.setValueEnum(valueEnum);
-                    }
-                    break;
-                case "switchField":
-                    Object switchOptions = ((SwitchField) field).getOptions();
-                    column.setValueType("select")
-                        .setValueEnum(switchOptions);
-                    
-                    // 如果设置了过滤项，设置值的枚举
-                    if (filters instanceof Boolean && (boolean) filters) {
-                        Object valueEnum = ((SwitchField) field).getValueEnum();
-                        column.setValueEnum(valueEnum);
-                    }
-                    break;
-                case "imageField":
-                    column.setValueType("image");
-                    break;
-                default:
-                    column.setValueType(component);
-                    break;
-            }
+                }
+                break;
+            case "hiddenField":
+                return null;
+            case "textField":
+                column.setValueType("text");
+            case "textAreaField":
+                column.setValueType("text");
+                break;
+            case "treeSelectField":
+                List<?> treeOptions = ((TreeSelect) field).getOptions();
+                column.setValueType("treeSelect")
+                    .setFieldProps(Map.of("options", treeOptions));
+                break;
+            case "cascaderField":
+                List<?> cascaderOptions = ((Cascader) field).getOptions();
+                column.setValueType("cascader")
+                    .setFieldProps(Map.of("options", cascaderOptions));
+                break;
+            case "selectField":
+                List<?> selectOptions = ((SelectField) field).getOptions();
+                column.setValueType("select")
+                    .setFieldProps(Map.of("options", selectOptions));
+                
+                // 如果设置了过滤项，设置值的枚举
+                if (filters instanceof Boolean && (boolean) filters) {
+                    Object valueEnum = ((SelectField) field).getValueEnum();
+                    column.setValueEnum(valueEnum);
+                }
+                break;
+            case "checkboxField":
+                List<?> checkboxOptions = ((Checkbox) field).getOptions();
+                column.setValueType("checkbox")
+                    .setFieldProps(Map.of("options", checkboxOptions));
+                
+                // 如果设置了过滤项，设置值的枚举
+                if (filters instanceof Boolean && (boolean) filters) {
+                    Object valueEnum = ((Checkbox) field).getValueEnum();
+                    column.setValueEnum(valueEnum);
+                }
+                break;
+            case "radioField":
+                List<?> radioOptions = ((Radio) field).getOptions();
+                column.setValueType("radio")
+                    .setFieldProps(Map.of("options", radioOptions));
+                
+                // 如果设置了过滤项，设置值的枚举
+                if (filters instanceof Boolean && (boolean) filters) {
+                    Object valueEnum = ((Radio) field).getValueEnum();
+                    column.setValueEnum(valueEnum);
+                }
+                break;
+            case "switchField":
+                Object switchOptions = ((SwitchField) field).getOptions();
+                column.setValueType("select")
+                    .setValueEnum(switchOptions);
+                
+                // 如果设置了过滤项，设置值的枚举
+                if (filters instanceof Boolean && (boolean) filters) {
+                    Object valueEnum = ((SwitchField) field).getValueEnum();
+                    column.setValueEnum(valueEnum);
+                }
+                break;
+            case "imageField":
+                column.setValueType("image");
+                break;
+            default:
+                column.setValueType(component);
+                break;
+        }
 
-            // 如果可编辑，设置编辑项
-            if (editable) {
-                String editableApi = ctx.getRequest().getRequestURI().replace("/index", "/editable");
-                column.setEditable(component, null, editableApi);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        // 如果可编辑，设置编辑项
+        if (editable) {
+            String editableApi = ctx.getRequest().getRequestURI().replace("/index", "/editable");
+            column.setEditable(component, null, editableApi);
         }
 
         return column;
