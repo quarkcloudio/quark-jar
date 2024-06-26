@@ -326,11 +326,9 @@ public class ResourceImpl implements Resource {
                 search.setExportText("导出").setExportApi(path.replace(":resource", resource));
             }
         }
-
         if (searches == null) {
             return search;
         }
-
         // 解析搜索项
         for (Object v : searches) {
 
@@ -416,12 +414,10 @@ public class ResourceImpl implements Resource {
                         setTreeData((List<TreeSelect.TreeData>) options);
                     break;
             }
-
             if (field != null) {
                 search.setItems(field);
             }
         }
-
         return search;
     }
 
