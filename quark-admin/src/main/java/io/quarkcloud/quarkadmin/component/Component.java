@@ -37,22 +37,16 @@ public class Component {
         if (defaultKey == "" || defaultKey == null) {
             defaultKey = UUID.randomUUID().toString();
         }
-
         if (crypt) {
             MessageDigest md;
             try {
                 md = MessageDigest.getInstance("MD5");
-                
-                // 计算消息的摘要
                 byte[] digest = md.digest(defaultKey.getBytes());
-                
-                // 将摘要转换为十六进制字符串
                 defaultKey = bytesToHex(digest);
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
             }
         }
-
         this.componentKey = this.componentkey = defaultKey;
     }
 
@@ -66,7 +60,6 @@ public class Component {
             }
             hexString.append(hex);
         }
-
         return hexString.toString();
     }
 }
