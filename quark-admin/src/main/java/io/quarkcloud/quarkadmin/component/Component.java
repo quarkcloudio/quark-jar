@@ -13,6 +13,9 @@ public class Component {
     // 组件Key
     public String componentKey;
 
+    // 组件Key
+    public String componentkey;
+
     // 组件
 	public String component;
 
@@ -50,7 +53,7 @@ public class Component {
             }
         }
 
-        this.componentKey = defaultKey;
+        this.componentKey = this.componentkey = defaultKey;
     }
 
     // 将字节数组转换为十六进制字符串

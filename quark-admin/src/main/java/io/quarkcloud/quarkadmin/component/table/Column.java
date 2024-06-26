@@ -3,6 +3,8 @@ package io.quarkcloud.quarkadmin.component.table;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import io.quarkcloud.quarkadmin.component.Component;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,6 +27,7 @@ public class Column extends Component {
     /**
      * 列的对齐方式，left | right | center
      */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String align;
 
     /**
@@ -35,26 +38,31 @@ public class Column extends Component {
     /**
      * 是否固定列，可选 true (等效于 left) left right
      */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public Object fixed;
 
     /**
      * 鼠标悬停时的提示信息
      */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String tooltip;
 
     /**
      * 是否自动缩略
      */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public boolean ellipsis;
 
     /**
      * 是否支持复制
      */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public boolean copyable;
 
     /**
      * 值的枚举，根据枚举值自动显示对应内容
      */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public Object valueEnum;
 
     /**
@@ -85,21 +93,25 @@ public class Column extends Component {
     /**
      * 查询表单中的权重，权重大的列排序靠前
      */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public int order;
 
     /**
      * 是否可排序
      */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public Object sorter;
 
     /**
      * 合并列数
      */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public int span;
 
     /**
      * 列宽度
      */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public int width;
 
     /**
@@ -115,11 +127,13 @@ public class Column extends Component {
     /**
      * 传递给 Form.Item 的配置
      */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public Object formItemProps;
 
     /**
      * 传递给渲染组件的 props 配置
      */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public Object fieldProps;
 
     /**
