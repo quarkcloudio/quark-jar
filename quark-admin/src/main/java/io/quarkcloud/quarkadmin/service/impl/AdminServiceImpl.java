@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
@@ -23,11 +22,12 @@ import io.quarkcloud.quarkadmin.mapper.UserHasRoleMapper;
 import io.quarkcloud.quarkadmin.service.AdminService;
 import io.quarkcloud.quarkadmin.service.MenuService;
 import io.quarkcloud.quarkadmin.service.RoleService;
+import io.quarkcloud.quarkcore.service.Context;
 import io.quarkcloud.quarkcore.util.Lister;
 import jakarta.annotation.Resource;
 
 @Service
-public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements AdminService {
+public class AdminServiceImpl extends ResourceServiceImpl<AdminMapper, Admin> implements AdminService {
     
     // 管理员
     @Resource
@@ -48,6 +48,11 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     // 菜单服务
     @Autowired
     private MenuService menuService;
+
+    // 获取列表
+    public List<Admin> getList(Context ctx) {
+        return null;
+    }
 
     // 根据用户id，判断是否有访问权限
     public boolean checkPermission(Long adminId, String urlPath, String method) {
