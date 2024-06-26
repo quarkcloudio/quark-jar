@@ -157,11 +157,10 @@ public class ResolveField {
         switch (component) {
             case "idField":
                 boolean onIndexDisplayed = (boolean) reflect.getFieldValue("onIndexDisplayed");
-                if (onIndexDisplayed) {
-                    column.setValueType("text");
-                } else {
+                if (!onIndexDisplayed) {
                     return null;
                 }
+                column.setValueType("text");
                 break;
             case "hiddenField":
                 return null;

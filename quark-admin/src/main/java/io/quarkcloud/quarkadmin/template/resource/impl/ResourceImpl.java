@@ -423,8 +423,6 @@ public class ResourceImpl implements Resource {
 
     // 列表页标题
     public String indexTableTitle(Context ctx) {
-
-        // 返回拼接后的标题
         return this.getTitle() + this.getTableTitleSuffix();
     }
 
