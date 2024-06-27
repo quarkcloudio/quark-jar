@@ -22,7 +22,6 @@ import io.quarkcloud.quarkadmin.mapper.UserHasRoleMapper;
 import io.quarkcloud.quarkadmin.service.AdminService;
 import io.quarkcloud.quarkadmin.service.MenuService;
 import io.quarkcloud.quarkadmin.service.RoleService;
-import io.quarkcloud.quarkcore.service.Context;
 import io.quarkcloud.quarkcore.util.Lister;
 import jakarta.annotation.Resource;
 
@@ -48,11 +47,6 @@ public class AdminServiceImpl extends ResourceServiceImpl<AdminMapper, Admin> im
     // 菜单服务
     @Autowired
     private MenuService menuService;
-
-    // 获取列表
-    public List<Admin> getList(Context ctx) {
-        return null;
-    }
 
     // 根据用户id，判断是否有访问权限
     public boolean checkPermission(Long adminId, String urlPath, String method) {

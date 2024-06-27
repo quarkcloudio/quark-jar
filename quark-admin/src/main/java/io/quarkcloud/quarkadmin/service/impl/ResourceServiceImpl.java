@@ -12,6 +12,6 @@ public class ResourceServiceImpl<M extends BaseMapper<T>, T> extends ServiceImpl
     
     // 获取列表
     public List<T> getList(Context ctx) {
-        return null;
+        return this.list();
     }
 }
