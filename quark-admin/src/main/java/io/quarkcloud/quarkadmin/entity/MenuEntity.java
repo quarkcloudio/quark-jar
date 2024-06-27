@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @TableName("menus")
-public class Menu {
+public class MenuEntity {
 
     // 主键
     private Long id;

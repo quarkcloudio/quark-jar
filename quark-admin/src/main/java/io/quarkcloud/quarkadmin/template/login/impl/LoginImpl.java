@@ -20,7 +20,7 @@ import io.quarkcloud.quarkadmin.component.form.Field;
 import io.quarkcloud.quarkadmin.component.form.Rule;
 import io.quarkcloud.quarkadmin.component.icon.Icon;
 import io.quarkcloud.quarkadmin.component.message.Message;
-import io.quarkcloud.quarkadmin.entity.Admin;
+import io.quarkcloud.quarkadmin.entity.AdminEntity;
 import io.quarkcloud.quarkadmin.service.AdminService;
 import io.quarkcloud.quarkadmin.template.login.Login;
 import io.quarkcloud.quarkcore.service.Cache;
@@ -309,7 +309,7 @@ public class LoginImpl implements Login {
             return Message.error("验证码错误！");
         }
 
-        Admin adminInfo = adminService.getByUsername((String) username);
+        AdminEntity adminInfo = adminService.getByUsername((String) username);
         if (adminInfo == null) {
             return Message.error("用户名或密码错误！");
         }

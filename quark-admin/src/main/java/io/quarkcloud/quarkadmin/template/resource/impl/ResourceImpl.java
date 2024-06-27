@@ -18,17 +18,16 @@ import io.quarkcloud.quarkadmin.component.pagecontainer.PageHeader;
 import io.quarkcloud.quarkadmin.component.table.Search;
 import io.quarkcloud.quarkadmin.component.table.Table;
 import io.quarkcloud.quarkadmin.component.table.ToolBar;
-import io.quarkcloud.quarkadmin.entity.Admin;
 import io.quarkcloud.quarkadmin.service.ResourceService;
 import io.quarkcloud.quarkadmin.template.resource.Action;
 import io.quarkcloud.quarkadmin.template.resource.Resource;
 import io.quarkcloud.quarkadmin.template.resource.core.ResolveAction;
 import io.quarkcloud.quarkadmin.template.resource.core.ResolveField;
 
-public class ResourceImpl implements Resource {
+public class ResourceImpl<T> implements Resource {
 
     @Autowired
-    ResourceService<Admin> resourceService;
+    ResourceService<T> resourceService;
 
     // 注解实例
     protected AdminResource annotationClass = null;

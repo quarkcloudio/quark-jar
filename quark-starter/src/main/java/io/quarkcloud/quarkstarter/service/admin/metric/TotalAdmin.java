@@ -1,7 +1,7 @@
 package io.quarkcloud.quarkstarter.service.admin.metric;
 
 import java.util.Map;
-import io.quarkcloud.quarkadmin.entity.Admin;
+import io.quarkcloud.quarkadmin.entity.AdminEntity;
 import io.quarkcloud.quarkadmin.template.metrics.impl.Value;
 
 public class TotalAdmin extends Value {
@@ -14,7 +14,7 @@ public class TotalAdmin extends Value {
 
     // 计算
     public Object calculate() {
-        long count = new Admin().selectCount(null);
+        long count = new AdminEntity().selectCount(null);
 
         return this.value(count).setValueStyle(Map.of("color", "#3f8600"));
     }

@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
-import io.quarkcloud.quarkadmin.entity.Permission;
-import io.quarkcloud.quarkadmin.entity.Role;
-import io.quarkcloud.quarkadmin.entity.RoleHasPermission;
+import io.quarkcloud.quarkadmin.entity.PermissionEntity;
+import io.quarkcloud.quarkadmin.entity.RoleEntity;
+import io.quarkcloud.quarkadmin.entity.RoleHasPermissionEntity;
 import io.quarkcloud.quarkadmin.mapper.PermissionMapper;
 import io.quarkcloud.quarkadmin.mapper.RoleHasPermissionMapper;
 import io.quarkcloud.quarkadmin.mapper.RoleMapper;
@@ -18,7 +18,7 @@ import io.quarkcloud.quarkadmin.service.RoleService;
 import jakarta.annotation.Resource;
 
 @Service
-public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
+public class RoleServiceImpl extends ServiceImpl<RoleMapper, RoleEntity> implements RoleService {
     
     // 角色权限关联表
     @Resource
@@ -29,8 +29,8 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     private PermissionMapper permissionMapper;
 
     // 根据角色id获取权限列表
-    public List<Permission> getPermissionsById(Long roleId) {
-        QueryWrapper<Permission> queryWrapper = new QueryWrapper<>();
+    public List<PermissionEntity> getPermissionsById(Long roleId) {
+        QueryWrapper<PermissionEntity> queryWrapper = new QueryWrapper<>();
         List<Long> PermissionIds= this.getPermissionIdsById(roleId);
 
         queryWrapper.in("id", PermissionIds);
@@ -41,12 +41,12 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     // 根据角色id获取权限ID列表
     public List<Long> getPermissionIdsById(Long roleId) {
         List<Long> list = new ArrayList<>();
-        QueryWrapper<RoleHasPermission> queryWrapper = new QueryWrapper<>();
+        QueryWrapper<RoleHasPermissionEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("role_id", roleId);
         queryWrapper.eq("guard_name", "admin");
 
-        List<RoleHasPermission> roleHasPermissions = roleHasPermissionMapper.selectList(queryWrapper);
-        for (RoleHasPermission roleHasPermission : roleHasPermissions) {
+        List<RoleHasPermissionEntity> roleHasPermissions = roleHasPermissionMapper.selectList(queryWrapper);
+        for (RoleHasPermissionEntity roleHasPermission : roleHasPermissions) {
             list.add(roleHasPermission.getPermissionId());
         }
         

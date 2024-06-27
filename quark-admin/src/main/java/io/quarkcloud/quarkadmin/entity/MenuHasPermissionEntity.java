@@ -5,17 +5,17 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 @Data
-@TableName("user_has_roles")
-public class UserHasRole {
+@TableName("menu_has_permissions")
+public class MenuHasPermissionEntity{
 
     // 主键
     private Long id;
 
-    // 用户id
-    private Long uid;
+    // 菜单ID
+    private Long menuId;
 
-    // 角色id
-    private Long roleId;
+    // 权限ID
+    private Long permissionId;
 
     // 守卫名称
     private String guardName;

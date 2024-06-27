@@ -10,7 +10,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper=false)
 @TableName("action_logs")
-public class ActionLog extends Model<ActionLog> {
+public class ActionLogEntity extends Model<ActionLogEntity> {
 
     // 主键
     private Long id;

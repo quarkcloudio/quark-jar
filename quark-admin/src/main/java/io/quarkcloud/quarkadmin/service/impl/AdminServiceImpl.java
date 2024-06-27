@@ -11,11 +11,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
-import io.quarkcloud.quarkadmin.entity.Admin;
-import io.quarkcloud.quarkadmin.entity.Menu;
-import io.quarkcloud.quarkadmin.entity.Permission;
-import io.quarkcloud.quarkadmin.entity.Role;
-import io.quarkcloud.quarkadmin.entity.UserHasRole;
+import io.quarkcloud.quarkadmin.entity.AdminEntity;
+import io.quarkcloud.quarkadmin.entity.MenuEntity;
+import io.quarkcloud.quarkadmin.entity.PermissionEntity;
+import io.quarkcloud.quarkadmin.entity.RoleEntity;
+import io.quarkcloud.quarkadmin.entity.UserHasRoleEntity;
 import io.quarkcloud.quarkadmin.mapper.AdminMapper;
 import io.quarkcloud.quarkadmin.mapper.RoleMapper;
 import io.quarkcloud.quarkadmin.mapper.UserHasRoleMapper;
@@ -26,7 +26,7 @@ import io.quarkcloud.quarkcore.util.Lister;
 import jakarta.annotation.Resource;
 
 @Service
-public class AdminServiceImpl extends ResourceServiceImpl<AdminMapper, Admin> implements AdminService {
+public class AdminServiceImpl extends ResourceServiceImpl<AdminMapper, AdminEntity> implements AdminService {
     
     // 管理员
     @Resource
@@ -51,8 +51,8 @@ public class AdminServiceImpl extends ResourceServiceImpl<AdminMapper, Admin> im
     // 根据用户id，判断是否有访问权限
     public boolean checkPermission(Long adminId, String urlPath, String method) {
         boolean hasPermission = false;
-        List<Permission> permissions = this.getPermissionsById(adminId);
-        for (Permission permission : permissions) {
+        List<PermissionEntity> permissions = this.getPermissionsById(adminId);
+        for (PermissionEntity permission : permissions) {
             if (permission.getPath().equals(urlPath) && permission.getMethod().equals(method)) {
                 hasPermission = true;
             }
@@ -62,8 +62,8 @@ public class AdminServiceImpl extends ResourceServiceImpl<AdminMapper, Admin> im
     }
 
     // 根据用户id获取权限列表
-    public List<Permission> getPermissionsById(Long adminId) {
-        List<Permission> list = new ArrayList<>();
+    public List<PermissionEntity> getPermissionsById(Long adminId) {
+        List<PermissionEntity> list = new ArrayList<>();
         List<Long> roleIds= this.getRoleIdsById(adminId);
         for (Long roleId : roleIds) {
             list.addAll(roleService.getPermissionsById(roleId));
@@ -73,8 +73,8 @@ public class AdminServiceImpl extends ResourceServiceImpl<AdminMapper, Admin> im
     }
 
     // 根据用户id获取角色列表
-    public List<Role> getRolesById(Long adminId) {
-        QueryWrapper<Role> queryWrapper = new QueryWrapper<>();
+    public List<RoleEntity> getRolesById(Long adminId) {
+        QueryWrapper<RoleEntity> queryWrapper = new QueryWrapper<>();
         List<Long> roleIds= this.getRoleIdsById(adminId);
 
         queryWrapper.in("id", roleIds);
@@ -86,12 +86,12 @@ public class AdminServiceImpl extends ResourceServiceImpl<AdminMapper, Admin> im
     public List<Long> getRoleIdsById(Long adminId) {
         List<Long> list = new ArrayList<>();
 
-        QueryWrapper<UserHasRole> queryWrapper = new QueryWrapper<>();
+        QueryWrapper<UserHasRoleEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("uid", adminId);
         queryWrapper.eq("guard_name", "admin");
 
-        List<UserHasRole> userHasRoles = userHasRoleMapper.selectList(queryWrapper);
-        for (UserHasRole userHasRole : userHasRoles) {
+        List<UserHasRoleEntity> userHasRoles = userHasRoleMapper.selectList(queryWrapper);
+        for (UserHasRoleEntity userHasRole : userHasRoles) {
             list.add(userHasRole.getRoleId());
         }
 
@@ -99,8 +99,8 @@ public class AdminServiceImpl extends ResourceServiceImpl<AdminMapper, Admin> im
     }
 
     // 根据用户id获取菜单列表
-    public List<Menu> getMenusById(Long adminId) {
-        List<Menu> list = new ArrayList<>();
+    public List<MenuEntity> getMenusById(Long adminId) {
+        List<MenuEntity> list = new ArrayList<>();
         if (adminId == 1) {
             list = menuService.getList();
         }
@@ -108,18 +108,18 @@ public class AdminServiceImpl extends ResourceServiceImpl<AdminMapper, Admin> im
         return list;
     }
 
-    public boolean hasMenu(List<Menu> menus, long id) {
+    public boolean hasMenu(List<MenuEntity> menus, long id) {
         return menus.stream().anyMatch(menu -> menu.getId() == id);
     }
 
     // 根据用户id获取菜单Tree
     public ArrayNode getMenuTreeById(Long adminId) {
-        List<Menu> list = getMenusById(adminId);
+        List<MenuEntity> list = getMenusById(adminId);
         ArrayNode menuTree = new ObjectMapper().createArrayNode();
 
-        List<Menu> newMenus = new ArrayList<>();
+        List<MenuEntity> newMenus = new ArrayList<>();
 
-        for (Menu v : list) {
+        for (MenuEntity v : list) {
             v.setKey(UUID.randomUUID().toString());
             v.setLocale("menu" + v.getPath().replace("/", "."));
 
@@ -144,10 +144,10 @@ public class AdminServiceImpl extends ResourceServiceImpl<AdminMapper, Admin> im
     }
 
     // 根据账号查询
-    public Admin getByUsername(String username) {
-        QueryWrapper<Admin> queryWrapper = new QueryWrapper<>();
+    public AdminEntity getByUsername(String username) {
+        QueryWrapper<AdminEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("username", username);
-        Admin adminInfo = adminMapper.selectOne(queryWrapper);
+        AdminEntity adminInfo = adminMapper.selectOne(queryWrapper);
 
         return adminInfo;
     }

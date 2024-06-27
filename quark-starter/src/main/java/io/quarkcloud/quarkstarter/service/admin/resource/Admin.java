@@ -6,11 +6,12 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import io.quarkcloud.quarkadmin.component.form.Field;
+import io.quarkcloud.quarkadmin.entity.AdminEntity;
 import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
 import io.quarkcloud.quarkcore.service.Context;
 
 @Component(value = "adminResource")
-public class Admin extends ResourceImpl {
+public class Admin extends ResourceImpl<AdminEntity> {
 
     public Admin() {
         this.title = "管理员";

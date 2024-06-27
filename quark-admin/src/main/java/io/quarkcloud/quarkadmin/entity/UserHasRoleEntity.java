@@ -5,14 +5,17 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 @Data
-@TableName("roles")
-public class Role {
+@TableName("user_has_roles")
+public class UserHasRoleEntity {
 
     // 主键
     private Long id;
 
-    // 角色名称
-    private String name;
+    // 用户id
+    private Long uid;
+
+    // 角色id
+    private Long roleId;
 
     // 守卫名称
     private String guardName;

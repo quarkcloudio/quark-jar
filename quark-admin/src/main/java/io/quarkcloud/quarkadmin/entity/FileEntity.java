@@ -9,8 +9,8 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper=false)
-@TableName("pictures")
-public class Picture extends Model<Picture> {
+@TableName("files")
+public class FileEntity extends Model<FileEntity> {
 
     // 主键
     private Long id;

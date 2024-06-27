@@ -10,7 +10,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper=false)
 @TableName("admins")
-public class Admin extends Model<Admin> {
+public class AdminEntity extends Model<AdminEntity> {
 
     // 主键
     private Long id;
