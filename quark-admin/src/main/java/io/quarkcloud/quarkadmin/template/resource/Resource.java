@@ -85,8 +85,8 @@ public interface Resource {
     public String indexTableTitle(Context ctx);
 
     // 列表页组件渲染
-    public Object indexComponentRender(Context ctx, Object data);
+    public Object indexComponentRender(Context ctx);
 
     // 组件渲染
-    public Object indexRender(Context context);
+    public Object indexRender(Context ctx);
 }

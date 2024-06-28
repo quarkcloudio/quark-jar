@@ -433,8 +433,7 @@ public class ResourceImpl<T> implements Resource {
     }
 
     // 列表页组件渲染
-    public Object indexComponentRender(Context ctx, Object data) {
-        Object component;
+    public Object indexComponentRender(Context ctx) {
 
         // 表格组件
         Table table = new Table();
@@ -471,29 +470,23 @@ public class ResourceImpl<T> implements Resource {
 
         // 获取分页
         Object perPage = this.getPerPage();
-        if (perPage == null) {
+        if (perPage == null || !(perPage instanceof Integer)) {
+            List<T> data = service.list(ctx);
             return table.setDatasource(data);
         }
 
-        // 不分页，直接返回数据
-        if (!(perPage instanceof Integer)) {
-            return table.setDatasource(data);
-        } else {
-            Map<String, Object> dataMap = (Map<String, Object>) data;
-            int current = (int) dataMap.get("currentPage");
-            int perPageValue = (int) dataMap.get("perPage");
-            long total = (long) dataMap.get("total");
-            Object items = dataMap.get("items");
+        Object data = service.list(ctx);
+        Map<String, Object> dataMap = (Map<String, Object>) data;
+        int current = (int) dataMap.get("currentPage");
+        int perPageValue = (int) dataMap.get("perPage");
+        long total = (long) dataMap.get("total");
+        Object items = dataMap.get("items");
 
-            component = table.setPagination(current, perPageValue, (int) total, 1).setDatasource(items);
-        }
-
-        return component;
+        return table.setPagination(current, perPageValue, (int) total, 1).setDatasource(items);
     }
 
     // 组件渲染
     public Object indexRender(Context context) {
-        Object data = service.list(context);
-        return this.pageComponentRender(context, indexComponentRender(context, data));
+        return this.pageComponentRender(context, indexComponentRender(context));
     }
 }
