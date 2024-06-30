@@ -1,4 +1,4 @@
-package io.quarkcloud.quarkadmin.template.resource.impl.search;
+package io.quarkcloud.quarkadmin.template.resource.impl;
 
 import java.util.Map;
 

@@ -342,7 +342,7 @@ public class ResourceImpl<T> implements Resource {
             Object field = new Object();
 
             // 获取搜索实例
-            io.quarkcloud.quarkadmin.template.resource.impl.search.SearchImpl searcher = (io.quarkcloud.quarkadmin.template.resource.impl.search.SearchImpl) v;
+            io.quarkcloud.quarkadmin.template.resource.impl.SearchImpl searcher = (io.quarkcloud.quarkadmin.template.resource.impl.SearchImpl) v;
 
             // 获取组件名称
             String component = searcher.getComponent();

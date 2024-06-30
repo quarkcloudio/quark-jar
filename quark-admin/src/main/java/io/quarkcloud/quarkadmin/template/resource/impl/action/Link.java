@@ -1,5 +1,6 @@
 package io.quarkcloud.quarkadmin.template.resource.impl.action;
 
+import io.quarkcloud.quarkadmin.template.resource.impl.ActionImpl;
 import io.quarkcloud.quarkcore.service.Context;
 
 public class Link extends ActionImpl {

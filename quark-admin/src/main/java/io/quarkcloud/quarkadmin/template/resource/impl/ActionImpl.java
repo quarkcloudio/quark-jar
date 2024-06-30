@@ -1,4 +1,4 @@
-package io.quarkcloud.quarkadmin.template.resource.impl.action;
+package io.quarkcloud.quarkadmin.template.resource.impl;
 
 import java.util.List;
 

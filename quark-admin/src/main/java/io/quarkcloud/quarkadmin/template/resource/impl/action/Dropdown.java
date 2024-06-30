@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import io.quarkcloud.quarkadmin.template.resource.Action;
 import io.quarkcloud.quarkadmin.template.resource.core.ResolveAction;
+import io.quarkcloud.quarkadmin.template.resource.impl.ActionImpl;
 import io.quarkcloud.quarkcore.service.Context;
 
 public class Dropdown extends ActionImpl {
