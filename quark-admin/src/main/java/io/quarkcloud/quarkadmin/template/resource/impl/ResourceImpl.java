@@ -191,7 +191,7 @@ public class ResourceImpl<T> implements Resource {
     }
 
     // 设置单列字段
-    public ResourceImpl setField(Map<String, Object> field) {
+    public ResourceImpl<T> setField(Map<String, Object> field) {
         this.field = field;
         return this;
     }
