@@ -8,7 +8,5 @@ import io.quarkcloud.quarkadmin.template.layout.impl.LayoutImpl;
 public class Index extends LayoutImpl {
 
     // 构造函数
-    public Index() {
-
-    }
+    public Index() {}
 }

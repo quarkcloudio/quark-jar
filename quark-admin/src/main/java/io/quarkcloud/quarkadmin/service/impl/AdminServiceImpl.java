@@ -22,12 +22,11 @@ import io.quarkcloud.quarkadmin.mapper.UserHasRoleMapper;
 import io.quarkcloud.quarkadmin.service.AdminService;
 import io.quarkcloud.quarkadmin.service.MenuService;
 import io.quarkcloud.quarkadmin.service.RoleService;
-import io.quarkcloud.quarkadmin.template.resource.impl.ServiceImpl;
 import io.quarkcloud.quarkcore.util.Lister;
 import jakarta.annotation.Resource;
 
 @Service
-public class AdminServiceImpl extends ServiceImpl<AdminMapper, AdminEntity> implements AdminService {
+public class AdminServiceImpl extends ResourceServiceImpl<AdminMapper, AdminEntity> implements AdminService {
     
     // 管理员
     @Resource

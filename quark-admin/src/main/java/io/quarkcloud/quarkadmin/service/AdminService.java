@@ -7,9 +7,8 @@ import io.quarkcloud.quarkadmin.entity.AdminEntity;
 import io.quarkcloud.quarkadmin.entity.MenuEntity;
 import io.quarkcloud.quarkadmin.entity.PermissionEntity;
 import io.quarkcloud.quarkadmin.entity.RoleEntity;
-import io.quarkcloud.quarkadmin.template.resource.Service;
 
-public interface AdminService extends Service<AdminEntity> {
+public interface AdminService extends ResourceService<AdminEntity> {
 
     public boolean checkPermission(Long adminId, String urlPath, String method);
 

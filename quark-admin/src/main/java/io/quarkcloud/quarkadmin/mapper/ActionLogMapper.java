@@ -1,10 +1,9 @@
 package io.quarkcloud.quarkadmin.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import io.quarkcloud.quarkadmin.entity.ActionLogEntity;
 
 @Mapper
-public interface ActionLogMapper extends BaseMapper<ActionLogEntity> {
+public interface ActionLogMapper extends ResourceMapper<ActionLogEntity> {
 
 }

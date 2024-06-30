@@ -18,7 +18,7 @@ import io.quarkcloud.quarkadmin.component.pagecontainer.PageHeader;
 import io.quarkcloud.quarkadmin.component.table.Search;
 import io.quarkcloud.quarkadmin.component.table.Table;
 import io.quarkcloud.quarkadmin.component.table.ToolBar;
-import io.quarkcloud.quarkadmin.template.resource.Service;
+import io.quarkcloud.quarkadmin.service.ResourceService;
 import io.quarkcloud.quarkadmin.template.resource.Action;
 import io.quarkcloud.quarkadmin.template.resource.Resource;
 import io.quarkcloud.quarkadmin.template.resource.core.ResolveAction;
@@ -27,7 +27,7 @@ import io.quarkcloud.quarkadmin.template.resource.core.ResolveField;
 public class ResourceImpl<T> implements Resource {
 
     @Autowired
-    Service<T> service;
+    ResourceService<T> resourceService;
 
     // 注解实例
     protected AdminResource annotationClass = null;
@@ -471,11 +471,11 @@ public class ResourceImpl<T> implements Resource {
         // 获取分页
         Object perPage = this.getPerPage();
         if (perPage == null || !(perPage instanceof Integer)) {
-            List<T> data = service.list(ctx);
+            List<T> data = resourceService.list(ctx);
             return table.setDatasource(data);
         }
 
-        Object data = service.list(ctx);
+        Object data = resourceService.list(ctx);
         Map<String, Object> dataMap = (Map<String, Object>) data;
         int current = (int) dataMap.get("currentPage");
         int perPageValue = (int) dataMap.get("perPage");

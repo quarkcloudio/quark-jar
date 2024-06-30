@@ -19,9 +19,7 @@ import io.quarkcloud.quarkstarter.service.admin.metric.TotalPicture;
 public class Index extends DashboardImpl {
 
     // 构造函数
-    public Index() {
-
-    }
+    public Index() {}
 
     // 内容
     public List<Metrics> cards(Context context) {
