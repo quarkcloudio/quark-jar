@@ -471,11 +471,11 @@ public class ResourceImpl<T> implements Resource {
         // 获取分页
         Object perPage = this.getPerPage();
         if (perPage == null || !(perPage instanceof Integer)) {
-            List<T> data = resourceService.list(ctx);
+            List<T> data = resourceService.list();
             return table.setDatasource(data);
         }
 
-        Object data = resourceService.list(ctx);
+        Object data = resourceService.list();
         Map<String, Object> dataMap = (Map<String, Object>) data;
         int current = (int) dataMap.get("currentPage");
         int perPageValue = (int) dataMap.get("perPage");
