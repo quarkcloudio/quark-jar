@@ -33,6 +33,12 @@ public class ResourceServiceImpl<M extends ResourceMapper<T>, T> implements Reso
         return this;
     }
 
+    // 使用列表查询条件
+    public ResourceServiceImpl<M, T> indexQueryWrapper() {
+        this.queryWrapper = null;
+        return this;
+    }
+
     // 获取列表
     public List<T> list() {
         return this.resourceMapper.selectList(queryWrapper);
