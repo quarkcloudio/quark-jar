@@ -6,6 +6,9 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+
 import io.quarkcloud.quarkcore.service.Context;
 import io.quarkcloud.quarkadmin.annotation.AdminResource;
 import io.quarkcloud.quarkadmin.component.form.Field;
@@ -18,16 +21,17 @@ import io.quarkcloud.quarkadmin.component.pagecontainer.PageHeader;
 import io.quarkcloud.quarkadmin.component.table.Search;
 import io.quarkcloud.quarkadmin.component.table.Table;
 import io.quarkcloud.quarkadmin.component.table.ToolBar;
+import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
 import io.quarkcloud.quarkadmin.service.ResourceService;
 import io.quarkcloud.quarkadmin.template.resource.Action;
 import io.quarkcloud.quarkadmin.template.resource.Resource;
 import io.quarkcloud.quarkadmin.template.resource.core.ResolveAction;
 import io.quarkcloud.quarkadmin.template.resource.core.ResolveField;
 
-public class ResourceImpl<T> implements Resource {
+public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource {
 
     @Autowired
-    ResourceService<T> resourceService;
+    ResourceService<M, T> resourceService;
 
     // 注解实例
     protected AdminResource annotationClass = null;
@@ -191,7 +195,7 @@ public class ResourceImpl<T> implements Resource {
     }
 
     // 设置单列字段
-    public ResourceImpl<T> setField(Map<String, Object> field) {
+    public ResourceImpl<M,T> setField(Map<String, Object> field) {
         this.field = field;
         return this;
     }
@@ -468,6 +472,8 @@ public class ResourceImpl<T> implements Resource {
              .setBatchActions(indexTableAlertActions)
              .setSearches(indexSearches);
 
+             resourceService.setContext(ctx);
+
         // 获取分页
         Object perPage = this.getPerPage();
         if (perPage == null || !(perPage instanceof Integer)) {
@@ -475,7 +481,9 @@ public class ResourceImpl<T> implements Resource {
             return table.setDatasource(data);
         }
 
-        Object data = resourceService.list();
+        IPage<T> page = new Page<>(1,10);
+
+        Object data = resourceService.page(page);
         Map<String, Object> dataMap = (Map<String, Object>) data;
         int current = (int) dataMap.get("currentPage");
         int perPageValue = (int) dataMap.get("perPage");

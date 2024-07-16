@@ -9,7 +9,7 @@ import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
 import io.quarkcloud.quarkadmin.service.ResourceService;
 import io.quarkcloud.quarkcore.service.Context;
 
-public class ResourceServiceImpl<M extends ResourceMapper<T>, T> implements ResourceService<T> {
+public class ResourceServiceImpl<M extends ResourceMapper<T>, T> implements ResourceService<M, T> {
     
     // 资源mapper
     @Autowired
