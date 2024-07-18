@@ -487,9 +487,10 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource {
         IPage<T> data = resourceService.page(pageSize);
         long current = data.getCurrent();
         long total = data.getTotal();
+        long defaultCurrent = 1;
         Object items = data.getRecords();
 
-        return table.setPagination(current, pageSize, total, 1L).setDatasource(items);
+        return table.setPagination(current, pageSize, total, defaultCurrent).setDatasource(items);
     }
 
     // 组件渲染
