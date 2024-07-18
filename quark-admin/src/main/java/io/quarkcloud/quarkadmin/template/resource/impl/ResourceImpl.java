@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
@@ -75,9 +76,9 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource {
     // 导出数据排序规则
     public String exportQueryOrder;
     
-    // 挂载模型
-    public Object model;
-    
+    // 查询条件
+    protected Wrapper<T> queryWrapper;
+
     // 注入的字段数据
     public Map<String, Object> field;
     
@@ -198,6 +199,16 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource {
     public ResourceImpl<M,T> setField(Map<String, Object> field) {
         this.field = field;
         return this;
+    }
+
+    // 全局查询
+    public Wrapper<T> query(Context ctx, Wrapper<T> queryWrapper) {
+        return queryWrapper;
+    }
+
+    // 列表查询
+    public Wrapper<T> indexQuery(Context ctx, Wrapper<T> queryWrapper) {
+        return queryWrapper;
     }
 
     // 字段
