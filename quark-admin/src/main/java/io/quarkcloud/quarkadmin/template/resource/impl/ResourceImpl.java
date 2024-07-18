@@ -481,16 +481,13 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource {
             return table.setDatasource(data);
         }
 
-        IPage<T> page = new Page<>(1,10);
+        // 组织分页数据
+        IPage<T> data = resourceService.page((Integer)perPage);
+        long current = data.getCurrent();
+        long total = data.getTotal();
+        Object items = data.getRecords();
 
-        Object data = resourceService.page(page);
-        Map<String, Object> dataMap = (Map<String, Object>) data;
-        int current = (int) dataMap.get("currentPage");
-        int perPageValue = (int) dataMap.get("perPage");
-        long total = (long) dataMap.get("total");
-        Object items = dataMap.get("items");
-
-        return table.setPagination(current, perPageValue, (int) total, 1).setDatasource(items);
+        return table.setPagination(current, (Integer)perPage, total, 1L).setDatasource(items);
     }
 
     // 组件渲染

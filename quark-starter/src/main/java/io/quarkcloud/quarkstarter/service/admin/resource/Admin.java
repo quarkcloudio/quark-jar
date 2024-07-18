@@ -16,7 +16,7 @@ public class Admin extends ResourceImpl<AdminMapper,AdminEntity> {
 
     public Admin() {
         this.title = "管理员";
-        // this.perPage = 10;
+        this.perPage = 10;
     }
 
     // 字段

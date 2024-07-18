@@ -24,5 +24,5 @@ public interface ResourceService<M extends ResourceMapper<T>, T> {
     public List<T> list();
 
     // 获取分页数据
-    public IPage<T> page(IPage<T> page);
+    public IPage<T> page(long pageSize);
 }

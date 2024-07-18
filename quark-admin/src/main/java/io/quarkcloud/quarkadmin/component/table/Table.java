@@ -153,8 +153,8 @@ public class Table  extends Component {
     /**
      * 设置表格分页配置
      */
-    public Table setPagination(int current, int pageSize, int total, int defaultCurrent) {
-        Map<String, Integer> pagination = new HashMap<>();
+    public Table setPagination(long current, long pageSize, long total, long defaultCurrent) {
+        Map<String, Long> pagination = new HashMap<>();
         pagination.put("current", current);
         pagination.put("pageSize", pageSize);
         pagination.put("total", total);

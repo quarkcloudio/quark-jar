@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
 import io.quarkcloud.quarkadmin.service.ResourceService;
@@ -45,7 +46,13 @@ public class ResourceServiceImpl<M extends ResourceMapper<T>, T> implements Reso
     }
 
     // 获取分页数据
-    public IPage<T> page(IPage<T> page) {
+    public IPage<T> page(long pageSize) {
+        long currentPage = 1;
+        String getPage = context.getRequest().getParameter("page");
+        if (getPage!=null) {
+            currentPage = Integer.parseInt(getPage);
+        }
+        IPage<T> page = new Page<T>(currentPage, pageSize);
         return this.resourceMapper.selectPage(page, queryWrapper);
     }
 }
