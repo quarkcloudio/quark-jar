@@ -465,29 +465,31 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource {
 
         // 表格组件
         table.setPolling(tablePolling)
-             .setTitle(tableTitle)
-             .setTableExtraRender(tableExtraRender)
-             .setToolBar(tableToolBar)
-             .setColumns(tableColumns)
-             .setBatchActions(indexTableAlertActions)
-             .setSearches(indexSearches);
+            .setTitle(tableTitle)
+            .setTableExtraRender(tableExtraRender)
+            .setToolBar(tableToolBar)
+            .setColumns(tableColumns)
+            .setBatchActions(indexTableAlertActions)
+            .setSearches(indexSearches);
 
+        // 设置上下文
         resourceService.setContext(ctx);
 
         // 获取分页
         Object perPage = this.getPerPage();
-        if (perPage == null || !(perPage instanceof Integer)) {
+        if (perPage == null || !((perPage instanceof Integer) || (perPage instanceof Long))) {
             List<T> data = resourceService.list();
             return table.setDatasource(data);
         }
 
-        // 组织分页数据
-        IPage<T> data = resourceService.page((Integer)perPage);
+        // 解析分页数据
+        long pageSize = ((Number) perPage).longValue();
+        IPage<T> data = resourceService.page(pageSize);
         long current = data.getCurrent();
         long total = data.getTotal();
         Object items = data.getRecords();
 
-        return table.setPagination(current, (Integer)perPage, total, 1L).setDatasource(items);
+        return table.setPagination(current, pageSize, total, 1L).setDatasource(items);
     }
 
     // 组件渲染
