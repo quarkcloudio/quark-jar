@@ -472,7 +472,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource {
              .setBatchActions(indexTableAlertActions)
              .setSearches(indexSearches);
 
-             resourceService.setContext(ctx);
+        resourceService.setContext(ctx);
 
         // 获取分页
         Object perPage = this.getPerPage();
