@@ -50,8 +50,10 @@ public class ResourceServiceImpl<M extends ResourceMapper<T>, T> implements Reso
         long currentPage = 1;
         String getPage = context.getRequest().getParameter("page");
         if (getPage!=null) {
-            currentPage = Integer.parseInt(getPage);
+            currentPage = Long.parseLong(getPage);
         }
+
+        // 构建分页
         IPage<T> page = new Page<T>(currentPage, pageSize);
         return this.resourceMapper.selectPage(page, queryWrapper);
     }
