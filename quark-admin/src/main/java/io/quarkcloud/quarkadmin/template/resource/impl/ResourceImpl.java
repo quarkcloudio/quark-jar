@@ -328,6 +328,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     }
 
     // 列表页搜索栏
+    @SuppressWarnings("unchecked")
     public Object indexSearches(Context ctx) {
 
         // 获取搜索项
