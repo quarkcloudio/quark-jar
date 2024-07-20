@@ -5,10 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import io.quarkcloud.quarkcore.service.Context;
 import io.quarkcloud.quarkadmin.annotation.AdminResource;
@@ -29,7 +27,7 @@ import io.quarkcloud.quarkadmin.template.resource.Resource;
 import io.quarkcloud.quarkadmin.template.resource.core.ResolveAction;
 import io.quarkcloud.quarkadmin.template.resource.core.ResolveField;
 
-public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource {
+public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T> {
 
     @Autowired
     ResourceService<M, T> resourceService;
@@ -77,7 +75,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource {
     public String exportQueryOrder;
     
     // 查询条件
-    protected Wrapper<T> queryWrapper;
+    protected QueryWrapper<T> queryWrapper;
 
     // 注入的字段数据
     public Map<String, Object> field;
@@ -202,12 +200,12 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource {
     }
 
     // 全局查询
-    public Wrapper<T> query(Context ctx, Wrapper<T> queryWrapper) {
+    public QueryWrapper<T> query(Context ctx, QueryWrapper<T> queryWrapper) {
         return queryWrapper;
     }
 
     // 列表查询
-    public Wrapper<T> indexQuery(Context ctx, Wrapper<T> queryWrapper) {
+    public QueryWrapper<T> indexQuery(Context ctx, QueryWrapper<T> queryWrapper) {
         return queryWrapper;
     }
 
@@ -336,7 +334,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource {
         List<Object> searches = this.searches(ctx);
 
         // 初始化搜索组件
-        Search search = new Search();
+        Search searchComponent = new Search();
 
         // 是否包含导出功能
         boolean withExport = this.isWithExport();
@@ -344,35 +342,35 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource {
             String resource = ctx.getPathVariable("resource");
             String[] paths = ctx.getRequestMapping();
             for (String path : paths) {
-                search.setExportText("导出").setExportApi(path.replace(":resource", resource));
+                searchComponent.setExportText("导出").setExportApi(path.replace(":resource", resource));
             }
         }
         if (searches == null) {
-            return search;
+            return searchComponent;
         }
+
         // 解析搜索项
         for (Object v : searches) {
 
             // 搜索项实例
             Object field = new Object();
 
-            // 获取搜索实例
-            io.quarkcloud.quarkadmin.template.resource.impl.SearchImpl searcher = (io.quarkcloud.quarkadmin.template.resource.impl.SearchImpl) v;
+            io.quarkcloud.quarkadmin.template.resource.Search<T> search = (io.quarkcloud.quarkadmin.template.resource.Search<T>) v;
 
             // 获取组件名称
-            String component = searcher.getComponent();
+            String component = search.getComponent();
 
             // 获取label标签文本
-            String label = searcher.getName();
+            String label = search.getName();
 
             // 获取字段名，支持数组
-            String name = searcher.getColumn(v);
+            String name = search.getColumn(v);
 
             // 获取接口
-            String api = searcher.getApi();
+            String api = search.getApi();
 
             // 获取属性
-            Object options = searcher.options(ctx);
+            Object options = search.options(ctx);
 
             // 根据组件类型构建组件
             switch (component) {
@@ -436,10 +434,11 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource {
                     break;
             }
             if (field != null) {
-                search.setItems(field);
+                searchComponent.setItems(field);
             }
         }
-        return search;
+
+        return searchComponent;
     }
 
     // 列表页标题

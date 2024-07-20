@@ -2,7 +2,7 @@ package io.quarkcloud.quarkadmin.service;
 
 import java.util.List;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 
 import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
@@ -15,7 +15,7 @@ public interface ResourceService<M extends ResourceMapper<T>, T> {
     public ResourceServiceImpl<M, T> setContext(Context context);
 
     // 设置查询条件
-    public ResourceServiceImpl<M, T> setQueryWrapper(Wrapper<T> queryWrapper);
+    public ResourceServiceImpl<M, T> setQueryWrapper(QueryWrapper<T> queryWrapper);
 
     // 使用列表查询条件
     public ResourceServiceImpl<M, T> indexQueryWrapper();

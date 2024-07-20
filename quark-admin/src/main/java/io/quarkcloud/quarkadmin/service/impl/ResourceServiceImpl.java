@@ -2,7 +2,7 @@ package io.quarkcloud.quarkadmin.service.impl;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
@@ -20,7 +20,7 @@ public class ResourceServiceImpl<M extends ResourceMapper<T>, T> implements Reso
     protected Context context;
 
     // 查询条件
-    protected Wrapper<T> queryWrapper;
+    protected QueryWrapper<T> queryWrapper;
 
     // 设置上下文
     public ResourceServiceImpl<M, T> setContext(Context context) {
@@ -29,7 +29,7 @@ public class ResourceServiceImpl<M extends ResourceMapper<T>, T> implements Reso
     }
 
     // 设置查询条件
-    public ResourceServiceImpl<M, T> setQueryWrapper(Wrapper<T> queryWrapper) {
+    public ResourceServiceImpl<M, T> setQueryWrapper(QueryWrapper<T> queryWrapper) {
         this.queryWrapper = queryWrapper;
         return this;
     }

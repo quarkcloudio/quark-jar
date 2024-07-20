@@ -7,7 +7,7 @@ import io.quarkcloud.quarkcore.service.Context;
 import io.quarkcloud.quarkadmin.component.form.fields.Cascader.Option;
 import io.quarkcloud.quarkadmin.template.resource.impl.SearchImpl;
 
-public class Cascader extends SearchImpl {
+public class Cascader<T> extends SearchImpl<T> {
 
     // 属性值
     public List<Option> options;

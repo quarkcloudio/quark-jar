@@ -1,5 +1,6 @@
 package io.quarkcloud.quarkadmin.component.table;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.quarkcloud.quarkadmin.component.Component;
@@ -81,6 +82,7 @@ public class Search extends Component {
         this.defaultCollapsed = true;
         this.resetText = "重置";
         this.searchText = "查询";
+        this.items = new ArrayList<>();
     }
 
     /**

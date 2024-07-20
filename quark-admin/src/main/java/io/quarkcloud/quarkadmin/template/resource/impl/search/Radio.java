@@ -7,7 +7,7 @@ import io.quarkcloud.quarkcore.service.Context;
 import io.quarkcloud.quarkadmin.component.form.fields.Radio.Option;
 import io.quarkcloud.quarkadmin.template.resource.impl.SearchImpl;
 
-public class Radio extends SearchImpl {
+public class Radio<T> extends SearchImpl<T> {
 
     // 属性值
     public List<Option> options;

@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 import io.quarkcloud.quarkcore.service.Context;
 
-public interface Resource {
+public interface Resource<T> {
 
     // 获取标题
     public String getTitle();
@@ -43,7 +43,7 @@ public interface Resource {
     public boolean isWithExport();
 
     // 设置单列字段
-    public Resource setField(Map<String, Object> field);
+    public Resource<T> setField(Map<String, Object> field);
 
     // 字段
     public List<Object> fields(Context ctx);

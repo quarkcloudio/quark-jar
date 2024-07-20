@@ -2,9 +2,11 @@ package io.quarkcloud.quarkadmin.template.resource;
 
 import java.util.Map;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+
 import io.quarkcloud.quarkcore.service.Context;
 
-public interface Search {
+public interface Search<T> {
 
     // 获取字段名
     public String getColumn(Object search);
@@ -21,7 +23,7 @@ public interface Search {
     public Object getDefault();
 
     // 执行查询
-    public Object apply(Context ctx, Object query, Object value) ;
+    public QueryWrapper<T> apply(Context ctx, QueryWrapper<T> query, Object value);
 
     // 属性
     public Object options(Context ctx);
