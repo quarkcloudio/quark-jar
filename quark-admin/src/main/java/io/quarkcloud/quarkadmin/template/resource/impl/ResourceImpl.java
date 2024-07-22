@@ -26,6 +26,7 @@ import io.quarkcloud.quarkadmin.template.resource.Action;
 import io.quarkcloud.quarkadmin.template.resource.Resource;
 import io.quarkcloud.quarkadmin.template.resource.core.ResolveAction;
 import io.quarkcloud.quarkadmin.template.resource.core.ResolveField;
+import io.quarkcloud.quarkadmin.template.resource.core.ResolveSearch;
 
 public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T> {
 
@@ -327,121 +328,6 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         return null;
     }
 
-    // 列表页搜索栏
-    @SuppressWarnings("unchecked")
-    public Object indexSearches(Context ctx) {
-
-        // 获取搜索项
-        List<Object> searches = this.searches(ctx);
-
-        // 初始化搜索组件
-        Search searchComponent = new Search();
-
-        // 是否包含导出功能
-        boolean withExport = this.isWithExport();
-        if (withExport) {
-            String resource = ctx.getPathVariable("resource");
-            String[] paths = ctx.getRequestMapping();
-            for (String path : paths) {
-                searchComponent.setExportText("导出").setExportApi(path.replace(":resource", resource));
-            }
-        }
-        if (searches == null) {
-            return searchComponent;
-        }
-
-        // 解析搜索项
-        for (Object v : searches) {
-
-            // 搜索项实例
-            Object field = new Object();
-
-            io.quarkcloud.quarkadmin.template.resource.Search<T> search = (io.quarkcloud.quarkadmin.template.resource.Search<T>) v;
-
-            // 获取组件名称
-            String component = search.getComponent();
-
-            // 获取label标签文本
-            String label = search.getName();
-
-            // 获取字段名，支持数组
-            String name = search.getColumn(v);
-
-            // 获取接口
-            String api = search.getApi();
-
-            // 获取属性
-            Object options = search.options(ctx);
-
-            // 根据组件类型构建组件
-            switch (component) {
-                case "textField":
-                    field = Field.
-                        text(name, label).
-                        setWidth(null);
-                    break;
-                case "selectField":
-                    field = Field.
-                        select(name, label).
-                        setWidth(null).
-                        setOptions((List<SelectField.Option>) options);
-                    break;
-                case "radioField":
-                    field = Field.
-                        radio(name, label).
-                        setOptions((List<Radio.Option>) options).
-                        setOptionType("button").
-                        setButtonStyle("solid");
-                    break;
-                case "multipleSelectField":
-                    field = Field.
-                        select(name, label).
-                        setMode("multiple").
-                        setWidth(null).
-                        setOptions((List<SelectField.Option>) options);
-                    break;
-                case "dateField":
-                    field = Field.
-                        date(name, label).
-                        setWidth(null);
-                    break;
-                case "datetimeField":
-                    field = Field.
-                        datetime(name, label).
-                        setWidth(null);
-                    break;
-                case "dateRangeField":
-                    field = Field.
-                        dateRange(name, label).
-                        setWidth(null);
-                    break;
-                case "datetimeRangeField":
-                    field = Field.
-                        datetimeRange(name, label).
-                        setWidth(null);
-                    break;
-                case "cascaderField":
-                    field = Field.
-                        cascader(name, label).
-                        setApi(api).
-                        setWidth(null).
-                        setOptions((List<Cascader.Option>) options);
-                    break;
-                case "treeSelectField":
-                    field = Field.
-                        treeSelect(name, label).
-                        setWidth(null).
-                        setTreeData((List<TreeSelect.TreeData>) options);
-                    break;
-            }
-            if (field != null) {
-                searchComponent.setItems(field);
-            }
-        }
-
-        return searchComponent;
-    }
-
     // 列表页标题
     public String indexTableTitle(Context ctx) {
         return this.getTitle() + this.getTableTitleSuffix();
@@ -472,7 +358,9 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         Object indexTableAlertActions = indexTableAlertActions(ctx);
 
         // 列表页搜索栏
-        Object indexSearches = indexSearches(ctx);
+        Object indexSearches = new ResolveSearch<T>(this.searches(ctx), ctx).
+            setWithExport(this.isWithExport()).
+            indexSearches(ctx);
 
         // 表格组件
         table.setPolling(tablePolling)
