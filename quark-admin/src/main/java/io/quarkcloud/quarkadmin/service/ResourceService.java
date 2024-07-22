@@ -17,8 +17,8 @@ public interface ResourceService<M extends ResourceMapper<T>, T> {
     // 设置查询条件
     public ResourceServiceImpl<M, T> setQueryWrapper(QueryWrapper<T> queryWrapper);
 
-    // 使用列表查询条件
-    public ResourceServiceImpl<M, T> indexQueryWrapper();
+    // 创建列表查询条件
+    public ResourceServiceImpl<M, T> buildIndexQuery();
 
     // 获取列表
     public List<T> list();

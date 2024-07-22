@@ -35,7 +35,7 @@ public class ResourceServiceImpl<M extends ResourceMapper<T>, T> implements Reso
     }
 
     // 使用列表查询条件
-    public ResourceServiceImpl<M, T> indexQueryWrapper() {
+    public ResourceServiceImpl<M, T> buildIndexQuery() {
         this.queryWrapper = null;
         return this;
     }

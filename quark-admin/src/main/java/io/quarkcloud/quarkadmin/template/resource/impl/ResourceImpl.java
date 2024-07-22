@@ -75,7 +75,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     public String exportQueryOrder;
     
     // 查询条件
-    protected QueryWrapper<T> queryWrapper;
+    public QueryWrapper<T> queryWrapper;
 
     // 注入的字段数据
     public Map<String, Object> field;
@@ -483,8 +483,14 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
             .setBatchActions(indexTableAlertActions)
             .setSearches(indexSearches);
 
-        // 设置上下文
-        resourceService.setContext(ctx);
+        // 获取查询条件
+        this.queryWrapper = this.query(ctx, queryWrapper);
+
+        // 获取查询条件
+        this.queryWrapper = this.indexQuery(ctx, queryWrapper);
+
+        // 设置查询条件
+        resourceService.setContext(ctx).setQueryWrapper(queryWrapper);
 
         // 获取分页
         Object perPage = this.getPerPage();
