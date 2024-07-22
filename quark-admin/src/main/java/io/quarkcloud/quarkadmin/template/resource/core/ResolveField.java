@@ -451,6 +451,7 @@ public class ResolveField {
     }
 
     // 解析表单组件内的字段
+    @SuppressWarnings("unchecked")
     public Object formFieldsParser(Context ctx, Object fields) {
         if (fields instanceof List) {
             ((List<Object>) fields).stream().forEach(field -> {
