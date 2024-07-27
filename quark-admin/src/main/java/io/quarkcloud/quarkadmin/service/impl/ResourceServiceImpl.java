@@ -60,7 +60,7 @@ public class ResourceServiceImpl<M extends ResourceMapper<T>, T> implements Reso
         QueryWrapper<T> queryWrapper = new PerformQuery<T>(context, this.queryWrapper).setSearches(searches).buildIndexQuery();
         long currentPage = 1;
         String searchParam = context.getParameter("search");
-        if (searchParam == null || searchParam == "") {
+        if (searchParam != null && searchParam != "") {
             ObjectMapper mapper = new ObjectMapper();
             Map<String, Object> map = null;
             try {
@@ -69,11 +69,19 @@ public class ResourceServiceImpl<M extends ResourceMapper<T>, T> implements Reso
                 currentPage = 1;
             }
             if (map!=null) {
-                if (map.get("page")!=null) {
-                    currentPage = Long.parseLong((String)map.get("page"));
+                Object getPage = map.get("page");
+                Object getPageSize = map.get("pageSize");
+                if (getPage!=null && getPage instanceof String) {
+                    currentPage = Long.parseLong((String) getPage);
                 }
-                if (map.get("pageSize")!=null) {
-                    pageSize = Long.parseLong((String)map.get("pageSize"));
+                if (getPageSize!=null && getPageSize instanceof String) {
+                    pageSize = Long.parseLong((String) getPageSize);
+                }
+                if (getPage instanceof Number) {
+                    currentPage = ((Number) getPage).longValue();
+                }
+                if (getPageSize instanceof Number) {
+                    pageSize = ((Number) getPageSize).longValue();
                 }
             }
         }
