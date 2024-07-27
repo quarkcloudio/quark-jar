@@ -23,6 +23,9 @@ public class ResourceServiceImpl<M extends ResourceMapper<T>, T> implements Reso
     // 查询条件
     protected QueryWrapper<T> queryWrapper;
 
+    // 查询组件
+    protected List<Object> searches;
+
     // 设置上下文
     public ResourceServiceImpl<M, T> setContext(Context context) {
         this.context = context;
@@ -35,15 +38,21 @@ public class ResourceServiceImpl<M extends ResourceMapper<T>, T> implements Reso
         return this;
     }
 
+    // 设置查询条件
+    public ResourceServiceImpl<M, T> setSearches(List<Object> searches) {
+        this.searches = searches;
+        return this;
+    }
+
     // 获取列表
     public List<T> list() {
-        QueryWrapper<T> queryWrapper = new PerformQuery<T>(context, this.queryWrapper).buildIndexQuery();
+        QueryWrapper<T> queryWrapper = new PerformQuery<T>(context, this.queryWrapper).setSearches(searches).buildIndexQuery();
         return this.resourceMapper.selectList(queryWrapper);
     }
 
     // 获取分页数据
     public IPage<T> page(long pageSize) {
-        QueryWrapper<T> queryWrapper = new PerformQuery<T>(context, this.queryWrapper).buildIndexQuery();
+        QueryWrapper<T> queryWrapper = new PerformQuery<T>(context, this.queryWrapper).setSearches(searches).buildIndexQuery();
         long currentPage = 1;
         String getPage = context.getRequest().getParameter("page");
         if (getPage!=null) {

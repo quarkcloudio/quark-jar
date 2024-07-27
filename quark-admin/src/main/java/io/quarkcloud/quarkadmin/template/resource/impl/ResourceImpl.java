@@ -372,7 +372,10 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         this.queryWrapper = this.indexQuery(ctx, queryWrapper);
 
         // 设置查询条件
-        resourceService.setContext(ctx).setQueryWrapper(queryWrapper);
+        resourceService.
+            setContext(ctx).
+            setQueryWrapper(queryWrapper).
+            setSearches(this.searches(ctx));
 
         // 获取分页
         Object perPage = this.getPerPage();
