@@ -39,8 +39,6 @@ public class PerformQuery<T> {
         if (searchParam == null || searchParam == "") {
             return queryWrapper;
         }
-
-        // 解析查询条件
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> map = null;
         try {
@@ -54,11 +52,10 @@ public class PerformQuery<T> {
         for (Object item : searches) {
             Search<T> search = (Search<T>) item;
             String column = search.getColumn(item);
-            if (map.get(column)!=null&&map.get(column)!="") {
+            if (map.get(column) != null && map.get(column) != "") {
                 queryWrapper = search.apply(context, queryWrapper, map.get(column));
             }
         }
-
         return queryWrapper;
     }
 }
