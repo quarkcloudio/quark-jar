@@ -11,7 +11,7 @@ import io.quarkcloud.quarkadmin.template.resource.Search;
 
 public class PerformQuery<T> {
 
-    // context
+    // 上下文
     public Context context;
 
     // 查询条件
