@@ -1,7 +1,8 @@
 package io.quarkcloud.quarkadmin.template.resource.core;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import java.util.Map;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.quarkcloud.quarkcore.service.Context;
 
 public class PerformQuery<T> {
@@ -13,12 +14,20 @@ public class PerformQuery<T> {
     protected QueryWrapper<T> queryWrapper;
 
     // 构造函数
-    public PerformQuery(Context context) {
+    public PerformQuery(Context context,QueryWrapper<T> queryWrapper) {
         this.context = context;
+        this.queryWrapper = queryWrapper;
     }
 
     // 构建查询条件
+    @SuppressWarnings("unchecked")
     public QueryWrapper<T> buildIndexQuery() {
-        return null;
+        String search = context.getParameter("search");
+        Map<String, Object> map = context.getRequestBody(Map.class);
+        if (map == null || map.isEmpty()) {
+            return queryWrapper;
+        }
+
+        return queryWrapper;
     }
 }

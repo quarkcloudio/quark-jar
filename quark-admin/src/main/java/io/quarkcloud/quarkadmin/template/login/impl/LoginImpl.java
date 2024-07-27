@@ -264,6 +264,7 @@ public class LoginImpl implements Login {
     }
 
     // 执行登录
+    @SuppressWarnings("unchecked")
     public Object handle(Context context) {
         Map<String, Object> map = context.getRequestBody(Map.class);
         if (map.isEmpty()) {

@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
 import io.quarkcloud.quarkadmin.service.ResourceService;
+import io.quarkcloud.quarkadmin.template.resource.core.PerformQuery;
 import io.quarkcloud.quarkcore.service.Context;
 
 public class ResourceServiceImpl<M extends ResourceMapper<T>, T> implements ResourceService<M, T> {
@@ -34,19 +35,15 @@ public class ResourceServiceImpl<M extends ResourceMapper<T>, T> implements Reso
         return this;
     }
 
-    // 使用列表查询条件
-    public ResourceServiceImpl<M, T> buildIndexQuery() {
-        this.queryWrapper = null;
-        return this;
-    }
-
     // 获取列表
     public List<T> list() {
+        QueryWrapper<T> queryWrapper = new PerformQuery<T>(context, this.queryWrapper).buildIndexQuery();
         return this.resourceMapper.selectList(queryWrapper);
     }
 
     // 获取分页数据
     public IPage<T> page(long pageSize) {
+        QueryWrapper<T> queryWrapper = new PerformQuery<T>(context, this.queryWrapper).buildIndexQuery();
         long currentPage = 1;
         String getPage = context.getRequest().getParameter("page");
         if (getPage!=null) {

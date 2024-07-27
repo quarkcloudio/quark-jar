@@ -45,14 +45,9 @@ public class Context {
 
     // setJoinPoint
     public Context setJoinPoint(ProceedingJoinPoint joinPoint) {
-
-        // 得到连接点执行的方法对象
         this.joinPointSignature = (MethodSignature) joinPoint.getSignature();
-
         this.joinPointMethod = joinPointSignature.getMethod();
-
         this.joinPoint = joinPoint;
-
         return this;
     }
 
@@ -67,7 +62,6 @@ public class Context {
         if (requestMapping == null) {
             return null;
         }
-
         return requestMapping.value();
     }
 
@@ -77,21 +71,15 @@ public class Context {
         if (requestMapping == null) {
             return null;
         }
-
-        // 创建一个HashMap来存储路径参数
         Map<String, String> pathVariables = new HashMap<>();
-
-        // 获取@RequestMapping注解的属性值，如路径、请求方法等
         String[] paths = requestMapping.value();
         String url = this.request.getRequestURI();
-
         for (int i = 0; i < paths.length; i++) {
             pathVariables = this.extractPathVariables(paths[i], url);
             if (!pathVariables.get(pathVariable).isEmpty()) {
                 return pathVariables.get(pathVariable);
             }
         }
-
         return null;
     }
 
@@ -107,11 +95,8 @@ public class Context {
      */
     private Map<String, String> extractPathVariables(String urlPattern, String url) {
         Map<String, String> pathVariables = new HashMap<>();
-        
-        // 将URL模式和请求URL分割为路径段
         String[] patternSegments = urlPattern.split("/");
         String[] urlSegments = url.split("/");
-
         // 遍历路径段，提取路径变量的值
         for (int i = 0; i < patternSegments.length; i++) {
             String patternSegment = patternSegments[i];
@@ -121,8 +106,17 @@ public class Context {
                 pathVariables.put(variableName, variableValue);
             }
         }
-        
         return pathVariables;
+    }
+
+    // getHeader
+    public String getHeader(String arg0) {
+        return request.getHeader(arg0);
+    }
+
+    // getParameter
+    public String getParameter(String arg0) {
+        return request.getParameter(arg0);
     }
 
     // getRequestBody
@@ -138,36 +132,25 @@ public class Context {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return map;
     }
 
     // 解析token
     public JWT parseToken() {
-
-        // 从请求头中获取令牌
         String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return null;
         }
-
         String token = authHeader.substring("Bearer ".length());
-
-        // JWT密钥
         String appKey = Env.getProperty("app.key");
-
-        // 验证Token是否合法
         if (!JWT.of(token).setKey(appKey.getBytes()).verify()) {
             return null;
         }
-
-        // 验证Token是否过期
         try {
             JWTValidator.of(token).validateDate(DateUtil.date());
         } catch (Exception e) {
             return null;
         }
-
         final JWT jwt = JWTUtil.parseToken(token);
 
         return jwt;
