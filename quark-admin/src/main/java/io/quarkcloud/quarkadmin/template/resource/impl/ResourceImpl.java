@@ -69,9 +69,6 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     // 导出数据排序规则
     public String exportQueryOrder;
     
-    // 查询条件
-    public QueryWrapper<T> queryWrapper;
-
     // 注入的字段数据
     public Map<String, Object> field;
     
@@ -365,11 +362,14 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
             .setBatchActions(indexTableAlertActions)
             .setSearches(indexSearches);
 
-        // 获取查询条件
-        this.queryWrapper = this.query(ctx, queryWrapper);
+        // 查询条件
+        QueryWrapper<T> queryWrapper = new QueryWrapper<>();
 
         // 获取查询条件
-        this.queryWrapper = this.indexQuery(ctx, queryWrapper);
+        queryWrapper = this.query(ctx, queryWrapper);
+
+        // 获取查询条件
+        queryWrapper = this.indexQuery(ctx, queryWrapper);
 
         // 设置查询条件
         resourceService.

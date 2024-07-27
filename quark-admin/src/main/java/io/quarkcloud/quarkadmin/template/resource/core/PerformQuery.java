@@ -48,14 +48,15 @@ public class PerformQuery<T> {
         } catch (JsonProcessingException e) {
             return queryWrapper;
         }
-
         if (map==null) {
             return queryWrapper;
         }
         for (Object item : searches) {
             Search<T> search = (Search<T>) item;
             String column = search.getColumn(item);
-            queryWrapper = search.apply(context, queryWrapper, map.get(column));
+            if (map.get(column)!=null&&map.get(column)!="") {
+                queryWrapper = search.apply(context, queryWrapper, map.get(column));
+            }
         }
 
         return queryWrapper;
