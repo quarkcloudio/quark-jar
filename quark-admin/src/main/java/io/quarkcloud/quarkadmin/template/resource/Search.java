@@ -1,9 +1,7 @@
 package io.quarkcloud.quarkadmin.template.resource;
 
 import java.util.Map;
-
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-
+import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import io.quarkcloud.quarkcore.service.Context;
 
 public interface Search<T> {
@@ -23,7 +21,7 @@ public interface Search<T> {
     public Object getDefault();
 
     // 执行查询
-    public QueryWrapper<T> apply(Context ctx, QueryWrapper<T> query, Object value);
+    public MPJLambdaWrapper<T> apply(Context ctx, MPJLambdaWrapper<T> query, Object value);
 
     // 属性
     public Object options(Context ctx);

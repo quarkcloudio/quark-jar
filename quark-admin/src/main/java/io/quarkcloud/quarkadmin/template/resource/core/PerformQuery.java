@@ -3,9 +3,10 @@ package io.quarkcloud.quarkadmin.template.resource.core;
 import java.util.List;
 import java.util.Map;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.yulichang.wrapper.MPJLambdaWrapper;
+
 import io.quarkcloud.quarkcore.service.Context;
 import io.quarkcloud.quarkadmin.template.resource.Search;
 
@@ -15,13 +16,13 @@ public class PerformQuery<T> {
     public Context context;
 
     // 查询条件
-    protected QueryWrapper<T> queryWrapper;
+    protected MPJLambdaWrapper<T> queryWrapper;
 
     // 搜索组件
     public List<Object> searches;
 
     // 构造函数
-    public PerformQuery(Context context, QueryWrapper<T> queryWrapper) {
+    public PerformQuery(Context context, MPJLambdaWrapper<T> queryWrapper) {
         this.context = context;
         this.queryWrapper = queryWrapper;
     }
@@ -34,7 +35,7 @@ public class PerformQuery<T> {
 
     // 构建查询条件
     @SuppressWarnings("unchecked")
-    public QueryWrapper<T> buildIndexQuery() {
+    public MPJLambdaWrapper<T> buildIndexQuery() {
         String searchParam = context.getParameter("search");
         if (searchParam == null || searchParam == "") {
             return queryWrapper;

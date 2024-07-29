@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.github.yulichang.wrapper.MPJLambdaWrapper;
 
 import io.quarkcloud.quarkcore.service.Context;
 import io.quarkcloud.quarkadmin.annotation.AdminResource;
@@ -192,12 +192,12 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     }
 
     // 全局查询
-    public QueryWrapper<T> query(Context ctx, QueryWrapper<T> queryWrapper) {
+    public MPJLambdaWrapper<T> query(Context ctx, MPJLambdaWrapper<T> queryWrapper) {
         return queryWrapper;
     }
 
     // 列表查询
-    public QueryWrapper<T> indexQuery(Context ctx, QueryWrapper<T> queryWrapper) {
+    public MPJLambdaWrapper<T> indexQuery(Context ctx, MPJLambdaWrapper<T> queryWrapper) {
         return queryWrapper;
     }
 
@@ -363,7 +363,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
             .setSearches(indexSearches);
 
         // 查询条件
-        QueryWrapper<T> queryWrapper = new QueryWrapper<>();
+        MPJLambdaWrapper<T> queryWrapper = new MPJLambdaWrapper<>();
 
         // 获取查询条件
         queryWrapper = this.query(ctx, queryWrapper);
