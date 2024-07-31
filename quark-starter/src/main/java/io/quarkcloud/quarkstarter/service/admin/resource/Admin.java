@@ -10,6 +10,7 @@ import io.quarkcloud.quarkadmin.entity.AdminEntity;
 import io.quarkcloud.quarkadmin.mapper.AdminMapper;
 import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
 import io.quarkcloud.quarkcore.service.Context;
+import io.quarkcloud.quarkstarter.service.admin.action.Delete;
 import io.quarkcloud.quarkstarter.service.admin.search.Input;
 
 @Component(value = "adminResource")
@@ -38,6 +39,8 @@ public class Admin extends ResourceImpl<AdminMapper,AdminEntity> {
     
     // 行为
     public List<Object> actions(Context ctx) {
-        return null;
+        return Arrays.asList(
+            new Delete()
+        );
     }
 }

@@ -33,6 +33,11 @@ public class ActionImpl implements Action {
     public boolean showOnDetail;
     public boolean showOnDetailExtra;
 
+    // 构造函数
+    public ActionImpl() {
+        this.actionType = "ajax";
+    }
+
     // 执行行为句柄
     public Object handle(Context ctx, Object query) throws Exception {
         return "Method not implemented";
