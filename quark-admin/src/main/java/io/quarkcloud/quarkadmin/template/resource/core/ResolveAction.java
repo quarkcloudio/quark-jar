@@ -19,7 +19,7 @@ import io.quarkcloud.quarkcore.service.Context;
 public class ResolveAction {
 
     // actions
-    public List<Action> actions;
+    public List<Object> actions;
 
     // context
     public Context context;
@@ -28,7 +28,7 @@ public class ResolveAction {
     public ResolveAction() {}
 
     // 构造函数
-    public ResolveAction(List<Action> actions, Context context) {
+    public ResolveAction(List<Object> actions, Context context) {
         this.actions = actions;
         this.context = context;
     }
@@ -43,7 +43,8 @@ public class ResolveAction {
         }
 
         // 遍历
-        for (Action action : actions) {
+        for (Object item : actions) {
+            Action action = (Action)item;
             if (action.shownOnIndex()) {
                 items.add(buildAction(context, action));
             }
@@ -62,7 +63,8 @@ public class ResolveAction {
         }
 
         // 遍历
-        for (Action action : actions) {
+        for (Object item : actions) {
+            Action action = (Action)item;
             if (action.shownOnIndexTableRow()) {
                 items.add(buildAction(context, action));
             }
@@ -81,7 +83,8 @@ public class ResolveAction {
         }
 
         // 遍历
-        for (Action action : actions) {
+        for (Object item : actions) {
+            Action action = (Action)item;
             if (action.shownOnIndexTableAlert()) {
                 items.add(buildAction(context, action));
             }
@@ -100,7 +103,8 @@ public class ResolveAction {
         }
 
         // 遍历
-        for (Action action : actions) {
+        for (Object item : actions) {
+            Action action = (Action)item;
             if (action.shownOnForm()) {
                 items.add(buildAction(context, action));
             }
@@ -119,7 +123,8 @@ public class ResolveAction {
         }
 
         // 遍历
-        for (Action action : actions) {
+        for (Object item : actions) {
+            Action action = (Action)item;
             if (action.shownOnFormExtra()) {
                 items.add(buildAction(context, action));
             }
@@ -138,7 +143,8 @@ public class ResolveAction {
         }
 
         // 遍历
-        for (Action action : actions) {
+        for (Object item : actions) {
+            Action action = (Action)item;
             if (action.shownOnDetail()) {
                 items.add(buildAction(context, action));
             }
@@ -157,7 +163,8 @@ public class ResolveAction {
         }
 
         // 遍历
-        for (Action action : actions) {
+        for (Object item : actions) {
+            Action action = (Action)item;
             if (action.shownOnDetailExtra()) {
                 items.add(buildAction(context, action));
             }

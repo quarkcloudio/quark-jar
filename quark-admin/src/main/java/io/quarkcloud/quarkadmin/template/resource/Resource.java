@@ -52,7 +52,7 @@ public interface Resource<T> {
     public List<Object> searches(Context ctx);
 
     // 行为
-    public List<Action> actions(Context ctx);
+    public List<Object> actions(Context ctx);
 
     // 菜单
     public Map<String, Object> menus(Context ctx);

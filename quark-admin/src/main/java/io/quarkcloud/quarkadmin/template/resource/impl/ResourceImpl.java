@@ -212,7 +212,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     }
 
     // 行为
-    public List<Action> actions(Context ctx) {
+    public List<Object> actions(Context ctx) {
         return null;
     }
 
@@ -296,7 +296,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     public Object indexTableColumns(Context ctx) {
 
         // 获取行为
-        List<Action> getActions = actions(ctx);
+        List<Object> getActions = actions(ctx);
 
         // 获取字段
         List<Object> getFields = fields(ctx);
