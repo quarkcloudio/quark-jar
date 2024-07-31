@@ -35,4 +35,9 @@ public class Admin extends ResourceImpl<AdminMapper,AdminEntity> {
             new Input<AdminEntity>("username", "用户名")
         );
     }
+    
+    // 行为
+    public List<Object> actions(Context ctx) {
+        return null;
+    }
 }
