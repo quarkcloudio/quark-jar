@@ -395,8 +395,14 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         return table.setPagination(current, pageSize, total, defaultCurrent).setDatasource(items);
     }
 
-    // 组件渲染
+    // 列表页组件渲染
     public Object indexRender(Context context) {
         return this.pageComponentRender(context, indexComponentRender(context));
+    }
+
+
+    // 创建页组件渲染
+    public Object creationRender(Context context) {
+        return "abcd";
     }
 }
