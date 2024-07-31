@@ -11,7 +11,7 @@ import io.quarkcloud.quarkadmin.component.action.Action.Closure;
 import io.quarkcloud.quarkadmin.component.drawer.Drawer;
 import io.quarkcloud.quarkadmin.component.dropdown.Dropdown;
 import io.quarkcloud.quarkadmin.component.form.Form;
-import io.quarkcloud.quarkadmin.component.form.fields.Space;
+import io.quarkcloud.quarkadmin.component.space.Space;
 import io.quarkcloud.quarkadmin.component.modal.Modal;
 import io.quarkcloud.quarkadmin.template.resource.Action;
 import io.quarkcloud.quarkcore.service.Context;
@@ -497,9 +497,10 @@ public class ResolveAction {
     public String buildActionApi(Context context, List<String> params, String uriKey) {
         StringBuilder paramsUri = new StringBuilder();
         String api = context.getRequest().getRequestURI();
-
-        for (String v : params) {
-            paramsUri.append(v).append("=${").append(v).append("}&");
+        if (params!=null) {
+            for (String v : params) {
+                paramsUri.append(v).append("=${").append(v).append("}&");
+            }
         }
 
         // 获取api路径

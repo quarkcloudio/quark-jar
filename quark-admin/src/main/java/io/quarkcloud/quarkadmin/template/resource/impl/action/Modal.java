@@ -8,13 +8,13 @@ import io.quarkcloud.quarkcore.service.Context;
 public class Modal extends ActionImpl {
 
     // 抽屉弹出层宽度
-    private int width;
+    public int width;
 
     // 关闭时销毁弹出层里的子元素
-    private boolean destroyOnClose;
+    public boolean destroyOnClose;
 
     // 初始化
-    public Modal(Context ctx) {
+    public Modal() {
         this.setActionType("modal");
         this.width = 520;
     }

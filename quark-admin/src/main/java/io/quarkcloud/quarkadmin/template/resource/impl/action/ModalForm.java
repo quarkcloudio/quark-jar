@@ -10,19 +10,19 @@ import io.quarkcloud.quarkcore.service.Context;
 public class ModalForm extends ActionImpl {
 
     // 抽屉弹出层宽度
-    private int width;
+    public int width;
 
     // 关闭时销毁弹出层里的子元素
-    private boolean destroyOnClose;
+    public boolean destroyOnClose;
 
     // 获取取消按钮文案
-    private String cancelText;
+    public String cancelText;
 
     // 获取提交按钮文案
-    private String submitText;
+    public String submitText;
 
     // 初始化
-    public ModalForm(Context ctx) {
+    public ModalForm() {
         this.setActionType("modalForm");
         this.width = 520;
         this.setReload("table");

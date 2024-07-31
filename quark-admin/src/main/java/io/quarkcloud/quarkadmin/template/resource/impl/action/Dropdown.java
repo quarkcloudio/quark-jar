@@ -9,38 +9,37 @@ import io.quarkcloud.quarkadmin.template.resource.impl.ActionImpl;
 import io.quarkcloud.quarkcore.service.Context;
 
 public class Dropdown extends ActionImpl {
+
     /**
      * 下拉框箭头是否显示
      */
-    private boolean arrow;
+    public boolean arrow;
 
     /**
      * 菜单弹出位置：bottomLeft bottomCenter bottomRight topLeft topCenter topRight
      */
-    private String placement;
+    public String placement;
 
     /**
      * 触发下拉的行为，移动端不支持 hover，Array<click|hover|contextMenu>
      */
-    private List<String> trigger;
+    public List<String> trigger;
 
     /**
      * 下拉根元素的样式
      */
-    private Map<String, Object> overlayStyle;
+    public Map<String, Object> overlayStyle;
 
     /**
      * 下拉菜单行为
      */
-    private List<Action> actions;
+    public List<Action> actions;
 
     // 初始化
-    public Object templateInit(Context ctx) {
+    public Dropdown() {
         this.actionType = "dropdown";
         this.placement = "bottomLeft";
         this.trigger.add("hover");
-
-        return this;
     }
 
     /**

@@ -199,7 +199,6 @@ public class Action extends Component {
     // "icon-password", "icon-article", "icon-page", "icon-plugin", "icon-admin",
     // "icon-banner"
     public Action setIcon(String icon) {
-
         this.icon = "icon-" + icon;
 
         return this;
@@ -207,7 +206,6 @@ public class Action extends Component {
 
     // 设置按钮类型，primary | ghost | dashed | link | text | default
     public Action setType(String buttonType, boolean danger) {
-
         this.type = buttonType;
         this.danger = danger;
 
@@ -216,7 +214,6 @@ public class Action extends Component {
 
     // 设置跳转链接
     public Action setLink(String herf, String target) {
-
         this.href = herf;
         this.target = target;
         this.actionType = "link";
@@ -242,7 +239,6 @@ public class Action extends Component {
 
     // 设置行为前的确认操作
     public Action setWithConfirm(String title, String text, String confirmType) {
-
         this.confirmTitle = title;
         this.confirmText = text;
         this.confirmType = confirmType;
