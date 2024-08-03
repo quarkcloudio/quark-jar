@@ -155,4 +155,36 @@ public class Context {
 
         return jwt;
     }
+
+    public boolean isIndex() {
+        String[] uri = this.request.getRequestURI().split("/");
+        return uri[uri.length - 1].equals("index");
+    }
+
+    public boolean isCreating() {
+        String[] uri = this.request.getRequestURI().split("/");
+        String lastSegment = uri[uri.length - 1];
+        return lastSegment.equals("create") || lastSegment.equals("store");
+    }
+
+    public boolean isEditing() {
+        String[] uri = this.request.getRequestURI().split("/");
+        String lastSegment = uri[uri.length - 1];
+        return lastSegment.equals("edit") || lastSegment.equals("save");
+    }
+
+    public boolean isDetail() {
+        String[] uri = this.request.getRequestURI().split("/");
+        return uri[uri.length - 1].equals("detail");
+    }
+
+    public boolean isExport() {
+        String[] uri = this.request.getRequestURI().split("/");
+        return uri[uri.length - 1].equals("export");
+    }
+
+    public boolean isImport() {
+        String[] uri = this.request.getRequestURI().split("/");
+        return uri[uri.length - 1].equals("import");
+    }
 }

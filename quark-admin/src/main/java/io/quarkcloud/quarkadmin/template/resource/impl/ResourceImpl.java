@@ -10,13 +10,15 @@ import com.github.yulichang.wrapper.MPJLambdaWrapper;
 
 import io.quarkcloud.quarkcore.service.Context;
 import io.quarkcloud.quarkadmin.annotation.AdminResource;
+import io.quarkcloud.quarkadmin.component.card.Card;
+import io.quarkcloud.quarkadmin.component.form.Form;
 import io.quarkcloud.quarkadmin.component.pagecontainer.PageContainer;
 import io.quarkcloud.quarkadmin.component.pagecontainer.PageHeader;
 import io.quarkcloud.quarkadmin.component.table.Table;
 import io.quarkcloud.quarkadmin.component.table.ToolBar;
+import io.quarkcloud.quarkadmin.component.tabs.Tabs;
 import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
 import io.quarkcloud.quarkadmin.service.ResourceService;
-import io.quarkcloud.quarkadmin.template.resource.Action;
 import io.quarkcloud.quarkadmin.template.resource.Resource;
 import io.quarkcloud.quarkadmin.template.resource.core.ResolveAction;
 import io.quarkcloud.quarkadmin.template.resource.core.ResolveField;
@@ -43,10 +45,10 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     public Object perPage;
     
     // 表单页Form实例
-    public Object form;
+    public Form form = new Form();
     
     // 列表页Table实例
-    public Object table;
+    public Table table = new Table();
     
     // 列表页表格标题后缀
     public String tableTitleSuffix;
@@ -400,9 +402,133 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         return this.pageComponentRender(context, indexComponentRender(context));
     }
 
+    // 创建表单的接口
+    public String formApi(Context ctx) {
+        return "";
+    }
+
+    // 创建表单标题
+    public String formTitle(Context ctx) {
+        String title = this.getTitle();
+        if (ctx.isCreating()) {
+            return "创建" + title;
+        } else if (ctx.isEditing()) {
+            return "编辑" + title;
+        }
+
+        return title;
+    }
+
+    // 创建表单组件渲染
+    public Object formWithinCard(
+        Context ctx,
+        String title,
+        Object extra,
+        String api,
+        Object fields,
+        Object actions,
+        Map<String, Object> data) {
+
+        Object formComponent = this.form.setStyle(Map.of("padding", "24px"))
+            .setApi(api)
+            .setActions(actions)
+            .setBody(fields)
+            .setInitialValues(data);
+
+        return new Card()
+            .setTitle(title)
+            .setHeaderBordered(true)
+            .setExtra(extra)
+            .setBody(formComponent);
+    }
+
+    // 创建表单组件渲染
+    public Object formWithinTabs(
+        Context ctx,
+        String title,
+        Object extra,
+        String api,
+        Object fields,
+        Object actions,
+        Map<String, Object> data) {
+        Tabs tabsComponent = new Tabs().setTabPanes(fields).setTabBarExtraContent(extra);
+
+        return this.form.setStyle(Map.of("backgroundColor", "#fff", "paddingBottom", "20px"))
+            .setApi(api)
+            .setActions(actions)
+            .setBody(tabsComponent)
+            .setInitialValues(data);
+    }
+
+    public Map<String, Object> beforeSaving(Context ctx, Map<String, Object> submitData) {
+        return submitData;
+    }
+
+    public Object formComponentRender (
+        Context ctx,
+        String title,
+        Object extra,
+        String api,
+        Object fields,
+        Object actions,
+        Map<String, Object> data) {
+
+        if (fields instanceof List && !((List<?>) fields).isEmpty()) {
+            String component;
+            try {
+                component = ((List<?>) fields).get(0).getClass().getField("component").toString();
+                if (component.equals("tabPane")) {
+                    return this.formWithinTabs(ctx, title, extra, api, fields, actions, data);
+                }
+            } catch (NoSuchFieldException | SecurityException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return this.formWithinCard(ctx, title, extra, api, fields, actions, data);
+    }
+
+    // 创建表单的接口
+    public String creationApi(Context ctx) {
+        String formApi = this.formApi(ctx);
+        if (!formApi.isEmpty()) {
+            return formApi;
+        }
+        String[] uri = ctx.getRequest().getRequestURI().split("/");
+        if (uri[uri.length - 1].equals("index")) {
+            return ctx.getRequest().getRequestURI().replace("/index", "/store");
+        }
+
+        return ctx.getRequest().getRequestURI().replace("/create", "/store");
+    }
+
+    // 创建页面显示前回调
+    public Map<String, Object> beforeCreating(Context ctx) {
+        return Map.of();
+    }
+
+    // 渲染创建页组件
+    public Object creationComponentRender(Context ctx, Map<String, Object> data) {
+        String title = formTitle(ctx);
+        List<Object> getActions = actions(ctx);
+        Object formExtraActions = new ResolveAction(getActions, ctx).getFormExtraActions();
+        String api = creationApi(ctx);
+
+        // 获取字段
+        List<Object> getFields = fields(ctx);
+
+        // 获取表格列
+        Object fields = new ResolveField(getFields, ctx).creationFieldsWithinComponents(ctx);
+        Object formActions = new ResolveAction(getActions, ctx).getFormActions();
+
+        return this.formComponentRender(ctx, title, formExtraActions, api, fields, formActions, data);
+
+    }
 
     // 创建页组件渲染
     public Object creationRender(Context context) {
-        return "abcd";
+        Map<String, Object> data = beforeCreating(context);
+
+        return this.pageComponentRender(context, creationComponentRender(context, data));
     }
 }

@@ -88,7 +88,7 @@ public class Form extends Component {
     private Object body;
 
     // 表单行为
-    private List<Object> actions;
+    private Object actions;
 
     // 样式
     private Map<String, Object> style;
