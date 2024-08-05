@@ -429,7 +429,8 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         Object actions,
         Map<String, Object> data) {
 
-        Object formComponent = this.form.setStyle(Map.of("padding", "24px"))
+        Object formComponent = this.form
+            .setStyle(Map.of("padding", "24px"))
             .setApi(api)
             .setActions(actions)
             .setBody(fields)

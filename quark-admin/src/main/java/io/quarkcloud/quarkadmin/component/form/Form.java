@@ -15,7 +15,6 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 public class Form extends Component {
 
     // 表单标题
