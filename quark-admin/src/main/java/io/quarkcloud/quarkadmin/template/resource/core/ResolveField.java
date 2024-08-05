@@ -286,41 +286,37 @@ public class ResolveField {
         if (fields instanceof List<?>) {
             List<?> fieldList = (List<?>) fields;
             for (Object obj : fieldList) {
-                try {
-                    // 检查是否有Body字段
-                    Reflect bodyReflect = new Reflect(obj);
-                    boolean bodyFieldExist = bodyReflect.checkFieldExist("body");
-                    if (bodyFieldExist) {
-                        // 获取Body字段的内容值
-                        Object body = obj.getClass().getField("body").get(obj);
+                // 检查是否有Body字段
+                Reflect bodyReflect = new Reflect(obj);
+                boolean bodyFieldExist = bodyReflect.checkFieldExist("body");
+                if (bodyFieldExist) {
+                    // 获取Body字段的内容值
+                    Object body = (Object) bodyReflect.getFieldValue("body");
 
-                        // 递归解析值
-                        Object parsedFields = creationFormFieldsParser(ctx, body);
+                    // 递归解析值
+                    Object parsedFields = creationFormFieldsParser(ctx, body);
 
-                        // 更新Body字段的值
-                        obj.getClass().getField("body").set(obj, parsedFields);
+                    // 更新Body字段的值
+                    bodyReflect.setFieldValue(parsedFields);
 
-                        items.add(obj);
-                    } else {
-                        // 获取Component字段的值
-                        String component = (String) obj.getClass().getSuperclass().getDeclaredField("component").get(obj);
+                    items.add(obj);
+                } else {
+                    // 获取Component字段的值
+                    String component = (String) bodyReflect.getFieldValue("component");
 
-                        // 如果Component包含"Field"，则进行进一步处理
-                        if (component.contains("Field")) {
-                            // 判断是否在创建页面显示
-                            Object isShown = new Reflect(obj).invoke("isShownOnCreation");
-                            if (isShown!=null && (Boolean) isShown) {
-                                if ((Boolean) isShown) {
-                                    new Reflect(obj).invoke("buildFrontendRules", String.class, context.request.getQueryString());
-                                    items.add(obj);
-                                }
+                    // 如果Component包含"Field"，则进行进一步处理
+                    if (component.contains("Field")) {
+                        // 判断是否在创建页面显示
+                        Object isShown = new Reflect(obj).invoke("isShownOnCreation");
+                        if (isShown!=null && (Boolean) isShown) {
+                            if ((Boolean) isShown) {
+                                new Reflect(obj).invoke("buildFrontendRules", String.class, context.request.getQueryString());
+                                items.add(obj);
                             }
-                        } else {
-                            items.add(obj);
                         }
+                    } else {
+                        items.add(obj);
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
             }
         }
@@ -374,58 +370,37 @@ public class ResolveField {
         if (fields instanceof List<?>) {
             List<?> fieldList = (List<?>) fields;
             for (Object obj : fieldList) {
-                try {
-                    // 检查是否有Body字段
-                    boolean hasBody = obj.getClass().getField("body") != null;
-
-                    if (hasBody) {
-                        // 获取Body字段的内容值
-                        Object body = obj.getClass().getField("body").get(obj);
-
-                        // 递归解析值
-                        Object parsedFields = updateFormFieldsParser(ctx, body);
-
-                        // 更新Body字段的值
-                        obj.getClass().getField("body").set(obj, parsedFields);
-
-                        items.add(obj);
-                    } else {
-                        // 获取Component字段的值
-                        String component = (String) obj.getClass().getSuperclass().getDeclaredField("component").get(obj);
-
-                        // 如果Component包含"Field"，则进行进一步处理
-                        if (component.contains("Field")) {
-
-                            // 判断是否在创建页面显示
-                            Object isShown = new Object();
-                            boolean hasMethod = false;
-                            try {
-                                isShown = obj.getClass().getMethod("isShownOnUpdate").invoke(obj);
-                                hasMethod = true;
-                            } catch (Exception e) {
-                                hasMethod = false;
+                // 检查是否有Body字段
+                Reflect bodyReflect = new Reflect(obj);
+                boolean bodyFieldExist = bodyReflect.checkFieldExist("body");
+                if (bodyFieldExist) {
+                    // 获取Body字段的内容值
+                    Object body = (Object) bodyReflect.getFieldValue("body");
+    
+                    // 递归解析值
+                    Object parsedFields = updateFormFieldsParser(ctx, body);
+    
+                    // 更新Body字段的值
+                    bodyReflect.setFieldValue(parsedFields);
+    
+                    items.add(obj);
+                } else {
+                    // 获取Component字段的值
+                    String component = (String) bodyReflect.getFieldValue("component");
+    
+                    // 如果Component包含"Field"，则进行进一步处理
+                    if (component.contains("Field")) {
+                        // 判断是否在创建页面显示
+                        Object isShown = new Reflect(obj).invoke("isShownOnUpdate");
+                        if (isShown!=null && (Boolean) isShown) {
+                            if ((Boolean) isShown) {
+                                new Reflect(obj).invoke("buildFrontendRules", String.class, context.request.getQueryString());
+                                items.add(obj);
                             }
-                
-                            if (hasMethod) {
-                                if (isShown instanceof Boolean) {
-                                    if ((Boolean) isShown) {
-                                        try {
-                                            Method method = obj.getClass().getMethod("buildFrontendRules", String.class);
-                                            method.invoke(obj, context.request.getQueryString());
-                                        } catch (NoSuchMethodException | SecurityException | IllegalAccessException
-                                                | InvocationTargetException e) {
-                                            e.printStackTrace();
-                                        }
-                                        items.add(obj);
-                                    }
-                                }
-                            }
-                        } else {
-                            items.add(obj);
                         }
+                    } else {
+                        items.add(obj);
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
             }
         }
@@ -438,27 +413,17 @@ public class ResolveField {
     public Object formFieldsParser(Context ctx, Object fields) {
         if (fields instanceof List) {
             ((List<Object>) fields).stream().forEach(field -> {
-                boolean hasBody = false;
-                Object body = new Object();
-                try {
-                    body = field.getClass().getField("body").get(field);
-                    hasBody = true;
-                } catch (NoSuchFieldException | IllegalAccessException e) {
-                    hasBody = false;
-                }
-                if (hasBody) {
+                // 检查是否有Body字段
+                Reflect bodyReflect = new Reflect(field);
+                boolean bodyFieldExist = bodyReflect.checkFieldExist("body");
+                if (bodyFieldExist) {
+                    // 获取Body字段的内容值
+                    Object body = (Object) bodyReflect.getFieldValue("body");
                     this.formFieldsParser(context, body);
                 } else {
-                    try {
-                        Object component = field.getClass().getSuperclass().getDeclaredField("component").get(field);
-                        String getComponent = (String) component;
-                        if (getComponent.contains("Field")) {
-                            Method method = field.getClass().getMethod("buildFrontendRules", String.class);
-                            method.invoke(field, context.request.getQueryString());
-                        }
-                    } catch (NoSuchFieldException | NoSuchMethodException | SecurityException | IllegalAccessException
-                            | InvocationTargetException e) {
-                        e.printStackTrace();
+                    String component = (String) bodyReflect.getFieldValue("component");
+                    if (component.contains("Field")) {
+                        new Reflect(field).invoke("buildFrontendRules", String.class, context.request.getQueryString());
                     }
                 }
             });
@@ -489,42 +454,38 @@ public class ResolveField {
         String componentType = "description";
 
         for (Object v : fields) {
-            try {
-                // 检查是否有Body字段
-                Reflect bodyReflect = new Reflect(v);
-                boolean bodyFieldExist = bodyReflect.checkFieldExist("body");
+            // 检查是否有Body字段
+            Reflect bodyReflect = new Reflect(v);
+            boolean bodyFieldExist = bodyReflect.checkFieldExist("body");
 
-                // 解析body数据
-                if (bodyFieldExist) {
-                    Object body = bodyReflect.getFieldValue();
-                    List<Object> subItems = new ArrayList<>();
-                    for (Object sv : (List<?>) body) {
-                        Object isShown = new Reflect(sv).invoke("isShownOnDetail");
-                        if (isShown!=null && (Boolean) isShown) {
-                            Object getColumn = fieldToColumn(ctx, sv);
-                            items.add(getColumn);
-                        }
-                    }
-
-                    Object descriptions = new Descriptions()
-                        .setStyle(Map.of("padding", "24px"))
-                        .setTitle("")
-                        .setColumn(2)
-                        .setColumns(subItems)
-                        .setDataSource(data)
-                        .setActions(detailActions);
-
-                    v.getClass().getMethod("setBody", Object.class).invoke(v, descriptions);
-                    items.add(v);
-                } else {
-                    Object isShown = new Reflect(v).invoke("isShownOnDetail");
+            // 解析body数据
+            if (bodyFieldExist) {
+                Object body = bodyReflect.getFieldValue();
+                List<Object> subItems = new ArrayList<>();
+                for (Object sv : (List<?>) body) {
+                    Object isShown = new Reflect(sv).invoke("isShownOnDetail");
                     if (isShown!=null && (Boolean) isShown) {
-                        Object getColumn = fieldToColumn(ctx, v);
+                        Object getColumn = fieldToColumn(ctx, sv);
                         items.add(getColumn);
                     }
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
+
+                Object descriptions = new Descriptions()
+                    .setStyle(Map.of("padding", "24px"))
+                    .setTitle("")
+                    .setColumn(2)
+                    .setColumns(subItems)
+                    .setDataSource(data)
+                    .setActions(detailActions);
+
+                new Reflect(v).invoke("setBody", Object.class, descriptions);
+                items.add(v);
+            } else {
+                Object isShown = new Reflect(v).invoke("isShownOnDetail");
+                if (isShown!=null && (Boolean) isShown) {
+                    Object getColumn = fieldToColumn(ctx, v);
+                    items.add(getColumn);
+                }
             }
         }
 
@@ -613,20 +574,15 @@ public class ResolveField {
                         items.addAll(getItems);
                     }
                 } else {
-                    try {
-                        String component = (String) v.getClass().getSuperclass().getDeclaredField("component").get(v);
-                        if (component != null && component.contains("Field")) {
-                            items.add(v);
-                            if (when) {
-                                List<Object> whenFields = getWhenFields(v);
-                                if (!whenFields.isEmpty()) {
-                                    items.addAll(whenFields);
-                                }
+                    String component = (String) bodyReflect.getFieldValue("component");
+                    if (component != null && component.contains("Field")) {
+                        items.add(v);
+                        if (when) {
+                            List<Object> whenFields = getWhenFields(v);
+                            if (!whenFields.isEmpty()) {
+                                items.addAll(whenFields);
                             }
                         }
-                    } catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException
-                            | SecurityException e) {
-                        e.printStackTrace();
                     }
                 }
             }

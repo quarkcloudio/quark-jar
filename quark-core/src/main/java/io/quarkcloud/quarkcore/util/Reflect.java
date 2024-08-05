@@ -181,6 +181,48 @@ public class Reflect {
         return null;
     }
 
+    // 设置字段值
+    public void setFieldValue(Object fieldValue) {
+        Field field;
+        if (fieldName==null || obj==null) {
+            return;
+        }
+        try {
+            field = obj.getClass().getDeclaredField(fieldName);
+        } catch (NoSuchFieldException e) {
+            field = null;
+        }
+        if (field!=null) {
+            field.setAccessible(true);
+            try {
+                field.set(obj, fieldValue);
+            } catch (IllegalArgumentException | IllegalAccessException e) {
+                return;
+            }
+        }
+
+        // 检查父类字段
+        try {
+            Field superField = obj.getClass().getSuperclass().getDeclaredField(fieldName);
+            if (superField != null) {
+                field = superField;
+            }
+        } catch (NoSuchFieldException e) {
+            field = null;
+        }
+
+        if (field!=null) {
+            field.setAccessible(true); // 使私有字段可访问
+            try {
+                field.set(obj, fieldValue);
+            } catch (IllegalArgumentException | IllegalAccessException e) {
+                return;
+            }
+        }
+
+        return;
+    }
+
     // 检查方法是否存在
     public boolean checkMethodExist() {
         if (obj == null) {
