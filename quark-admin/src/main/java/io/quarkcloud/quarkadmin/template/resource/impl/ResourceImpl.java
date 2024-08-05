@@ -79,12 +79,9 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
 
     // 构造函数
     public ResourceImpl() {
-
-        // 获取注解对象
         if (getClass().isAnnotationPresent(AdminResource.class)) {
             annotationClass = getClass().getAnnotation(AdminResource.class);
         }
-
         this.tableTitleSuffix = "列表";
         this.tableActionColumnTitle = "操作";
         this.tableActionColumnWidth = 200;
