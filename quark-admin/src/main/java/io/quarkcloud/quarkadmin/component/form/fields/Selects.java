@@ -169,6 +169,7 @@ public class Selects extends Component {
         this.component = "selects";
         this.setComponentKey();
         this.style = new HashMap<>();
+        this.rules = new ArrayList<>();
     }
 
     // 校验规则，设置字段的校验逻辑

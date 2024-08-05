@@ -288,9 +288,9 @@ public class ResolveField {
             for (Object obj : fieldList) {
                 try {
                     // 检查是否有Body字段
-                    boolean hasBody = obj.getClass().getField("body") != null;
-
-                    if (hasBody) {
+                    Reflect bodyReflect = new Reflect(obj);
+                    boolean bodyFieldExist = bodyReflect.checkFieldExist("body");
+                    if (bodyFieldExist) {
                         // 获取Body字段的内容值
                         Object body = obj.getClass().getField("body").get(obj);
 
@@ -307,29 +307,12 @@ public class ResolveField {
 
                         // 如果Component包含"Field"，则进行进一步处理
                         if (component.contains("Field")) {
-
                             // 判断是否在创建页面显示
-                            Object isShown = new Object();
-                            boolean hasMethod = false;
-                            try {
-                                isShown = obj.getClass().getMethod("isShownOnCreation").invoke(obj);
-                                hasMethod = true;
-                            } catch (Exception e) {
-                                hasMethod = false;
-                            }
-                
-                            if (hasMethod) {
-                                if (isShown instanceof Boolean) {
-                                    if ((Boolean) isShown) {
-                                        try {
-                                            Method method = obj.getClass().getMethod("buildFrontendRules", String.class);
-                                            method.invoke(obj, context.request.getQueryString());
-                                        } catch (NoSuchMethodException | SecurityException | IllegalAccessException
-                                                | InvocationTargetException e) {
-                                            e.printStackTrace();
-                                        }
-                                        items.add(obj);
-                                    }
+                            Object isShown = new Reflect(obj).invoke("isShownOnCreation");
+                            if (isShown!=null && (Boolean) isShown) {
+                                if ((Boolean) isShown) {
+                                    new Reflect(obj).invoke("buildFrontendRules", String.class, context.request.getQueryString());
+                                    items.add(obj);
                                 }
                             }
                         } else {

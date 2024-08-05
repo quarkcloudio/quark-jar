@@ -252,13 +252,13 @@ public class Reflect {
     }
 
     // invoke
-    public Object invoke(String methodName, Class<?>... parameterTypes) {
+    public Object invoke(String methodName, Class<?> parameterTypes, Object... args) {
         Object result = new Object();
         if (methodName==null || obj==null) {
             return false;
         }
         try {
-            result = obj.getClass().getMethod(methodName, parameterTypes).invoke(obj, parameterTypes);
+            result = obj.getClass().getMethod(methodName, parameterTypes).invoke(obj, args);
         } catch (Exception e) {
             e.printStackTrace();
         }

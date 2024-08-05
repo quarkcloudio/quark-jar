@@ -184,6 +184,7 @@ public class Id extends Component {
         this.component = "idField";
         this.setComponentKey();
         this.style = new HashMap<>();
+        this.rules = new ArrayList<>();
     }
 
     // 校验规则，设置字段的校验逻辑

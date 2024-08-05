@@ -197,6 +197,7 @@ public class Image extends Component {
         this.component = "imageField";
         this.setComponentKey();
         this.style = new HashMap<>();
+        this.rules = new ArrayList<>();
     }
 
     // 校验规则，设置字段的校验逻辑

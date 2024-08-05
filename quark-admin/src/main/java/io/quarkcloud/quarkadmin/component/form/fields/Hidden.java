@@ -173,6 +173,7 @@ public class Hidden extends Component {
         this.component = "hiddenField";
         this.setComponentKey();
         this.style = new HashMap<>();
+        this.rules = new ArrayList<>();
     }
 
     // 校验规则，设置字段的校验逻辑

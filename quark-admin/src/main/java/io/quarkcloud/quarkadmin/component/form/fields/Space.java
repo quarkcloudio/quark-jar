@@ -188,6 +188,7 @@ public class Space extends Component {
         this.component = "spaceField";
         this.setComponentKey();
         this.style = new HashMap<>();
+        this.rules = new ArrayList<>();
     }
 
     // 校验规则，设置字段的校验逻辑

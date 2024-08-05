@@ -232,7 +232,7 @@ public class Text extends Component {
         this.placeholder = "请输入";
         this.maxLength = 200;
         this.style = new HashMap<>();
-
+        this.rules = new ArrayList<>();
         this.setComponentKey();
         this.setWidth(200);
     }
@@ -303,15 +303,12 @@ public class Text extends Component {
 
         Function<List<Rule>, List<Rule>> convertToFrontendRules = Rule::convertToFrontendRules;
         frontendRules.addAll(convertToFrontendRules.apply(this.rules));
-
         if (isCreating) {
             frontendRules.addAll(convertToFrontendRules.apply(this.creationRules));
         }
-
         if (isEditing) {
             frontendRules.addAll(convertToFrontendRules.apply(this.updateRules));
         }
-        
         this.frontendRules = frontendRules;
 
         return this;

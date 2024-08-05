@@ -192,6 +192,7 @@ public class MapField extends Component {
         this.component = "mapField";
         this.setComponentKey();
         this.style = new HashMap<>();
+        this.rules = new ArrayList<>();
     }
 
     // 校验规则，设置字段的校验逻辑
