@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.quarkcloud.quarkadmin.annotation.AdminResourceIndexRender;
+import io.quarkcloud.quarkadmin.annotation.AdminResourceStoreRender;
 import io.quarkcloud.quarkadmin.annotation.AdminResourceCreateRender;
 import io.quarkcloud.quarkcore.service.Context;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,6 +25,13 @@ public class AdminResourceController {
     @ResponseBody
     @AdminResourceCreateRender
     public Object create(HttpServletRequest request, HttpServletResponse response) {
+        return new Context(request, response);
+    }
+
+    @RequestMapping("/api/admin/{resource}/store")
+    @ResponseBody
+    @AdminResourceStoreRender
+    public Object store(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
 }

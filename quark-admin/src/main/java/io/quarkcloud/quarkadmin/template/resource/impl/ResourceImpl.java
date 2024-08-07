@@ -12,6 +12,7 @@ import io.quarkcloud.quarkcore.service.Context;
 import io.quarkcloud.quarkadmin.annotation.AdminResource;
 import io.quarkcloud.quarkadmin.component.card.Card;
 import io.quarkcloud.quarkadmin.component.form.Form;
+import io.quarkcloud.quarkadmin.component.message.Message;
 import io.quarkcloud.quarkadmin.component.pagecontainer.PageContainer;
 import io.quarkcloud.quarkadmin.component.pagecontainer.PageHeader;
 import io.quarkcloud.quarkadmin.component.table.Table;
@@ -528,5 +529,10 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         Map<String, Object> data = beforeCreating(context);
 
         return this.pageComponentRender(context, creationComponentRender(context, data));
+    }
+
+    // 保存创建数据
+    public Object storeRender(Context context) {
+        return Message.success("保存成功");
     }
 }
