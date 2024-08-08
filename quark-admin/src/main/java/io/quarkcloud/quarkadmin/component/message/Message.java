@@ -43,11 +43,11 @@ public class Message extends Component {
     }
 
     // 返回成功
-    public static Object success(String message,Object data) {
+    public static Object success(String message,String url) {
         return new Message().
         setType("success").
         setContent(message).
-        setData(data);
+        setUrl(url);
     }
 
     // 返回成功

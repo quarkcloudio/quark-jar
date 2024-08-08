@@ -186,7 +186,7 @@ public class LoginImpl implements Login {
         // 返回验证码ID
         map.put("captchaId", simpleUUID);
 
-        return Message.success("获取成功！", map);
+        return Message.success("获取成功！", null, map);
     }
 
     // 获取验证码
@@ -339,7 +339,7 @@ public class LoginImpl implements Login {
         Map<String, String> result = new HashMap<>();
         result.put("token", token);
 
-        return Message.success("登录成功！", result);
+        return Message.success("登录成功！", null, result);
     }
     
     // 组件渲染

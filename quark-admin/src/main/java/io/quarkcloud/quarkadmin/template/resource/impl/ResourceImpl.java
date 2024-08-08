@@ -5,9 +5,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 
+import cn.hutool.extra.validation.BeanValidationResult.ErrorMessage;
 import io.quarkcloud.quarkcore.service.Context;
 import io.quarkcloud.quarkadmin.annotation.AdminResource;
 import io.quarkcloud.quarkadmin.component.card.Card;
@@ -533,6 +538,24 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
 
     // 保存创建数据
     public Object storeRender(Context context) {
-        return Message.success("保存成功");
+        return this.afterSaved(context, 0, null, true);
+    }
+
+    // 保存创建数据后回调
+    public Object afterSaved(Context ctx, int id, Map<String, Object> data, Boolean result) {
+
+        // If it's an import operation, return immediately with the result error if any.
+        if (ctx.isImport()) {
+            return result;
+        }
+
+        // If there was an error during the save operation, return the error message.
+        if (!result) {
+            return Message.error("操作失败！");
+        }
+
+        // Return a success message with a redirect URL.
+        String redirectUrl = "/layout/index?api=" + "/api/admin/{resource}/index".replace("{resource}", ctx.getPathVariable("resource"));
+        return Message.success("操作成功！", redirectUrl);
     }
 }
