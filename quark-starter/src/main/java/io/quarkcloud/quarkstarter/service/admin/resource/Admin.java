@@ -31,7 +31,10 @@ public class Admin extends ResourceImpl<AdminMapper,AdminEntity> {
     public List<Object> fields(Context ctx) {
         return Arrays.asList(
             Field.text("username", "用户名"),
-            Field.text("nickname", "昵称")
+            Field.text("nickname", "昵称"),
+            Field.text("email", "邮箱"),
+            Field.text("phone", "手机号"),
+            Field.text("password", "密码")
         );
     }
 

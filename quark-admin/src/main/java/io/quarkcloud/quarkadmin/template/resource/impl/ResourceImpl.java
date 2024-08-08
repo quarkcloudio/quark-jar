@@ -5,14 +5,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 
-import cn.hutool.extra.validation.BeanValidationResult.ErrorMessage;
 import io.quarkcloud.quarkcore.service.Context;
 import io.quarkcloud.quarkadmin.annotation.AdminResource;
 import io.quarkcloud.quarkadmin.component.card.Card;
@@ -532,12 +528,12 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     // 创建页组件渲染
     public Object creationRender(Context context) {
         Map<String, Object> data = beforeCreating(context);
-
         return this.pageComponentRender(context, creationComponentRender(context, data));
     }
 
     // 保存创建数据
     public Object storeRender(Context context) {
+        this.resourceService.setContext(context).save();
         return this.afterSaved(context, 0, null, true);
     }
 

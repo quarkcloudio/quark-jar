@@ -90,4 +90,16 @@ public class ResourceServiceImpl<M extends ResourceMapper<T>, T> implements Reso
         IPage<T> page = new Page<T>(currentPage, pageSize);
         return this.resourceMapper.selectPage(page, queryWrapper);
     }
+
+    // 保存
+    @SuppressWarnings("unchecked")
+    public Boolean save() {
+        T entity = (T) context.getRequestBody(this.getEntity().getClass());
+        return this.resourceMapper.insert(entity) > 0;
+    }
+
+    // 获取实体
+    public T getEntity() {
+        return this.resourceMapper.selectOne(null);
+    }
 }
