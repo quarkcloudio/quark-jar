@@ -21,6 +21,24 @@ public class AdminResourceController {
         return new Context(request, response);
     }
 
+    @RequestMapping("/api/admin/{resource}/editable")
+    @ResponseBody
+    public Object editable(HttpServletRequest request, HttpServletResponse response) {
+        return new Context(request, response);
+    }
+
+    @RequestMapping("/api/admin/{resource}/action/{uriKey}")
+    @ResponseBody
+    public Object action(HttpServletRequest request, HttpServletResponse response) {
+        return new Context(request, response);
+    }
+
+    @RequestMapping("/api/admin/{resource}/action/{uriKey}/values")
+    @ResponseBody
+    public Object actionValues(HttpServletRequest request, HttpServletResponse response) {
+        return new Context(request, response);
+    }
+
     @RequestMapping("/api/admin/{resource}/create")
     @ResponseBody
     @AdminResourceCreateRender
@@ -32,6 +50,54 @@ public class AdminResourceController {
     @ResponseBody
     @AdminResourceStoreRender
     public Object store(HttpServletRequest request, HttpServletResponse response) {
+        return new Context(request, response);
+    }
+
+    @RequestMapping("/api/admin/{resource}/edit")
+    @ResponseBody
+    public Object edit(HttpServletRequest request, HttpServletResponse response) {
+        return new Context(request, response);
+    }
+
+    @RequestMapping("/api/admin/{resource}/edit/values")
+    @ResponseBody
+    public Object editValues(HttpServletRequest request, HttpServletResponse response) {
+        return new Context(request, response);
+    }
+
+    @RequestMapping("/api/admin/{resource}/save")
+    @ResponseBody
+    public Object save(HttpServletRequest request, HttpServletResponse response) {
+        return new Context(request, response);
+    }
+
+    @RequestMapping("/api/admin/{resource}/import")
+    @ResponseBody
+    public Object excelImport(HttpServletRequest request, HttpServletResponse response) {
+        return new Context(request, response);
+    }
+
+    @RequestMapping("/api/admin/{resource}/export")
+    @ResponseBody
+    public Object excelExport(HttpServletRequest request, HttpServletResponse response) {
+        return new Context(request, response);
+    }
+
+    @RequestMapping("/api/admin/{resource}/detail")
+    @ResponseBody
+    public Object detail(HttpServletRequest request, HttpServletResponse response) {
+        return new Context(request, response);
+    }
+
+    @RequestMapping("/api/admin/{resource}/import/template")
+    @ResponseBody
+    public Object importTemplate(HttpServletRequest request, HttpServletResponse response) {
+        return new Context(request, response);
+    }
+
+    @RequestMapping("/api/admin/{resource}/{uriKey}/form")
+    @ResponseBody
+    public Object form(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
 }
