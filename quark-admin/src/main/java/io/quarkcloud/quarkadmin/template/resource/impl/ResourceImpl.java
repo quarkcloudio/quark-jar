@@ -571,7 +571,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
 
     // 编辑页组件渲染
     public Object editRender(Context context) {
-        Map<String, Object> data = beforeCreating(context);
+        Map<String, Object> data = beforeEditing(context);
         return this.pageComponentRender(context, editComponentRender(context, data));
     }
 

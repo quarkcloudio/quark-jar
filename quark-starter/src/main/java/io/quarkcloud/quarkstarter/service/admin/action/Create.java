@@ -27,7 +27,7 @@ public class Create extends Link {
         String path = ctx.getRequest().getRequestURI();
 
         // 将路径中的 "/index" 替换为 "/create"
-        String modifiedPath = path.replaceAll("/index", "/create");
+        String modifiedPath = path.replace("/index", "/create");
         
         // 构建最终的 URL
         return "#/layout/index?api=" + modifiedPath;
