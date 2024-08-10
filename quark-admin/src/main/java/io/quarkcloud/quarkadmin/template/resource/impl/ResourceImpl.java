@@ -519,8 +519,6 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
 
         // 获取字段
         List<Object> getFields = fields(ctx);
-
-        // 获取表格列
         Object fields = new ResolveField(getFields, ctx).creationFieldsWithinComponents(ctx);
         Object formActions = new ResolveAction(getActions, ctx).getFormActions();
 
