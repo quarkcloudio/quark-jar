@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.quarkcloud.quarkadmin.annotation.AdminResourceIndexRender;
 import io.quarkcloud.quarkadmin.annotation.AdminResourceStoreRender;
 import io.quarkcloud.quarkadmin.annotation.AdminResourceCreateRender;
+import io.quarkcloud.quarkadmin.annotation.AdminResourceEditRender;
 import io.quarkcloud.quarkcore.service.Context;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -55,6 +56,7 @@ public class AdminResourceController {
 
     @RequestMapping("/api/admin/{resource}/edit")
     @ResponseBody
+    @AdminResourceEditRender
     public Object edit(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
