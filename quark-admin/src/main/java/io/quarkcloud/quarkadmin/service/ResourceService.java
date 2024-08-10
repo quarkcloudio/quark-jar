@@ -23,7 +23,5 @@ public interface ResourceService<M extends ResourceMapper<T>, T> {
     // 获取分页数据
     public IPage<T> page(long pageSize);
 
-    public T getEntity();
-
     public T save(T resourceEntity);
 }
