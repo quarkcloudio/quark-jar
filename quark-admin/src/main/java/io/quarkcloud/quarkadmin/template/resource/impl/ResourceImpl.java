@@ -539,18 +539,12 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
 
     // 保存创建数据后回调
     public Object afterSaved(Context ctx, int id, Map<String, Object> data, Boolean result) {
-
-        // If it's an import operation, return immediately with the result error if any.
         if (ctx.isImport()) {
             return result;
         }
-
-        // If there was an error during the save operation, return the error message.
         if (!result) {
             return Message.error("操作失败！");
         }
-
-        // Return a success message with a redirect URL.
         String redirectUrl = "/layout/index?api=" + "/api/admin/{resource}/index".replace("{resource}", ctx.getPathVariable("resource"));
         return Message.success("操作成功！", redirectUrl);
     }
