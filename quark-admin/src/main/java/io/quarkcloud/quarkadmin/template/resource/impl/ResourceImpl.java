@@ -34,6 +34,9 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     // 注解实例
     protected AdminResource annotationClass = null;
 
+    // 实体类
+    public T entity;
+
     // 页面标题
     public String title;
     
@@ -533,7 +536,8 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
 
     // 保存创建数据
     public Object storeRender(Context context) {
-        this.resourceService.setContext(context).save();
+        T result = this.resourceService.setContext(context).save(this.entity);
+        System.out.println(result);
         return this.afterSaved(context, 0, null, true);
     }
 

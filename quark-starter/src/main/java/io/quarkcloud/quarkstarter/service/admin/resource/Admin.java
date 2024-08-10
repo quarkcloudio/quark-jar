@@ -23,6 +23,7 @@ public class Admin extends ResourceImpl<AdminMapper,AdminEntity> {
 
     // 构造函数
     public Admin() {
+        this.entity = new AdminEntity();
         this.title = "管理员";
         this.perPage = 10;
     }

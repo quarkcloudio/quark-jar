@@ -93,13 +93,9 @@ public class ResourceServiceImpl<M extends ResourceMapper<T>, T> implements Reso
 
     // 保存
     @SuppressWarnings("unchecked")
-    public Boolean save() {
-        T entity = (T) context.getRequestBody(this.getEntity().getClass());
-        return this.resourceMapper.insert(entity) > 0;
-    }
-
-    // 获取实体
-    public T getEntity() {
-        return this.resourceMapper.selectOne(null);
+    public T save(T resourceEntity) {
+        T entity = (T) context.getRequestBody(resourceEntity.getClass());
+        this.resourceMapper.insert(entity);
+        return entity;
     }
 }

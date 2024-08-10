@@ -25,5 +25,5 @@ public interface ResourceService<M extends ResourceMapper<T>, T> {
 
     public T getEntity();
 
-    public Boolean save();
+    public T save(T resourceEntity);
 }
