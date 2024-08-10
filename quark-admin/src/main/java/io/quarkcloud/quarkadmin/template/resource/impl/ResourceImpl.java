@@ -541,14 +541,14 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     }
 
     // 保存创建数据后回调
-    public Object afterSaved(Context ctx,T result) {
-        if (ctx.isImport()) {
+    public Object afterSaved(Context context,T result) {
+        if (context.isImport()) {
             return result;
         }
         if (result == null) {
             return Message.error("操作失败！");
         }
-        String redirectUrl = "/layout/index?api=" + "/api/admin/{resource}/index".replace("{resource}", ctx.getPathVariable("resource"));
+        String redirectUrl = "/layout/index?api=" + "/api/admin/{resource}/index".replace("{resource}", context.getPathVariable("resource"));
         return Message.success("操作成功！", redirectUrl);
     }
 }
