@@ -516,8 +516,6 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         List<Object> getActions = actions(ctx);
         Object formExtraActions = new ResolveAction(getActions, ctx).getFormExtraActions();
         String api = creationApi(ctx);
-
-        // 获取字段
         List<Object> getFields = fields(ctx);
         Object fields = new ResolveField(getFields, ctx).creationFieldsWithinComponents(ctx);
         Object formActions = new ResolveAction(getActions, ctx).getFormActions();
@@ -538,7 +536,52 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         return this.afterSaved(context, result);
     }
 
-    // 保存创建数据后回调
+    // 编辑表单的接口
+    public String editApi(Context ctx) {
+        String formApi = this.formApi(ctx);
+        if (!formApi.isEmpty()) {
+            return formApi;
+        }
+        String[] uri = ctx.getRequest().getRequestURI().split("/");
+        if (uri[uri.length - 1].equals("index")) {
+            return ctx.getRequest().getRequestURI().replace("/index", "/save");
+        }
+
+        return ctx.getRequest().getRequestURI().replace("/edit", "/save");
+    }
+
+    // 编辑页面显示前回调
+    public Map<String, Object> beforeEditing(Context ctx) {
+        return Map.of();
+    }
+
+    // 渲染编辑页组件
+    public Object editComponentRender(Context ctx, Map<String, Object> data) {
+        String title = formTitle(ctx);
+        List<Object> getActions = actions(ctx);
+        Object formExtraActions = new ResolveAction(getActions, ctx).getFormExtraActions();
+        String api = editApi(ctx);
+        List<Object> getFields = fields(ctx);
+        Object fields = new ResolveField(getFields, ctx).updateFieldsWithinComponents(ctx);
+        Object formActions = new ResolveAction(getActions, ctx).getFormActions();
+
+        return this.formComponentRender(ctx, title, formExtraActions, api, fields, formActions, data);
+
+    }
+
+    // 编辑页组件渲染
+    public Object editRender(Context context) {
+        Map<String, Object> data = beforeCreating(context);
+        return this.pageComponentRender(context, editComponentRender(context, data));
+    }
+
+    // 保存编辑数据
+    public Object saveRender(Context context) {
+        T result = this.resourceService.setContext(context).update(this.entity);
+        return this.afterSaved(context, result);
+    }
+
+    // 保存数据后回调
     public Object afterSaved(Context context,T result) {
         if (context.isImport()) {
             return result;

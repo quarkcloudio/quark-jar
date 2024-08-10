@@ -98,4 +98,12 @@ public class ResourceServiceImpl<M extends ResourceMapper<T>, T> implements Reso
         this.resourceMapper.insert(entity);
         return entity;
     }
+
+    // 更新
+    @SuppressWarnings("unchecked")
+    public T update(T entity) {
+        entity = (T) context.getRequestBody(entity.getClass());
+        this.resourceMapper.updateById(entity);
+        return entity;
+    }
 }
