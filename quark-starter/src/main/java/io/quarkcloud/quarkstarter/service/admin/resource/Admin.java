@@ -35,7 +35,7 @@ public class Admin extends ResourceImpl<AdminMapper,AdminEntity> {
             Field.text("nickname", "昵称"),
             Field.text("email", "邮箱"),
             Field.text("phone", "手机号"),
-            Field.text("password", "密码")
+            Field.password("password", "密码").onlyOnForms()
         );
     }
 
