@@ -57,22 +57,6 @@ public class ClassLoader implements ApplicationContextAware {
         return classInstance;
     }
 
-    /**
-     * 加载指定路径的类。
-     * 
-     * @return 返回加载的类的实例，如果加载失败或无法实例化，则返回null。
-     */
-    public Object getInstance(Class<?> requiredType) {
-        Object classInstance = null;
-        try {
-            classInstance = ClassLoader.getApplicationContext().getBean(requiredType);
-        } catch (BeansException e) {
-            e.printStackTrace();
-        }
-
-        return classInstance;
-    }
-
     // 执行指定方法
     public Object doMethod(String methodName) {
         Object classInstance = getInstance();
