@@ -537,16 +537,15 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     // 保存创建数据
     public Object storeRender(Context context) {
         T result = this.resourceService.setContext(context).save(this.entity);
-        System.out.println(result);
-        return this.afterSaved(context, 0, null, true);
+        return this.afterSaved(context, result);
     }
 
     // 保存创建数据后回调
-    public Object afterSaved(Context ctx, int id, Map<String, Object> data, Boolean result) {
+    public Object afterSaved(Context ctx,T result) {
         if (ctx.isImport()) {
             return result;
         }
-        if (!result) {
+        if (result == null) {
             return Message.error("操作失败！");
         }
         String redirectUrl = "/layout/index?api=" + "/api/admin/{resource}/index".replace("{resource}", ctx.getPathVariable("resource"));
