@@ -67,15 +67,6 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     // 列表页表格是否轮询数据
     public int tablePolling;
     
-    // 全局排序规则
-    public String queryOrder;
-    
-    // 列表页排序规则
-    public String indexQueryOrder;
-    
-    // 导出数据排序规则
-    public String exportQueryOrder;
-    
     // 注入的字段数据
     public Map<String, Object> field;
     
@@ -157,30 +148,6 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         return annotationClass.tablePolling();
     }
 
-    // 获取全局排序规则
-    public String getQueryOrder() {
-        if (annotationClass == null || annotationClass.queryOrder().isEmpty()) {
-            return queryOrder;
-        }
-        return annotationClass.queryOrder();
-    }
-
-    // 获取列表页排序规则
-    public String getIndexQueryOrder() {
-        if (annotationClass == null || annotationClass.indexQueryOrder().isEmpty()) {
-            return indexQueryOrder;
-        }
-        return annotationClass.indexQueryOrder();
-    }
-
-    // 获取导出数据排序规则
-    public String getExportQueryOrder() {
-        if (annotationClass == null || annotationClass.exportQueryOrder().isEmpty()) {
-            return exportQueryOrder;
-        }
-        return annotationClass.exportQueryOrder();
-    }
-
     // 获取是否具有导出功能
     public boolean isWithExport() {
         if (annotationClass == null) {
@@ -202,7 +169,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
 
     // 列表查询
     public MPJLambdaWrapper<T> indexQuery(Context ctx, MPJLambdaWrapper<T> queryWrapper) {
-        return queryWrapper;
+        return queryWrapper.orderByDesc("id");
     }
 
     // 字段

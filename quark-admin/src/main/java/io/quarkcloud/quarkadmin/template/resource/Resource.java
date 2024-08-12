@@ -2,6 +2,9 @@ package io.quarkcloud.quarkadmin.template.resource;
 
 import java.util.List;
 import java.util.Map;
+
+import com.github.yulichang.wrapper.MPJLambdaWrapper;
+
 import io.quarkcloud.quarkcore.service.Context;
 
 public interface Resource<T> {
@@ -30,20 +33,17 @@ public interface Resource<T> {
     // 获取表格是否轮询数据
     public int getTablePolling();
 
-    // 获取全局排序规则
-    public String getQueryOrder();
-
-    // 获取列表页排序规则
-    public String getIndexQueryOrder();
-
-    // 获取导出数据排序规则
-    public String getExportQueryOrder();
-
     // 获取是否具有导出功能
     public boolean isWithExport();
 
     // 设置单列字段
     public Resource<T> setField(Map<String, Object> field);
+
+    // 全局查询
+    public MPJLambdaWrapper<T> query(Context ctx, MPJLambdaWrapper<T> queryWrapper);
+
+    // 列表查询
+    public MPJLambdaWrapper<T> indexQuery(Context ctx, MPJLambdaWrapper<T> queryWrapper);
 
     // 字段
     public List<Object> fields(Context ctx);
