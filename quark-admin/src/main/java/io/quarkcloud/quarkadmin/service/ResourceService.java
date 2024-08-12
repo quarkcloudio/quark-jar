@@ -23,5 +23,12 @@ public interface ResourceService<M extends ResourceMapper<T>, T> {
     // 获取分页数据
     public IPage<T> page(long pageSize);
 
+    // 保存
     public T save(T resourceEntity);
+
+    // 更新
+    public T update(T entity);
+
+    // 获取单个
+    public T first();
 }

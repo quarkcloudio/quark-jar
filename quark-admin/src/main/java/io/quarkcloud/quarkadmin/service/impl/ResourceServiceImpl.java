@@ -106,4 +106,10 @@ public class ResourceServiceImpl<M extends ResourceMapper<T>, T> implements Reso
         this.resourceMapper.updateById(entity);
         return entity;
     }
+
+    // 获取单个
+    public T first() {
+        String id = context.getParameter("id");
+        return this.resourceMapper.selectById(id);
+    }
 }

@@ -76,6 +76,6 @@ public class AdminResourceEditRenderAspect {
         ClassLoader classLoader = new ClassLoader();
 
         // 调用类方法
-        return classLoader.setClassPath(loadPackages[0]+resource).doMethod("creationRender", newContext);
+        return classLoader.setClassPath(loadPackages[0]+resource).doMethod("editRender", newContext);
     }
 }

@@ -25,10 +25,10 @@ public class Form extends Component {
     private boolean colon;
 
     // 表单的值
-    private Map<String, Object> values;
+    private Object values;
 
     // 表单的初始值
-    private Map<String, Object> initialValues;
+    private Object initialValues;
 
     // 标签的对齐方式
     private String labelAlign;
@@ -163,8 +163,9 @@ public class Form extends Component {
     }
 
     // 表单默认值，只有初始化以及重置时生效
-    public Form setInitialValues(Map<String, Object> initialValues) {
-        Map<String, Object> data = initialValues;
+    public Form setInitialValues(Object initialValues) {
+        Object data = initialValues;
+        this.initialValues = data;
         return this;
     }
 

@@ -429,7 +429,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         String api,
         Object fields,
         Object actions,
-        Map<String, Object> data) {
+        T data) {
 
         Object formComponent = this.form
             .setStyle(Map.of("padding", "24px"))
@@ -453,7 +453,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         String api,
         Object fields,
         Object actions,
-        Map<String, Object> data) {
+        T data) {
         Tabs tabsComponent = new Tabs().setTabPanes(fields).setTabBarExtraContent(extra);
 
         return this.form.setStyle(Map.of("backgroundColor", "#fff", "paddingBottom", "20px"))
@@ -474,7 +474,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         String api,
         Object fields,
         Object actions,
-        Map<String, Object> data) {
+        T data) {
 
         if (fields instanceof List && !((List<?>) fields).isEmpty()) {
             String component;
@@ -506,12 +506,12 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     }
 
     // 创建页面显示前回调
-    public Map<String, Object> beforeCreating(Context ctx) {
-        return Map.of();
+    public T beforeCreating(Context ctx) {
+        return null;
     }
 
     // 渲染创建页组件
-    public Object creationComponentRender(Context ctx, Map<String, Object> data) {
+    public Object creationComponentRender(Context ctx, T data) {
         String title = formTitle(ctx);
         List<Object> getActions = actions(ctx);
         Object formExtraActions = new ResolveAction(getActions, ctx).getFormExtraActions();
@@ -526,7 +526,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
 
     // 创建页组件渲染
     public Object creationRender(Context context) {
-        Map<String, Object> data = beforeCreating(context);
+        T data = beforeCreating(context);
         return this.pageComponentRender(context, creationComponentRender(context, data));
     }
 
@@ -551,12 +551,12 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     }
 
     // 编辑页面显示前回调
-    public Map<String, Object> beforeEditing(Context ctx) {
-        return Map.of();
+    public T beforeEditing(Context ctx,T data) {
+        return data;
     }
 
     // 渲染编辑页组件
-    public Object editComponentRender(Context ctx, Map<String, Object> data) {
+    public Object editComponentRender(Context ctx, T data) {
         String title = formTitle(ctx);
         List<Object> getActions = actions(ctx);
         Object formExtraActions = new ResolveAction(getActions, ctx).getFormExtraActions();
@@ -571,7 +571,9 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
 
     // 编辑页组件渲染
     public Object editRender(Context context) {
-        Map<String, Object> data = beforeEditing(context);
+        ResourceService<M, T> resourceService = this.resourceService.setContext(context);
+        T data = resourceService.first();
+        data = beforeEditing(context, data);
         return this.pageComponentRender(context, editComponentRender(context, data));
     }
 
