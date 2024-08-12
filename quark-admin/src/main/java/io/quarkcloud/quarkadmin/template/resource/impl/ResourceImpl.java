@@ -537,8 +537,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
 
     // 编辑页组件渲染
     public Object editRender(Context context) {
-        ResourceService<M, T> resourceService = this.resourceService.setContext(context);
-        T data = resourceService.first();
+        T data = this.resourceService.setContext(context).first();
         data = beforeEditing(context, data);
         return this.pageComponentRender(context, editComponentRender(context, data));
     }
