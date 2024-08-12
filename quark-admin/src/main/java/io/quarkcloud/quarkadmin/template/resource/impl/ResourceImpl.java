@@ -533,7 +533,6 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         Object formActions = new ResolveAction(getActions, ctx).getFormActions();
 
         return this.formComponentRender(ctx, title, formExtraActions, api, fields, formActions, data);
-
     }
 
     // 编辑页组件渲染
