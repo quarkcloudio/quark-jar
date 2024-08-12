@@ -122,18 +122,15 @@ public class Form extends Component {
     // 解析initialValue
     public Object parseInitialValue(Object item, Map<String, Object> initialValues) {
         Object value = null;
-
         if (item instanceof List) {
             return null;
         }
-
         return value;
     }
 
     // 查找字段
     public List<Object> findFields(Object fields, boolean when) {
         List<Object> items = new ArrayList<>();
-
         if (fields instanceof List) {
             for (Object v : (List<?>) fields) {
                 items.addAll(fieldParser(v, when));
@@ -141,18 +138,15 @@ public class Form extends Component {
         } else {
             items.addAll(fieldParser(fields, when));
         }
-
         return items;
     }
 
     // 解析字段
     public List<Object> fieldParser(Object v, boolean when) {
         List<Object> items = new ArrayList<>();
-
         if (v instanceof List) {
             return items;
         }
-
         return items;
     }
 
