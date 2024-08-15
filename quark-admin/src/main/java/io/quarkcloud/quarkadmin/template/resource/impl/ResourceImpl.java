@@ -218,8 +218,6 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
 
     // 页面组件渲染
     public Object pageComponentRender(Context ctx, Object body) {
-
-        // 页面容器组件渲染
         return this.pageContainerComponentRender(ctx, body);
     }
 
@@ -257,7 +255,6 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     // 列表页工具栏
     public Object indexTableToolBar(Context ctx) {
         Object tableActions = new ResolveAction(actions(ctx), ctx).getIndexTableActions();
-
         return new ToolBar().
             setTitle(indexTableTitle(ctx)).
             setActions(tableActions);
@@ -265,23 +262,14 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
 
     // 列表页表格列
     public Object indexTableColumns(Context ctx) {
-
-        // 获取行为
         List<Object> getActions = actions(ctx);
-
-        // 获取字段
         List<Object> getFields = fields(ctx);
-
-        // 获取表格行为
         List<Object> tableActions = new ResolveAction(getActions, ctx).getIndexTableRowActions();
-
-        // 获取表格列
         List<Object> tableColumns = new ResolveField(getFields, ctx).
             setTableActionColumnTitle(tableActionColumnTitle).
             setTableActionColumnWidth(tableActionColumnWidth).
             setTableRowActions(tableActions).
             indexTableColumns(ctx);
-
         return tableColumns;
     }
 
@@ -362,7 +350,6 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         long total = data.getTotal();
         long defaultCurrent = 1;
         Object items = data.getRecords();
-
         return table.setPagination(current, pageSize, total, defaultCurrent).setDatasource(items);
     }
 
@@ -384,7 +371,6 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         } else if (ctx.isEditing()) {
             return "编辑" + title;
         }
-
         return title;
     }
 
@@ -422,7 +408,6 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         Object actions,
         T data) {
         Tabs tabsComponent = new Tabs().setTabPanes(fields).setTabBarExtraContent(extra);
-
         return this.form.setStyle(Map.of("backgroundColor", "#fff", "paddingBottom", "20px"))
             .setApi(api)
             .setActions(actions)
@@ -442,7 +427,6 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         Object fields,
         Object actions,
         T data) {
-
         if (fields instanceof List && !((List<?>) fields).isEmpty()) {
             String component;
             try {
@@ -454,7 +438,6 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
                 e.printStackTrace();
             }
         }
-
         return this.formWithinCard(ctx, title, extra, api, fields, actions, data);
     }
 
@@ -468,7 +451,6 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         if (uri[uri.length - 1].equals("index")) {
             return ctx.getRequest().getRequestURI().replace("/index", "/store");
         }
-
         return ctx.getRequest().getRequestURI().replace("/create", "/store");
     }
 
@@ -486,7 +468,6 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         List<Object> getFields = fields(ctx);
         Object fields = new ResolveField(getFields, ctx).creationFieldsWithinComponents(ctx);
         Object formActions = new ResolveAction(getActions, ctx).getFormActions();
-
         return this.formComponentRender(ctx, title, formExtraActions, api, fields, formActions, data);
 
     }
@@ -513,7 +494,6 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         if (uri[uri.length - 1].equals("index")) {
             return ctx.getRequest().getRequestURI().replace("/index", "/save");
         }
-
         return ctx.getRequest().getRequestURI().replace("/edit", "/save");
     }
 
@@ -531,7 +511,6 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         List<Object> getFields = fields(ctx);
         Object fields = new ResolveField(getFields, ctx).updateFieldsWithinComponents(ctx);
         Object formActions = new ResolveAction(getActions, ctx).getFormActions();
-
         return this.formComponentRender(ctx, title, formExtraActions, api, fields, formActions, data);
     }
 
