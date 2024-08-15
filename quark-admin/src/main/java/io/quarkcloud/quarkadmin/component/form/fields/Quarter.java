@@ -67,6 +67,7 @@ public class Quarter extends Component {
     boolean noStyle;
 
     // 必填样式设置。如不设置，则会根据校验规则自动生成
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean required;
 
     // 会在 label 旁增加一个 icon，悬浮后展示配置的信息

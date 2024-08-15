@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import io.quarkcloud.quarkadmin.component.form.Field;
+import io.quarkcloud.quarkadmin.component.form.Rule;
 import io.quarkcloud.quarkadmin.entity.AdminEntity;
 import io.quarkcloud.quarkadmin.mapper.AdminMapper;
 import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
@@ -33,7 +34,11 @@ public class Admin extends ResourceImpl<AdminMapper,AdminEntity> {
     public List<Object> fields(Context ctx) {
         return Arrays.asList(
             Field.id("id", "ID"),
-            Field.text("username", "用户名"),
+            Field.text("username", "用户名").setRules(Arrays.asList(
+                Rule.required(true, "用户名必须填写"),
+                Rule.min(6, "用户名不能少于6个字符"),
+                Rule.max(20, "用户名不能超过20个字符")
+            )),
             Field.text("nickname", "昵称"),
             Field.text("email", "邮箱"),
             Field.text("phone", "手机号"),
