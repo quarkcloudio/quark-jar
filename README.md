@@ -39,7 +39,7 @@ public class QuarkStarterApplication {
 }
 ```
 
-后台地址： ```http://127.0.0.1:3000/admin/```
+后台地址： ```http://127.0.0.1:8080/admin/```
 
 账号：```administrator```
 密码：```123456```
