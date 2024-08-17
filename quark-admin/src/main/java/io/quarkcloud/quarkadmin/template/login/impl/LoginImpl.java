@@ -231,6 +231,7 @@ public class LoginImpl implements Login {
     }
 
     // 解析创建页表单组件内的字段
+    @SuppressWarnings("unchecked")
     public Object formFieldsParser(Context context, Object fields) {
         if (fields instanceof List) {
             ((List<Object>) fields).stream().forEach(field -> {
@@ -333,7 +334,7 @@ public class LoginImpl implements Login {
                 .setPayload("avatar", adminInfo.getAvatar())
                 .setPayload("guard_name", "admin")
                 .setKey(appKey.getBytes())
-                .setExpiresAt(new Date(System.currentTimeMillis() + 3600000))
+                .setExpiresAt(new Date(System.currentTimeMillis() + (3600000 * 24)))
                 .sign();
 
         Map<String, String> result = new HashMap<>();
