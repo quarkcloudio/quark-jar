@@ -125,12 +125,15 @@ public class Selects extends Component {
     boolean ignore;
 
     // 全局校验规则
+    @JsonIgnore
     List<Rule> rules;
 
     // 创建页校验规则
+    @JsonIgnore
     List<Rule> creationRules;
 
     // 编辑页校验规则
+    @JsonIgnore
     List<Rule> updateRules;
 
     // 前端校验规则，设置字段的校验逻辑
