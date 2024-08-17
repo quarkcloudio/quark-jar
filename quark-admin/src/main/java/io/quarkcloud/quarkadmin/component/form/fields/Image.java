@@ -1,10 +1,13 @@
 package io.quarkcloud.quarkadmin.component.form.fields;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+
+import javax.swing.table.TableColumn;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -13,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.quarkcloud.quarkadmin.component.Component;
 import io.quarkcloud.quarkadmin.component.form.Rule;
+import io.quarkcloud.quarkadmin.component.table.Column;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -207,6 +211,24 @@ public class Image extends Component {
 
     public Image() {
         this.component = "imageField";
+        this.colon = true;
+        this.labelAlign = "right";
+        this.showOnIndex = true;
+        this.showOnDetail = true;
+        this.showOnCreation = true;
+        this.showOnUpdate = true;
+        this.showOnExport = true;
+        this.showOnImport = true;
+        this.column = new Column();
+        this.mode = "single";
+        this.button = "上传图片";
+        this.limitSize = 2;
+        this.limitNum = 3;
+        this.limitType = Arrays.asList("image/jpeg", "image/png");
+        this.api = "/api/admin/upload/image/handle";
+        this.limitWH = new HashMap<>();
+        this.limitWH.put("width", 0);
+        this.limitWH.put("height", 0);
         this.setComponentKey();
         this.style = new HashMap<>();
         this.rules = new ArrayList<>();
@@ -221,10 +243,8 @@ public class Image extends Component {
     // rule.max(20, "用户名不能超过20个字符") // 用户名最多只能包含20个字符
     // ));
     public Image setRules(List<Rule> rules) {
-
         rules.forEach(rule -> rule.setName(name));
         this.rules = rules;
-
         return this;
     }
 
@@ -235,10 +255,8 @@ public class Image extends Component {
     // rule.unique("admins", "username", "用户名已存在"),
     // ));
     public Image setCreationRules(List<Rule> rules) {
-
         rules.forEach(rule -> rule.setName(name));
         this.creationRules = rules;
-
         return this;
     }
 
@@ -249,10 +267,8 @@ public class Image extends Component {
     // rule.unique("admins", "username", "用户名已存在"),
     // ));
     public Image setUpdateRules(List<Rule> rules) {
-
         rules.forEach(rule -> rule.setName(name));
         this.updateRules = rules;
-
         return this;
     }
 
@@ -262,27 +278,21 @@ public class Image extends Component {
         String[] uri = path.split("/");
         boolean isCreating = (uri[uri.length - 1].equals("create")) || (uri[uri.length - 1].equals("store"));
         boolean isEditing = (uri[uri.length - 1].equals("edit")) || (uri[uri.length - 1].equals("update"));
-
         Function<List<Rule>, List<Rule>> convertToFrontendRules = Rule::convertToFrontendRules;
         frontendRules.addAll(convertToFrontendRules.apply(this.rules));
-
         if (isCreating) {
             frontendRules.addAll(convertToFrontendRules.apply(this.creationRules));
         }
-
         if (isEditing) {
             frontendRules.addAll(convertToFrontendRules.apply(this.updateRules));
         }
-        
         this.frontendRules = frontendRules;
-
         return this;
     }
 
     // 表头的筛选菜单项，当值为 true 时，自动使用 valueEnum 生成，只在列表页中有效
     public Image setFilters(boolean filters) {
         this.filters = filters;
-
         return this;
     }
 
@@ -296,7 +306,6 @@ public class Image extends Component {
             tmpFilters.add(map);
         });
         this.filters = tmpFilters;
-
         return this;
     }
 
@@ -312,17 +321,13 @@ public class Image extends Component {
     //
     // new Image().setWhen(">", option, callback)
     public Image setWhen(String operator, Object option, Closure callback) {
-
         WhenItem item = new WhenItem();
-
         item.body = callback.callback();
         item.conditionName = this.name;
         item.conditionOperator = operator;
         item.option = option;
-
         StringBuilder conditionBuilder = new StringBuilder();
         conditionBuilder.append("<%=String(").append(this.name).append(")");
-
         switch (operator) {
             case "=":
                 conditionBuilder.append(" === '").append(option).append("' %>");
@@ -356,95 +361,81 @@ public class Image extends Component {
                 conditionBuilder.append(" === '").append(option).append("' %>");
                 break;
         }
-
         item.condition = conditionBuilder.toString();
         whenItem.add(item);
         when.setItems(whenItem);
-
         return this;
     }
 
     // Specify that the element should be hidden from the index view.
     public Image hideFromIndex(boolean callback) {
         this.showOnIndex = !callback;
-
         return this;
     }
 
     // Specify that the element should be hidden from the detail view.
     public Image hideFromDetail(boolean callback) {
         this.showOnDetail = !callback;
-
         return this;
     }
 
     // Specify that the element should be hidden from the creation view.
     public Image hideWhenCreating(boolean callback) {
         this.showOnCreation = !callback;
-
         return this;
     }
 
     // Specify that the element should be hidden from the update view.
     public Image hideWhenUpdating(boolean callback) {
         this.showOnUpdate = !callback;
-
         return this;
     }
 
     // Specify that the element should be hidden from the export file.
     public Image hideWhenExporting(boolean callback) {
         this.showOnExport = !callback;
-
         return this;
     }
 
     // Specify that the element should be hidden from the import file.
     public Image hideWhenImporting(boolean callback) {
         this.showOnImport = !callback;
-
         return this;
     }
 
     // Specify that the element should be hidden from the index view.
     public Image onIndexShowing(boolean callback) {
         this.showOnIndex = callback;
-
         return this;
     }
 
     // Specify that the element should be hidden from the detail view.
     public Image onDetailShowing(boolean callback) {
         this.showOnDetail = callback;
-
         return this;
     }
 
     // Specify that the element should be hidden from the creation view.
     public Image showOnCreating(boolean callback) {
         this.showOnCreation = callback;
-
         return this;
     }
 
     // Specify that the element should be hidden from the update view.
     public Image showOnUpdating(boolean callback) {
         this.showOnUpdate = callback;
-
         return this;
     }
 
     // Specify that the element should be hidden from the export file.
     public Image showOnExporting(boolean callback) {
         this.showOnExport = callback;
-
         return this;
     }
 
     // Specify that the element should be hidden from the import file.
     public Image showOnImporting(boolean callback) {
         this.showOnImport = callback;
-
         return this;
     }
 
@@ -456,7 +447,6 @@ public class Image extends Component {
         this.showOnUpdate = false;
         this.showOnExport = false;
         this.showOnImport = false;
-
         return this;
     }
 
@@ -468,7 +458,6 @@ public class Image extends Component {
         this.showOnUpdate = false;
         this.showOnExport = false;
         this.showOnImport = false;
-
         return this;
     }
 
@@ -480,7 +469,6 @@ public class Image extends Component {
         this.showOnUpdate = true;
         this.showOnExport = false;
         this.showOnImport = false;
-
         return this;
     }
 
@@ -492,7 +480,6 @@ public class Image extends Component {
         this.showOnUpdate = false;
         this.showOnExport = true;
         this.showOnImport = false;
-
         return this;
     }
 
@@ -504,7 +491,6 @@ public class Image extends Component {
         this.showOnUpdate = false;
         this.showOnExport = false;
         this.showOnImport = true;
-
         return this;
     }
 
@@ -516,7 +502,6 @@ public class Image extends Component {
         this.showOnUpdate = false;
         this.showOnExport = true;
         this.showOnImport = true;
-
         return this;
     }
 
@@ -563,10 +548,8 @@ public class Image extends Component {
 
     // 上传图片限制尺寸
     public Image setLimitWH(int width, int height) {
-
         this.limitWH.put("width", width);
         this.limitWH.put("height", height);
-
         return this;
     }
 }
