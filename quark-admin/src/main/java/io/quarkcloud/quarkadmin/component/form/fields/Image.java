@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import javax.swing.table.TableColumn;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
