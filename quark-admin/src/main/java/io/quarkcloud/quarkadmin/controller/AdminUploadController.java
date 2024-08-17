@@ -51,6 +51,7 @@ public class AdminUploadController {
  
         // 返回上传文件的路径
         String filePath = uploadFile.getAbsolutePath();
+        
         return filePath;
     }
 
