@@ -34,6 +34,7 @@ public class Admin extends ResourceImpl<AdminMapper,AdminEntity> {
     public List<Object> fields(Context ctx) {
         return Arrays.asList(
             Field.id("id", "ID"),
+            Field.image("avatar", "头像").onlyOnForms(),
             Field.text("username", "用户名").setRules(Arrays.asList(
                 Rule.required(true, "用户名必须填写"),
                 Rule.min(6, "用户名不能少于6个字符"),

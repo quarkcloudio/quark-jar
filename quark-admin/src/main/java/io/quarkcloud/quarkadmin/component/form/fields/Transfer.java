@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -102,6 +103,7 @@ public class Transfer extends Component {
     Object wrapperCol;
 
     // 列表页、详情页中列属性
+    @JsonIgnore
     Object column;
 
     // 设置列的对齐方式,left | right | center，只在列表页、详情页中有效
@@ -162,21 +164,27 @@ public class Transfer extends Component {
     List<WhenItem> whenItem;
 
     // 在列表页展示
+    @JsonIgnore
     boolean showOnIndex;
 
     // 在详情页展示
+    @JsonIgnore
     boolean showOnDetail;
 
     // 在创建页面展示
+    @JsonIgnore
     boolean showOnCreation;
 
     // 在编辑页面展示
+    @JsonIgnore
     boolean showOnUpdate;
 
     // 在导出的Excel上展示
+    @JsonIgnore
     boolean showOnExport;
 
     // 在导入Excel上展示
+    @JsonIgnore
     boolean showOnImport;
 
     // 回调函数
@@ -598,31 +606,37 @@ public class Transfer extends Component {
     }
 
     // Check for showing when updating.
+    @JsonIgnore
     public boolean isShownOnUpdate() {
         return this.showOnUpdate;
     }
 
     // Check showing on index.
+    @JsonIgnore
     public boolean isShownOnIndex() {
         return this.showOnIndex;
     }
 
     // Check showing on detail.
+    @JsonIgnore
     public boolean isShownOnDetail() {
         return this.showOnDetail;
     }
 
     // Check for showing when creating.
+    @JsonIgnore
     public boolean isShownOnCreation() {
         return this.showOnCreation;
     }
 
     // Check for showing when exporting.
+    @JsonIgnore
     public boolean isShownOnExport() {
         return this.showOnExport;
     }
 
     // Check for showing when importing.
+    @JsonIgnore
     public boolean isShownOnImport() {
         return this.showOnImport;
     }
