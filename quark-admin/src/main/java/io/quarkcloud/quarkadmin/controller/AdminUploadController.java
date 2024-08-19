@@ -16,10 +16,28 @@ import cn.hutool.core.util.StrUtil;
 
 @RestController
 public class AdminUploadController {
-    
+
+    @RequestMapping("/api/admin/upload/image/getList")
+    @ResponseBody
+    public Object getImageList(@RequestParam("file") MultipartFile file) {
+        return "";
+    }
+
+    @RequestMapping("/api/admin/upload/image/delete")
+    @ResponseBody
+    public Object imageDelete(@RequestParam("file") MultipartFile file) {
+        return "";
+    }
+
+    @RequestMapping("/api/admin/upload/image/crop")
+    @ResponseBody
+    public Object imageCrop(@RequestParam("file") MultipartFile file) {
+        return "";
+    }
+
     @RequestMapping("/api/admin/upload/image/handle")
     @ResponseBody
-    public Object image(@RequestParam("file") MultipartFile file) throws IOException {
+    public Object imageHandle(@RequestParam("file") MultipartFile file) throws IOException {
 
         byte[] fileBytes = file.getBytes();
         String fileName = file.getOriginalFilename();
@@ -55,9 +73,15 @@ public class AdminUploadController {
         return filePath;
     }
 
+    @RequestMapping("/api/admin/upload/image/base64Handle")
+    @ResponseBody
+    public Object imageBase64Handle(@RequestParam("file") MultipartFile file) throws IOException {
+        return "";
+    }
+
     @RequestMapping("/api/admin/upload/file/handle")
     @ResponseBody
-    public Object file(@RequestParam("file") MultipartFile file) throws IOException {
+    public Object fileHandle(@RequestParam("file") MultipartFile file) throws IOException {
         byte[] fileBytes = file.getBytes();
         String fileName = file.getOriginalFilename();
 
