@@ -1,5 +1,6 @@
 package io.quarkcloud.quarkadmin.service.impl;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -86,6 +87,15 @@ public class ResourceServiceImpl<M extends ResourceMapper<T>, T> implements Reso
     // 根据 ID 选择修改
     public boolean updateById(T entity) {
         return this.resourceMapper.updateById(entity) > 0;
+    };
+
+    // 根据 ID 查询
+    public T getById(Serializable id) {
+        return this.resourceMapper.selectById(id);
+    };
+
+    public T getOne(Wrapper<T> queryWrapper) {
+        return this.resourceMapper.selectOne(queryWrapper);
     };
 
     // 获取列表

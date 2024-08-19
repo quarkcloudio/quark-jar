@@ -1,6 +1,9 @@
 package io.quarkcloud.quarkadmin.service;
 
+import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -52,6 +55,12 @@ public interface ResourceService<M extends ResourceMapper<T>, T> {
     
     // 根据 ID 选择修改
     boolean updateById(T entity);
+
+    // 根据 ID 查询
+    T getById(Serializable id);
+
+    // 根据 Wrapper，查询一条记录。结果集，如果是多个会抛出异常，随机取一条加上限制条件 wrapper.last("LIMIT 1")
+    T getOne(Wrapper<T> queryWrapper);
 
     /**
      * 根据上下文获取列表

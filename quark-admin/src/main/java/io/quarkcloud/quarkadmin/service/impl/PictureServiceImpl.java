@@ -8,4 +8,7 @@ import io.quarkcloud.quarkadmin.service.PictureService;
 @Service
 public class PictureServiceImpl extends ResourceServiceImpl<PictureMapper, PictureEntity> implements PictureService {
 
+    public String getPath(Object id) {
+        return null;
+    }
 }
