@@ -339,13 +339,13 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         // 获取分页
         Object perPage = this.getPerPage();
         if (perPage == null || !((perPage instanceof Integer) || (perPage instanceof Long))) {
-            List<T> data = resourceService.list();
+            List<T> data = resourceService.getListByContext();
             return table.setDatasource(data);
         }
 
         // 解析分页数据
         long pageSize = ((Number) perPage).longValue();
-        IPage<T> data = resourceService.page(pageSize);
+        IPage<T> data = resourceService.getPageByContext(pageSize);
         long current = data.getCurrent();
         long total = data.getTotal();
         long defaultCurrent = 1;
@@ -480,7 +480,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
 
     // 保存创建数据
     public Object storeRender(Context context) {
-        T result = this.resourceService.setContext(context).save(this.entity);
+        T result = this.resourceService.setContext(context).saveByContext(this.entity);
         return this.afterSaved(context, result);
     }
 
@@ -516,14 +516,14 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
 
     // 编辑页组件渲染
     public Object editRender(Context context) {
-        T data = this.resourceService.setContext(context).first();
+        T data = this.resourceService.setContext(context).getOneByContext();
         data = beforeEditing(context, data);
         return this.pageComponentRender(context, editComponentRender(context, data));
     }
 
     // 保存编辑数据
     public Object saveRender(Context context) {
-        T result = this.resourceService.setContext(context).update(this.entity);
+        T result = this.resourceService.setContext(context).updateByContext(this.entity);
         return this.afterSaved(context, result);
     }
 

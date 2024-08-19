@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -14,6 +16,7 @@ import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
 import io.quarkcloud.quarkadmin.service.ResourceService;
 import io.quarkcloud.quarkadmin.template.resource.core.PerformQuery;
 import io.quarkcloud.quarkcore.service.Context;
+import io.quarkcloud.quarkcore.util.Reflect;
 
 public class ResourceServiceImpl<M extends ResourceMapper<T>, T> implements ResourceService<M, T> {
     
@@ -48,15 +51,52 @@ public class ResourceServiceImpl<M extends ResourceMapper<T>, T> implements Reso
         return this;
     }
 
+    /**
+     * 插入数据
+     * 
+     * @param resourceEntity 要插入的实体
+     * @return 插入后返回结果
+     */
+    public boolean save(T resourceEntity) {
+        return this.resourceMapper.insert(resourceEntity) > 0;
+    };
+
+    /**
+     * 插入数据返回Id
+     * 
+     * @param resourceEntity 要插入的实体
+     * @return 插入后Id
+     */
+    public Long saveGetId(T resourceEntity) {
+        this.resourceMapper.insert(resourceEntity);
+        Reflect reflect = new Reflect(resourceEntity);
+        return (long)reflect.getFieldValue("id");
+    };
+
+    // 根据 UpdateWrapper 条件，更新记录 需要设置sqlset
+    public boolean update(Wrapper<T> updateWrapper) {
+        return this.resourceMapper.update(null, updateWrapper) > 0;
+    };
+
+    // 根据 whereWrapper 条件，更新记录
+    public boolean update(T updateEntity, Wrapper<T> whereWrapper) {
+        return this.resourceMapper.update(updateEntity, whereWrapper) > 0;
+    };
+    
+    // 根据 ID 选择修改
+    public boolean updateById(T entity) {
+        return this.resourceMapper.updateById(entity) > 0;
+    };
+
     // 获取列表
-    public List<T> list() {
+    public List<T> getListByContext() {
         MPJLambdaWrapper<T> queryWrapper = new PerformQuery<T>(context, this.queryWrapper).setSearches(searches).buildIndexQuery();
         return this.resourceMapper.selectList(queryWrapper);
     }
 
     // 获取分页数据
     @SuppressWarnings("unchecked")
-    public IPage<T> page(long pageSize) {
+    public IPage<T> getPageByContext(long pageSize) {
         MPJLambdaWrapper<T> queryWrapper = new PerformQuery<T>(context, this.queryWrapper).setSearches(searches).buildIndexQuery();
         long currentPage = 1;
         String searchParam = context.getParameter("search");
@@ -93,7 +133,7 @@ public class ResourceServiceImpl<M extends ResourceMapper<T>, T> implements Reso
 
     // 保存
     @SuppressWarnings("unchecked")
-    public T save(T entity) {
+    public T saveByContext(T entity) {
         entity = (T) context.getRequestBody(entity.getClass());
         this.resourceMapper.insert(entity);
         return entity;
@@ -101,14 +141,14 @@ public class ResourceServiceImpl<M extends ResourceMapper<T>, T> implements Reso
 
     // 更新
     @SuppressWarnings("unchecked")
-    public T update(T entity) {
+    public T updateByContext(T entity) {
         entity = (T) context.getRequestBody(entity.getClass());
         this.resourceMapper.updateById(entity);
         return entity;
     }
 
     // 获取单个
-    public T first() {
+    public T getOneByContext() {
         String id = context.getParameter("id");
         return this.resourceMapper.selectById(id);
     }
