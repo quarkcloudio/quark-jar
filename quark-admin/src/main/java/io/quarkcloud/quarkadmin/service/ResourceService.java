@@ -2,8 +2,6 @@ package io.quarkcloud.quarkadmin.service;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
