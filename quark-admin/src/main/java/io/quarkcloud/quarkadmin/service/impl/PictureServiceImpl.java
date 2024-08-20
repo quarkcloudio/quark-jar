@@ -1,11 +1,13 @@
 package io.quarkcloud.quarkadmin.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.quarkcloud.quarkadmin.entity.PictureEntity;
@@ -91,5 +93,49 @@ public class PictureServiceImpl extends ResourceServiceImpl<PictureMapper, Pictu
         }
 
         return http + webSiteDomain + "/admin/default.png";
+    }
+
+    public List<String> getPaths(Object id) {
+        List<String> paths = new ArrayList<>();
+        String http = "";
+        String webSiteDomain = configService.getValue("WEB_SITE_DOMAIN");
+        String webConfig = configService.getValue("SSL_OPEN");
+        
+        if (webSiteDomain != null && !webSiteDomain.isEmpty()) {
+            if ("1".equals(webConfig)) {
+                http = "https://";
+            } else {
+                http = "http://";
+            }
+        }
+
+        if (id instanceof String) {
+            String getId = (String) id;
+            // 处理 JSON 字符串
+            if (getId.contains("{")) {
+                ObjectMapper objectMapper = new ObjectMapper();
+                try {
+                    List<Map<String, Object>> jsonData = objectMapper.readValue(getId, new TypeReference<List<Map<String, Object>>>() {});
+                    for (Map<String, Object> v : jsonData) {
+                        String path = (String) v.get("url");
+                        if (path.contains("//")) {
+                            paths.add(path);
+                        } else {
+                            if (path.contains("/public")) {
+                                path = path.replace("/public", "/");
+                            }
+                            if (!path.isEmpty()) {
+                                path = http + webSiteDomain + path;
+                            }
+                            paths.add(path);
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return paths;
     }
 }
