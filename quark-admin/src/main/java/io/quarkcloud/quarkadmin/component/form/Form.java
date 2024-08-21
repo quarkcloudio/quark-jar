@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.quarkcloud.quarkadmin.component.Component;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -122,9 +124,42 @@ public class Form extends Component {
     // 解析initialValue
     public Object parseInitialValue(Object item, Map<String, Object> initialValues) {
         Object value = null;
-        if (item instanceof List) {
+
+        // 数组直接返回
+        if (item instanceof List<?>) {
             return null;
         }
+
+        try {
+            String name = (String) item.getClass().getMethod("getName").invoke(item);
+            if (name.isEmpty()) {
+                return null;
+            }
+
+            boolean issetDefaultValue = item.getClass().getMethod("getDefaultValue") != null;
+            if (issetDefaultValue) {
+                Object defaultValue = item.getClass().getMethod("getDefaultValue").invoke(item);
+                if (defaultValue != null) {
+                    value = defaultValue;
+                }
+            }
+
+            boolean issetValue = item.getClass().getMethod("getValue") != null;
+            if (issetValue) {
+                Object getValue = item.getClass().getMethod("getValue").invoke(item);
+                if (getValue != null) {
+                    value = getValue;
+                }
+            }
+
+            if (initialValues.get(name) != null) {
+                value = initialValues.get(name);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return value;
     }
 
@@ -144,21 +179,158 @@ public class Form extends Component {
     // 解析字段
     public List<Object> fieldParser(Object v, boolean when) {
         List<Object> items = new ArrayList<>();
-        if (v instanceof List) {
+
+        // 数组直接返回
+        if (v instanceof List<?>) {
             return items;
         }
+
+        String vKind = v.getClass().getSimpleName();
+        if (!(vKind.equals("Object") || vKind.equals("Pointer"))) {
+            return items;
+        }
+
+        boolean hasBody = false;
+        try {
+            hasBody = v.getClass().getMethod("getBody") != null;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // 存在body的情况下
+        if (hasBody) {
+            try {
+                Object body = v.getClass().getMethod("getBody").invoke(v);
+                List<Object> getItems = findFields(body, true);
+                if (!getItems.isEmpty()) {
+                    items.addAll(getItems);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return items;
+        }
+
+        boolean hasTabPanes = false;
+        try {
+            hasTabPanes = v.getClass().getMethod("getTabPanes") != null;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // 存在TabPanes情况下
+        if (hasTabPanes) {
+            try {
+                Object body = v.getClass().getMethod("getTabPanes").invoke(v);
+                List<Object> getItems = findFields(body, true);
+                if (!getItems.isEmpty()) {
+                    items.addAll(getItems);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return items;
+        }
+
+        // 默认情况
+        try {
+            String component = (String) v.getClass().getMethod("getComponent").invoke(v);
+            if (component.contains("Field")) {
+                items.add(v);
+                if (when) {
+                    List<Object> whenFields = getWhenFields(v);
+                    if (!whenFields.isEmpty()) {
+                        items.addAll(whenFields);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return items;
     }
 
     // 获取When组件中的字段
     public List<Object> getWhenFields(Object item) {
         List<Object> items = new ArrayList<>();
+
+        try {
+            boolean whenIsValid = item.getClass().getMethod("getWhen") != null;
+            if (!whenIsValid) {
+                return items;
+            }
+
+            Object getWhen = item.getClass().getMethod("getWhen").invoke(item);
+            if (getWhen == null) {
+                return items;
+            }
+
+            Object whenItems = getWhen.getClass().getMethod("getItems").invoke(getWhen);
+            if (whenItems == null) {
+                return items;
+            }
+
+            for (Object v : (List<?>) whenItems) {
+                Object body = v.getClass().getMethod("getBody").invoke(v);
+                if (body instanceof List<?>) {
+                    items.addAll((List<?>) body);
+                } else {
+                    items.add(body);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return items;
     }
 
     // 表单默认值，只有初始化以及重置时生效
+    @SuppressWarnings("unchecked")
     public Form setInitialValues(Object initialValues) {
-        Object data = initialValues;
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Object> data = objectMapper.convertValue(initialValues, Map.class);
+
+        List<Object> fields = findFields(this.body, true);
+        for (Object v : fields) {
+            Object value = parseInitialValue(v, data);
+            if (value != null) {
+                try {
+                    String name = (String) v.getClass().getMethod("getName").invoke(v);
+                    data.put(name, value);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        for (Map.Entry<String, Object> entry : data.entrySet()) {
+            String k = entry.getKey();
+            Object v = entry.getValue();
+            if (v instanceof String) {
+                String getV = (String) v;
+                if (getV.contains("[")) {
+                    try {
+                        List<Object> m = new ArrayList<>();
+                        m = new ObjectMapper().readValue(getV, List.class);
+                        data.put(k, m);
+                    } catch (Exception e) {
+                        if (getV.contains("{")) {
+                            try {
+                                Map<String, Object> m = new HashMap<>();
+                                m = new ObjectMapper().readValue(getV, Map.class);
+                                data.put(k, m);
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         this.initialValues = data;
         return this;
     }
