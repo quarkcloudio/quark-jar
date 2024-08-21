@@ -1,5 +1,6 @@
 package io.quarkcloud.quarkadmin.entity;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
@@ -43,10 +44,10 @@ public class ActionLogEntity extends Model<ActionLogEntity> {
     private int status;
 
     // 创建时间
-    @TableField(fill = FieldFill.INSERT)
-    private Date createdAt;
+    @TableField(value = "created_at", fill = FieldFill.INSERT)
+    private LocalDateTime createdAt;
 
     // 更新时间
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Date updatedAt;
+    @TableField(value = "updated_at", fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime updatedAt;
 }

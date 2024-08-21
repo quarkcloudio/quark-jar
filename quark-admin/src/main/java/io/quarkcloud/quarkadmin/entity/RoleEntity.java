@@ -1,6 +1,6 @@
 package io.quarkcloud.quarkadmin.entity;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -24,10 +24,10 @@ public class RoleEntity {
     private String guardName;
 
     // 创建时间
-    @TableField(fill = FieldFill.INSERT)
-    private Date createdAt;
+    @TableField(value = "created_at", fill = FieldFill.INSERT)
+    private LocalDateTime createdAt;
 
     // 更新时间
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Date updatedAt;
+    @TableField(value = "updated_at", fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime updatedAt;
 }
