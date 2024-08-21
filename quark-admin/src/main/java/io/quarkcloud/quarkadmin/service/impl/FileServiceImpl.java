@@ -37,8 +37,8 @@ public class FileServiceImpl extends ResourceServiceImpl<FileMapper, FileEntity>
             if (getId.contains("//") && !getId.contains("{")) {
                 return getId;
             }
-            if (getId.contains("/public") && !getId.contains("{")) {
-                return http + webSiteDomain + getId.replace("/public/", "/");
+            if (getId.contains("public") && !getId.contains("{")) {
+                return http + webSiteDomain + getId.replace("public/", "/");
             }
             if (getId.contains("/") && !getId.contains("{")) {
                 return http + webSiteDomain + getId;
@@ -65,8 +65,8 @@ public class FileServiceImpl extends ResourceServiceImpl<FileMapper, FileEntity>
                 if (path.contains("//")) {
                     return path;
                 }
-                if (path.contains("/public")) {
-                    path = path.replace("/public/", "/");
+                if (path.contains("public")) {
+                    path = path.replace("public/", "/");
                 }
                 if (!path.isEmpty()) {
                     return http + webSiteDomain + path;
@@ -82,8 +82,8 @@ public class FileServiceImpl extends ResourceServiceImpl<FileMapper, FileEntity>
             if (path.contains("//")) {
                 return path;
             }
-            if (path.contains("/public")) {
-                path = path.replace("/public/", "/");
+            if (path.contains("public")) {
+                path = path.replace("public/", "/");
             }
         }
         if (!path.isEmpty()) {

@@ -39,8 +39,8 @@ public class PictureServiceImpl extends ResourceServiceImpl<PictureMapper, Pictu
             if (getId.contains("//") && !getId.contains("{")) {
                 return getId;
             }
-            if (getId.contains("/public") && !getId.contains("{")) {
-                return http + webSiteDomain + getId.replace("/public/", "/");
+            if (getId.contains("public") && !getId.contains("{")) {
+                return http + webSiteDomain + getId.replace("public/", "/");
             }
             if (getId.contains("/") && !getId.contains("{")) {
                 return http + webSiteDomain + getId;
@@ -67,8 +67,8 @@ public class PictureServiceImpl extends ResourceServiceImpl<PictureMapper, Pictu
                 if (path.contains("//")) {
                     return path;
                 }
-                if (path.contains("/public")) {
-                    path = path.replace("/public/", "/");
+                if (path.contains("public")) {
+                    path = path.replace("public/", "/");
                 }
                 if (!path.isEmpty()) {
                     return http + webSiteDomain + path;
@@ -84,8 +84,8 @@ public class PictureServiceImpl extends ResourceServiceImpl<PictureMapper, Pictu
             if (path.contains("//")) {
                 return path;
             }
-            if (path.contains("/public")) {
-                path = path.replace("/public/", "/");
+            if (path.contains("public")) {
+                path = path.replace("public/", "/");
             }
         }
         if (!path.isEmpty()) {
@@ -121,8 +121,8 @@ public class PictureServiceImpl extends ResourceServiceImpl<PictureMapper, Pictu
                         if (path.contains("//")) {
                             paths.add(path);
                         } else {
-                            if (path.contains("/public")) {
-                                path = path.replace("/public", "/");
+                            if (path.contains("public")) {
+                                path = path.replace("public", "/");
                             }
                             if (!path.isEmpty()) {
                                 path = http + webSiteDomain + path;
