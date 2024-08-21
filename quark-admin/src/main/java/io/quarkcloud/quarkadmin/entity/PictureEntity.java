@@ -37,6 +37,12 @@ public class PictureEntity extends Model<PictureEntity> {
     // 状态
     private Long size;
 
+    // 宽度
+    private int width;
+
+    // 高度
+    private int height;
+
     // 文件扩展名
     private String ext;
 

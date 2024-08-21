@@ -11,6 +11,7 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -22,9 +23,15 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import io.quarkcloud.quarkadmin.component.message.Message;
+import io.quarkcloud.quarkadmin.entity.PictureEntity;
+import io.quarkcloud.quarkadmin.service.PictureService;
 
 @RestController
 public class AdminUploadController {
+    
+    // 注入图片服务
+    @Autowired
+    private PictureService pictureService;
 
     @RequestMapping("/api/admin/upload/image/getList")
     @ResponseBody
@@ -47,7 +54,6 @@ public class AdminUploadController {
     @RequestMapping("/api/admin/upload/image/handle")
     @ResponseBody
     public Object imageHandle(@RequestParam("file") MultipartFile file) throws IOException, NoSuchAlgorithmException {
-
         byte[] fileBytes = file.getBytes();
         String fileName = file.getOriginalFilename();
 
@@ -102,9 +108,24 @@ public class AdminUploadController {
         int width = image.getWidth();
         int height = image.getHeight();
 
+        PictureEntity pictureEntity = new PictureEntity();
+        pictureEntity.setName(fileName);
+        pictureEntity.setPath(filePath);
+        pictureEntity.setSize(fileSize);
+        pictureEntity.setHash(fileHash);
+        pictureEntity.setExt(fileExt);
+        pictureEntity.setHeight(height);
+        pictureEntity.setWidth(width);
+
+        // 获取文件路径
+        String fileUrl = pictureService.getPath(filePath);
+        pictureEntity.setUrl(fileUrl);
+
+        Long fileId = pictureService.saveGetId(pictureEntity);
+
         // 返回上传成功的消息
         return Message.success("上传成功", "", Map.of(
-            "id", "",
+            "id", fileId,
             "contentType", fileType,
             "ext", fileExt,
             "hash", fileHash,
@@ -113,7 +134,7 @@ public class AdminUploadController {
             "name", fileName,
             "path", filePath,
             "size", fileSize,
-            "url", ""
+            "url", fileUrl
         ));
     }
 
