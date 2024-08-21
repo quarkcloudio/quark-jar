@@ -8,7 +8,9 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import io.quarkcloud.quarkcore.util.RawJsonDeserializer;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -40,7 +42,8 @@ public class AdminEntity extends Model<AdminEntity> {
     private String password;
 
     // 头像
-    private String avatar;
+    @JsonDeserialize(using = RawJsonDeserializer.class)
+    private Object avatar;
 
     // 最后登录ip
     private String lastLoginIp;
