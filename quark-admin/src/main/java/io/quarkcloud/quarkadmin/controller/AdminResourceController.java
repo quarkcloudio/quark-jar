@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.quarkcloud.quarkadmin.annotation.AdminResourceIndexRender;
+import io.quarkcloud.quarkadmin.annotation.AdminResourceSaveRender;
 import io.quarkcloud.quarkadmin.annotation.AdminResourceStoreRender;
 import io.quarkcloud.quarkadmin.annotation.AdminResourceCreateRender;
 import io.quarkcloud.quarkadmin.annotation.AdminResourceEditRender;
@@ -69,6 +70,7 @@ public class AdminResourceController {
 
     @RequestMapping("/api/admin/{resource}/save")
     @ResponseBody
+    @AdminResourceSaveRender
     public Object save(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }

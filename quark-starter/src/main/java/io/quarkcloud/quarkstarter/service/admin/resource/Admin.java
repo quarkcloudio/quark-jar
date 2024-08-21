@@ -69,7 +69,7 @@ public class Admin extends ResourceImpl<AdminMapper,AdminEntity> {
 
     // 编辑页面显示前回调
     public AdminEntity beforeEditing(Context ctx,AdminEntity data) {
-        data.setPassword("");
+        data.setPassword(null);
         return data;
     }
 }
