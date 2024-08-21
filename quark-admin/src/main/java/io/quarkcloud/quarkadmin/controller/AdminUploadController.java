@@ -24,7 +24,9 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import io.quarkcloud.quarkadmin.component.message.Message;
 import io.quarkcloud.quarkadmin.entity.PictureEntity;
+import io.quarkcloud.quarkadmin.entity.FileEntity;
 import io.quarkcloud.quarkadmin.service.PictureService;
+import io.quarkcloud.quarkadmin.service.FileService;
 
 @RestController
 public class AdminUploadController {
@@ -32,6 +34,10 @@ public class AdminUploadController {
     // 注入图片服务
     @Autowired
     private PictureService pictureService;
+
+    // 注入文件服务
+    @Autowired
+    private FileService fileService;
 
     @RequestMapping("/api/admin/upload/image/getList")
     @ResponseBody
@@ -146,7 +152,7 @@ public class AdminUploadController {
 
     @RequestMapping("/api/admin/upload/file/handle")
     @ResponseBody
-    public Object fileHandle(@RequestParam("file") MultipartFile file) throws IOException {
+    public Object fileHandle(@RequestParam("file") MultipartFile file) throws IOException, NoSuchAlgorithmException {
         byte[] fileBytes = file.getBytes();
         String fileName = file.getOriginalFilename();
 
@@ -169,15 +175,54 @@ public class AdminUploadController {
         }
  
         // 生成新的文件名，避免文件名冲突
-        String newFileName = IdUtil.simpleUUID() + "." +FileUtil.extName(fileName);
+        String fileExt = FileUtil.extName(fileName);
+        String newFileName = IdUtil.simpleUUID() + "." + fileExt;
         File uploadFile = FileUtil.file(dir, newFileName);
 
         // 将文件写入服务器指定目录
         FileUtil.writeBytes(fileBytes, uploadFile);
  
-        // 返回上传文件的路径
-        String filePath = uploadFile.getAbsolutePath();
+        // 文件保存路径
+        String filePath = uploadDir + newFileName;
 
-        return filePath;
+        // 文件类型
+        String fileType = FileTypeUtil.getType(uploadFile);
+
+        // 文件大小
+        Long fileSize = uploadFile.length();
+        
+        // 文件hash
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] hashBytes = digest.digest(fileBytes);
+        StringBuilder sb = new StringBuilder();
+        for (byte b : hashBytes) {
+            sb.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
+        }
+        String fileHash = sb.toString();
+
+        FileEntity fileEntity = new FileEntity();
+        fileEntity.setName(fileName);
+        fileEntity.setPath(filePath);
+        fileEntity.setSize(fileSize);
+        fileEntity.setHash(fileHash);
+        fileEntity.setExt(fileExt);
+
+        // 获取文件路径
+        String fileUrl = fileService.getPath(filePath);
+        fileEntity.setUrl(fileUrl);
+
+        Long fileId = fileService.saveGetId(fileEntity);
+
+        // 返回上传成功的消息
+        return Message.success("上传成功", "", Map.of(
+            "id", fileId,
+            "contentType", fileType,
+            "ext", fileExt,
+            "hash", fileHash,
+            "name", fileName,
+            "path", filePath,
+            "size", fileSize,
+            "url", fileUrl
+        ));
     }
 }
