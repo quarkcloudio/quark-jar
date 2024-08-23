@@ -391,6 +391,8 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
             .setBody(fields)
             .setInitialValues(data);
 
+        System.out.println(formComponent);
+
         return new Card()
             .setTitle(title)
             .setHeaderBordered(true)
