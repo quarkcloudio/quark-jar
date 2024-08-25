@@ -458,7 +458,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
 
     // 创建页面显示前回调
     public T beforeCreating(Context ctx) {
-        return null;
+        return this.entity;
     }
 
     // 渲染创建页组件
