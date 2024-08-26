@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.quarkcloud.quarkadmin.component.Component;
-import io.quarkcloud.quarkadmin.component.grid.Col;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
