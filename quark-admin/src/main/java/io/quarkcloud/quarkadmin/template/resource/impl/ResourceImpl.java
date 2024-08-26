@@ -538,4 +538,9 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         String redirectUrl = "/layout/index?api=" + "/api/admin/{resource}/index".replace("{resource}", context.getPathVariable("resource"));
         return Message.success("操作成功！", redirectUrl);
     }
+
+    // 行为解析
+    public Object actionRender(Context context) {
+        return Message.success("操作成功！");
+    }
 }

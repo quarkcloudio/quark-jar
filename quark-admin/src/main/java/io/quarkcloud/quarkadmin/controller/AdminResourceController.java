@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.quarkcloud.quarkadmin.annotation.AdminResourceIndexRender;
 import io.quarkcloud.quarkadmin.annotation.AdminResourceSaveRender;
 import io.quarkcloud.quarkadmin.annotation.AdminResourceStoreRender;
+import io.quarkcloud.quarkadmin.annotation.AdminResourceActionRender;
 import io.quarkcloud.quarkadmin.annotation.AdminResourceCreateRender;
 import io.quarkcloud.quarkadmin.annotation.AdminResourceEditRender;
 import io.quarkcloud.quarkcore.service.Context;
@@ -31,6 +32,7 @@ public class AdminResourceController {
 
     @RequestMapping("/api/admin/{resource}/action/{uriKey}")
     @ResponseBody
+    @AdminResourceActionRender
     public Object action(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
