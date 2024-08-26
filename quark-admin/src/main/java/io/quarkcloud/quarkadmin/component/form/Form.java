@@ -327,6 +327,14 @@ public class Form extends Component {
                             }
                         }
                     }
+                } else if (getV.contains("{")) {
+                    try {
+                        Map<String, Object> m = new HashMap<>();
+                        m = new ObjectMapper().readValue(getV, Map.class);
+                        data.put(k, m);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             }
         }
