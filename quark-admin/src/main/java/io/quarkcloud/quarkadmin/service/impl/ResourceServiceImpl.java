@@ -1,6 +1,7 @@
 package io.quarkcloud.quarkadmin.service.impl;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -51,52 +52,6 @@ public class ResourceServiceImpl<M extends ResourceMapper<T>, T> implements Reso
         this.searches = searches;
         return this;
     }
-
-    /**
-     * 插入数据
-     * 
-     * @param resourceEntity 要插入的实体
-     * @return 插入后返回结果
-     */
-    public boolean save(T resourceEntity) {
-        return this.resourceMapper.insert(resourceEntity) > 0;
-    };
-
-    /**
-     * 插入数据返回Id
-     * 
-     * @param resourceEntity 要插入的实体
-     * @return 插入后Id
-     */
-    public Long saveGetId(T resourceEntity) {
-        this.resourceMapper.insert(resourceEntity);
-        Reflect reflect = new Reflect(resourceEntity);
-        return (long)reflect.getFieldValue("id");
-    };
-
-    // 根据 UpdateWrapper 条件，更新记录 需要设置sqlset
-    public boolean update(Wrapper<T> updateWrapper) {
-        return this.resourceMapper.update(null, updateWrapper) > 0;
-    };
-
-    // 根据 whereWrapper 条件，更新记录
-    public boolean update(T updateEntity, Wrapper<T> whereWrapper) {
-        return this.resourceMapper.update(updateEntity, whereWrapper) > 0;
-    };
-    
-    // 根据 ID 选择修改
-    public boolean updateById(T entity) {
-        return this.resourceMapper.updateById(entity) > 0;
-    };
-
-    // 根据 ID 查询
-    public T getById(Serializable id) {
-        return this.resourceMapper.selectById(id);
-    };
-
-    public T getOne(Wrapper<T> queryWrapper) {
-        return this.resourceMapper.selectOne(queryWrapper);
-    };
 
     // 获取列表
     public List<T> getListByContext() {
@@ -161,5 +116,95 @@ public class ResourceServiceImpl<M extends ResourceMapper<T>, T> implements Reso
     public T getOneByContext() {
         String id = context.getParameter("id");
         return this.resourceMapper.selectById(id);
+    }
+
+    public boolean removeByContext() {
+        return false;
+    }
+
+    /**
+     * 插入数据
+     * 
+     * @param resourceEntity 要插入的实体
+     * @return 插入后返回结果
+     */
+    public boolean save(T resourceEntity) {
+        return this.resourceMapper.insert(resourceEntity) > 0;
+    };
+
+    /**
+     * 插入数据返回Id
+     * 
+     * @param resourceEntity 要插入的实体
+     * @return 插入后Id
+     */
+    public Long saveGetId(T resourceEntity) {
+        this.resourceMapper.insert(resourceEntity);
+        Reflect reflect = new Reflect(resourceEntity);
+        return (long)reflect.getFieldValue("id");
+    };
+
+    // 根据 UpdateWrapper 条件，更新记录 需要设置sqlset
+    public boolean update(Wrapper<T> updateWrapper) {
+        return this.resourceMapper.update(null, updateWrapper) > 0;
+    };
+
+    // 根据 whereWrapper 条件，更新记录
+    public boolean update(T updateEntity, Wrapper<T> whereWrapper) {
+        return this.resourceMapper.update(updateEntity, whereWrapper) > 0;
+    };
+    
+    // 根据 ID 选择修改
+    public boolean updateById(T entity) {
+        return this.resourceMapper.updateById(entity) > 0;
+    };
+
+    // 根据 ID 查询
+    public T getById(Serializable id) {
+        return this.resourceMapper.selectById(id);
+    };
+
+    public T getOne(Wrapper<T> queryWrapper) {
+        return this.resourceMapper.selectOne(queryWrapper);
+    };
+
+    /**
+     * 根据 queryWrapper 设置的条件，删除记录
+     * 
+     * @param queryWrapper 包含查询条件的包装器对象，用于定位要移除的对象
+     * @return 如果成功移除了对象，返回true；否则返回false
+     */
+    public boolean remove(Wrapper<T> queryWrapper) {
+        return this.resourceMapper.delete(queryWrapper) > 0;
+    }
+
+    /**
+     * 根据 ID 删除
+     * 
+     * @param id 要删除的记录的主键值
+     * @return 如果删除成功，返回true；否则返回false
+     */
+    public boolean removeById(Serializable id) {
+        return this.resourceMapper.deleteById(id) > 0;
+    }
+
+    /**
+     * 根据 columnMap 条件，删除记录
+     * 
+     * @param idList 要删除的记录的主键值列表
+     * @return 如果删除成功，返回true；否则返回false
+     */
+    public boolean removeByMap(Map<String, Object> columnMap) {
+        return this.resourceMapper.deleteByMap(columnMap) > 0;
+    }
+
+    /**
+     * 删除（根据ID 批量删除）
+     * 
+     * @param idList 要删除的记录的主键值列表
+     * @return 如果删除成功，返回true；否则返回false
+     */
+    public boolean removeByIds(Collection<? extends Serializable> idList) {
+        return this.resourceMapper.deleteBatchIds(idList) > 0;
     }
 }

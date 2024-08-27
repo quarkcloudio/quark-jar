@@ -1,7 +1,9 @@
 package io.quarkcloud.quarkadmin.service;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -28,6 +30,71 @@ public interface ResourceService<M extends ResourceMapper<T>, T> {
      * @return 返回设置查询条件后的ResourceServiceImpl实例，支持链式调用
      */
     public ResourceServiceImpl<M, T> setQueryWrapper(MPJLambdaWrapper<T> queryWrapper);
+
+    /**
+     * 根据上下文获取列表
+     * 
+     * 此方法旨在根据当前上下文检索和返回一个列表
+     * 它不接受任何参数，因为它依赖于外部上下文来获取数据
+     * 
+     * @return List<T> 返回一个泛型列表，包含符合当前上下文条件的元素
+     */
+    public List<T> getListByContext();
+
+    /**
+     * 获取分页数据
+     * 
+     * @param pageSize 每页显示的数据条数，这是一个重要的分页参数，决定了每页数据的数量
+     * @return 返回一个泛型的分页对象，该对象包含当前页的数据以及分页的相关信息
+     */
+    public IPage<T> getPageByContext(long pageSize);
+
+    /**
+     * 通过上下文保存实体
+     * 
+     * 此方法利用当前的上下文环境来保存传入的实体对象它提供了一种在特定上下文中持久化数据的方法，
+     * 具体的上下文依赖于实现本方法的类和使用场景例如，它可以用作在特定用户会话中保存数据，
+     * 或者在特定的事务上下文中保存实体
+     * 
+     * @param resourceEntity 要保存的实体对象这个参数是泛型的，允许保存不同类型的实体
+     * @return 返回保存后的实体对象，以便于链式调用和进一步操作
+     */
+    public T saveByContext(T resourceEntity);
+
+    /**
+     * 根据上下文更新实体
+     * 
+     * 此方法主要用于在特定上下文中更新实体的状态它通过传入一个实体对象，
+     * 并根据这个实体的标识符和其他属性的值来更新数据库中的对应记录更新操作
+     * 是在上下文环境中进行的，这意味着更新过程可能涉及到与数据库的交互，
+     * 以及其他与更新操作相关的逻辑这个方法提供了一种灵活的方式来处理实体
+     * 的更新，使得开发者不需要手动管理更新过程中的细节
+     * 
+     * @param entity 要更新的实体对象这个对象应该包含所有需要更新到数据库的属性值，
+     *               包括标识符和其他需要更改的字段
+     * @return 更新后的实体对象这个对象可能包含从数据库返回的最新信息，如更新时间等
+     */
+    public T updateByContext(T entity);
+
+    /**
+     * 根据上下文获取单个实体对象
+     * 
+     * 此方法通过上下文信息来检索并返回一个实体对象它不接受任何参数，
+     * 因为所需的实体信息已经通过上下文隐式提供
+     * 
+     * @return T 实体类的单个实例
+     */
+    public T getOneByContext();
+
+    /**
+     * 根据上下文移除数据.
+     * 
+     * 此方法的目的是提供一种基于上下文的数据移除方式，以实现更灵活的数据管理策略.
+     * 它相较于直接通过具体数据项进行移除，更加注重于上下文环境，从而决定是否移除数据.
+     * 
+     * @return 如果移除操作成功，返回true；否则返回false. 
+     */
+    public boolean removeByContext();
 
     /**
      * 插入数据
@@ -87,57 +154,34 @@ public interface ResourceService<M extends ResourceMapper<T>, T> {
     T getOne(Wrapper<T> queryWrapper);
 
     /**
-     * 根据上下文获取列表
+     * 根据 queryWrapper 设置的条件，删除记录
      * 
-     * 此方法旨在根据当前上下文检索和返回一个列表
-     * 它不接受任何参数，因为它依赖于外部上下文来获取数据
-     * 
-     * @return List<T> 返回一个泛型列表，包含符合当前上下文条件的元素
+     * @param queryWrapper 包含查询条件的包装器对象，用于定位要移除的对象
+     * @return 如果成功移除了对象，返回true；否则返回false
      */
-    public List<T> getListByContext();
+    boolean remove(Wrapper<T> queryWrapper);
 
     /**
-     * 获取分页数据
+     * 根据 ID 删除
      * 
-     * @param pageSize 每页显示的数据条数，这是一个重要的分页参数，决定了每页数据的数量
-     * @return 返回一个泛型的分页对象，该对象包含当前页的数据以及分页的相关信息
+     * @param id 要删除的记录的主键值
+     * @return 如果删除成功，返回true；否则返回false
      */
-    public IPage<T> getPageByContext(long pageSize);
+    boolean removeById(Serializable id);
 
     /**
-     * 通过上下文保存实体
+     * 根据 columnMap 条件，删除记录
      * 
-     * 此方法利用当前的上下文环境来保存传入的实体对象它提供了一种在特定上下文中持久化数据的方法，
-     * 具体的上下文依赖于实现本方法的类和使用场景例如，它可以用作在特定用户会话中保存数据，
-     * 或者在特定的事务上下文中保存实体
-     * 
-     * @param resourceEntity 要保存的实体对象这个参数是泛型的，允许保存不同类型的实体
-     * @return 返回保存后的实体对象，以便于链式调用和进一步操作
+     * @param idList 要删除的记录的主键值列表
+     * @return 如果删除成功，返回true；否则返回false
      */
-    public T saveByContext(T resourceEntity);
+    boolean removeByMap(Map<String, Object> columnMap);
 
     /**
-     * 根据上下文更新实体
+     * 删除（根据ID 批量删除）
      * 
-     * 此方法主要用于在特定上下文中更新实体的状态它通过传入一个实体对象，
-     * 并根据这个实体的标识符和其他属性的值来更新数据库中的对应记录更新操作
-     * 是在上下文环境中进行的，这意味着更新过程可能涉及到与数据库的交互，
-     * 以及其他与更新操作相关的逻辑这个方法提供了一种灵活的方式来处理实体
-     * 的更新，使得开发者不需要手动管理更新过程中的细节
-     * 
-     * @param entity 要更新的实体对象这个对象应该包含所有需要更新到数据库的属性值，
-     *               包括标识符和其他需要更改的字段
-     * @return 更新后的实体对象这个对象可能包含从数据库返回的最新信息，如更新时间等
+     * @param idList 要删除的记录的主键值列表
+     * @return 如果删除成功，返回true；否则返回false
      */
-    public T updateByContext(T entity);
-
-    /**
-     * 根据上下文获取单个实体对象
-     * 
-     * 此方法通过上下文信息来检索并返回一个实体对象它不接受任何参数，
-     * 因为所需的实体信息已经通过上下文隐式提供
-     * 
-     * @return T 实体类的单个实例
-     */
-    public T getOneByContext();
+    boolean removeByIds(Collection<? extends Serializable> idList);
 }
