@@ -4,7 +4,7 @@ import java.util.List;
 
 import io.quarkcloud.quarkcore.service.Context;
 
-public interface Action {
+public interface Action<T> {
 
     // 行为key
     String getUriKey(Object action);

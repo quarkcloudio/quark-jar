@@ -1,9 +1,10 @@
 package io.quarkcloud.quarkadmin.template.resource.impl.action;
 
+import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
 import io.quarkcloud.quarkadmin.template.resource.impl.ActionImpl;
 import io.quarkcloud.quarkcore.service.Context;
 
-public class Link extends ActionImpl {
+public class Link<M, T> extends ActionImpl<ResourceMapper<T>, T> {
 
     // 获取跳转链接
     public String href;

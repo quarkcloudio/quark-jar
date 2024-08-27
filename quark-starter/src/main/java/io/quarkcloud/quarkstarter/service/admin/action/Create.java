@@ -1,9 +1,10 @@
 package io.quarkcloud.quarkstarter.service.admin.action;
 
+import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
 import io.quarkcloud.quarkadmin.template.resource.impl.action.Link;
 import io.quarkcloud.quarkcore.service.Context;
 
-public class Create extends Link {
+public class Create<M, T> extends Link<ResourceMapper<T>, T> {
 
     // 构造函数
     public Create(String title) {

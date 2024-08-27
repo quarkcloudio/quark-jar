@@ -2,10 +2,12 @@ package io.quarkcloud.quarkstarter.service.admin.action;
 
 import java.util.Arrays;
 
+import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
+import io.quarkcloud.quarkadmin.service.ResourceService;
 import io.quarkcloud.quarkadmin.template.resource.impl.ActionImpl;
 import io.quarkcloud.quarkcore.service.Context;
 
-public class Delete extends ActionImpl {
+public class Delete<M, T> extends ActionImpl<ResourceMapper<T>, T> {
 
     // 构造函数
     public Delete() {
@@ -58,7 +60,7 @@ public class Delete extends ActionImpl {
     }
 
     // 执行行为句柄
-    public Object handle(Context context, Object query) throws Exception {
+    public Object handle(Context context, ResourceService<ResourceMapper<T>, T> resourceService) throws Exception {
         return "Method not implemented";
     }
 }

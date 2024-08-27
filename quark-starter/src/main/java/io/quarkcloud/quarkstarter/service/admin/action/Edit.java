@@ -1,9 +1,10 @@
 package io.quarkcloud.quarkstarter.service.admin.action;
 
+import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
 import io.quarkcloud.quarkadmin.template.resource.impl.action.Link;
 import io.quarkcloud.quarkcore.service.Context;
 
-public class Edit extends Link {
+public class Edit<M, T> extends Link<ResourceMapper<T>, T> {
 
     // 构造函数
     public Edit() {

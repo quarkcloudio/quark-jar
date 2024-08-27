@@ -3,12 +3,14 @@ package io.quarkcloud.quarkadmin.template.resource.impl.action;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
 import io.quarkcloud.quarkadmin.template.resource.Action;
 import io.quarkcloud.quarkadmin.template.resource.core.ResolveAction;
 import io.quarkcloud.quarkadmin.template.resource.impl.ActionImpl;
 import io.quarkcloud.quarkcore.service.Context;
 
-public class Dropdown extends ActionImpl {
+public class Dropdown<M, T> extends ActionImpl<ResourceMapper<T>, T> {
 
     /**
      * 下拉框箭头是否显示
@@ -33,7 +35,7 @@ public class Dropdown extends ActionImpl {
     /**
      * 下拉菜单行为
      */
-    public List<Action> actions;
+    public List<Action<T>> actions;
 
     // 初始化
     public Dropdown() {
@@ -79,7 +81,7 @@ public class Dropdown extends ActionImpl {
      * @param actions 下拉菜单行为列表
      * @return Dropdown 实例
      */
-    public Dropdown setActions(List<Action> actions) {
+    public Dropdown<M, T> setActions(List<Action<T>> actions) {
         this.actions = actions;
         return this;
     }
@@ -88,7 +90,7 @@ public class Dropdown extends ActionImpl {
      * 获取下拉菜单行为
      * @return 下拉菜单行为列表
      */
-    public List<Action> getActions() {
+    public List<Action<T>> getActions() {
         return actions;
     }
 
@@ -102,10 +104,10 @@ public class Dropdown extends ActionImpl {
         ResolveAction resolveAction = new ResolveAction();
 
         // 获取行为
-        List<Action> actions = getActions();
+        List<Action<T>> actions = getActions();
 
         // 解析行为
-        for (Action v : actions) {
+        for (Action<T> v : actions) {
             items.add(resolveAction.buildAction(context, v));
         }
 

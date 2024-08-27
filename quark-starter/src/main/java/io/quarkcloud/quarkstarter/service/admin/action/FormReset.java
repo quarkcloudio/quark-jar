@@ -1,8 +1,9 @@
 package io.quarkcloud.quarkstarter.service.admin.action;
 
+import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
 import io.quarkcloud.quarkadmin.template.resource.impl.ActionImpl;
 
-public class FormReset extends ActionImpl {
+public class FormReset<M, T> extends ActionImpl<ResourceMapper<T>, T> {
 
     // 构造函数
     public FormReset() {

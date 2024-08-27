@@ -57,13 +57,13 @@ public class Admin extends ResourceImpl<AdminMapper,AdminEntity> {
     // 行为
     public List<Object> actions(Context context) {
         return Arrays.asList(
-            new Create(this.title),
-            new Edit(),
-            new Delete(),
-            new FormExtraBack(),
-            new FormSubmit(),
-            new FormReset(),
-            new FormBack()
+            new Create<AdminMapper, AdminEntity>(this.title),
+            new Edit<AdminMapper, AdminEntity>(),
+            new Delete<AdminMapper, AdminEntity>(),
+            new FormExtraBack<AdminMapper, AdminEntity>(),
+            new FormSubmit<AdminMapper, AdminEntity>(),
+            new FormReset<AdminMapper, AdminEntity>(),
+            new FormBack<AdminMapper, AdminEntity>()
         );
     }
 

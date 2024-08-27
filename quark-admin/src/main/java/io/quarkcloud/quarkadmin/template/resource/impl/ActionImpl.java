@@ -3,10 +3,12 @@ package io.quarkcloud.quarkadmin.template.resource.impl;
 import java.util.List;
 
 import org.apache.commons.lang3.reflect.TypeUtils;
+
+import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
 import io.quarkcloud.quarkadmin.template.resource.Action;
 import io.quarkcloud.quarkcore.service.Context;
 
-public class ActionImpl implements Action {
+public class ActionImpl<M extends ResourceMapper<T>, T> implements Action<T> {
     
     public String name;
     public String reload;
