@@ -12,11 +12,12 @@ import io.quarkcloud.quarkadmin.component.drawer.Drawer;
 import io.quarkcloud.quarkadmin.component.dropdown.Dropdown;
 import io.quarkcloud.quarkadmin.component.form.Form;
 import io.quarkcloud.quarkadmin.component.space.Space;
+import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
 import io.quarkcloud.quarkadmin.component.modal.Modal;
 import io.quarkcloud.quarkadmin.template.resource.Action;
 import io.quarkcloud.quarkcore.service.Context;
 
-public class ResolveAction {
+public class ResolveAction<M extends ResourceMapper<T>, T> {
 
     // actions
     public List<Object> actions;
@@ -234,7 +235,7 @@ public class ResolveAction {
 
         switch (actionType) {
             case "link":
-                io.quarkcloud.quarkadmin.template.resource.impl.action.Link linkActioner = (io.quarkcloud.quarkadmin.template.resource.impl.action.Link) action;
+                io.quarkcloud.quarkadmin.template.resource.impl.action.Link<M, T> linkActioner = (io.quarkcloud.quarkadmin.template.resource.impl.action.Link<M, T>) action;
 
                 // 是否显示箭头图标
                 String href = linkActioner.getHref(context);
@@ -247,7 +248,7 @@ public class ResolveAction {
                 break;
 
             case "modal":
-                io.quarkcloud.quarkadmin.template.resource.impl.action.Modal modalActioner = (io.quarkcloud.quarkadmin.template.resource.impl.action.Modal) action;
+                io.quarkcloud.quarkadmin.template.resource.impl.action.Modal<M, T> modalActioner = (io.quarkcloud.quarkadmin.template.resource.impl.action.Modal<M, T>) action;
 
                 // 宽度
                 int modalWidth = modalActioner.getWidth();
@@ -275,7 +276,7 @@ public class ResolveAction {
                 break;
 
             case "drawer":
-                io.quarkcloud.quarkadmin.template.resource.impl.action.Drawer drawerActioner = (io.quarkcloud.quarkadmin.template.resource.impl.action.Drawer) action;
+                io.quarkcloud.quarkadmin.template.resource.impl.action.Drawer<M, T> drawerActioner = (io.quarkcloud.quarkadmin.template.resource.impl.action.Drawer<M, T>) action;
 
                 // 宽度
                 int drawerWidth = drawerActioner.getWidth();
@@ -303,7 +304,7 @@ public class ResolveAction {
                 break;
 
             case "modalForm":
-                io.quarkcloud.quarkadmin.template.resource.impl.action.ModalForm modalFormerActioner = (io.quarkcloud.quarkadmin.template.resource.impl.action.ModalForm) action;
+                io.quarkcloud.quarkadmin.template.resource.impl.action.ModalForm<M, T> modalFormerActioner = (io.quarkcloud.quarkadmin.template.resource.impl.action.ModalForm<M, T>) action;
 
                 // 表单数据接口
                 String initApi = buildFormInitApi(context, params, uriKey);
@@ -379,7 +380,7 @@ public class ResolveAction {
                 break;
 
             case "drawerForm":
-                io.quarkcloud.quarkadmin.template.resource.impl.action.DrawerForm drawerFormerActioner = (io.quarkcloud.quarkadmin.template.resource.impl.action.DrawerForm) action;
+                io.quarkcloud.quarkadmin.template.resource.impl.action.DrawerForm<M, T> drawerFormerActioner = (io.quarkcloud.quarkadmin.template.resource.impl.action.DrawerForm<M, T>) action;
 
                 // 表单数据接口
                 String initApiDrawer = buildFormInitApi(context, params, uriKey);
@@ -451,7 +452,7 @@ public class ResolveAction {
                 break;
 
             case "dropdown":
-                io.quarkcloud.quarkadmin.template.resource.impl.action.Dropdown dropdownActioner = (io.quarkcloud.quarkadmin.template.resource.impl.action.Dropdown) action;
+                io.quarkcloud.quarkadmin.template.resource.impl.action.Dropdown<M, T> dropdownActioner = (io.quarkcloud.quarkadmin.template.resource.impl.action.Dropdown<M, T>) action;
 
                 // 获取下拉菜单
                 Object overlay = dropdownActioner.getMenu(context);

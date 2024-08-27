@@ -254,7 +254,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
 
     // 列表页工具栏
     public Object indexTableToolBar(Context context) {
-        Object tableActions = new ResolveAction(actions(context), context).getIndexTableActions();
+        Object tableActions = new ResolveAction<ResourceMapper<T>, T>(actions(context), context).getIndexTableActions();
         return new ToolBar().
             setTitle(indexTableTitle(context)).
             setActions(tableActions);
@@ -264,7 +264,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     public Object indexTableColumns(Context context) {
         List<Object> getActions = actions(context);
         List<Object> getFields = fields(context);
-        List<Object> tableActions = new ResolveAction(getActions, context).getIndexTableRowActions();
+        List<Object> tableActions = new ResolveAction<ResourceMapper<T>, T>(getActions, context).getIndexTableRowActions();
         List<Object> tableColumns = new ResolveField(getFields, context).
             setTableActionColumnTitle(tableActionColumnTitle).
             setTableActionColumnWidth(tableActionColumnWidth).
@@ -463,11 +463,11 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     public Object creationComponentRender(Context context, T data) {
         String title = formTitle(context);
         List<Object> getActions = actions(context);
-        Object formExtraActions = new ResolveAction(getActions, context).getFormExtraActions();
+        Object formExtraActions = new ResolveAction<ResourceMapper<T>, T>(getActions, context).getFormExtraActions();
         String api = creationApi(context);
         List<Object> getFields = fields(context);
         Object fields = new ResolveField(getFields, context).creationFieldsWithinComponents(context);
-        Object formActions = new ResolveAction(getActions, context).getFormActions();
+        Object formActions = new ResolveAction<ResourceMapper<T>, T>(getActions, context).getFormActions();
         return this.formComponentRender(context, title, formExtraActions, api, fields, formActions, data);
 
     }
@@ -506,11 +506,11 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     public Object editComponentRender(Context context, T data) {
         String title = formTitle(context);
         List<Object> getActions = actions(context);
-        Object formExtraActions = new ResolveAction(getActions, context).getFormExtraActions();
+        Object formExtraActions = new ResolveAction<ResourceMapper<T>, T>(getActions, context).getFormExtraActions();
         String api = editApi(context);
         List<Object> getFields = fields(context);
         Object fields = new ResolveField(getFields, context).updateFieldsWithinComponents(context);
-        Object formActions = new ResolveAction(getActions, context).getFormActions();
+        Object formActions = new ResolveAction<ResourceMapper<T>, T>(getActions, context).getFormActions();
         return this.formComponentRender(context, title, formExtraActions, api, fields, formActions, data);
     }
 

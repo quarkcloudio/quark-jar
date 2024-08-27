@@ -35,7 +35,7 @@ public class Dropdown<M, T> extends ActionImpl<ResourceMapper<T>, T> {
     /**
      * 下拉菜单行为
      */
-    public List<Action<T>> actions;
+    public List<Action> actions;
 
     // 初始化
     public Dropdown() {
@@ -81,7 +81,7 @@ public class Dropdown<M, T> extends ActionImpl<ResourceMapper<T>, T> {
      * @param actions 下拉菜单行为列表
      * @return Dropdown 实例
      */
-    public Dropdown<M, T> setActions(List<Action<T>> actions) {
+    public Dropdown<M, T> setActions(List<Action> actions) {
         this.actions = actions;
         return this;
     }
@@ -90,7 +90,7 @@ public class Dropdown<M, T> extends ActionImpl<ResourceMapper<T>, T> {
      * 获取下拉菜单行为
      * @return 下拉菜单行为列表
      */
-    public List<Action<T>> getActions() {
+    public List<Action> getActions() {
         return actions;
     }
 
@@ -101,13 +101,13 @@ public class Dropdown<M, T> extends ActionImpl<ResourceMapper<T>, T> {
      */
     public Object getMenu(Context context) {
         List<Object> items = new ArrayList<>();
-        ResolveAction resolveAction = new ResolveAction();
+        ResolveAction<ResourceMapper<T>, T> resolveAction = new ResolveAction<ResourceMapper<T>, T>();
 
         // 获取行为
-        List<Action<T>> actions = getActions();
+        List<Action> actions = getActions();
 
         // 解析行为
-        for (Action<T> v : actions) {
+        for (Action v : actions) {
             items.add(resolveAction.buildAction(context, v));
         }
 

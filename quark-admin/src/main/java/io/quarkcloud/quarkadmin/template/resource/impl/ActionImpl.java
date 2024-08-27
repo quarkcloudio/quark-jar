@@ -8,7 +8,7 @@ import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
 import io.quarkcloud.quarkadmin.template.resource.Action;
 import io.quarkcloud.quarkcore.service.Context;
 
-public class ActionImpl<M extends ResourceMapper<T>, T> implements Action<T> {
+public class ActionImpl<M extends ResourceMapper<T>, T> implements Action {
     
     public String name;
     public String reload;
