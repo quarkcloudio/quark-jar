@@ -540,7 +540,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         if (result == null) {
             return Message.error("操作失败！");
         }
-        String redirectUrl = "/layout/index?api=" + "/api/admin/{resource}/index".replace("{resource}", context.getPathVariable("resource"));
+        String redirectUrl = "/layout/index?api=/api/admin/{resource}/index".replace("{resource}", context.getPathVariable("resource"));
         return Message.success("操作成功！", redirectUrl);
     }
 
