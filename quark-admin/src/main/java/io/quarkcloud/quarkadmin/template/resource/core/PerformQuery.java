@@ -59,4 +59,9 @@ public class PerformQuery<T> {
         }
         return queryWrapper;
     }
+
+    // 创建导出查询
+    public MPJLambdaWrapper<T> buildExportQuery() {
+        return queryWrapper;
+    }
 }

@@ -118,8 +118,17 @@ public class ResourceServiceImpl<M extends ResourceMapper<T>, T> implements Reso
         return this.resourceMapper.selectById(id);
     }
 
+    // 删除
     public boolean removeByContext() {
-        return false;
+        String id = context.getParameter("id");
+        if (id != null && !id.isEmpty()) {
+            if (id.contains(",")) {
+                queryWrapper.in("id", id.split(","));
+            } else {
+                queryWrapper.eq("id", id);
+            }
+        }
+        return this.remove(queryWrapper);
     }
 
     /**

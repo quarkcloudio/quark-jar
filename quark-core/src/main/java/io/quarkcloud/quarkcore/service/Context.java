@@ -135,6 +135,26 @@ public class Context {
         return map;
     }
 
+    // getRequestParam
+    @SuppressWarnings("unchecked")
+    public Object getRequestParam(String arg0) {
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> map = null;
+        try {
+            map = mapper.readValue(request.getReader(), Map.class);
+        } catch (StreamReadException e) {
+            e.printStackTrace();
+        } catch (DatabindException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (map!=null && !map.isEmpty()) {
+            return map.get(arg0);
+        }
+        return map;
+    }
+
     // 解析token
     public JWT parseToken() {
         String authHeader = request.getHeader("Authorization");
