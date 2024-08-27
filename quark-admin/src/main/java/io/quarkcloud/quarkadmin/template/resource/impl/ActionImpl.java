@@ -39,7 +39,7 @@ public class ActionImpl implements Action {
     }
 
     // 执行行为句柄
-    public Object handle(Context ctx, Object query) throws Exception {
+    public Object handle(Context context, Object query) throws Exception {
         return "Method not implemented";
     }
 
@@ -102,7 +102,7 @@ public class ActionImpl implements Action {
     }
 
     // 行为表单字段
-    public List<Object> fields(Context ctx) {
+    public List<Object> fields(Context context) {
         return fields;
     }
 

@@ -13,7 +13,7 @@ public class TreeSelect<T> extends SearchImpl<T> {
     public List<TreeData> options;
 
     // 构造方法
-    public TreeSelect(Context ctx) {
+    public TreeSelect(Context context) {
         this.component = "treeSelectField";
         this.options = new ArrayList<>();
     }

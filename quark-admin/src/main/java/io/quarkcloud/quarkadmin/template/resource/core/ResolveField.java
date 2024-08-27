@@ -69,9 +69,9 @@ public class ResolveField {
     }
 
     // 列表字段
-    public List<Object> indexFields(Context ctx) {
+    public List<Object> indexFields(Context context) {
         List<Object> items = new ArrayList<>();
-        fields = this.getFields(ctx);
+        fields = this.getFields(context);
         if (fields == null) {
             return items;
         }
@@ -85,13 +85,13 @@ public class ResolveField {
     }
 
     // 表格列
-    public List<Object> indexTableColumns(Context ctx) {
+    public List<Object> indexTableColumns(Context context) {
         List<Object> columns = new ArrayList<>();
 
         // 获取索引表字段
-        List<Object> fields = indexFields(ctx);
+        List<Object> fields = indexFields(context);
         for (Object v : fields) {
-            Object getColumn = fieldToColumn(ctx, v);
+            Object getColumn = fieldToColumn(context, v);
             if (getColumn != null) {
                 columns.add(getColumn);
             }
@@ -118,7 +118,7 @@ public class ResolveField {
     }
 
     // 将表单项转换为表格列
-    public Object fieldToColumn(Context ctx, Object field) {
+    public Object fieldToColumn(Context context, Object field) {
         Column column = null;
         Reflect reflect = new Reflect(field);
         
@@ -231,7 +231,7 @@ public class ResolveField {
 
         // 如果可编辑，设置编辑项
         if (editable) {
-            String editableApi = ctx.getRequest().getRequestURI().replace("/index", "/editable");
+            String editableApi = context.getRequest().getRequestURI().replace("/index", "/editable");
             column.setEditable(component, null, editableApi);
         }
 
@@ -239,9 +239,9 @@ public class ResolveField {
     }
 
     // 创建页字段
-    public List<Object> creationFields(Context ctx) {
+    public List<Object> creationFields(Context context) {
         List<Object> items = new ArrayList<>();
-        fields = this.getFields(ctx);
+        fields = this.getFields(context);
         if (fields == null) {
             return items;
         }
@@ -255,9 +255,9 @@ public class ResolveField {
     }
 
     // 不包含When组件内字段的创建页字段
-    public List<Object> creationFieldsWithoutWhen(Context ctx) {
+    public List<Object> creationFieldsWithoutWhen(Context context) {
         List<Object> items = new ArrayList<>();
-        fields = this.getFieldsWithoutWhen(ctx);
+        fields = this.getFieldsWithoutWhen(context);
         if (fields == null) {
             return items;
         }
@@ -271,13 +271,13 @@ public class ResolveField {
     }
 
     // 包裹在组件内的创建页字段
-    public List<Object> creationFieldsWithinComponents(Context ctx) {
-        List<Object> items = creationFormFieldsParser(ctx, fields);
+    public List<Object> creationFieldsWithinComponents(Context context) {
+        List<Object> items = creationFormFieldsParser(context, fields);
         return items;
     }
 
     // 解析创建页表单组件内的字段
-    public List<Object> creationFormFieldsParser(Context ctx, Object fields) {
+    public List<Object> creationFormFieldsParser(Context context, Object fields) {
         List<Object> items = new ArrayList<>();
 
         // 解析字段
@@ -292,7 +292,7 @@ public class ResolveField {
                     Object body = (Object) bodyReflect.getFieldValue("body");
 
                     // 递归解析值
-                    Object parsedFields = creationFormFieldsParser(ctx, body);
+                    Object parsedFields = creationFormFieldsParser(context, body);
 
                     // 更新Body字段的值
                     bodyReflect.setFieldValue(parsedFields);
@@ -323,9 +323,9 @@ public class ResolveField {
     }
 
     // 编辑页字段
-    public List<Object> updateFields(Context ctx) {
+    public List<Object> updateFields(Context context) {
         List<Object> items = new ArrayList<>();
-        fields = this.getFields(ctx);
+        fields = this.getFields(context);
         if (fields == null) {
             return items;
         }
@@ -339,9 +339,9 @@ public class ResolveField {
     }
 
     // 不包含When组件内字段的编辑页字段
-    public List<Object> updateFieldsWithoutWhen(Context ctx) {
+    public List<Object> updateFieldsWithoutWhen(Context context) {
         List<Object> items = new ArrayList<>();
-        fields = this.getFieldsWithoutWhen(ctx);
+        fields = this.getFieldsWithoutWhen(context);
         if (fields == null) {
             return items;
         }
@@ -355,13 +355,13 @@ public class ResolveField {
     }
 
     // 包裹在组件内的编辑页字段
-    public List<Object> updateFieldsWithinComponents(Context ctx) {
-        List<Object> items = updateFormFieldsParser(ctx, fields);
+    public List<Object> updateFieldsWithinComponents(Context context) {
+        List<Object> items = updateFormFieldsParser(context, fields);
         return items;
     }
 
     // 解析编辑页表单组件内的字段
-    public List<Object> updateFormFieldsParser(Context ctx, Object fields) {
+    public List<Object> updateFormFieldsParser(Context context, Object fields) {
         List<Object> items = new ArrayList<>();
 
         // 解析字段
@@ -376,7 +376,7 @@ public class ResolveField {
                     Object body = (Object) bodyReflect.getFieldValue("body");
     
                     // 递归解析值
-                    Object parsedFields = updateFormFieldsParser(ctx, body);
+                    Object parsedFields = updateFormFieldsParser(context, body);
     
                     // 更新Body字段的值
                     bodyReflect.setFieldValue(parsedFields);
@@ -408,7 +408,7 @@ public class ResolveField {
 
     // 解析表单组件内的字段
     @SuppressWarnings("unchecked")
-    public Object formFieldsParser(Context ctx, Object fields) {
+    public Object formFieldsParser(Context context, Object fields) {
         if (fields instanceof List) {
             ((List<Object>) fields).stream().forEach(field -> {
                 // 检查是否有Body字段
@@ -431,9 +431,9 @@ public class ResolveField {
     }
 
     // 详情页字段
-    public List<Object> detailFields(Context ctx) {
+    public List<Object> detailFields(Context context) {
         List<Object> items = new ArrayList<>();
-        fields = this.getFields(ctx);
+        fields = this.getFields(context);
         if (fields == null) {
             return items;
         }
@@ -447,7 +447,7 @@ public class ResolveField {
     }
 
     // 包裹在组件内的详情页字段
-    public Object detailFieldsWithinComponents(Context ctx, Map<String, Object> data) {
+    public Object detailFieldsWithinComponents(Context context, Map<String, Object> data) {
         List<Object> items = new ArrayList<>();
         String componentType = "description";
 
@@ -463,7 +463,7 @@ public class ResolveField {
                 for (Object sv : (List<?>) body) {
                     Object isShown = new Reflect(sv).invoke("isShownOnDetail");
                     if (isShown!=null && (Boolean) isShown) {
-                        Object getColumn = fieldToColumn(ctx, sv);
+                        Object getColumn = fieldToColumn(context, sv);
                         items.add(getColumn);
                     }
                 }
@@ -481,7 +481,7 @@ public class ResolveField {
             } else {
                 Object isShown = new Reflect(v).invoke("isShownOnDetail");
                 if (isShown!=null && (Boolean) isShown) {
-                    Object getColumn = fieldToColumn(ctx, v);
+                    Object getColumn = fieldToColumn(context, v);
                     items.add(getColumn);
                 }
             }
@@ -501,9 +501,9 @@ public class ResolveField {
     }
 
     // 导出字段
-    public List<Object> exportFields(Context ctx) {
+    public List<Object> exportFields(Context context) {
         List<Object> items = new ArrayList<>();
-        fields = this.getFields(ctx);
+        fields = this.getFields(context);
         if (fields == null) {
             return items;
         }
@@ -517,9 +517,9 @@ public class ResolveField {
     }
 
     // 导入字段
-    public List<Object> importFields(Context ctx) {
+    public List<Object> importFields(Context context) {
         List<Object> items = new ArrayList<>();
-        fields = this.getFields(ctx);
+        fields = this.getFields(context);
         if (fields == null) {
             return items;
         }
@@ -533,9 +533,9 @@ public class ResolveField {
     }
 
     // 不包含When组件内字段的导入字段
-    public List<Object> importFieldsWithoutWhen(Context ctx) {
+    public List<Object> importFieldsWithoutWhen(Context context) {
         List<Object> items = new ArrayList<>();
-        fields = this.getFieldsWithoutWhen(ctx);
+        fields = this.getFieldsWithoutWhen(context);
         if (fields == null) {
             return items;
         }
@@ -549,12 +549,12 @@ public class ResolveField {
     }
 
     // 获取字段
-    public List<Object> getFields(Context ctx) {
+    public List<Object> getFields(Context context) {
         return this.findFields(fields, true);
     }
 
     // 获取不包含When组件的字段
-    public List<Object> getFieldsWithoutWhen(Context ctx) {
+    public List<Object> getFieldsWithoutWhen(Context context) {
         return this.findFields(fields, false);
     }
 

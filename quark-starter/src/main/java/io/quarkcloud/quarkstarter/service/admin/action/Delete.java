@@ -58,7 +58,7 @@ public class Delete extends ActionImpl {
     }
 
     // 执行行为句柄
-    public Object handle(Context ctx, Object query) throws Exception {
+    public Object handle(Context context, Object query) throws Exception {
         return "Method not implemented";
     }
 }

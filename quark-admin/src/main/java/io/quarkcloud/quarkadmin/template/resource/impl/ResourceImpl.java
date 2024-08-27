@@ -163,37 +163,37 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     }
 
     // 全局查询
-    public MPJLambdaWrapper<T> query(Context ctx, MPJLambdaWrapper<T> queryWrapper) {
+    public MPJLambdaWrapper<T> query(Context context, MPJLambdaWrapper<T> queryWrapper) {
         return queryWrapper;
     }
 
     // 列表查询
-    public MPJLambdaWrapper<T> indexQuery(Context ctx, MPJLambdaWrapper<T> queryWrapper) {
+    public MPJLambdaWrapper<T> indexQuery(Context context, MPJLambdaWrapper<T> queryWrapper) {
         return queryWrapper.orderByDesc("id");
     }
 
     // 字段
-    public List<Object> fields(Context ctx) {
+    public List<Object> fields(Context context) {
         return null;
     }
 
     // 搜索
-    public List<Object> searches(Context ctx) {
+    public List<Object> searches(Context context) {
         return null;
     }
 
     // 行为
-    public List<Object> actions(Context ctx) {
+    public List<Object> actions(Context context) {
         return null;
     }
 
     // 菜单
-    public Map<String, Object> menus(Context ctx) {
+    public Map<String, Object> menus(Context context) {
         return null;
     }
 
     // 数据导出前回调
-    public List<Object> beforeExporting(Context ctx, List<Map<String, Object>> list) {
+    public List<Object> beforeExporting(Context context, List<Map<String, Object>> list) {
         List<Object> result = new ArrayList<>();
         for (Map<String, Object> v : list) {
             result.add(v);
@@ -202,27 +202,27 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     }
 
     // 数据导入前回调
-    public List<List<Object>> beforeImporting(Context ctx, List<List<Object>> list) {
+    public List<List<Object>> beforeImporting(Context context, List<List<Object>> list) {
         return list;
     }
 
     // 表格行内编辑执行完之后回调
-    public Object afterEditable(Context ctx, Object id, String field, Object value) {
+    public Object afterEditable(Context context, Object id, String field, Object value) {
         return null;
     }
 
     // 行为执行完之后回调
-    public Object afterAction(Context ctx, String uriKey, Object query) {
+    public Object afterAction(Context context, String uriKey, Object query) {
         return null;
     }
 
     // 页面组件渲染
-    public Object pageComponentRender(Context ctx, Object body) {
-        return this.pageContainerComponentRender(ctx, body);
+    public Object pageComponentRender(Context context, Object body) {
+        return this.pageContainerComponentRender(context, body);
     }
 
     // 页面容器组件渲染
-    public Object pageContainerComponentRender(Context ctx, Object body) {
+    public Object pageContainerComponentRender(Context context, Object body) {
 
         // 页面标题
         String title = this.getTitle();
@@ -248,69 +248,69 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     }
 
     // 列表页表格主体
-    public Object indexTableExtraRender(Context ctx) {
+    public Object indexTableExtraRender(Context context) {
         return null;
     }
 
     // 列表页工具栏
-    public Object indexTableToolBar(Context ctx) {
-        Object tableActions = new ResolveAction(actions(ctx), ctx).getIndexTableActions();
+    public Object indexTableToolBar(Context context) {
+        Object tableActions = new ResolveAction(actions(context), context).getIndexTableActions();
         return new ToolBar().
-            setTitle(indexTableTitle(ctx)).
+            setTitle(indexTableTitle(context)).
             setActions(tableActions);
     }
 
     // 列表页表格列
-    public Object indexTableColumns(Context ctx) {
-        List<Object> getActions = actions(ctx);
-        List<Object> getFields = fields(ctx);
-        List<Object> tableActions = new ResolveAction(getActions, ctx).getIndexTableRowActions();
-        List<Object> tableColumns = new ResolveField(getFields, ctx).
+    public Object indexTableColumns(Context context) {
+        List<Object> getActions = actions(context);
+        List<Object> getFields = fields(context);
+        List<Object> tableActions = new ResolveAction(getActions, context).getIndexTableRowActions();
+        List<Object> tableColumns = new ResolveField(getFields, context).
             setTableActionColumnTitle(tableActionColumnTitle).
             setTableActionColumnWidth(tableActionColumnWidth).
             setTableRowActions(tableActions).
-            indexTableColumns(ctx);
+            indexTableColumns(context);
         return tableColumns;
     }
 
     // 列表页批量操作
-    public Object indexTableAlertActions(Context ctx) {
+    public Object indexTableAlertActions(Context context) {
         return null;
     }
 
     // 列表页标题
-    public String indexTableTitle(Context ctx) {
+    public String indexTableTitle(Context context) {
         return this.getTitle() + this.getTableTitleSuffix();
     }
 
     // 列表页组件渲染
-    public Object indexComponentRender(Context ctx) {
+    public Object indexComponentRender(Context context) {
 
         // 表格组件
         Table table = new Table();
 
         // 列表标题
-        String tableTitle = indexTableTitle(ctx);
+        String tableTitle = indexTableTitle(context);
 
         // 列表页轮询数据
         int tablePolling = getTablePolling();
 
         // 列表页表格主体
-        Object tableExtraRender = indexTableExtraRender(ctx);
+        Object tableExtraRender = indexTableExtraRender(context);
 
         // 列表页工具栏
-        Object tableToolBar = indexTableToolBar(ctx);
+        Object tableToolBar = indexTableToolBar(context);
 
         // 列表页表格列
-        Object tableColumns = indexTableColumns(ctx);
+        Object tableColumns = indexTableColumns(context);
 
         // 列表页批量操作
-        Object indexTableAlertActions = indexTableAlertActions(ctx);
+        Object indexTableAlertActions = indexTableAlertActions(context);
 
         // 列表页搜索栏
-        Object indexSearches = new ResolveSearch<T>(this.searches(ctx), ctx).
+        Object indexSearches = new ResolveSearch<T>(this.searches(context), context).
             setWithExport(this.isWithExport()).
-            indexSearches(ctx);
+            indexSearches(context);
 
         // 表格组件
         table.setPolling(tablePolling)
@@ -325,16 +325,16 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         MPJLambdaWrapper<T> queryWrapper = new MPJLambdaWrapper<>();
 
         // 获取查询条件
-        queryWrapper = this.query(ctx, queryWrapper);
+        queryWrapper = this.query(context, queryWrapper);
 
         // 获取查询条件
-        queryWrapper = this.indexQuery(ctx, queryWrapper);
+        queryWrapper = this.indexQuery(context, queryWrapper);
 
         // 设置查询条件
         resourceService.
-            setContext(ctx).
+            setContext(context).
             setQueryWrapper(queryWrapper).
-            setSearches(this.searches(ctx));
+            setSearches(this.searches(context));
 
         // 获取分页
         Object perPage = this.getPerPage();
@@ -359,16 +359,16 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     }
 
     // 创建表单的接口
-    public String formApi(Context ctx) {
+    public String formApi(Context context) {
         return "";
     }
 
     // 创建表单标题
-    public String formTitle(Context ctx) {
+    public String formTitle(Context context) {
         String title = this.getTitle();
-        if (ctx.isCreating()) {
+        if (context.isCreating()) {
             return "创建" + title;
-        } else if (ctx.isEditing()) {
+        } else if (context.isEditing()) {
             return "编辑" + title;
         }
         return title;
@@ -376,7 +376,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
 
     // 创建表单组件渲染
     public Object formWithinCard(
-        Context ctx,
+        Context context,
         String title,
         Object extra,
         String api,
@@ -400,7 +400,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
 
     // 创建表单组件渲染
     public Object formWithinTabs(
-        Context ctx,
+        Context context,
         String title,
         Object extra,
         String api,
@@ -415,12 +415,12 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
             .setInitialValues(data);
     }
 
-    public Map<String, Object> beforeSaving(Context ctx, Map<String, Object> submitData) {
+    public Map<String, Object> beforeSaving(Context context, Map<String, Object> submitData) {
         return submitData;
     }
 
     public Object formComponentRender (
-        Context ctx,
+        Context context,
         String title,
         Object extra,
         String api,
@@ -432,43 +432,43 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
             try {
                 component = ((List<?>) fields).get(0).getClass().getField("component").toString();
                 if (component.equals("tabPane")) {
-                    return this.formWithinTabs(ctx, title, extra, api, fields, actions, data);
+                    return this.formWithinTabs(context, title, extra, api, fields, actions, data);
                 }
             } catch (NoSuchFieldException | SecurityException e) {
                 e.printStackTrace();
             }
         }
-        return this.formWithinCard(ctx, title, extra, api, fields, actions, data);
+        return this.formWithinCard(context, title, extra, api, fields, actions, data);
     }
 
     // 创建表单的接口
-    public String creationApi(Context ctx) {
-        String formApi = this.formApi(ctx);
+    public String creationApi(Context context) {
+        String formApi = this.formApi(context);
         if (!formApi.isEmpty()) {
             return formApi;
         }
-        String[] uri = ctx.getRequest().getRequestURI().split("/");
+        String[] uri = context.getRequest().getRequestURI().split("/");
         if (uri[uri.length - 1].equals("index")) {
-            return ctx.getRequest().getRequestURI().replace("/index", "/store");
+            return context.getRequest().getRequestURI().replace("/index", "/store");
         }
-        return ctx.getRequest().getRequestURI().replace("/create", "/store");
+        return context.getRequest().getRequestURI().replace("/create", "/store");
     }
 
     // 创建页面显示前回调
-    public T beforeCreating(Context ctx) {
+    public T beforeCreating(Context context) {
         return this.entity;
     }
 
     // 渲染创建页组件
-    public Object creationComponentRender(Context ctx, T data) {
-        String title = formTitle(ctx);
-        List<Object> getActions = actions(ctx);
-        Object formExtraActions = new ResolveAction(getActions, ctx).getFormExtraActions();
-        String api = creationApi(ctx);
-        List<Object> getFields = fields(ctx);
-        Object fields = new ResolveField(getFields, ctx).creationFieldsWithinComponents(ctx);
-        Object formActions = new ResolveAction(getActions, ctx).getFormActions();
-        return this.formComponentRender(ctx, title, formExtraActions, api, fields, formActions, data);
+    public Object creationComponentRender(Context context, T data) {
+        String title = formTitle(context);
+        List<Object> getActions = actions(context);
+        Object formExtraActions = new ResolveAction(getActions, context).getFormExtraActions();
+        String api = creationApi(context);
+        List<Object> getFields = fields(context);
+        Object fields = new ResolveField(getFields, context).creationFieldsWithinComponents(context);
+        Object formActions = new ResolveAction(getActions, context).getFormActions();
+        return this.formComponentRender(context, title, formExtraActions, api, fields, formActions, data);
 
     }
 
@@ -485,33 +485,33 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     }
 
     // 编辑表单的接口
-    public String editApi(Context ctx) {
-        String formApi = this.formApi(ctx);
+    public String editApi(Context context) {
+        String formApi = this.formApi(context);
         if (!formApi.isEmpty()) {
             return formApi;
         }
-        String[] uri = ctx.getRequest().getRequestURI().split("/");
+        String[] uri = context.getRequest().getRequestURI().split("/");
         if (uri[uri.length - 1].equals("index")) {
-            return ctx.getRequest().getRequestURI().replace("/index", "/save");
+            return context.getRequest().getRequestURI().replace("/index", "/save");
         }
-        return ctx.getRequest().getRequestURI().replace("/edit", "/save");
+        return context.getRequest().getRequestURI().replace("/edit", "/save");
     }
 
     // 编辑页面显示前回调
-    public T beforeEditing(Context ctx,T data) {
+    public T beforeEditing(Context context,T data) {
         return data;
     }
 
     // 渲染编辑页组件
-    public Object editComponentRender(Context ctx, T data) {
-        String title = formTitle(ctx);
-        List<Object> getActions = actions(ctx);
-        Object formExtraActions = new ResolveAction(getActions, ctx).getFormExtraActions();
-        String api = editApi(ctx);
-        List<Object> getFields = fields(ctx);
-        Object fields = new ResolveField(getFields, ctx).updateFieldsWithinComponents(ctx);
-        Object formActions = new ResolveAction(getActions, ctx).getFormActions();
-        return this.formComponentRender(ctx, title, formExtraActions, api, fields, formActions, data);
+    public Object editComponentRender(Context context, T data) {
+        String title = formTitle(context);
+        List<Object> getActions = actions(context);
+        Object formExtraActions = new ResolveAction(getActions, context).getFormExtraActions();
+        String api = editApi(context);
+        List<Object> getFields = fields(context);
+        Object fields = new ResolveField(getFields, context).updateFieldsWithinComponents(context);
+        Object formActions = new ResolveAction(getActions, context).getFormActions();
+        return this.formComponentRender(context, title, formExtraActions, api, fields, formActions, data);
     }
 
     // 编辑页组件渲染

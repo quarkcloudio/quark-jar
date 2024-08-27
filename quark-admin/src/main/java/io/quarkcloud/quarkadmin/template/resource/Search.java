@@ -21,11 +21,11 @@ public interface Search<T> {
     public Object getDefault();
 
     // 执行查询
-    public MPJLambdaWrapper<T> apply(Context ctx, MPJLambdaWrapper<T> query, Object value);
+    public MPJLambdaWrapper<T> apply(Context context, MPJLambdaWrapper<T> query, Object value);
 
     // 属性
-    public Object options(Context ctx);
+    public Object options(Context context);
 
     // 单向联动
-    public Map<String, String> load(Context ctx);
+    public Map<String, String> load(Context context);
 }

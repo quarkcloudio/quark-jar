@@ -94,10 +94,10 @@ public class Dropdown extends ActionImpl {
 
     /**
      * 获取菜单
-     * @param ctx 上下文对象
+     * @param context 上下文对象
      * @return 菜单组件
      */
-    public Object getMenu(Context ctx) {
+    public Object getMenu(Context context) {
         List<Object> items = new ArrayList<>();
         ResolveAction resolveAction = new ResolveAction();
 
@@ -106,7 +106,7 @@ public class Dropdown extends ActionImpl {
 
         // 解析行为
         for (Action v : actions) {
-            items.add(resolveAction.buildAction(ctx, v));
+            items.add(resolveAction.buildAction(context, v));
         }
 
         return new io.quarkcloud.quarkadmin.component.menu.Menu().setItems(items);

@@ -6,7 +6,7 @@ import io.quarkcloud.quarkcore.service.Context;
 public class DateRange<T> extends SearchImpl<T> {
 
     // 构造方法
-    public DateRange(Context ctx) {
+    public DateRange(Context context) {
         this.component = "dateRangeField";
     }
 }

@@ -35,13 +35,13 @@ public class ResolveSearch<T> {
 
     // 列表页搜索栏
     @SuppressWarnings("unchecked")
-    public Object indexSearches(Context ctx) {
+    public Object indexSearches(Context context) {
 
         // 初始化搜索组件
         Search searchComponent = new Search();
         if (withExport) {
-            String resource = ctx.getPathVariable("resource");
-            String[] paths = ctx.getRequestMapping();
+            String resource = context.getPathVariable("resource");
+            String[] paths = context.getRequestMapping();
             for (String path : paths) {
                 searchComponent.setExportText("导出").setExportApi(path.replace(":resource", resource));
             }
@@ -71,7 +71,7 @@ public class ResolveSearch<T> {
             String api = search.getApi();
 
             // 获取属性
-            Object options = search.options(ctx);
+            Object options = search.options(context);
 
             // 根据组件类型构建组件
             switch (component) {

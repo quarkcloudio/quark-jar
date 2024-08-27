@@ -13,7 +13,7 @@ public class Radio<T> extends SearchImpl<T> {
     public List<Option> options;
 
     // 构造方法
-    public Radio(Context ctx) {
+    public Radio(Context context) {
         this.component = "radioField";
         this.options = new ArrayList<>();
     }

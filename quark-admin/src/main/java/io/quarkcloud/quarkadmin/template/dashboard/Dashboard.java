@@ -16,13 +16,13 @@ public interface Dashboard {
     public boolean isBackIcon();
 
     // 内容
-    public List<Metrics> cards(Context ctx);
+    public List<Metrics> cards(Context context);
 
     // 页面组件渲染
-    public Object pageComponentRender(Context ctx, Object body);
+    public Object pageComponentRender(Context context, Object body);
 
     // 页面容器组件渲染
-    public Object pageContainerComponentRender(Context ctx, Object body);
+    public Object pageContainerComponentRender(Context context, Object body);
 
     // 组件渲染
     public Object render(Context context);

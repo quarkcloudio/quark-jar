@@ -13,7 +13,7 @@ public class Select<T> extends SearchImpl<T> {
     public List<Option> options;
 
     // 构造方法
-    public Select(Context ctx) {
+    public Select(Context context) {
         this.component = "selectField";
         this.options = new ArrayList<>();
     }

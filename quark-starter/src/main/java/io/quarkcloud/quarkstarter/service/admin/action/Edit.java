@@ -37,10 +37,10 @@ public class Edit extends Link {
         this.setOnlyOnIndexTableRow(true);
     }
 
-    public String getHref(Context ctx) {
+    public String getHref(Context context) {
 
         // 从上下文中获取当前路径
-        String path = ctx.getRequest().getRequestURI();
+        String path = context.getRequest().getRequestURI();
 
         // 将路径中的 "/index" 替换为 "/edit"
         String modifiedPath = path.replace("/index", "/edit&id=${id}");

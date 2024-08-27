@@ -31,12 +31,12 @@ public class DrawerForm extends ActionImpl {
     }
 
     // 表单字段
-    public List<Object> fields(Context ctx) {
+    public List<Object> fields(Context context) {
         return null;
     }
 
     // 表单数据（异步获取）
-    public Map<String, Object> data(Context ctx) {
+    public Map<String, Object> data(Context context) {
         return new HashMap<>();
     }
 

@@ -47,17 +47,17 @@ public class SearchImpl<T> implements Search<T> {
     }
 
     // 执行查询
-    public MPJLambdaWrapper<T> apply(Context ctx, MPJLambdaWrapper<T> query, Object value) {
+    public MPJLambdaWrapper<T> apply(Context context, MPJLambdaWrapper<T> query, Object value) {
         return query;
     }
 
     // 属性
-    public Object options(Context ctx) {
+    public Object options(Context context) {
         return null;
     }
 
     // 单向联动
-    public Map<String, String> load(Context ctx) {
+    public Map<String, String> load(Context context) {
         return null;
     }
 }

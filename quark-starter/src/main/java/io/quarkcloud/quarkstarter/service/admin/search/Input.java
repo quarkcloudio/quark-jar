@@ -14,7 +14,7 @@ public class Input<T> extends SearchImpl<T> {
     }
 
     // 应用查询条件方法
-    public QueryWrapper<T> apply(Context ctx, QueryWrapper<T> query, Object value) {
+    public QueryWrapper<T> apply(Context context, QueryWrapper<T> query, Object value) {
         return query.like(column, value);
     }
 }

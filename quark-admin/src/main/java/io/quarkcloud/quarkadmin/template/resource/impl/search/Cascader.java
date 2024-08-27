@@ -13,7 +13,7 @@ public class Cascader<T> extends SearchImpl<T> {
     public List<Option> options;
 
     // 构造方法
-    public Cascader(Context ctx) {
+    public Cascader(Context context) {
         this.component = "cascaderField";
         this.options = new ArrayList<>();
     }

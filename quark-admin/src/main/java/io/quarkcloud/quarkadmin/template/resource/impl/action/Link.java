@@ -18,12 +18,12 @@ public class Link extends ActionImpl {
     }
 
     // 获取跳转链接
-    public String getHref(Context ctx) {
+    public String getHref(Context context) {
         return this.href;
     }
 
     // 相当于 a 链接的 target 属性，href 存在时生效
-    public String getTarget(Context ctx) {
+    public String getTarget(Context context) {
         return this.target;
     }
 }

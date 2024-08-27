@@ -174,7 +174,7 @@ public class ResolveAction {
     }
 
     // 构建行为
-    public Object buildAction(Context ctx, Action action) {
+    public Object buildAction(Context context, Action action) {
 
         // 行为名称
         String name = action.getName();
@@ -194,7 +194,7 @@ public class ResolveAction {
         // 获取api替换参数
         List<String> params = action.getApiParams();
         if (api == null || api.isEmpty()) {
-            api = buildActionApi(ctx, params, uriKey);
+            api = buildActionApi(context, params, uriKey);
         }
 
         // 行为类型
@@ -237,10 +237,10 @@ public class ResolveAction {
                 io.quarkcloud.quarkadmin.template.resource.impl.action.Link linkActioner = (io.quarkcloud.quarkadmin.template.resource.impl.action.Link) action;
 
                 // 是否显示箭头图标
-                String href = linkActioner.getHref(ctx);
+                String href = linkActioner.getHref(context);
 
                 // 相当于 a 链接的 target 属性，href 存在时生效
-                String target = linkActioner.getTarget(ctx);
+                String target = linkActioner.getTarget(context);
 
                 // 设置跳转链接
                 actioncomponent.setLink(href, target);
@@ -256,10 +256,10 @@ public class ResolveAction {
                 boolean modalDestroyOnClose = modalActioner.isDestroyOnClose();
 
                 // 内容
-                Object modalBody = modalActioner.getBody(ctx);
+                Object modalBody = modalActioner.getBody(context);
 
                 // 弹窗行为
-                List<Object> modalActions = modalActioner.getActions(ctx);
+                List<Object> modalActions = modalActioner.getActions(context);
 
                 // 构建弹窗
                 Closure<Modal> modalClosure = (Modal modal) -> {
@@ -284,10 +284,10 @@ public class ResolveAction {
                 boolean drawerDestroyOnClose = drawerActioner.isDestroyOnClose();
 
                 // 内容
-                Object drawerBody = drawerActioner.getBody(ctx);
+                Object drawerBody = drawerActioner.getBody(context);
 
                 // 弹窗行为
-                List<Object> drawerActions = drawerActioner.getActions(ctx);
+                List<Object> drawerActions = drawerActioner.getActions(context);
 
                 // 构建弹窗
                 Closure<Drawer> drawerClosure = (Drawer drawer) -> {
@@ -306,13 +306,13 @@ public class ResolveAction {
                 io.quarkcloud.quarkadmin.template.resource.impl.action.ModalForm modalFormerActioner = (io.quarkcloud.quarkadmin.template.resource.impl.action.ModalForm) action;
 
                 // 表单数据接口
-                String initApi = buildFormInitApi(ctx, params, uriKey);
+                String initApi = buildFormInitApi(context, params, uriKey);
 
                 // 字段
-                List<Object> modalFormFields = modalFormerActioner.fields(ctx);
+                List<Object> modalFormFields = modalFormerActioner.fields(context);
 
                 // 解析表单组件内的字段
-                Object formFields = new ResolveField().formFieldsParser(ctx, modalFormFields);
+                Object formFields = new ResolveField().formFieldsParser(context, modalFormFields);
 
                 // 表单初始数据
                 Map<String, Object> modalFormData = new HashMap<>();
@@ -382,13 +382,13 @@ public class ResolveAction {
                 io.quarkcloud.quarkadmin.template.resource.impl.action.DrawerForm drawerFormerActioner = (io.quarkcloud.quarkadmin.template.resource.impl.action.DrawerForm) action;
 
                 // 表单数据接口
-                String initApiDrawer = buildFormInitApi(ctx, params, uriKey);
+                String initApiDrawer = buildFormInitApi(context, params, uriKey);
 
                 // 字段
-                Object drawerFormFields = drawerFormerActioner.fields(ctx);
+                Object drawerFormFields = drawerFormerActioner.fields(context);
 
                 // 解析表单组件内的字段
-                Object drawerFormFieldComponents = new ResolveField().formFieldsParser(ctx, drawerFormFields);
+                Object drawerFormFieldComponents = new ResolveField().formFieldsParser(context, drawerFormFields);
 
                 // 表单初始数据
                 Map<String, Object> drawerFormData = new HashMap<>();
@@ -454,7 +454,7 @@ public class ResolveAction {
                 io.quarkcloud.quarkadmin.template.resource.impl.action.Dropdown dropdownActioner = (io.quarkcloud.quarkadmin.template.resource.impl.action.Dropdown) action;
 
                 // 获取下拉菜单
-                Object overlay = dropdownActioner.getMenu(ctx);
+                Object overlay = dropdownActioner.getMenu(context);
 
                 // 下拉根元素的样式
                 Map<String, Object> overlayStyle = dropdownActioner.getOverlayStyle();
@@ -545,7 +545,7 @@ public class ResolveAction {
     }
 
     // 构建表单初始化数据接口
-    public String buildFormInitApi(Context ctx, List<String> params, String uriKey) {
+    public String buildFormInitApi(Context context, List<String> params, String uriKey) {
         // 拼接参数
         String paramsUri = "";
         if (!params.isEmpty()) {
@@ -557,7 +557,7 @@ public class ResolveAction {
         }
 
         // 构建基本 API 路径
-        String api = ctx.getRequest().getRequestURI().replace("/index", "/action/" + uriKey + "/values");
+        String api = context.getRequest().getRequestURI().replace("/index", "/action/" + uriKey + "/values");
 
         // 处理不同页面接口的情况
         api = api.replace("/create", "/action/" + uriKey + "/values");

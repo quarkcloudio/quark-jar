@@ -30,12 +30,12 @@ public class Modal extends ActionImpl {
     }
 
     // 内容
-    public Object getBody(Context ctx) {
+    public Object getBody(Context context) {
         return null;
     }
 
     // 弹窗行为
-    public List<Object> getActions(Context ctx) {
+    public List<Object> getActions(Context context) {
         return null;
     }
 

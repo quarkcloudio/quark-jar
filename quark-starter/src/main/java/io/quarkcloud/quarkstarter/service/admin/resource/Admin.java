@@ -31,7 +31,7 @@ public class Admin extends ResourceImpl<AdminMapper,AdminEntity> {
     }
 
     // 字段
-    public List<Object> fields(Context ctx) {
+    public List<Object> fields(Context context) {
         return Arrays.asList(
             Field.id("id", "ID"),
             Field.image("avatar", "头像").onlyOnForms(),
@@ -48,14 +48,14 @@ public class Admin extends ResourceImpl<AdminMapper,AdminEntity> {
     }
 
     // 搜索表单
-    public List<Object> searches(Context ctx) {
+    public List<Object> searches(Context context) {
         return Arrays.asList(
             new Input<AdminEntity>("username", "用户名")
         );
     }
     
     // 行为
-    public List<Object> actions(Context ctx) {
+    public List<Object> actions(Context context) {
         return Arrays.asList(
             new Create(this.title),
             new Edit(),
@@ -68,7 +68,7 @@ public class Admin extends ResourceImpl<AdminMapper,AdminEntity> {
     }
 
     // 编辑页面显示前回调
-    public AdminEntity beforeEditing(Context ctx,AdminEntity data) {
+    public AdminEntity beforeEditing(Context context,AdminEntity data) {
         data.setPassword(null);
         return data;
     }
