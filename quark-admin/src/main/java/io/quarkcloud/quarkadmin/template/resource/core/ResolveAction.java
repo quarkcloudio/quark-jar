@@ -175,6 +175,7 @@ public class ResolveAction<M extends ResourceMapper<T>, T> {
     }
 
     // 构建行为
+    @SuppressWarnings("unchecked")
     public Object buildAction(Context context, Action action) {
 
         // 行为名称
