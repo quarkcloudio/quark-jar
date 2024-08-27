@@ -45,19 +45,45 @@ public interface ResourceService<M extends ResourceMapper<T>, T> {
      */
     public Long saveGetId(T resourceEntity);
 
-    // 根据 UpdateWrapper 条件，更新记录 需要设置sqlset
+    /**
+     * 更新实体信息
+     * 
+     * @param updateWrapper 包装了更新操作的Wrapper对象，用于构建更新语句
+     * @return 返回更新操作的执行结果，true表示更新成功，false表示更新失败
+     */
     boolean update(Wrapper<T> updateWrapper);
 
-    // 根据 whereWrapper 条件，更新记录
+    /**
+     * 更新实体信息
+     * 
+     * @param updateEntity 待更新的实体对象，必须包含要更新的字段和对应的值
+     * @param whereWrapper 更新条件包装器，用于指定更新的条件，通常包含where条件
+     * @return 操作是否成功执行，成功返回true，失败返回false
+     */
     boolean update(T updateEntity, Wrapper<T> whereWrapper);
     
-    // 根据 ID 选择修改
+    /**
+     * 根据 ID 更新实体
+     * 
+     * @param entity 实体对象，必须包含 ID，且 ID 必须存在
+     * @return 更新成功返回 true，否则返回 false
+     */
     boolean updateById(T entity);
 
-    // 根据 ID 查询
+    /**
+     * 根据 ID 查询数据
+     * 
+     * @param id 要查询的 ID
+     * @return 返回查询到的实体对象，类型为T，表示泛型类型，可以是任何实体类型
+     */
     T getById(Serializable id);
 
-    // 根据 Wrapper，查询一条记录。结果集，如果是多个会抛出异常，随机取一条加上限制条件 wrapper.last("LIMIT 1")
+    /**
+     * 根据 Wrapper，查询一条记录。结果集，如果是多个会抛出异常，随机取一条加上限制条件 wrapper.last("LIMIT 1")
+     * 
+     * @param queryWrapper 查询条件包装器，用于构建查询语句
+     * @return 返回查询到的实体对象，类型为T，表示泛型类型，可以是任何实体类型
+     */
     T getOne(Wrapper<T> queryWrapper);
 
     /**
