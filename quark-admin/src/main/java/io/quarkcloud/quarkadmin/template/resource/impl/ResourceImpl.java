@@ -521,6 +521,11 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         return this.pageComponentRender(context, editComponentRender(context, data));
     }
 
+    // 获取编辑表单值
+    public Object editValuesRender(Context context) {
+        return Message.success("操作成功！");
+    }
+
     // 保存编辑数据
     public Object saveRender(Context context) {
         T result = this.resourceService.setContext(context).updateByContext(this.entity);
@@ -539,8 +544,43 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         return Message.success("操作成功！", redirectUrl);
     }
 
+    // 表格行内编辑
+    public Object editableRender(Context context) {
+        return Message.success("操作成功！");
+    }
+
     // 行为解析
     public Object actionRender(Context context) {
+        return Message.success("操作成功！");
+    }
+
+    // 行为表单值
+    public Object actionValuesRender(Context context) {
+        return Message.success("操作成功！");
+    }
+
+    // 导入数据
+    public Object importRender(Context context) {
+        return Message.success("操作成功！");
+    }
+
+    // 导出数据
+    public Object exportRender(Context context) {
+        return Message.success("操作成功！");
+    }
+
+    // 详情页面
+    public Object detailRender(Context context) {
+        return Message.success("操作成功！");
+    }
+
+    // 导入模板
+    public Object importTemplateRender(Context context) {
+        return Message.success("操作成功！");
+    }
+
+    // 表单渲染
+    public Object formRender(Context context) {
         return Message.success("操作成功！");
     }
 }

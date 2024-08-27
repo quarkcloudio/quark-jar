@@ -8,8 +8,15 @@ import io.quarkcloud.quarkadmin.annotation.AdminResourceIndexRender;
 import io.quarkcloud.quarkadmin.annotation.AdminResourceSaveRender;
 import io.quarkcloud.quarkadmin.annotation.AdminResourceStoreRender;
 import io.quarkcloud.quarkadmin.annotation.AdminResourceActionRender;
+import io.quarkcloud.quarkadmin.annotation.AdminResourceActionValuesRender;
 import io.quarkcloud.quarkadmin.annotation.AdminResourceCreateRender;
+import io.quarkcloud.quarkadmin.annotation.AdminResourceDetailRender;
 import io.quarkcloud.quarkadmin.annotation.AdminResourceEditRender;
+import io.quarkcloud.quarkadmin.annotation.AdminResourceEditValuesRender;
+import io.quarkcloud.quarkadmin.annotation.AdminResourceEditableRender;
+import io.quarkcloud.quarkadmin.annotation.AdminResourceExportRender;
+import io.quarkcloud.quarkadmin.annotation.AdminResourceImportRender;
+import io.quarkcloud.quarkadmin.annotation.AdminResourceImportTemplateRender;
 import io.quarkcloud.quarkcore.service.Context;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,6 +33,7 @@ public class AdminResourceController {
 
     @RequestMapping("/api/admin/{resource}/editable")
     @ResponseBody
+    @AdminResourceEditableRender
     public Object editable(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
@@ -39,6 +47,7 @@ public class AdminResourceController {
 
     @RequestMapping("/api/admin/{resource}/action/{uriKey}/values")
     @ResponseBody
+    @AdminResourceActionValuesRender
     public Object actionValues(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
@@ -66,6 +75,7 @@ public class AdminResourceController {
 
     @RequestMapping("/api/admin/{resource}/edit/values")
     @ResponseBody
+    @AdminResourceEditValuesRender
     public Object editValues(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
@@ -79,24 +89,28 @@ public class AdminResourceController {
 
     @RequestMapping("/api/admin/{resource}/import")
     @ResponseBody
+    @AdminResourceImportRender
     public Object excelImport(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
 
     @RequestMapping("/api/admin/{resource}/export")
     @ResponseBody
+    @AdminResourceExportRender
     public Object excelExport(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
 
     @RequestMapping("/api/admin/{resource}/detail")
     @ResponseBody
+    @AdminResourceDetailRender
     public Object detail(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
 
     @RequestMapping("/api/admin/{resource}/import/template")
     @ResponseBody
+    @AdminResourceImportTemplateRender
     public Object importTemplate(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
