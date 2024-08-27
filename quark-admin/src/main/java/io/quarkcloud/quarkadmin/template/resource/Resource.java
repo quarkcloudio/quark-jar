@@ -5,6 +5,8 @@ import java.util.Map;
 
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 
+import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
+import io.quarkcloud.quarkadmin.service.ResourceService;
 import io.quarkcloud.quarkcore.service.Context;
 
 public interface Resource<T> {
@@ -67,7 +69,7 @@ public interface Resource<T> {
     public Object afterEditable(Context context, Object id, String field, Object value);
 
     // 行为执行完之后回调
-    public Object afterAction(Context context, String uriKey, Object query);
+    public Object afterAction(Context context, String uriKey, ResourceService<ResourceMapper<T>, T> resourceService);
 
     // 页面组件渲染
     public Object pageComponentRender(Context context, Object body);

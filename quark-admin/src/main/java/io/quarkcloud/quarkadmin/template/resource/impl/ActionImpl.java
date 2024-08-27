@@ -5,10 +5,11 @@ import java.util.List;
 import org.apache.commons.lang3.reflect.TypeUtils;
 
 import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
+import io.quarkcloud.quarkadmin.service.ResourceService;
 import io.quarkcloud.quarkadmin.template.resource.Action;
 import io.quarkcloud.quarkcore.service.Context;
 
-public class ActionImpl<M extends ResourceMapper<T>, T> implements Action {
+public class ActionImpl<M extends ResourceMapper<T>, T> implements Action<T> {
     
     public String name;
     public String reload;
@@ -41,7 +42,7 @@ public class ActionImpl<M extends ResourceMapper<T>, T> implements Action {
     }
 
     // 执行行为句柄
-    public Object handle(Context context, Object query) throws Exception {
+    public Object handle(Context context, ResourceService<ResourceMapper<T>, T> resourceService) {
         return "Method not implemented";
     }
 

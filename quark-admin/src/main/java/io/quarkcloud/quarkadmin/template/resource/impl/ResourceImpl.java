@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.transaction.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -21,10 +22,12 @@ import io.quarkcloud.quarkadmin.component.table.ToolBar;
 import io.quarkcloud.quarkadmin.component.tabs.Tabs;
 import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
 import io.quarkcloud.quarkadmin.service.ResourceService;
+import io.quarkcloud.quarkadmin.template.resource.Action;
 import io.quarkcloud.quarkadmin.template.resource.Resource;
 import io.quarkcloud.quarkadmin.template.resource.core.ResolveAction;
 import io.quarkcloud.quarkadmin.template.resource.core.ResolveField;
 import io.quarkcloud.quarkadmin.template.resource.core.ResolveSearch;
+import io.quarkcloud.quarkadmin.template.resource.impl.action.Dropdown;
 
 public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T> {
 
@@ -212,7 +215,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     }
 
     // 行为执行完之后回调
-    public Object afterAction(Context context, String uriKey, Object query) {
+    public Object afterAction(Context context, String uriKey, ResourceService<ResourceMapper<T>, T> resourceService) {
         return null;
     }
 
@@ -550,8 +553,43 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     }
 
     // 行为解析
+    @SuppressWarnings("unchecked")
     public Object actionRender(Context context) {
-        return Message.success("操作成功！");
+        Object result = null;
+        MPJLambdaWrapper<T> queryWrapper = new MPJLambdaWrapper<>();
+        queryWrapper = this.query(context, queryWrapper);
+        List<Object> actions = this.actions(context);
+        for (Object item : actions) {
+            Action<T> actionInstance = (Action<T>)item;
+            String uriKey = actionInstance.getUriKey(item);
+            String actionType = actionInstance.getActionType();
+            if ("dropdown".equals(actionType)) {
+                Dropdown<M,T> dropdownActioner = (Dropdown<M,T>) actionInstance;
+                for (Object dropdownAction : dropdownActioner.getActions()) {
+                    String dropdownUriKey = dropdownActioner.getUriKey(dropdownAction);
+                    if (context.getPathVariable("uriKey").equals(dropdownUriKey)) {
+                        Action<T> dropdownActionInstance = (Action<T>) dropdownAction;
+                        ResourceService<ResourceMapper<T>, T> getResourceService = (ResourceService<ResourceMapper<T>, T>) resourceService.setQueryWrapper(queryWrapper);
+                        result = dropdownActionInstance.handle(context, getResourceService);
+                        Object err = this.afterAction(context, dropdownUriKey, getResourceService);
+                        if (err!=null) {
+                            return err;
+                        }
+                    }
+                }
+            } else {
+                if (context.getPathVariable("uriKey").equals(uriKey)) {
+                    ResourceService<ResourceMapper<T>, T> getResourceService = (ResourceService<ResourceMapper<T>, T>) resourceService.setQueryWrapper(queryWrapper);
+                    result = actionInstance.handle(context, getResourceService);
+                    Object err = this.afterAction(context, uriKey, getResourceService);
+                    if (err!=null) {
+                        return err;
+                    }
+                }
+            }
+        }
+
+        return result;
     }
 
     // 行为表单值

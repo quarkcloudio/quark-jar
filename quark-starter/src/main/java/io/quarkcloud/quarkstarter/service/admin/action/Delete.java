@@ -2,6 +2,7 @@ package io.quarkcloud.quarkstarter.service.admin.action;
 
 import java.util.Arrays;
 
+import io.quarkcloud.quarkadmin.component.message.Message;
 import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
 import io.quarkcloud.quarkadmin.service.ResourceService;
 import io.quarkcloud.quarkadmin.template.resource.impl.ActionImpl;
@@ -60,7 +61,11 @@ public class Delete<M, T> extends ActionImpl<ResourceMapper<T>, T> {
     }
 
     // 执行行为句柄
-    public Object handle(Context context, ResourceService<ResourceMapper<T>, T> resourceService) throws Exception {
-        return "Method not implemented";
+    public Object handle(Context context, ResourceService<ResourceMapper<T>, T> resourceService) {
+        boolean result = resourceService.setContext(context).removeByContext();
+        if (!result) {
+            return Message.error("操作失败！");
+        }
+        return Message.success("操作成功！");
     }
 }
