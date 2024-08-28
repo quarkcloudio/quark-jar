@@ -1,6 +1,7 @@
 package io.quarkcloud.quarkadmin.service.impl;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +9,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -121,14 +123,17 @@ public class ResourceServiceImpl<M extends ResourceMapper<T>, T> implements Reso
     // 删除
     public boolean removeByContext() {
         String id = context.getParameter("id");
+        boolean result = false;
         if (id != null && !id.isEmpty()) {
             if (id.contains(",")) {
-                queryWrapper.in("id", id.split(","));
+                String[] ids = id.split(",");
+                List<String> idList = Arrays.asList(ids);
+                result = this.removeByIds(idList);
             } else {
-                queryWrapper.eq("id", id);
+                result = this.removeById(id);
             }
         }
-        return this.remove(queryWrapper);
+        return result;
     }
 
     /**
