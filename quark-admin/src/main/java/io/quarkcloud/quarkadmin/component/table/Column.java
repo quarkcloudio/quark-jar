@@ -1,5 +1,6 @@
 package io.quarkcloud.quarkadmin.component.table;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -117,7 +118,7 @@ public class Column extends Component {
     /**
      * 可编辑的配置，如下拉选项等
      */
-    public Object editable;
+    public Map<String, Object> editable;
 
     /**
      * 数据操作列配置
@@ -143,7 +144,7 @@ public class Column extends Component {
         this.setComponentKey();
         this.component = "column";
         this.align = "left";
-        this.editable = false;
+        this.editable = null;
         this.actions = false;
         this.filters = false;
         this.hideInSearch = true;
@@ -169,11 +170,10 @@ public class Column extends Component {
      * @return 当前列对象
      */
     public Column setEditable(String name, List<Object> options, String action) {
-        this.editable = Map.of(
-            "name", name,
-            "options", options,
-            "action", action
-        );
+        this.editable = new HashMap<>();
+        this.editable.put("name", name);
+        this.editable.put("options", options);
+        this.editable.put("action", action);
         return this;
     }
 }

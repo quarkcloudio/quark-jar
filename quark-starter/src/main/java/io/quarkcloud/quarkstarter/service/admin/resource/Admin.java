@@ -40,7 +40,7 @@ public class Admin extends ResourceImpl<AdminMapper,AdminEntity> {
                 Rule.min(6, "用户名不能少于6个字符"),
                 Rule.max(20, "用户名不能超过20个字符")
             )),
-            Field.text("nickname", "昵称"),
+            Field.text("nickname", "昵称").setEditable(true),
             Field.text("email", "邮箱"),
             Field.text("phone", "手机号"),
             Field.password("password", "密码").onlyOnForms()
