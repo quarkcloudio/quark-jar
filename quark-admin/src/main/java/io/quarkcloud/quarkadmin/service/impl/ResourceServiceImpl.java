@@ -108,7 +108,7 @@ public class ResourceServiceImpl<M extends ResourceMapper<T>, T> implements Reso
     // 更新
     @SuppressWarnings("unchecked")
     public T editableUpdate(T entity) {
-        entity = (T) context.getQueryBody(entity.getClass());
+        entity = (T) context.getParameterBody(entity.getClass());
         this.resourceMapper.updateById(entity);
         System.out.println(entity);
         return entity;

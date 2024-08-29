@@ -5,8 +5,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.URI;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -164,8 +162,8 @@ public class Context {
         return map;
     }
 
-    // getQueryBody
-    public <T> T getQueryBody(Class<T> valueType) {
+    // getParameterBody
+    public <T> T getParameterBody(Class<T> valueType) {
         T entity = null;
         try {
             entity = valueType.getDeclaredConstructor().newInstance();
@@ -182,7 +180,27 @@ public class Context {
                 field = valueType.getDeclaredField(fieldName);
                 field.setAccessible(true);
                 try {
-                    field.set(entity, fieldValue[0]);
+                    // 根据字段类型转换值
+                    Class<?> fieldType = field.getType();
+                    if (fieldType == String.class) {
+                        field.set(entity, fieldValue[0]);
+                    } else if (fieldType == int.class || fieldType == Integer.class) {
+                        field.set(entity, Integer.parseInt(fieldValue[0]));
+                    } else if (fieldType == long.class || fieldType == Long.class) {
+                        field.set(entity, Long.parseLong(fieldValue[0]));
+                    } else if (fieldType == double.class || fieldType == Double.class) {
+                        field.set(entity, Double.parseDouble(fieldValue[0]));
+                    } else if (fieldType == float.class || fieldType == Float.class) {
+                        field.set(entity, Float.parseFloat(fieldValue[0]));
+                    } else if (fieldType == short.class || fieldType == Short.class) {
+                        field.set(entity, Short.parseShort(fieldValue[0]));
+                    } else if (fieldType == byte.class || fieldType == Byte.class) {
+                        field.set(entity, Byte.parseByte(fieldValue[0]));
+                    } else if (fieldType == boolean.class || fieldType == Boolean.class) {
+                        field.set(entity, Boolean.parseBoolean(fieldValue[0]));
+                    } else if (fieldType == char.class || fieldType == Character.class) {
+                        field.set(entity, fieldValue[0].charAt(0));
+                    }
                 } catch (IllegalArgumentException | IllegalAccessException e) {
                     e.printStackTrace();
                 }
