@@ -35,6 +35,7 @@ public class ResolveAction<M extends ResourceMapper<T>, T> {
     }
 
     // 列表行为
+    @SuppressWarnings("unchecked")
     public Object getIndexTableActions() {
         List<Object> items = new ArrayList<>();
 
@@ -45,7 +46,7 @@ public class ResolveAction<M extends ResourceMapper<T>, T> {
 
         // 遍历
         for (Object item : actions) {
-            Action action = (Action)item;
+            Action<T> action = (Action<T>) item;
             if (action.shownOnIndex()) {
                 items.add(buildAction(context, action));
             }
@@ -55,6 +56,7 @@ public class ResolveAction<M extends ResourceMapper<T>, T> {
     }
 
     // 表格行内行为
+    @SuppressWarnings("unchecked")
     public List<Object> getIndexTableRowActions() {
         List<Object> items = new ArrayList<>();
 
@@ -65,7 +67,7 @@ public class ResolveAction<M extends ResourceMapper<T>, T> {
 
         // 遍历
         for (Object item : actions) {
-            Action action = (Action)item;
+            Action<T> action = (Action<T>) item;
             if (action.shownOnIndexTableRow()) {
                 items.add(buildAction(context, action));
             }
@@ -75,6 +77,7 @@ public class ResolveAction<M extends ResourceMapper<T>, T> {
     }
     
     // 表格多选弹出层行为
+    @SuppressWarnings("unchecked")
     public Object getIndexTableAlertActions() {
         List<Object> items = new ArrayList<>();
 
@@ -85,7 +88,7 @@ public class ResolveAction<M extends ResourceMapper<T>, T> {
 
         // 遍历
         for (Object item : actions) {
-            Action action = (Action)item;
+            Action<T> action = (Action<T>) item;
             if (action.shownOnIndexTableAlert()) {
                 items.add(buildAction(context, action));
             }
@@ -95,6 +98,7 @@ public class ResolveAction<M extends ResourceMapper<T>, T> {
     }
     
     // 表单页行为
+    @SuppressWarnings("unchecked")
     public Object getFormActions() {
         List<Object> items = new ArrayList<>();
 
@@ -105,7 +109,7 @@ public class ResolveAction<M extends ResourceMapper<T>, T> {
 
         // 遍历
         for (Object item : actions) {
-            Action action = (Action)item;
+            Action<T> action = (Action<T>) item;
             if (action.shownOnForm()) {
                 items.add(buildAction(context, action));
             }
@@ -115,6 +119,7 @@ public class ResolveAction<M extends ResourceMapper<T>, T> {
     }
 
     // 表单页右上角自定义区域行为
+    @SuppressWarnings("unchecked")
     public Object getFormExtraActions() {
         List<Object> items = new ArrayList<>();
 
@@ -125,7 +130,7 @@ public class ResolveAction<M extends ResourceMapper<T>, T> {
 
         // 遍历
         for (Object item : actions) {
-            Action action = (Action)item;
+            Action<T> action = (Action<T>) item;
             if (action.shownOnFormExtra()) {
                 items.add(buildAction(context, action));
             }
@@ -135,6 +140,7 @@ public class ResolveAction<M extends ResourceMapper<T>, T> {
     }
 
     // 详情页行为
+    @SuppressWarnings("unchecked")
     public Object getDetailActions() {
         List<Object> items = new ArrayList<>();
 
@@ -145,7 +151,7 @@ public class ResolveAction<M extends ResourceMapper<T>, T> {
 
         // 遍历
         for (Object item : actions) {
-            Action action = (Action)item;
+            Action<T> action = (Action<T>) item;
             if (action.shownOnDetail()) {
                 items.add(buildAction(context, action));
             }
@@ -155,6 +161,7 @@ public class ResolveAction<M extends ResourceMapper<T>, T> {
     }
 
     // 详情页右上角自定义区域行为
+    @SuppressWarnings("unchecked")
     public Object getDetailExtraActions() {
         List<Object> items = new ArrayList<>();
 
@@ -165,7 +172,7 @@ public class ResolveAction<M extends ResourceMapper<T>, T> {
 
         // 遍历
         for (Object item : actions) {
-            Action action = (Action)item;
+            Action<T> action = (Action<T>) item;
             if (action.shownOnDetailExtra()) {
                 items.add(buildAction(context, action));
             }
@@ -176,7 +183,7 @@ public class ResolveAction<M extends ResourceMapper<T>, T> {
 
     // 构建行为
     @SuppressWarnings("unchecked")
-    public Object buildAction(Context context, Action action) {
+    public Object buildAction(Context context, Action<T> action) {
 
         // 行为名称
         String name = action.getName();
