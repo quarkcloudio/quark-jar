@@ -49,7 +49,7 @@ public class AdminEntity extends Model<AdminEntity> {
     private String lastLoginIp;
 
     // 最后登录时间
-    private LocalDateTime lastLoginTime;
+    private String lastLoginTime;
 
     // 状态
     private int status;
