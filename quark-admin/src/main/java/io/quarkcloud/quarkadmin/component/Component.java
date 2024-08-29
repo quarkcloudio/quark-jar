@@ -50,6 +50,10 @@ public class Component {
         this.componentKey = this.componentkey = defaultKey;
     }
 
+    public String getComponent() {
+        return this.component;
+    }
+
     // 将字节数组转换为十六进制字符串
     public String bytesToHex(byte[] bytes) {
         StringBuilder hexString = new StringBuilder();

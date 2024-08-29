@@ -8,6 +8,7 @@ import java.util.Map;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.quarkcloud.quarkadmin.component.Component;
+import io.quarkcloud.quarkcore.util.Reflect;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -185,69 +186,36 @@ public class Form extends Component {
             return items;
         }
 
-        String vKind = v.getClass().getSimpleName();
-        if (!(vKind.equals("Object") || vKind.equals("Pointer"))) {
-            return items;
-        }
-
-        boolean hasBody = false;
-        try {
-            hasBody = v.getClass().getMethod("getBody") != null;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        // 存在body的情况下
-        if (hasBody) {
-            try {
-                Object body = v.getClass().getMethod("getBody").invoke(v);
-                List<Object> getItems = findFields(body, true);
-                if (!getItems.isEmpty()) {
-                    items.addAll(getItems);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+        boolean isHasGetBody = new Reflect(v).checkMethodExist("getBody");
+        if (isHasGetBody) {
+            Object body = new Reflect(v).invoke("getBody");
+            List<Object> getItems = findFields(body, true);
+            if (!getItems.isEmpty()) {
+                items.addAll(getItems);
             }
             return items;
         }
 
-        boolean hasTabPanes = false;
-        try {
-            hasTabPanes = v.getClass().getMethod("getTabPanes") != null;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        // 存在TabPanes情况下
-        if (hasTabPanes) {
-            try {
-                Object body = v.getClass().getMethod("getTabPanes").invoke(v);
-                List<Object> getItems = findFields(body, true);
-                if (!getItems.isEmpty()) {
-                    items.addAll(getItems);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+        boolean isHasGetTabPanes = new Reflect(v).checkMethodExist("getTabPanes");
+        if (isHasGetTabPanes) {
+            body = new Reflect(v).invoke("getTabPanes");
+            List<Object> getItems = findFields(body, true);
+            if (!getItems.isEmpty()) {
+                items.addAll(getItems);
             }
             return items;
         }
 
-        // 默认情况
-        try {
-            String component = (String) v.getClass().getMethod("getComponent").invoke(v);
-            if (component.contains("Field")) {
-                items.add(v);
-                if (when) {
-                    List<Object> whenFields = getWhenFields(v);
-                    if (!whenFields.isEmpty()) {
-                        items.addAll(whenFields);
-                    }
+        String component = (String) new Reflect(v).invoke("getComponent");
+        if (component.contains("Field")) {
+            items.add(v);
+            if (when) {
+                List<Object> whenFields = getWhenFields(v);
+                if (!whenFields.isEmpty()) {
+                    items.addAll(whenFields);
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-
         return items;
     }
 
@@ -255,33 +223,31 @@ public class Form extends Component {
     public List<Object> getWhenFields(Object item) {
         List<Object> items = new ArrayList<>();
 
-        try {
-            boolean whenIsValid = item.getClass().getMethod("getWhen") != null;
-            if (!whenIsValid) {
-                return items;
-            }
+        boolean whenIsValid = new Reflect(item).checkMethodExist("getWhen");
+        if (!whenIsValid) {
+            return items;
+        }
+        Object getWhen = new Reflect(item).invoke("getWhen");
+        if (getWhen == null) {
+            return items;
+        }
 
-            Object getWhen = item.getClass().getMethod("getWhen").invoke(item);
-            if (getWhen == null) {
-                return items;
+        boolean itemsIsValid = new Reflect(getWhen).checkMethodExist("getItems");
+        if (!itemsIsValid) {
+            return items;
+        }
+        Object whenItems = new Reflect(item).invoke("getItems");
+        if (whenItems == null) {
+            return items;
+        }
+        
+        for (Object v : (List<?>) whenItems) {
+            Object body = new Reflect(v).invoke("getBody");
+            if (body instanceof List<?>) {
+                items.addAll((List<?>) body);
+            } else {
+                items.add(body);
             }
-
-            Object whenItems = getWhen.getClass().getMethod("getItems").invoke(getWhen);
-            if (whenItems == null) {
-                return items;
-            }
-
-            for (Object v : (List<?>) whenItems) {
-                Object body = v.getClass().getMethod("getBody").invoke(v);
-                if (body instanceof List<?>) {
-                    items.addAll((List<?>) body);
-                } else {
-                    items.add(body);
-                }
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
 
         return items;
