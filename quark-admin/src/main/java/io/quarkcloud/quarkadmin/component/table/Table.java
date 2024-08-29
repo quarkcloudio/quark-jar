@@ -123,7 +123,7 @@ public class Table  extends Component {
         this.options.put("reload", true);
         this.options.put("setting", true);
         this.rowSelection = new ArrayList<>();
-        this.setComponentKey("table");
+        this.setComponentKey("table", false);
     }
 
     /**
