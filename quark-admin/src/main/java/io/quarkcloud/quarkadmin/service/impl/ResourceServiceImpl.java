@@ -110,7 +110,6 @@ public class ResourceServiceImpl<M extends ResourceMapper<T>, T> implements Reso
     public T editableUpdate(T entity) {
         entity = (T) context.getParameterBody(entity.getClass());
         this.resourceMapper.updateById(entity);
-        System.out.println(entity);
         return entity;
     }
 
