@@ -548,6 +548,10 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
 
     // 表格行内编辑
     public Object editableRender(Context context) {
+        T result = this.resourceService.setContext(context).editableUpdate(this.entity);
+        if (result == null) {
+            return Message.error("操作失败！");
+        }
         return Message.success("操作成功！");
     }
 

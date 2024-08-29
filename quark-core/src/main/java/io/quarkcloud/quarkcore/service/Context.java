@@ -2,7 +2,11 @@ package io.quarkcloud.quarkcore.service;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URI;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -119,6 +123,11 @@ public class Context {
         return request.getParameter(arg0);
     }
 
+    // getParameterMap
+    public Map<String, String[]> getParameterMap() {
+        return request.getParameterMap();
+    }
+
     // getRequestBody
     public <T> T getRequestBody(Class<T> valueType) {
         ObjectMapper mapper = new ObjectMapper();
@@ -153,6 +162,35 @@ public class Context {
             return map.get(arg0);
         }
         return map;
+    }
+
+    // getQueryBody
+    public <T> T getQueryBody(Class<T> valueType) {
+        T entity = null;
+        try {
+            entity = valueType.getDeclaredConstructor().newInstance();
+        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+                | NoSuchMethodException | SecurityException e) {
+            e.printStackTrace();
+        }
+        Map<String, String[]> map = this.getParameterMap();
+        for (Map.Entry<String, String[]> entry : map.entrySet()) {
+            String fieldName = entry.getKey();
+            String[] fieldValue = entry.getValue();
+            Field field;
+            try {
+                field = valueType.getDeclaredField(fieldName);
+                field.setAccessible(true);
+                try {
+                    field.set(entity, fieldValue[0]);
+                } catch (IllegalArgumentException | IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            } catch (NoSuchFieldException | SecurityException e) {
+                e.printStackTrace();
+            }
+        }
+        return entity;
     }
 
     // 解析token
