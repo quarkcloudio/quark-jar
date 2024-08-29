@@ -28,8 +28,16 @@ public class Radio extends Component {
     @Data
     public static class Option {
 
+        // 选项的标签
+        public Option(String label, Object value) {
+            this.label = label;
+            this.value = value;
+        }
+
+        // 选项的文本
         String label;
 
+        // 选项的 value
         Object value;
 
         @JsonInclude(JsonInclude.Include.NON_DEFAULT)
@@ -219,9 +227,18 @@ public class Radio extends Component {
 
     public Radio() {
         this.component = "radioField";
+        this.colon = true;
+        this.labelAlign = "right";
+        this.showOnIndex = true;
+        this.showOnDetail = true;
+        this.showOnCreation = true;
+        this.showOnUpdate = true;
+        this.showOnExport = true;
+        this.showOnImport = true;
         this.setComponentKey();
         this.style = new HashMap<>();
         this.rules = new ArrayList<>();
+        this.options = new ArrayList<>();
     }
 
     // Field 的长度，我们归纳了常用的 Field 长度以及适合的场景，支持了一些枚举 "xs" , "s" , "m" , "l" , "x"

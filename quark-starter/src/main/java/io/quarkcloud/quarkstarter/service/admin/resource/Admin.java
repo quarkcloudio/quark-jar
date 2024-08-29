@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import io.quarkcloud.quarkadmin.component.form.Field;
 import io.quarkcloud.quarkadmin.component.form.Rule;
+import io.quarkcloud.quarkadmin.component.form.fields.Radio;
 import io.quarkcloud.quarkadmin.entity.AdminEntity;
 import io.quarkcloud.quarkadmin.mapper.AdminMapper;
 import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
@@ -43,6 +44,10 @@ public class Admin extends ResourceImpl<AdminMapper,AdminEntity> {
             Field.text("nickname", "昵称").setEditable(true),
             Field.text("email", "邮箱"),
             Field.text("phone", "手机号"),
+            Field.radio("sex", "性别").setOptions(Arrays.asList(
+                new Radio.Option("男",1),
+                new Radio.Option("女",2)
+            )).setDefaultValue(1),
             Field.password("password", "密码").onlyOnForms()
         );
     }
