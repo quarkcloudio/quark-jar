@@ -131,34 +131,36 @@ public class Form extends Component {
             return null;
         }
 
-        try {
-            String name = (String) item.getClass().getMethod("getName").invoke(item);
-            if (name.isEmpty()) {
-                return null;
-            }
+        boolean isHasGetName = new Reflect(item).checkMethodExist("getName");
+        if (isHasGetName) {
+            return null;
+        }
+        String name = (String) new Reflect(item).invoke("getName");
+        if (name.isEmpty()) {
+            return null;
+        }
 
-            boolean issetDefaultValue = item.getClass().getMethod("getDefaultValue") != null;
-            if (issetDefaultValue) {
-                Object defaultValue = item.getClass().getMethod("getDefaultValue").invoke(item);
-                if (defaultValue != null) {
-                    value = defaultValue;
-                }
+        boolean issetDefaultValue = new Reflect(item).checkMethodExist("getDefaultValue");
+        if (issetDefaultValue) {
+            Object defaultValue = new Reflect(item).invoke("getDefaultValue");
+            if (defaultValue != null) {
+                System.out.println(name+"-defaultValue:"+defaultValue);
+                value = defaultValue;
             }
+        }
 
-            boolean issetValue = item.getClass().getMethod("getValue") != null;
-            if (issetValue) {
-                Object getValue = item.getClass().getMethod("getValue").invoke(item);
-                if (getValue != null) {
+        boolean issetValue = new Reflect(item).checkMethodExist("getValue");
+        if (issetValue) {
+            Object getValue = new Reflect(item).invoke("getValue");
+            if (getValue != null) {
+                    System.out.println(name+"-value:"+getValue);
                     value = getValue;
-                }
             }
+        }
 
-            if (initialValues.get(name) != null) {
-                value = initialValues.get(name);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (initialValues.get(name) != null) {
+            System.out.println(name+"-initialValue:"+initialValues.get(name));
+            value = initialValues.get(name);
         }
 
         return value;
@@ -304,8 +306,8 @@ public class Form extends Component {
                 }
             }
         }
-
         this.initialValues = data;
+        
         return this;
     }
 
