@@ -132,7 +132,7 @@ public class Form extends Component {
         }
 
         boolean isHasGetName = new Reflect(item).checkMethodExist("getName");
-        if (isHasGetName) {
+        if (!isHasGetName) {
             return null;
         }
         String name = (String) new Reflect(item).invoke("getName");
@@ -182,7 +182,6 @@ public class Form extends Component {
     // 解析字段
     public List<Object> fieldParser(Object v, boolean when) {
         List<Object> items = new ArrayList<>();
-
         // 数组直接返回
         if (v instanceof List<?>) {
             return items;
@@ -260,7 +259,6 @@ public class Form extends Component {
     public Form setInitialValues(Object initialValues) {
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Object> data = objectMapper.convertValue(initialValues, Map.class);
-
         List<Object> fields = findFields(this.body, true);
         for (Object v : fields) {
             Object value = parseInitialValue(v, data);

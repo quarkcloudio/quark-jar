@@ -29,7 +29,7 @@ public class PictureEntity extends Model<PictureEntity> {
     private Long fileCategorId;
 
     // 排序
-    private int sort;
+    private Integer sort;
 
     // 文件名
     private String name;
@@ -38,10 +38,10 @@ public class PictureEntity extends Model<PictureEntity> {
     private Long size;
 
     // 宽度
-    private int width;
+    private Integer width;
 
     // 高度
-    private int height;
+    private Integer height;
 
     // 文件扩展名
     private String ext;

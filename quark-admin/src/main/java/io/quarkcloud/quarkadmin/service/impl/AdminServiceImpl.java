@@ -123,9 +123,9 @@ public class AdminServiceImpl extends ResourceServiceImpl<AdminMapper, AdminEnti
             v.setKey(UUID.randomUUID().toString());
             v.setLocale("menu" + v.getPath().replace("/", "."));
 
-            v.setHideInMenu(!v.isShow());
+            v.setHideInMenu(!v.getShow());
 
-            if (v.getType() == 2 && v.isEngine()) {
+            if (v.getType() == 2 && v.getIsEngine()) {
                 v.setPath("/layout/index?api=" + v.getPath());
             }
 

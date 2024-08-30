@@ -20,7 +20,7 @@ public class ActionLogEntity extends Model<ActionLogEntity> {
     private Long id;
 
     // 操作人id
-    private int objectId;
+    private Integer objectId;
 
     // 操作人名
     private String username;
@@ -38,7 +38,7 @@ public class ActionLogEntity extends Model<ActionLogEntity> {
     private String type;
 
     // 状态
-    private int status;
+    private Integer status;
 
     // 创建时间
     @TableField(value = "created_at", fill = FieldFill.INSERT)

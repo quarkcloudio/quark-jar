@@ -32,23 +32,23 @@ public class MenuEntity {
     private Long pid;
 
     // 排序
-    private short sort;
+    private Short sort;
 
     // 访问路径
     private String path;
 
     // 是否显示
     @TableField(value = "`show`")
-    private boolean show;
+    private Boolean show;
 
     // 是否为引擎路由
-    private boolean isEngine;
+    private Boolean isEngine;
 
     // 是否打开新页面
-    private boolean isLink;
+    private Boolean isLink;
 
     // 状态
-    private boolean status;
+    private Boolean status;
 
     // 组件key
     @TableField(value = "`key`")
@@ -58,7 +58,7 @@ public class MenuEntity {
     private String locale;
 
     // 在菜单中隐藏
-    private boolean hideInMenu;
+    private Boolean hideInMenu;
 
     // 创建时间
     @TableField(value = "created_at", fill = FieldFill.INSERT)

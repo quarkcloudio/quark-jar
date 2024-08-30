@@ -27,7 +27,7 @@ public class PictureCategoryEntity extends Model<PictureCategoryEntity> {
     private String title;
 
     // 排序
-    private int sort;
+    private Short sort;
 
     // 描述
     private String description;

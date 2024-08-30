@@ -28,7 +28,7 @@ public class AdminEntity extends Model<AdminEntity> {
     private String nickname;
 
     // 性别
-    private int sex;
+    private Integer sex;
 
     // 邮箱
     private String email;
@@ -50,7 +50,7 @@ public class AdminEntity extends Model<AdminEntity> {
     private String lastLoginTime;
 
     // 状态
-    private int status;
+    private Integer status;
 
     // 创建时间
     @TableField(value = "created_at", fill = FieldFill.INSERT)

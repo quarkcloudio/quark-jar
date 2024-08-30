@@ -27,7 +27,7 @@ public class FileCategoryEntity extends Model<FileCategoryEntity> {
     private String title;
 
     // 排序
-    private int sort;
+    private Integer sort;
 
     // 描述
     private String description;

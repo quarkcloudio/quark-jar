@@ -29,7 +29,7 @@ public class ConfigEntity extends Model<ConfigEntity> {
     private String name;
 
     // 排序
-    private int sort;
+    private Integer sort;
 
     // 分组名称
     private String groupName;
@@ -41,7 +41,7 @@ public class ConfigEntity extends Model<ConfigEntity> {
     private String remark;
 
     // 状态
-    private int status;
+    private Integer status;
 
     // 创建时间
     @TableField(value = "created_at", fill = FieldFill.INSERT)

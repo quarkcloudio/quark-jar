@@ -29,7 +29,7 @@ public class FileEntity extends Model<FileEntity> {
     private Long fileCategorId;
 
     // 排序
-    private int sort;
+    private Integer sort;
 
     // 文件名
     private String name;
