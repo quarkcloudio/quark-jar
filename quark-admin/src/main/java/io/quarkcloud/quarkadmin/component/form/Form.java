@@ -265,11 +265,10 @@ public class Form extends Component {
         for (Object v : fields) {
             Object value = parseInitialValue(v, data);
             if (value != null) {
-                try {
-                    String name = (String) v.getClass().getMethod("getName").invoke(v);
+                boolean isHasGetName = new Reflect(v).checkMethodExist("getName");
+                if (isHasGetName) {
+                    String name = (String) new Reflect(v).invoke("getName");
                     data.put(name, value);
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
             }
         }
@@ -307,7 +306,7 @@ public class Form extends Component {
             }
         }
         this.initialValues = data;
-        
+
         return this;
     }
 
