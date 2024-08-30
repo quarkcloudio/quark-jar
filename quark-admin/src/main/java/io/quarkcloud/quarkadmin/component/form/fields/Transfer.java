@@ -12,6 +12,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.quarkcloud.quarkadmin.component.Component;
+import io.quarkcloud.quarkadmin.component.form.Closure;
 import io.quarkcloud.quarkadmin.component.form.Rule;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -191,10 +192,8 @@ public class Transfer extends Component {
     boolean showOnImport;
 
     // 回调函数
-    @FunctionalInterface
-    interface Closure {
-        Object callback();
-    }
+    @JsonIgnore
+    Closure callback;
 
     // 数据源，其中的数据将会被渲染到左边一栏中，targetKeys 中指定的除外
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)

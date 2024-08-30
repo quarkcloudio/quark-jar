@@ -12,6 +12,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.quarkcloud.quarkadmin.component.Component;
+import io.quarkcloud.quarkadmin.component.form.Closure;
 import io.quarkcloud.quarkadmin.component.form.Rule;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -169,10 +170,8 @@ public class Group extends Component {
     boolean showOnImport;
 
     // 回调函数
-    @FunctionalInterface
-    interface Closure {
-        Object callback();
-    }
+    @JsonIgnore
+    Closure callback;
 
     // 分组标题
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)

@@ -12,6 +12,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.quarkcloud.quarkadmin.component.Component;
+import io.quarkcloud.quarkadmin.component.form.Closure;
 import io.quarkcloud.quarkadmin.component.form.Rule;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -171,10 +172,8 @@ public class Password extends Component {
     boolean showOnImport;
 
     // 回调函数
-    @FunctionalInterface
-    interface Closure {
-        Object callback();
-    }
+    @JsonIgnore
+    Closure callback;
 
     // 带标签的 input，设置后置标签
     Object addonAfter;

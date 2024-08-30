@@ -20,6 +20,6 @@ public class TreeSelect<T> extends SearchImpl<T> {
 
     // 设置Option
     public TreeData option(Object value, String title) {
-        return new TreeData().setTitle(title).setValue(value);
+        return new TreeData(title, value);
     }
 }

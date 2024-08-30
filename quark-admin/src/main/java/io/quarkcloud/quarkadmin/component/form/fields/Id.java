@@ -12,6 +12,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.quarkcloud.quarkadmin.component.Component;
+import io.quarkcloud.quarkadmin.component.form.Closure;
 import io.quarkcloud.quarkadmin.component.form.Rule;
 import io.quarkcloud.quarkadmin.component.table.Column;
 import lombok.Data;
@@ -171,10 +172,8 @@ public class Id extends Component {
     boolean showOnImport;
 
     // 回调函数
-    @FunctionalInterface
-    interface Closure {
-        Object callback();
-    }
+    @JsonIgnore
+    Closure callback;
 
     // 默认的选中项
     Object defaultValue;

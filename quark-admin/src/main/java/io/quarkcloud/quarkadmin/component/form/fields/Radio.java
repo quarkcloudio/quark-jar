@@ -15,6 +15,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.quarkcloud.quarkadmin.component.Component;
+import io.quarkcloud.quarkadmin.component.form.Closure;
 import io.quarkcloud.quarkadmin.component.form.Rule;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -192,10 +193,8 @@ public class Radio extends Component {
     boolean showOnImport;
 
     // 回调函数
-    @FunctionalInterface
-    interface Closure {
-        Object callback();
-    }
+    @JsonIgnore
+    Closure callback;
 
     // RadioButton 的风格样式，目前有描边和填色两种风格 outline | solid
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)

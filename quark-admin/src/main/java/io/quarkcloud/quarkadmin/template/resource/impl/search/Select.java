@@ -20,6 +20,6 @@ public class Select<T> extends SearchImpl<T> {
 
     // 设置Option
     public Option option(Object value, String label) {
-        return new Option().setLabel(label).setValue(value);
+        return new Option(label, value);
     }
 }

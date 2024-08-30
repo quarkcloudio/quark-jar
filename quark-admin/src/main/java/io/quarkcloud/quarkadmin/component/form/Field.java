@@ -316,6 +316,10 @@ public class Field {
         return new Text().setName(name).setLabel(label);
     }
 
+    public static Text text(String name, String label, Closure callback) {
+        return new Text().setName(name).setLabel(label).setCallback(callback);
+    }
+
     public static Textarea textarea(String name) {
         return new Textarea().setName(name);
     }

@@ -12,6 +12,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.quarkcloud.quarkadmin.component.Component;
+import io.quarkcloud.quarkadmin.component.form.Closure;
 import io.quarkcloud.quarkadmin.component.form.Rule;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -36,8 +37,16 @@ public class TreeSelect extends Component {
     @Data
     public static class TreeData {
 
+        // 选项的标签
+        public TreeData(String title, Object value) {
+            this.title = title;
+            this.value = value;
+        }
+
+        // 选项的文本
         String title;
 
+        // 选项的 value
         Object value;
 
         @JsonInclude(JsonInclude.Include.NON_DEFAULT)
@@ -204,10 +213,8 @@ public class TreeSelect extends Component {
     boolean showOnImport;
 
     // 回调函数
-    @FunctionalInterface
-    interface Closure {
-        Object callback();
-    }
+    @JsonIgnore
+    Closure callback;
 
     // 可以点击清除图标删除内容
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
