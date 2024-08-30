@@ -600,18 +600,13 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         return Message.success("操作成功！");
     }
 
-    // 导入数据
-    public Object importRender(Context context) {
-        return Message.success("操作成功！");
-    }
-
-    // 导出数据
-    public Object exportRender(Context context) {
-        return Message.success("操作成功！");
-    }
-
     // 详情页面
     public Object detailRender(Context context) {
+        return Message.success("操作成功！");
+    }
+
+    // 表单渲染
+    public Object formRender(Context context) {
         return Message.success("操作成功！");
     }
 
@@ -620,8 +615,13 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         return Message.success("操作成功！");
     }
 
-    // 表单渲染
-    public Object formRender(Context context) {
+    // 导入数据
+    public Object importRender(Context context) {
+        return Message.success("操作成功！");
+    }
+
+    // 导出数据
+    public Object exportRender(Context context) {
         return Message.success("操作成功！");
     }
 }
