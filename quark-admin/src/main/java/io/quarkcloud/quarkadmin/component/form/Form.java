@@ -144,7 +144,6 @@ public class Form extends Component {
         if (issetDefaultValue) {
             Object defaultValue = new Reflect(item).invoke("getDefaultValue");
             if (defaultValue != null) {
-                System.out.println(name+"-defaultValue:"+defaultValue);
                 value = defaultValue;
             }
         }
@@ -153,13 +152,11 @@ public class Form extends Component {
         if (issetValue) {
             Object getValue = new Reflect(item).invoke("getValue");
             if (getValue != null) {
-                    System.out.println(name+"-value:"+getValue);
                     value = getValue;
             }
         }
 
         if (initialValues.get(name) != null) {
-            System.out.println(name+"-initialValue:"+initialValues.get(name));
             value = initialValues.get(name);
         }
 
