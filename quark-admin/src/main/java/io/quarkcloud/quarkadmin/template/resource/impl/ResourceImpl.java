@@ -7,11 +7,15 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 
 import io.quarkcloud.quarkcore.service.Context;
+import io.quarkcloud.quarkcore.util.Reflect;
 import io.quarkcloud.quarkadmin.annotation.AdminResource;
 import io.quarkcloud.quarkadmin.component.card.Card;
+import io.quarkcloud.quarkadmin.component.form.Closure;
 import io.quarkcloud.quarkadmin.component.form.Form;
 import io.quarkcloud.quarkadmin.component.message.Message;
 import io.quarkcloud.quarkadmin.component.pagecontainer.PageContainer;
@@ -68,9 +72,6 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     
     // 列表页表格是否轮询数据
     public int tablePolling;
-    
-    // 注入的字段数据
-    public Map<String, Object> field;
     
     // 是否具有导出功能
     public boolean withExport;
@@ -156,12 +157,6 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
             return withExport;
         }
         return annotationClass.withExport();
-    }
-
-    // 设置单列字段
-    public ResourceImpl<M,T> setField(Map<String, Object> field) {
-        this.field = field;
-        return this;
     }
 
     // 全局查询
@@ -285,6 +280,51 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         return this.getTitle() + this.getTableTitleSuffix();
     }
 
+    // 解析列表页表格数据
+    public List<T> performsIndexList(Context context, List<T> lists) {
+        List<Object> getFields = fields(context);
+        List<Object> indexFields = new ResolveField(getFields, context).indexFields(context);
+        for (T item : lists) {
+            this.entity = item;
+            Reflect itemReflect = new Reflect(item);
+            for (Object fieldObj : indexFields) {
+                Reflect fieldReflect = new Reflect(fieldObj);
+                String fieldName = (String) fieldReflect.getFieldValue("name");
+                boolean hasItemName = itemReflect.checkFieldExist(fieldName);
+                if (hasItemName) {
+                    Closure callback = (Closure) fieldReflect.getFieldValue("callback");
+                    // 解析回调函数值
+                    if (callback != null) {
+                        Object callbackValue = callback.callback();
+                        itemReflect.setFieldValue(fieldName, callbackValue);
+                    } else {
+                        String itemValue = itemReflect.getFieldValue(fieldName).toString();
+                        ObjectMapper mapper = new ObjectMapper();
+                        try {
+                            if (itemValue.startsWith("[") && itemValue.endsWith("]")) {
+                                List<?> list = mapper.readValue(itemValue, new TypeReference<List<Object>>() {});
+                                itemReflect.setFieldValue(fieldName, list);
+                            } else if (itemValue.startsWith("{") && itemValue.endsWith("}")) {
+                                Map<?, ?> map = mapper.readValue(itemValue, new TypeReference<Map<String, Object>>() {});
+                                itemReflect.setFieldValue(fieldName, map);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
+
+        // 显示前回调
+        return this.beforeIndexShowing(context, lists);
+    }
+
+    // 列表页面显示前回调
+    public List<T> beforeIndexShowing(Context context, List<T> list) {
+        return list;
+    }
+
     // 列表页组件渲染
     public Object indexComponentRender(Context context) {
 
@@ -351,7 +391,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         long current = data.getCurrent();
         long total = data.getTotal();
         long defaultCurrent = 1;
-        Object items = data.getRecords();
+        Object items = this.performsIndexList(context, data.getRecords());
         return table.setPagination(current, pageSize, total, defaultCurrent).setDatasource(items);
     }
 

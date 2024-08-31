@@ -38,9 +38,6 @@ public interface Resource<T> {
     // 获取是否具有导出功能
     public boolean isWithExport();
 
-    // 设置单列字段
-    public Resource<T> setField(Map<String, Object> field);
-
     // 全局查询
     public MPJLambdaWrapper<T> query(Context context, MPJLambdaWrapper<T> queryWrapper);
 
