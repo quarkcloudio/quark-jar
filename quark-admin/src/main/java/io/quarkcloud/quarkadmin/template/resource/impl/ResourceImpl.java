@@ -284,6 +284,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     public List<T> performsIndexList(Context context, List<T> lists) {
         List<Object> getFields = fields(context);
         List<Object> indexFields = new ResolveField(getFields, context).indexFields(context);
+        T tempEntity = this.entity;
         for (T item : lists) {
             this.entity = item;
             Reflect itemReflect = new Reflect(item);
@@ -314,6 +315,9 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
                     }
                 }
             }
+
+            // 归还原始对象
+            this.entity = tempEntity;
         }
 
         // 显示前回调
