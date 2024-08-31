@@ -57,7 +57,8 @@ public class Admin extends ResourceImpl<AdminMapper,AdminEntity> {
     // 搜索表单
     public List<Object> searches(Context context) {
         return Arrays.asList(
-            new Input<AdminEntity>("username", "用户名")
+            new Input<AdminEntity>("username", "用户名"),
+            new Input<AdminEntity>("nickname", "昵称")
         );
     }
     
