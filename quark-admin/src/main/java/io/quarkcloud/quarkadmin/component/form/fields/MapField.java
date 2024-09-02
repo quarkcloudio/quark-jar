@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.quarkcloud.quarkadmin.component.Component;
 import io.quarkcloud.quarkadmin.component.form.Closure;
 import io.quarkcloud.quarkadmin.component.form.Rule;
+import io.quarkcloud.quarkadmin.component.table.Column;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -176,7 +177,7 @@ public class MapField extends Component {
 
     // 默认选中的选项
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    Object defaultValue;
+    Map<String, Object> defaultValue;
 
     // 整组失效
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
@@ -204,6 +205,28 @@ public class MapField extends Component {
         this.setComponentKey();
         this.style = new HashMap<>();
         this.rules = new ArrayList<>();
+        this.colon = true;
+        this.labelAlign = "right";
+        this.showOnIndex = true;
+        this.showOnDetail = true;
+        this.showOnCreation = true;
+        this.showOnUpdate = true;
+        this.showOnExport = true;
+        this.showOnImport = true;
+        this.column = new Column();
+
+        this.defaultValue = new HashMap<>();
+        this.defaultValue.put("longitude", "116.397724");
+        this.defaultValue.put("latitude", "39.903755");
+
+        this.zoom = 14;
+        this.mapKey = "70ac74a1443326e66e51a4255700a4e2";
+        this.mapSecurityJsCode = "5c4fc57d6cba5efd1c15c988d18d2a78";
+
+        this.style = new HashMap<>();
+        this.style.put("height", 500);
+        this.style.put("width", "100%");
+        this.style.put("marginTop", "10px");
     }
 
     // 校验规则，设置字段的校验逻辑

@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.quarkcloud.quarkadmin.component.Component;
 import io.quarkcloud.quarkadmin.component.form.Closure;
 import io.quarkcloud.quarkadmin.component.form.Rule;
+import io.quarkcloud.quarkadmin.component.table.Column;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -187,7 +188,7 @@ public class DatetimeRange extends Component {
     String className;
 
     // 默认的选中项
-    Object defaultValue;
+    Object[] defaultValue;
 
     // 禁用
     Object disabled;
@@ -217,7 +218,7 @@ public class DatetimeRange extends Component {
     String picker;
 
     // 输入框占位文本
-    String placeholder;
+    String[] placeholder;
 
     // 浮层预设位置，bottomLeft bottomRight topLeft topRight
     String placement;
@@ -263,6 +264,18 @@ public class DatetimeRange extends Component {
         this.setComponentKey();
         this.style = new HashMap<>();
         this.rules = new ArrayList<>();
+        this.colon = true;
+        this.labelAlign = "right";
+        this.showOnIndex = true;
+        this.showOnDetail = true;
+        this.showOnCreation = true;
+        this.showOnUpdate = true;
+        this.showOnExport = true;
+        this.showOnImport = true;
+        this.column = new Column();
+        this.format = "YYYY-MM-DD HH:mm:ss";
+        this.placeholder = new String[]{"开始时间", "结束时间"};
+        this.defaultValue = new Object[]{null, null};
     }
 
     // Field 的长度，我们归纳了常用的 Field 长度以及适合的场景，支持了一些枚举 "xs" , "s" , "m" , "l" , "x"

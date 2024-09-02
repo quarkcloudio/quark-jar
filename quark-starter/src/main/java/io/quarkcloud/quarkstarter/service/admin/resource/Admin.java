@@ -51,6 +51,7 @@ public class Admin extends ResourceImpl<AdminMapper,AdminEntity> {
                 new Radio.Option("女",2)
             )).setDefaultValue(1),
             Field.password("password", "密码").onlyOnForms(),
+            Field.datetime("lastLoginTime", "最后登录时间"),
             Field.switchField("status", "状态").
             setTrueValue("正常").
             setFalseValue("禁用").

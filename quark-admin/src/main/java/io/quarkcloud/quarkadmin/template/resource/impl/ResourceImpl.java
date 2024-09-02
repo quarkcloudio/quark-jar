@@ -299,18 +299,21 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
                         Object callbackValue = callback.callback();
                         itemReflect.setFieldValue(fieldName, callbackValue);
                     } else {
-                        String itemValue = itemReflect.getFieldValue(fieldName).toString();
-                        ObjectMapper mapper = new ObjectMapper();
-                        try {
-                            if (itemValue.startsWith("[") && itemValue.endsWith("]")) {
-                                List<?> list = mapper.readValue(itemValue, new TypeReference<List<Object>>() {});
-                                itemReflect.setFieldValue(fieldName, list);
-                            } else if (itemValue.startsWith("{") && itemValue.endsWith("}")) {
-                                Map<?, ?> map = mapper.readValue(itemValue, new TypeReference<Map<String, Object>>() {});
-                                itemReflect.setFieldValue(fieldName, map);
+                        Object itemValue = itemReflect.getFieldValue(fieldName);
+                        if (itemValue instanceof String) {
+                            String getItemValue = (String) itemValue;
+                            ObjectMapper mapper = new ObjectMapper();
+                            try {
+                                if (getItemValue.startsWith("[") && getItemValue.endsWith("]")) {
+                                    List<?> list = mapper.readValue(getItemValue, new TypeReference<List<Object>>() {});
+                                    itemReflect.setFieldValue(fieldName, list);
+                                } else if (getItemValue.startsWith("{") && getItemValue.endsWith("}")) {
+                                    Map<?, ?> map = mapper.readValue(getItemValue, new TypeReference<Map<String, Object>>() {});
+                                    itemReflect.setFieldValue(fieldName, map);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
                         }
                     }
                 }

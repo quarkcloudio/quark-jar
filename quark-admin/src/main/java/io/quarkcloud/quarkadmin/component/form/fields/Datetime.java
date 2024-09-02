@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.quarkcloud.quarkadmin.component.Component;
 import io.quarkcloud.quarkadmin.component.form.Closure;
 import io.quarkcloud.quarkadmin.component.form.Rule;
+import io.quarkcloud.quarkadmin.component.table.Column;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -261,6 +262,17 @@ public class Datetime extends Component {
     public Datetime() {
         this.component = "datetimeField";
         this.setComponentKey();
+        this.colon = true;
+        this.labelAlign = "right";
+        this.showOnIndex = true;
+        this.showOnDetail = true;
+        this.showOnCreation = true;
+        this.showOnUpdate = true;
+        this.showOnExport = true;
+        this.showOnImport = true;
+        this.column = new Column();
+        this.placeholder = "请选择";
+        this.format = "YYYY-MM-DD HH:mm:ss";
         this.style = new HashMap<>();
         this.rules = new ArrayList<>();
     }

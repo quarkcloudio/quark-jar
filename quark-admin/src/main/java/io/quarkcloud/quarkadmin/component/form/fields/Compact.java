@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.quarkcloud.quarkadmin.component.Component;
 import io.quarkcloud.quarkadmin.component.form.Closure;
 import io.quarkcloud.quarkadmin.component.form.Rule;
+import io.quarkcloud.quarkadmin.component.table.Column;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -193,6 +194,10 @@ public class Compact extends Component {
     public Compact() {
         this.component = "compactField";
         this.setComponentKey();
+        this.colon = true;
+        this.labelAlign = "right";
+        this.column = new Column();
+        this.onlyOnForms();
         this.style = new HashMap<>();
         this.rules = new ArrayList<>();
     }

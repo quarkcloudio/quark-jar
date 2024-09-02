@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.quarkcloud.quarkadmin.component.Component;
 import io.quarkcloud.quarkadmin.component.form.Closure;
 import io.quarkcloud.quarkadmin.component.form.Rule;
+import io.quarkcloud.quarkadmin.component.table.Column;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -187,7 +188,7 @@ public class DateRange extends Component {
     String className;
 
     // 默认的选中项
-    Object defaultValue;
+    Object[] defaultValue;
 
     // 禁用
     Object disabled;
@@ -217,7 +218,7 @@ public class DateRange extends Component {
     String picker;
 
     // 输入框占位文本
-    String placeholder;
+    String[] placeholder;
 
     // 浮层预设位置，bottomLeft bottomRight topLeft topRight
     String placement;
@@ -261,6 +262,19 @@ public class DateRange extends Component {
     public DateRange() {
         this.component = "dateRangeField";
         this.setComponentKey();
+        this.colon = true;
+        this.labelAlign = "right";
+        this.showOnIndex = true;
+        this.showOnDetail = true;
+        this.showOnCreation = true;
+        this.showOnUpdate = true;
+        this.showOnExport = true;
+        this.showOnImport = true;
+        this.column = new Column();
+        this.picker = "date";
+        this.format = "YYYY-MM-DD";
+        this.placeholder = new String[]{"开始日期", "结束日期"};
+        this.defaultValue = new Object[]{null, null};
         this.style = new HashMap<>();
         this.rules = new ArrayList<>();
     }

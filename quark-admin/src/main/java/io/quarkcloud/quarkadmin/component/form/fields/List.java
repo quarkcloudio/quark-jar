@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.quarkcloud.quarkadmin.component.Component;
 import io.quarkcloud.quarkadmin.component.form.Closure;
 import io.quarkcloud.quarkadmin.component.form.Rule;
+import io.quarkcloud.quarkadmin.component.table.Column;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -199,6 +200,18 @@ public class List extends Component {
         this.setComponentKey();
         this.style = new HashMap<>();
         this.rules = new ArrayList<>();
+        this.colon = true;
+        this.labelAlign = "right";
+        this.showOnIndex = true;
+        this.showOnDetail = true;
+        this.showOnCreation = true;
+        this.showOnUpdate = true;
+        this.showOnExport = true;
+        this.showOnImport = true;
+        this.column = new Column();
+        this.buttonText = "添加一行数据";
+        this.buttonPosition = "top";
+        this.alwaysShowItemLabel = true;
     }
 
     // 校验规则，设置字段的校验逻辑
