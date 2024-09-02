@@ -1,7 +1,6 @@
 package io.quarkcloud.quarkadmin.component.table;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -169,7 +168,7 @@ public class Column extends Component {
      * @param action 编辑动作
      * @return 当前列对象
      */
-    public Column setEditable(String name, List<Object> options, String action) {
+    public Column setEditable(String name, Object options, String action) {
         this.editable = new HashMap<>();
         this.editable.put("name", name);
         this.editable.put("options", options);

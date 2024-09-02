@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.quarkcloud.quarkadmin.component.Component;
 import io.quarkcloud.quarkadmin.component.form.Closure;
 import io.quarkcloud.quarkadmin.component.form.Rule;
+import io.quarkcloud.quarkadmin.component.table.Column;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -379,6 +380,19 @@ public class TreeSelect extends Component {
 
     public TreeSelect() {
         this.component = "treeSelectField";
+        this.colon = true;
+        this.labelAlign = "right";
+        this.showOnIndex = true;
+        this.showOnDetail = true;
+        this.showOnCreation = true;
+        this.showOnUpdate = true;
+        this.showOnExport = true;
+        this.showOnImport = true;
+        this.allowClear = true;
+        this.column = new Column();
+        this.treeDefaultExpandAll = true;
+        this.treeLine = true;
+        this.setWidth(200); // Set default width
         this.setComponentKey();
         this.style = new HashMap<>();
         this.rules = new ArrayList<>();

@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.quarkcloud.quarkadmin.component.Component;
 import io.quarkcloud.quarkadmin.component.form.Closure;
 import io.quarkcloud.quarkadmin.component.form.Rule;
+import io.quarkcloud.quarkadmin.component.table.Column;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -178,9 +179,13 @@ public class Selects extends Component {
 
     public Selects() {
         this.component = "selects";
+        this.colon = true;
+        this.labelAlign = "right";
+        this.column = new Column();
         this.setComponentKey();
         this.style = new HashMap<>();
         this.rules = new ArrayList<>();
+        this.onlyOnForms();
     }
 
     // 校验规则，设置字段的校验逻辑

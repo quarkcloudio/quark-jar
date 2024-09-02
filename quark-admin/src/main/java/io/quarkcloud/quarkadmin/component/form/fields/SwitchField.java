@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.quarkcloud.quarkadmin.component.Component;
 import io.quarkcloud.quarkadmin.component.form.Closure;
 import io.quarkcloud.quarkadmin.component.form.Rule;
+import io.quarkcloud.quarkadmin.component.table.Column;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -225,6 +226,15 @@ public class SwitchField extends Component {
 
     public SwitchField() {
         this.component = "switchField";
+        this.colon = true;
+        this.labelAlign = "right";
+        this.showOnIndex = true;
+        this.showOnDetail = true;
+        this.showOnCreation = true;
+        this.showOnUpdate = true;
+        this.showOnExport = true;
+        this.showOnImport = true;
+        this.column = new Column();
         this.setComponentKey();
         this.style = new HashMap<>();
         this.rules = new ArrayList<>();
@@ -605,5 +615,17 @@ public class SwitchField extends Component {
     // 当前可选项
     public Object getOptions() {
         return Map.of(0, this.unCheckedChildren,1, this.checkedChildren);
+    }
+
+    // 选中时的内容
+    public SwitchField setTrueValue(Object value) {
+        this.checkedChildren = value;
+        return this;
+    }
+
+    // 非选中时的内容
+    public SwitchField setFalseValue(Object value) {
+        this.unCheckedChildren = value;
+        return this;
     }
 }

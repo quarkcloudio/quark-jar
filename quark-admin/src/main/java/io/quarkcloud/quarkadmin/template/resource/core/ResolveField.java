@@ -120,6 +120,7 @@ public class ResolveField {
     // 将表单项转换为表格列
     public Object fieldToColumn(Context context, Object field) {
         Column column = null;
+        Object options = null;
         Reflect reflect = new Reflect(field);
         
         // 获取字段属性
@@ -168,19 +169,19 @@ public class ResolveField {
                 column.setValueType("text");
                 break;
             case "treeSelectField":
-                List<?> treeOptions = ((TreeSelect) field).getOptions();
+                options = ((TreeSelect) field).getOptions();
                 column.setValueType("treeSelect")
-                    .setFieldProps(Map.of("options", treeOptions));
+                    .setFieldProps(Map.of("options", options));
                 break;
             case "cascaderField":
-                List<?> cascaderOptions = ((Cascader) field).getOptions();
+                options = ((Cascader) field).getOptions();
                 column.setValueType("cascader")
-                    .setFieldProps(Map.of("options", cascaderOptions));
+                    .setFieldProps(Map.of("options", options));
                 break;
             case "selectField":
-                List<?> selectOptions = ((SelectField) field).getOptions();
+                options = ((SelectField) field).getOptions();
                 column.setValueType("select")
-                    .setFieldProps(Map.of("options", selectOptions));
+                    .setFieldProps(Map.of("options", options));
                 
                 // 如果设置了过滤项，设置值的枚举
                 if (filters instanceof Boolean && (boolean) filters) {
@@ -189,9 +190,9 @@ public class ResolveField {
                 }
                 break;
             case "checkboxField":
-                List<?> checkboxOptions = ((Checkbox) field).getOptions();
+                options = ((Checkbox) field).getOptions();
                 column.setValueType("checkbox")
-                    .setFieldProps(Map.of("options", checkboxOptions));
+                    .setFieldProps(Map.of("options", options));
                 
                 // 如果设置了过滤项，设置值的枚举
                 if (filters instanceof Boolean && (boolean) filters) {
@@ -200,9 +201,9 @@ public class ResolveField {
                 }
                 break;
             case "radioField":
-                List<?> radioOptions = ((Radio) field).getOptions();
+                options = ((Radio) field).getOptions();
                 column.setValueType("radio")
-                    .setFieldProps(Map.of("options", radioOptions));
+                    .setFieldProps(Map.of("options", options));
                 
                 // 如果设置了过滤项，设置值的枚举
                 if (filters instanceof Boolean && (boolean) filters) {
@@ -211,9 +212,8 @@ public class ResolveField {
                 }
                 break;
             case "switchField":
-                Object switchOptions = ((SwitchField) field).getOptions();
-                column.setValueType("select")
-                    .setValueEnum(switchOptions);
+                options = ((SwitchField) field).getOptions();
+                column.setValueType("select").setValueEnum(options);
                 
                 // 如果设置了过滤项，设置值的枚举
                 if (filters instanceof Boolean && (boolean) filters) {
@@ -232,7 +232,7 @@ public class ResolveField {
         // 如果可编辑，设置编辑项
         if (editable) {
             String editableApi = context.getRequest().getRequestURI().replace("/index", "/editable");
-            column.setEditable(component, null, editableApi);
+            column.setEditable(component, options, editableApi);
         }
 
         return column;

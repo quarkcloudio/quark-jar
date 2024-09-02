@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.quarkcloud.quarkadmin.component.Component;
 import io.quarkcloud.quarkadmin.component.form.Closure;
 import io.quarkcloud.quarkadmin.component.form.Rule;
+import io.quarkcloud.quarkadmin.component.table.Column;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -237,7 +238,7 @@ public class TimeRange extends Component {
 
     // 输入框占位文本
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    String placeholder;
+    String[] placeholder;
 
     // 浮层预设位置，bottomLeft bottomRight topLeft topRight
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
@@ -285,9 +286,21 @@ public class TimeRange extends Component {
 
     public TimeRange() {
         this.component = "timeRangeField";
+        this.column = new Column();
         this.setComponentKey();
         this.style = new HashMap<>();
         this.rules = new ArrayList<>();
+        this.colon = true;
+        this.labelAlign = "right";
+        this.showOnIndex = true;
+        this.showOnDetail = true;
+        this.showOnCreation = true;
+        this.showOnUpdate = true;
+        this.showOnExport = true;
+        this.showOnImport = true;
+        this.format = "HH:mm";
+        this.placeholder = new String[]{"开始时间", "结束时间"};
+        this.defaultValue = new Object[]{null, null};
     }
 
     // Field 的长度，我们归纳了常用的 Field 长度以及适合的场景，支持了一些枚举 "xs" , "s" , "m" , "l" , "x"
