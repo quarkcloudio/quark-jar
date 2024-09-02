@@ -1,6 +1,8 @@
 package io.quarkcloud.quarkadmin.service.impl;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -105,10 +107,65 @@ public class ResourceServiceImpl<M extends ResourceMapper<T>, T> implements Reso
         return entity;
     }
 
+    // 解析表格列可编辑数据
+    private Object resolveEditableBody(Context context, Class<? extends Object> clazz) {
+        Object entity = null;
+        try {
+            entity = clazz.getDeclaredConstructor().newInstance();
+        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+                | NoSuchMethodException | SecurityException e) {
+            e.printStackTrace();
+        }
+        Map<String, String[]> map = context.getParameterMap();
+        for (Map.Entry<String, String[]> entry : map.entrySet()) {
+            String fieldName = entry.getKey();
+            String[] fieldValue = entry.getValue();
+            Field field;
+            try {
+                field = clazz.getDeclaredField(fieldName);
+                field.setAccessible(true);
+                try {
+                    // 根据字段类型转换值
+                    Class<?> fieldType = field.getType();
+                    if (fieldType == String.class) {
+                        field.set(entity, fieldValue[0]);
+                    } else if (fieldType == int.class || fieldType == Integer.class) {
+                        if (fieldValue[0].equals("true")) {
+                            field.set(entity, 1);
+                        } else if (fieldValue[0].equals("false")) {
+                            field.set(entity, 0);
+                        } else {
+                            field.set(entity, Integer.parseInt(fieldValue[0]));
+                        }
+                    } else if (fieldType == long.class || fieldType == Long.class) {
+                        field.set(entity, Long.parseLong(fieldValue[0]));
+                    } else if (fieldType == double.class || fieldType == Double.class) {
+                        field.set(entity, Double.parseDouble(fieldValue[0]));
+                    } else if (fieldType == float.class || fieldType == Float.class) {
+                        field.set(entity, Float.parseFloat(fieldValue[0]));
+                    } else if (fieldType == short.class || fieldType == Short.class) {
+                        field.set(entity, Short.parseShort(fieldValue[0]));
+                    } else if (fieldType == byte.class || fieldType == Byte.class) {
+                        field.set(entity, Byte.parseByte(fieldValue[0]));
+                    } else if (fieldType == boolean.class || fieldType == Boolean.class) {
+                        field.set(entity, Boolean.parseBoolean(fieldValue[0]));
+                    } else if (fieldType == char.class || fieldType == Character.class) {
+                        field.set(entity, fieldValue[0].charAt(0));
+                    }
+                } catch (IllegalArgumentException | IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            } catch (NoSuchFieldException | SecurityException e) {
+                e.printStackTrace();
+            }
+        }
+        return entity;
+    }
+
     // 更新
     @SuppressWarnings("unchecked")
     public T editableUpdate(T entity) {
-        entity = (T) context.getParameterBody(entity.getClass());
+        entity = (T) this.resolveEditableBody(context, entity.getClass());
         this.resourceMapper.updateById(entity);
         return entity;
     }
