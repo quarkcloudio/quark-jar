@@ -15,8 +15,9 @@ import net.sf.jsqlparser.util.validation.ValidationException;
 public class PerformValidation<T> {
 
     // 创建请求的验证器
-    public void validatorForCreation(Context ctx, T data) {
-
+    public Object validatorForCreation(Context context, T data) {
+        List<Rule> rules = rulesForCreation(context);
+        return validator(rules, data);
     }
 
     // 验证规则
@@ -26,25 +27,27 @@ public class PerformValidation<T> {
         return null;
     }
 
-    private void checkUnique(Rule rule, Object fieldValue) throws ValidationException {
+    private Object checkUnique(Rule rule, Object fieldValue) {
         if (fieldValue == null) {
-            return;
+            return null;
         }
         String table = rule.getUniqueTable();
         String field = rule.getUniqueTableField();
         String except = rule.getUniqueIgnoreValue();
         String sql;
         Object[] params;
+
+        return null;
     }
 
     // 创建请求的验证规则
-    public List<Rule> rulesForCreation(Context ctx) {
+    public List<Rule> rulesForCreation(Context context) {
         List<Rule> rules = new ArrayList<>();
         return rules;
     }
 
     // 判断是否需要验证 When 组件里的规则
-    public boolean needValidateWhenRules(Context ctx, WhenItem whenItem) {
+    public boolean needValidateWhenRules(Context context, WhenItem whenItem) {
         ObjectMapper objectMapper = new ObjectMapper(); // 用于 JSON 序列化
         String conditionName = whenItem.getConditionName();
         Object conditionOption = whenItem.getOption();
@@ -101,13 +104,13 @@ public class PerformValidation<T> {
     }
 
     // 更新请求的验证器
-    public Object validatorForUpdate(Context ctx, T data) {
-        List<Rule> rules = rulesForUpdate(ctx);
+    public Object validatorForUpdate(Context context, T data) {
+        List<Rule> rules = rulesForUpdate(context);
         return validator(rules, data);
     }
 
     // 更新请求的验证规则
-    public List<Rule> rulesForUpdate(Context ctx) {
+    public List<Rule> rulesForUpdate(Context context) {
         List<Rule> rules = new ArrayList<>();
         return rules;
     }
@@ -119,13 +122,13 @@ public class PerformValidation<T> {
     }
 
     // 导入请求的验证器
-    public Object validatorForImport(Context ctx, T data) throws ValidationException {
-        List<Rule> rules = rulesForImport(ctx);
+    public Object validatorForImport(Context context, T data) throws ValidationException {
+        List<Rule> rules = rulesForImport(context);
         return validator(rules, data);
     }
 
     // 创建请求的验证规则
-    public List<Rule> rulesForImport(Context ctx) {
+    public List<Rule> rulesForImport(Context context) {
         List<Rule> rules = new ArrayList<>();
         return rules;
     }
