@@ -13,6 +13,7 @@ import io.quarkcloud.quarkcore.service.Context;
 import net.sf.jsqlparser.util.validation.ValidationException;
 
 public class PerformValidation<T> {
+
     // 创建请求的验证器
     public void validatorForCreation(Context ctx, T data) {
 
@@ -22,7 +23,6 @@ public class PerformValidation<T> {
     public Object validator(List<Rule> rules, T data) {
         for (Rule rule : rules) {
         }
-
         return null;
     }
 
@@ -55,28 +55,21 @@ public class PerformValidation<T> {
         if (value == null) {
             return false;
         }
-
         String valueString = value.toString();
         if (valueString.isEmpty()) {
             return false;
         }
-
         switch (conditionOperator) {
             case "=":
                 return valueString.equals(conditionOption.toString());
-
             case ">":
                 return valueString.compareTo(conditionOption.toString()) > 0;
-
             case "<":
                 return valueString.compareTo(conditionOption.toString()) < 0;
-
             case "<=":
                 return valueString.compareTo(conditionOption.toString()) <= 0;
-
             case ">=":
                 return valueString.compareTo(conditionOption.toString()) >= 0;
-
             case "has":
                 if (value instanceof List) {
                     try {
@@ -89,18 +82,15 @@ public class PerformValidation<T> {
                 } else {
                     return valueString.contains(conditionOption.toString());
                 }
-
             case "in":
                 if (conditionOption instanceof List) {
                     List<String> conditionOptionList = (List<String>) conditionOption;
                     return conditionOptionList.contains(valueString);
                 }
                 break;
-
             default:
                 return valueString.equals(conditionOption.toString());
         }
-
         return false;
     }
 
