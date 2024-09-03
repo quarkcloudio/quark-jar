@@ -10,7 +10,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.quarkcloud.quarkadmin.component.form.Rule;
 import io.quarkcloud.quarkadmin.component.form.fields.WhenItem;
 import io.quarkcloud.quarkcore.service.Context;
-import net.sf.jsqlparser.util.validation.ValidationException;
 
 public class PerformValidation<T> {
 
@@ -122,7 +121,7 @@ public class PerformValidation<T> {
     }
 
     // 导入请求的验证器
-    public Object validatorForImport(Context context, T data) throws ValidationException {
+    public Object validatorForImport(Context context, T data) {
         List<Rule> rules = rulesForImport(context);
         return validator(rules, data);
     }
