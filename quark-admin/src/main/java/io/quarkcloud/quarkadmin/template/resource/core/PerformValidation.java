@@ -10,33 +10,99 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.quarkcloud.quarkadmin.component.form.Rule;
 import io.quarkcloud.quarkadmin.component.form.fields.WhenItem;
 import io.quarkcloud.quarkcore.service.Context;
+import io.quarkcloud.quarkcore.util.Reflect;
+import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
+import io.quarkcloud.quarkadmin.service.ResourceService;
 
 public class PerformValidation<T> {
 
+    // 字段
+    public List<Object> fields;
+
+    // 上下文
+    public Context context;
+
+    // 资源服务
+    public ResourceService<ResourceMapper<T>, T> resourceService;
+
+    // 构造函数
+    public PerformValidation(Context context, List<Object> fields, ResourceService<ResourceMapper<T>, T> resourceService) {
+        this.context = context;
+        this.fields = fields;
+        this.resourceService = resourceService;
+    }
+
     // 创建请求的验证器
-    public Object validatorForCreation(Context context, T data) {
+    public Object validatorForCreation(Object data) {
         List<Rule> rules = rulesForCreation(context);
         return validator(rules, data);
     }
 
     // 验证规则
-    public Object validator(List<Rule> rules, T data) {
+    public Object validator(List<Rule> rules, Object data) {
+        Object result = null;
+        Reflect reflect = new Reflect(data);
         for (Rule rule : rules) {
-        }
-        return null;
-    }
+            Object fieldValue = reflect.getFieldValue(rule.getName());
+            switch (rule.getRuleType()) {
+                case "required":
+                    if (fieldValue == null) {
+                        String errMsg = rule.getMessage();
+                        if (!errMsg.isEmpty()) {
+                            result = errMsg;
+                        }
+                    }
+                    break;
 
-    private Object checkUnique(Rule rule, Object fieldValue) {
-        if (fieldValue == null) {
-            return null;
-        }
-        String table = rule.getUniqueTable();
-        String field = rule.getUniqueTableField();
-        String except = rule.getUniqueIgnoreValue();
-        String sql;
-        Object[] params;
+                case "min":
+                    if (fieldValue instanceof String) {
+                        String fieldStr = (String) fieldValue;
+                        int strNum = fieldStr.length(); // Adjust this if you need to count Unicode code points
+                        if (strNum < rule.getMin()) {
+                            String errMsg = rule.getMessage();
+                            if (!errMsg.isEmpty()) {
+                                result = errMsg;
+                            }
+                        }
+                    }
+                    break;
 
-        return null;
+                case "max":
+                    if (fieldValue instanceof String) {
+                        String fieldStr = (String) fieldValue;
+                        int strNum = fieldStr.length(); // Adjust this if you need to count Unicode code points
+                        if (strNum > rule.getMax()) {
+                            String errMsg = rule.getMessage();
+                            if (!errMsg.isEmpty()) {
+                                result = errMsg;
+                            }
+                        }
+                    }
+                    break;
+
+                case "unique":
+                    boolean checkUniqueResult = false;
+                    String table = rule.getUniqueTable();
+                    String field = rule.getUniqueTableField();
+                    String except = rule.getUniqueIgnoreValue();
+                    if (except != null && !except.isEmpty()) {
+                        String ignoreField = except.replace("{", "").replace("}", "");
+                        Object ignoreValue = reflect.getFieldValue(ignoreField);
+                        fieldValue = reflect.getFieldValue(rule.getName());
+                        checkUniqueResult = resourceService.uniqueValidate(table, field, fieldValue, ignoreField, ignoreValue);
+                    } else {
+                        checkUniqueResult = resourceService.uniqueValidate(table, field, fieldValue);
+                    }
+                    if (checkUniqueResult) {
+                        String errMsg = rule.getMessage();
+                        if (!errMsg.isEmpty()) {
+                            result = errMsg;
+                        }
+                    }
+                    break;
+            }
+        }
+        return result;
     }
 
     // 创建请求的验证规则
@@ -103,7 +169,7 @@ public class PerformValidation<T> {
     }
 
     // 更新请求的验证器
-    public Object validatorForUpdate(Context context, T data) {
+    public Object validatorForUpdate(Object data) {
         List<Rule> rules = rulesForUpdate(context);
         return validator(rules, data);
     }
@@ -121,7 +187,7 @@ public class PerformValidation<T> {
     }
 
     // 导入请求的验证器
-    public Object validatorForImport(Context context, T data) {
+    public Object validatorForImport(Object data) {
         List<Rule> rules = rulesForImport(context);
         return validator(rules, data);
     }

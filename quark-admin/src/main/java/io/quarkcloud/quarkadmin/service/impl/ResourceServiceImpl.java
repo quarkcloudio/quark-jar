@@ -200,6 +200,16 @@ public class ResourceServiceImpl<M extends ResourceMapper<T>, T> implements Reso
         return result;
     }
 
+    // 唯一性校验
+    public boolean uniqueValidate(String table, String field, Object fieldValue) {
+        return this.resourceMapper.uniqueValidate(table, field, fieldValue) > 0;
+    }
+
+    // 唯一性校验
+    public boolean uniqueValidate(String table, String field, Object fieldValue, String ignoreField, Object ignoreValue) {
+        return this.resourceMapper.uniqueValidate(table, field, fieldValue, ignoreField, ignoreValue) > 0;
+    }
+
     /**
      * 插入数据
      * 
