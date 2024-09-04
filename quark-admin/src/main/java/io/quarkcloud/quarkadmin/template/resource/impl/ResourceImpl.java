@@ -27,6 +27,7 @@ import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
 import io.quarkcloud.quarkadmin.service.ResourceService;
 import io.quarkcloud.quarkadmin.template.resource.Action;
 import io.quarkcloud.quarkadmin.template.resource.Resource;
+import io.quarkcloud.quarkadmin.template.resource.core.PerformValidation;
 import io.quarkcloud.quarkadmin.template.resource.core.ResolveAction;
 import io.quarkcloud.quarkadmin.template.resource.core.ResolveField;
 import io.quarkcloud.quarkadmin.template.resource.core.ResolveSearch;
@@ -528,9 +529,26 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     }
 
     // 保存创建数据
+    @SuppressWarnings("unchecked")
     public Object storeRender(Context context) {
-        T result = this.resourceService.setContext(context).saveByContext(this.entity);
-        return this.afterSaved(context, result);
+
+        // 获取实体数据
+        T getEntity = (T) context.getRequestBody(entity.getClass());
+
+        // 获取资源服务
+        ResourceService<ResourceMapper<T>, T> getResourceService = (ResourceService<ResourceMapper<T>, T>) this.resourceService;
+
+        // 创建数据前验证数据
+        Object validationResult = new PerformValidation<T>(context, this.fields(context), getResourceService).validatorForCreation(getEntity);
+        if (validationResult!= null) {
+            return Message.error(validationResult);
+        }
+
+        // 保存数据
+        this.resourceService.save(getEntity);
+
+        // 保存后回调
+        return this.afterSaved(context, getEntity);
     }
 
     // 编辑表单的接口
@@ -576,9 +594,26 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     }
 
     // 保存编辑数据
+    @SuppressWarnings("unchecked")
     public Object saveRender(Context context) {
-        T result = this.resourceService.setContext(context).updateByContext(this.entity);
-        return this.afterSaved(context, result);
+
+        // 获取实体数据
+        T getEntity = (T) context.getRequestBody(entity.getClass());
+
+        // 获取资源服务
+        ResourceService<ResourceMapper<T>, T> getResourceService = (ResourceService<ResourceMapper<T>, T>) this.resourceService;
+
+        // 创建数据前验证数据
+        Object validationResult = new PerformValidation<T>(context, this.fields(context), getResourceService).validatorForUpdate(getEntity);
+        if (validationResult!= null) {
+            return Message.error(validationResult);
+        }
+
+        // 保存数据
+        this.resourceService.updateById(getEntity);
+
+        // 保存后回调
+        return this.afterSaved(context, getEntity);
     }
 
     // 保存数据后回调

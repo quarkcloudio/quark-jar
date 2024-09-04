@@ -196,12 +196,16 @@ public class PerformValidation<T> {
         boolean hasGetRules = reflect.checkMethodExist("getRules");
         if (hasGetRules) {
             List<Rule> getRules= (List<Rule>) reflect.invoke("getRules");
-            rules.addAll(getRules);
+            if (getRules!=null) {
+                rules.addAll(getRules);
+            }
         }
         boolean hasGetCreationRules = reflect.checkMethodExist("getCreationRules");
         if (hasGetCreationRules) {
             List<Rule> getCreationRules= (List<Rule>) reflect.invoke("getCreationRules");
-            rules.addAll(getCreationRules);
+            if (getCreationRules!=null) {
+                rules.addAll(getCreationRules);
+            }
         }
         return rules;
     }
@@ -255,12 +259,16 @@ public class PerformValidation<T> {
         boolean hasGetRules = reflect.checkMethodExist("getRules");
         if (hasGetRules) {
             List<Rule> getRules= (List<Rule>) reflect.invoke("getRules");
-            rules.addAll(getRules);
+            if (getRules!= null) {
+                rules.addAll(getRules);
+            }
         }
         boolean hasGetUpdateRules = reflect.checkMethodExist("getUpdateRules");
         if (hasGetUpdateRules) {
             List<Rule> getUpdateRules= (List<Rule>) reflect.invoke("getUpdateRules");
-            rules.addAll(getUpdateRules);
+            if (getUpdateRules!= null) {
+                rules.addAll(getUpdateRules);
+            }
         }
         return rules;
     }

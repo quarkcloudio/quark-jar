@@ -36,14 +36,14 @@ public class Message extends Component {
     }
 
     // 返回成功
-    public static Object success(String message) {
+    public static Object success(Object message) {
         return new Message().
         setType("success").
         setContent(message);
     }
 
     // 返回成功
-    public static Object success(String message,String url) {
+    public static Object success(Object message,String url) {
         return new Message().
         setType("success").
         setContent(message).
@@ -51,7 +51,7 @@ public class Message extends Component {
     }
 
     // 返回成功
-    public static Object success(String message,String url,Object data) {
+    public static Object success(Object message,String url,Object data) {
         return new Message().
         setType("success").
         setContent(message).
@@ -60,7 +60,7 @@ public class Message extends Component {
     }
 
     // 返回失败
-    public static Object error(String message) {
+    public static Object error(Object message) {
         return new Message().
         setType("error").
         setContent(message);
