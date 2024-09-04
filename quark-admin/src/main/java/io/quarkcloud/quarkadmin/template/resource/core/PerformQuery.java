@@ -34,8 +34,26 @@ public class PerformQuery<T> {
     }
 
     // 构建查询条件
-    @SuppressWarnings("unchecked")
     public MPJLambdaWrapper<T> buildIndexQuery() {
+
+        // 搜索组件
+        MPJLambdaWrapper<T> getQueryWrapper = this.applySearch(this.queryWrapper);
+
+        // 列过滤器
+        getQueryWrapper = this.applyColumnFilters(getQueryWrapper);
+
+        // 返回
+        return getQueryWrapper;
+    }
+
+    // 创建导出查询
+    public MPJLambdaWrapper<T> buildExportQuery() {
+        return queryWrapper;
+    }
+
+    // 构建查询条件
+    @SuppressWarnings("unchecked")
+    public MPJLambdaWrapper<T> applySearch(MPJLambdaWrapper<T> queryWrapper) {
         String searchParam = context.getParameter("search");
         if (searchParam == null || searchParam == "") {
             return queryWrapper;
@@ -60,8 +78,30 @@ public class PerformQuery<T> {
         return queryWrapper;
     }
 
-    // 创建导出查询
-    public MPJLambdaWrapper<T> buildExportQuery() {
+    // 构建查询条件
+    @SuppressWarnings("unchecked")
+    public MPJLambdaWrapper<T> applyColumnFilters(MPJLambdaWrapper<T> queryWrapper) {
+        String filterParam = context.getParameter("filter");
+        if (filterParam == null || filterParam == "") {
+            return queryWrapper;
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, List<Object>> map = null;
+        try {
+            map = mapper.readValue(filterParam, Map.class);
+        } catch (JsonProcessingException e) {
+            return queryWrapper;
+        }
+        if (map==null) {
+            return queryWrapper;
+        }
+        for (Map.Entry<String, List<Object>> entry : map.entrySet()) {
+            String key = entry.getKey();
+            List<Object> value = entry.getValue();
+            if (key!=null&&value!=null) {
+                queryWrapper.in(key, value);
+            }
+        }
         return queryWrapper;
     }
 }
