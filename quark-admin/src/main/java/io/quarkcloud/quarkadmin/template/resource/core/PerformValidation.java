@@ -1,10 +1,12 @@
 package io.quarkcloud.quarkadmin.template.resource.core;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import io.quarkcloud.quarkadmin.component.form.Rule;
+import io.quarkcloud.quarkadmin.component.form.fields.When;
 import io.quarkcloud.quarkadmin.component.form.fields.WhenItem;
 import io.quarkcloud.quarkcore.service.Context;
 import io.quarkcloud.quarkcore.util.Reflect;
@@ -54,7 +56,11 @@ public class PerformValidation<T> {
                 case "min":
                     if (fieldValue instanceof String) {
                         String fieldStr = (String) fieldValue;
-                        int strNum = fieldStr.length(); // Adjust this if you need to count Unicode code points
+                        int strNum = 0;
+                        if (fieldStr != null) {
+                            // 获取 UTF-8 编码的字节数组长度
+                            strNum = fieldStr.getBytes(StandardCharsets.UTF_8).length;
+                        }
                         if (strNum < rule.getMin()) {
                             String errMsg = rule.getMessage();
                             if (!errMsg.isEmpty()) {
@@ -67,7 +73,11 @@ public class PerformValidation<T> {
                 case "max":
                     if (fieldValue instanceof String) {
                         String fieldStr = (String) fieldValue;
-                        int strNum = fieldStr.length(); // Adjust this if you need to count Unicode code points
+                        int strNum = 0;
+                        if (fieldStr != null) {
+                            // 获取 UTF-8 编码的字节数组长度
+                            strNum = fieldStr.getBytes(StandardCharsets.UTF_8).length;
+                        }
                         if (strNum > rule.getMax()) {
                             String errMsg = rule.getMessage();
                             if (!errMsg.isEmpty()) {
@@ -105,6 +115,35 @@ public class PerformValidation<T> {
     // 创建请求的验证规则
     public List<Rule> rulesForCreation(Context context) {
         List<Rule> rules = new ArrayList<>();
+        ResolveField resolveField = new ResolveField(fields, context);
+        Object fields = resolveField.creationFieldsWithoutWhen(context);
+        if (fields instanceof List<?>) {
+            for (Object v : (List<?>) fields) {
+                rules.addAll(getRulesForCreation(v));
+                Reflect reflect = new Reflect(v);
+                boolean hasGetWhen = reflect.checkMethodExist("getWhen");
+                if (hasGetWhen) {
+                    When when= (When) reflect.invoke("getWhen");
+                    if (when!= null) {
+                        List<WhenItem> whenItems = when.getItems();
+                        if (whenItems != null && !whenItems.isEmpty()) {
+                            for (WhenItem item : whenItems) {
+                                if (needValidateWhenRules(context, item)) {
+                                    Object body = item.getBody();
+                                    if (body instanceof List<?>) {
+                                        for (Object bv : (List<?>) body) {
+                                            rules.addAll(getRulesForCreation(bv));
+                                        }
+                                    } else {
+                                        rules.addAll(getRulesForCreation(body));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
         return rules;
     }
 
@@ -176,6 +215,35 @@ public class PerformValidation<T> {
     // 更新请求的验证规则
     public List<Rule> rulesForUpdate(Context context) {
         List<Rule> rules = new ArrayList<>();
+        ResolveField resolveField = new ResolveField(fields, context);
+        Object fields = resolveField.updateFieldsWithoutWhen(context);
+        if (fields instanceof List<?>) {
+            for (Object v : (List<?>) fields) {
+                rules.addAll(getRulesForUpdate(v));
+                Reflect reflect = new Reflect(v);
+                boolean hasGetWhen = reflect.checkMethodExist("getWhen");
+                if (hasGetWhen) {
+                    When when= (When) reflect.invoke("getWhen");
+                    if (when!= null) {
+                        List<WhenItem> whenItems = when.getItems();
+                        if (whenItems != null && !whenItems.isEmpty()) {
+                            for (WhenItem item : whenItems) {
+                                if (needValidateWhenRules(context, item)) {
+                                    Object body = item.getBody();
+                                    if (body instanceof List<?>) {
+                                        for (Object bv : (List<?>) body) {
+                                            rules.addAll(getRulesForUpdate(bv));
+                                        }
+                                    } else {
+                                        rules.addAll(getRulesForUpdate(body));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
         return rules;
     }
 
@@ -206,6 +274,35 @@ public class PerformValidation<T> {
     // 创建请求的验证规则
     public List<Rule> rulesForImport(Context context) {
         List<Rule> rules = new ArrayList<>();
+        ResolveField resolveField = new ResolveField(fields, context);
+        Object fields = resolveField.importFieldsWithoutWhen(context);
+        if (fields instanceof List<?>) {
+            for (Object v : (List<?>) fields) {
+                rules.addAll(getRulesForCreation(v));
+                Reflect reflect = new Reflect(v);
+                boolean hasGetWhen = reflect.checkMethodExist("getWhen");
+                if (hasGetWhen) {
+                    When when= (When) reflect.invoke("getWhen");
+                    if (when!= null) {
+                        List<WhenItem> whenItems = when.getItems();
+                        if (whenItems != null && !whenItems.isEmpty()) {
+                            for (WhenItem item : whenItems) {
+                                if (needValidateWhenRules(context, item)) {
+                                    Object body = item.getBody();
+                                    if (body instanceof List<?>) {
+                                        for (Object bv : (List<?>) body) {
+                                            rules.addAll(getRulesForCreation(bv));
+                                        }
+                                    } else {
+                                        rules.addAll(getRulesForCreation(body));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
         return rules;
     }
 }
