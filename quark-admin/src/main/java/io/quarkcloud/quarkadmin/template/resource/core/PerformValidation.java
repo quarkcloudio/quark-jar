@@ -150,8 +150,20 @@ public class PerformValidation<T> {
     }
 
     // 获取创建请求资源规则
+    @SuppressWarnings("unchecked")
     public List<Rule> getRulesForCreation(Object field) {
         List<Rule> rules = new ArrayList<>();
+        Reflect reflect = new Reflect(field);
+        boolean hasGetRules = reflect.checkMethodExist("getRules");
+        if (hasGetRules) {
+            List<Rule> getRules= (List<Rule>) reflect.invoke("getRules");
+            rules.addAll(getRules);
+        }
+        boolean hasGetCreationRules = reflect.checkMethodExist("getCreationRules");
+        if (hasGetCreationRules) {
+            List<Rule> getCreationRules= (List<Rule>) reflect.invoke("getCreationRules");
+            rules.addAll(getCreationRules);
+        }
         return rules;
     }
 
@@ -168,8 +180,20 @@ public class PerformValidation<T> {
     }
 
     // 获取更新请求资源规则
+    @SuppressWarnings("unchecked")
     public List<Rule> getRulesForUpdate(Object field) {
         List<Rule> rules = new ArrayList<>();
+        Reflect reflect = new Reflect(field);
+        boolean hasGetRules = reflect.checkMethodExist("getRules");
+        if (hasGetRules) {
+            List<Rule> getRules= (List<Rule>) reflect.invoke("getRules");
+            rules.addAll(getRules);
+        }
+        boolean hasGetUpdateRules = reflect.checkMethodExist("getUpdateRules");
+        if (hasGetUpdateRules) {
+            List<Rule> getUpdateRules= (List<Rule>) reflect.invoke("getUpdateRules");
+            rules.addAll(getUpdateRules);
+        }
         return rules;
     }
 
