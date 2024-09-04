@@ -583,7 +583,11 @@ public class Checkbox extends Component {
 
     // 当前列值的枚举 valueEnum
     public Map<?, ?> getValueEnum() {
-        return null;
+        Map<Object, String> data = new HashMap<>();
+        for (Option option : options) {
+            data.put(option.getValue(), option.getLabel());
+        }
+        return data;
     }
 
     // 根据value值获取Option的Label

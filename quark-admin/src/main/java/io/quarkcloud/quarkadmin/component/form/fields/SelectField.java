@@ -737,7 +737,11 @@ public class SelectField extends Component {
 
     // 当前列值的枚举 valueEnum
     public Map<?, ?> getValueEnum() {
-        return null;
+        Map<Object, String> data = new HashMap<>();
+        for (Option option : options) {
+            data.put(option.getValue(), option.getLabel());
+        }
+        return data;
     }
 
     public SelectField setLoad(String field, String api) {

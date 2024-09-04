@@ -585,9 +585,7 @@ public class SwitchField extends Component {
 
     // 当前列值的枚举 valueEnum
     public Map<?, ?> getValueEnum() {
-
         Map<Integer, Object> data = new HashMap<>();
-
         data.put(0, this.unCheckedChildren);
         data.put(1, this.checkedChildren);
 

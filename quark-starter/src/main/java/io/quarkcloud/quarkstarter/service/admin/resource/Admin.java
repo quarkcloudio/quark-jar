@@ -49,7 +49,7 @@ public class Admin extends ResourceImpl<AdminMapper,AdminEntity> {
             Field.radio("sex", "性别").setOptions(Arrays.asList(
                 new Radio.Option("男",1),
                 new Radio.Option("女",2)
-            )).setDefaultValue(1),
+            )).setFilters(true).setDefaultValue(1),
             Field.password("password", "密码").onlyOnForms(),
             Field.datetime("lastLoginTime", "最后登录时间").onlyOnIndex(),
             Field.switchField("status", "状态").
