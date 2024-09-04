@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import io.quarkcloud.quarkadmin.component.form.Rule;
 import io.quarkcloud.quarkadmin.component.form.fields.WhenItem;
 import io.quarkcloud.quarkcore.service.Context;
@@ -113,17 +110,15 @@ public class PerformValidation<T> {
 
     // 判断是否需要验证 When 组件里的规则
     public boolean needValidateWhenRules(Context context, WhenItem whenItem) {
-        ObjectMapper objectMapper = new ObjectMapper(); // 用于 JSON 序列化
         String conditionName = whenItem.getConditionName();
         Object conditionOption = whenItem.getOption();
         String conditionOperator = whenItem.getConditionOperator();
-        
-        Map<String, Object> data = null;
-        Object value = data.get(conditionName);
+        Map<String, String[]> data = context.getParameterMap();
+        String[] value = data.get(conditionName);
         if (value == null) {
             return false;
         }
-        String valueString = value.toString();
+        String valueString = value[0];
         if (valueString.isEmpty()) {
             return false;
         }
@@ -139,21 +134,13 @@ public class PerformValidation<T> {
             case ">=":
                 return valueString.compareTo(conditionOption.toString()) >= 0;
             case "has":
-                if (value instanceof List) {
-                    try {
-                        String json = objectMapper.writeValueAsString(value);
-                        return json.contains(conditionOption.toString());
-                    } catch (JsonProcessingException e) {
-                        // Handle JSON processing error
-                        return false;
-                    }
-                } else {
-                    return valueString.contains(conditionOption.toString());
-                }
+                return valueString.contains(conditionOption.toString());
             case "in":
                 if (conditionOption instanceof List) {
-                    List<String> conditionOptionList = (List<String>) conditionOption;
-                    return conditionOptionList.contains(valueString);
+                    List<?> list = (List<?>) conditionOption;
+                    if (!list.isEmpty() && list.get(0) instanceof String) {
+                        return list.contains(valueString);
+                    }
                 }
                 break;
             default:
