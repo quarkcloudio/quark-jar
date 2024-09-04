@@ -1,6 +1,6 @@
 package io.quarkcloud.quarkstarter.service.admin.search;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.github.yulichang.wrapper.MPJLambdaWrapper;
 
 import io.quarkcloud.quarkadmin.template.resource.impl.SearchImpl;
 import io.quarkcloud.quarkcore.service.Context;
@@ -14,7 +14,7 @@ public class Input<T> extends SearchImpl<T> {
     }
 
     // 应用查询条件方法
-    public QueryWrapper<T> apply(Context context, QueryWrapper<T> query, Object value) {
+    public MPJLambdaWrapper<T> apply(Context context, MPJLambdaWrapper<T> query, Object value) {
         return query.like(column, value);
     }
 }
