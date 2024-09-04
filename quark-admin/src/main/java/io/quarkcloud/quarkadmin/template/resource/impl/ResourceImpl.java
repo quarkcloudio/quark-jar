@@ -27,6 +27,7 @@ import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
 import io.quarkcloud.quarkadmin.service.ResourceService;
 import io.quarkcloud.quarkadmin.template.resource.Action;
 import io.quarkcloud.quarkadmin.template.resource.Resource;
+import io.quarkcloud.quarkadmin.template.resource.core.PerformQuery;
 import io.quarkcloud.quarkadmin.template.resource.core.PerformValidation;
 import io.quarkcloud.quarkadmin.template.resource.core.ResolveAction;
 import io.quarkcloud.quarkadmin.template.resource.core.ResolveField;
@@ -74,6 +75,15 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     // 列表页表格是否轮询数据
     public int tablePolling;
     
+    // 全局排序规则
+    public Map<String, String> queryOrder;
+
+    // 列表页排序规则
+    public Map<String, String> indexQueryOrder;
+
+    // 导出数据排序规则
+    public Map<String, String> exportQueryOrder;
+
     // 是否具有导出功能
     public boolean withExport;
 
@@ -86,6 +96,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         this.tableActionColumnTitle = "操作";
         this.tableActionColumnWidth = 200;
         this.backIcon = true;
+        this.indexQueryOrder = Map.of("id", "desc");
     }
 
     // 获取标题
@@ -167,7 +178,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
 
     // 列表查询
     public MPJLambdaWrapper<T> indexQuery(Context context, MPJLambdaWrapper<T> queryWrapper) {
-        return queryWrapper.orderByDesc("id");
+        return queryWrapper;
     }
 
     // 字段
@@ -374,17 +385,26 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         // 查询条件
         MPJLambdaWrapper<T> queryWrapper = new MPJLambdaWrapper<>();
 
-        // 获取查询条件
+        // 获取全局查询条件
         queryWrapper = this.query(context, queryWrapper);
 
-        // 获取查询条件
+        // 获取列表查询条件
         queryWrapper = this.indexQuery(context, queryWrapper);
+
+        Map<String, String> defaultQueryOrder = this.queryOrder;
+        if (defaultQueryOrder == null) {
+            defaultQueryOrder = this.indexQueryOrder;
+        }
+
+        queryWrapper = new PerformQuery<T>(context, queryWrapper).
+            setSearches(this.searches(context)).
+            setDefaultOrder(defaultQueryOrder).
+            buildIndexQuery();
 
         // 设置查询条件
         resourceService.
             setContext(context).
-            setQueryWrapper(queryWrapper).
-            setSearches(this.searches(context));
+            setQueryWrapper(queryWrapper);
 
         // 获取分页
         Object perPage = this.getPerPage();

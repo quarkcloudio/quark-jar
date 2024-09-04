@@ -16,10 +16,13 @@ public class PerformQuery<T> {
     public Context context;
 
     // 查询条件
-    protected MPJLambdaWrapper<T> queryWrapper;
+    public MPJLambdaWrapper<T> queryWrapper;
 
     // 搜索组件
     public List<Object> searches;
+
+    // 排序规则
+    public Map<String, String> defaultQueryOrder;
 
     // 构造函数
     public PerformQuery(Context context, MPJLambdaWrapper<T> queryWrapper) {
@@ -33,6 +36,12 @@ public class PerformQuery<T> {
         return this;
     }
 
+    // 设置默认排序
+    public PerformQuery<T> setDefaultOrder(Map<String, String> defaultOrder) {
+        this.defaultQueryOrder = defaultOrder;
+        return this;
+    }
+
     // 构建查询条件
     public MPJLambdaWrapper<T> buildIndexQuery() {
 
@@ -42,6 +51,9 @@ public class PerformQuery<T> {
         // 列过滤器
         getQueryWrapper = this.applyColumnFilters(getQueryWrapper);
 
+        // 排序
+        getQueryWrapper = this.applyOrderings(getQueryWrapper);
+        
         // 返回
         return getQueryWrapper;
     }
@@ -100,6 +112,48 @@ public class PerformQuery<T> {
             List<Object> value = entry.getValue();
             if (key!=null&&value!=null) {
                 queryWrapper.in(key, value);
+            }
+        }
+        return queryWrapper;
+    }
+
+    // 构建查询条件
+    @SuppressWarnings("unchecked")
+    public MPJLambdaWrapper<T> applyOrderings(MPJLambdaWrapper<T> queryWrapper) {
+        String sorterParam = context.getParameter("sorter");
+        if (sorterParam == null || sorterParam.equals("{}") || sorterParam.isEmpty()) {
+            for (Map.Entry<String, String> entry : defaultQueryOrder.entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue();
+                if (key!=null&&value!=null) {
+                    if (value.equals("asc") || value.equals("ascend")) {
+                        queryWrapper.orderByAsc(key);
+                    } else if (value.equals("desc") || value.equals("descend")) {
+                        queryWrapper.orderByDesc(key);
+                    }
+                }
+            }
+            return queryWrapper;
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, String> map = null;
+        try {
+            map = mapper.readValue(sorterParam, Map.class);
+        } catch (JsonProcessingException e) {
+            return queryWrapper;
+        }
+        if (map==null) {
+            return queryWrapper;
+        }
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            if (key!=null&&value!=null) {
+                if (value.equals("asc") || value.equals("ascend")) {
+                    queryWrapper.orderByAsc(key);
+                } else if (value.equals("desc") || value.equals("descend")) {
+                    queryWrapper.orderByDesc(key);
+                }
             }
         }
         return queryWrapper;
