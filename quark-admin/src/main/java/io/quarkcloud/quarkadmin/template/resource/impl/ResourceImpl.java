@@ -1,6 +1,7 @@
 package io.quarkcloud.quarkadmin.template.resource.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -698,8 +699,40 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     }
 
     // 行为表单值
+    @SuppressWarnings("unchecked")
     public Object actionValuesRender(Context context) {
-        return Message.success("操作成功！");
+        Map<String, Object> data = new HashMap<>();
+        List<Object> actions = this.actions(context);
+        for (Object item : actions) {
+            Action<T> actionInstance = (Action<T>) item;
+            // uri唯一标识
+            String uriKey = actionInstance.getUriKey(item);
+            // 获取行为类型
+            String actionType = actionInstance.getActionType();
+            if ("dropdown".equals(actionType)) {
+                Dropdown<M,T> dropdownActioner = (Dropdown<M,T>) actionInstance;
+                for (Object dropdownAction : dropdownActioner.getActions()) {
+                    String dropdownUriKey = dropdownActioner.getUriKey(dropdownAction);
+                    if (context.getPathVariable("uriKey").equals(dropdownUriKey)) {
+                        Reflect dropdownActionReflect = new Reflect(dropdownAction);
+                        boolean hasDataMethod = dropdownActionReflect.checkMethodExist("data");
+                        if (hasDataMethod) {
+                            data = ( Map<String,Object>) dropdownActionReflect.invoke("data",context.getClass(), context);
+                        }
+                    }
+                }
+            } else {
+                if (context.getPathVariable("uriKey").equals(uriKey)) {
+                    Reflect actionInstanceReflect = new Reflect(actionInstance);
+                    boolean hasDataMethod = actionInstanceReflect.checkMethodExist("data");
+                    if (hasDataMethod) {
+                        data = ( Map<String,Object>) actionInstanceReflect.invoke("data",context.getClass(), context);
+                    }
+                }
+            }
+        }
+
+        return Message.success("操作成功！", null, data);
     }
 
     // 详情页面
