@@ -12,6 +12,8 @@ import org.aspectj.lang.reflect.MethodSignature;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -209,6 +211,57 @@ public class Context {
             }
         }
         return entity;
+    }
+
+    // 从search参数中获取分页数量
+    @SuppressWarnings("unchecked")
+    public Long getPageSizeFromSearch(Long pageSize) {
+        String searchParam = this.getParameter("search");
+        if (searchParam != null && searchParam != "") {
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, Object> map = null;
+            try {
+                map = mapper.readValue(searchParam, Map.class);
+            } catch (JsonProcessingException e) {
+                pageSize = 0L;
+            }
+            if (map!=null) {
+                Object getPageSize = map.get("pageSize");
+                if (getPageSize!=null && getPageSize instanceof String) {
+                    pageSize = Long.parseLong((String) getPageSize);
+                }
+                if (getPageSize instanceof Number) {
+                    pageSize = ((Number) getPageSize).longValue();
+                }
+            }
+        }
+        return pageSize;
+    }
+
+    // 从search参数中获取页码
+    @SuppressWarnings("unchecked")
+    public Long getPageFromSearch() {
+        long currentPage = 1;
+        String searchParam = this.getParameter("search");
+        if (searchParam != null && searchParam != "") {
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, Object> map = null;
+            try {
+                map = mapper.readValue(searchParam, Map.class);
+            } catch (JsonProcessingException e) {
+                currentPage = 1;
+            }
+            if (map!=null) {
+                Object getPage = map.get("page");
+                if (getPage!=null && getPage instanceof String) {
+                    currentPage = Long.parseLong((String) getPage);
+                }
+                if (getPage instanceof Number) {
+                    currentPage = ((Number) getPage).longValue();
+                }
+            }
+        }
+        return currentPage;
     }
 
     // 解析token

@@ -32,24 +32,6 @@ public interface ResourceService<M extends ResourceMapper<T>, T> {
     public ResourceServiceImpl<M, T> setQueryWrapper(MPJLambdaWrapper<T> queryWrapper);
 
     /**
-     * 根据上下文获取列表
-     * 
-     * 此方法旨在根据当前上下文检索和返回一个列表
-     * 它不接受任何参数，因为它依赖于外部上下文来获取数据
-     * 
-     * @return List<T> 返回一个泛型列表，包含符合当前上下文条件的元素
-     */
-    public List<T> getListByContext();
-
-    /**
-     * 获取分页数据
-     * 
-     * @param pageSize 每页显示的数据条数，这是一个重要的分页参数，决定了每页数据的数量
-     * @return 返回一个泛型的分页对象，该对象包含当前页的数据以及分页的相关信息
-     */
-    public IPage<T> getPageByContext(long pageSize);
-
-    /**
      * 通过上下文保存实体
      * 
      * 此方法利用当前的上下文环境来保存传入的实体对象它提供了一种在特定上下文中持久化数据的方法，
@@ -196,4 +178,34 @@ public interface ResourceService<M extends ResourceMapper<T>, T> {
      * @return 如果删除成功，返回true；否则返回false
      */
     boolean removeByIds(Collection<? extends Serializable> idList);
+
+    // 查询所有
+    List<T> list();
+
+    // 查询列表
+    List<T> list(Wrapper<T> queryWrapper);
+
+    // 查询（根据ID 批量查询）
+    Collection<T> listByIds(Collection<? extends Serializable> idList);
+
+    // 查询（根据 columnMap 条件）
+    Collection<T> listByMap(Map<String, Object> columnMap);
+
+    // 查询所有列表
+    List<Map<String, Object>> listMaps();
+
+    // 查询列表
+    List<Map<String, Object>> listMaps(Wrapper<T> queryWrapper);
+
+    // 无条件分页查询
+    IPage<T> page(IPage<T> page);
+
+    // 条件分页查询
+    IPage<T> page(IPage<T> page, Wrapper<T> queryWrapper);
+
+    // 无条件分页查询
+    IPage<Map<String, Object>> pageMaps(IPage<Map<String, Object>> page);
+
+    // 条件分页查询
+    IPage<Map<String, Object>> pageMaps(IPage<Map<String, Object>> page, Wrapper<T> queryWrapper);
 }

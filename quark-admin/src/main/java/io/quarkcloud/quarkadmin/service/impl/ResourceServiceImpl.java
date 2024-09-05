@@ -13,9 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 
 import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
@@ -54,47 +51,6 @@ public class ResourceServiceImpl<M extends ResourceMapper<T>, T> implements Reso
     public ResourceServiceImpl<M, T> setUpdateWrapper(LambdaUpdateWrapper<T> updateWrapper) {
         this.updateWrapper = updateWrapper;
         return this;
-    }
-
-    // 获取列表
-    public List<T> getListByContext() {
-        return this.resourceMapper.selectList(queryWrapper);
-    }
-
-    // 获取分页数据
-    @SuppressWarnings("unchecked")
-    public IPage<T> getPageByContext(long pageSize) {
-        long currentPage = 1;
-        String searchParam = context.getParameter("search");
-        if (searchParam != null && searchParam != "") {
-            ObjectMapper mapper = new ObjectMapper();
-            Map<String, Object> map = null;
-            try {
-                map = mapper.readValue(searchParam, Map.class);
-            } catch (JsonProcessingException e) {
-                currentPage = 1;
-            }
-            if (map!=null) {
-                Object getPage = map.get("page");
-                Object getPageSize = map.get("pageSize");
-                if (getPage!=null && getPage instanceof String) {
-                    currentPage = Long.parseLong((String) getPage);
-                }
-                if (getPageSize!=null && getPageSize instanceof String) {
-                    pageSize = Long.parseLong((String) getPageSize);
-                }
-                if (getPage instanceof Number) {
-                    currentPage = ((Number) getPage).longValue();
-                }
-                if (getPageSize instanceof Number) {
-                    pageSize = ((Number) getPageSize).longValue();
-                }
-            }
-        }
-
-        // 构建分页
-        IPage<T> page = new Page<T>(currentPage, pageSize);
-        return this.resourceMapper.selectPage(page, queryWrapper);
     }
 
     // 保存
@@ -292,5 +248,55 @@ public class ResourceServiceImpl<M extends ResourceMapper<T>, T> implements Reso
      */
     public boolean removeByIds(Collection<? extends Serializable> idList) {
         return this.resourceMapper.deleteBatchIds(idList) > 0;
+    }
+
+    // 查询所有
+    public List<T> list() {
+        return this.resourceMapper.selectList(null);
+    }
+
+    // 查询列表
+    public List<T> list(Wrapper<T> queryWrapper) {
+        return this.resourceMapper.selectList(queryWrapper);
+    }
+
+    // 查询（根据ID 批量查询）
+    public Collection<T> listByIds(Collection<? extends Serializable> idList) {
+        return this.resourceMapper.selectBatchIds(idList);
+    }
+
+    // 查询（根据 columnMap 条件）
+    public Collection<T> listByMap(Map<String, Object> columnMap) {
+        return this.resourceMapper.selectByMap(columnMap);
+    }
+
+    // 查询所有列表
+    public List<Map<String, Object>> listMaps() {
+        return this.resourceMapper.selectMaps(null);
+    }
+
+    // 查询列表
+    public List<Map<String, Object>> listMaps(Wrapper<T> queryWrapper) {
+        return this.resourceMapper.selectMaps(queryWrapper);
+    }
+
+    // 无条件分页查询
+    public IPage<T> page(IPage<T> page) {
+        return this.resourceMapper.selectPage(page, null);
+    }
+
+    // 条件分页查询
+    public IPage<T> page(IPage<T> page, Wrapper<T> queryWrapper) {
+        return this.resourceMapper.selectPage(page, queryWrapper);
+    }
+
+    // 无条件分页查询
+    public IPage<Map<String, Object>> pageMaps(IPage<Map<String, Object>> page) {
+        return this.resourceMapper.selectMapsPage(page, null);
+    }
+
+    // 条件分页查询
+    public IPage<Map<String, Object>> pageMaps(IPage<Map<String, Object>> page, Wrapper<T> queryWrapper) {
+        return this.resourceMapper.selectMapsPage(page, queryWrapper);
     }
 }

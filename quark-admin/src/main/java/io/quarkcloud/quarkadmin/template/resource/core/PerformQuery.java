@@ -3,6 +3,7 @@ package io.quarkcloud.quarkadmin.template.resource.core;
 import java.util.List;
 import java.util.Map;
 
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
@@ -18,6 +19,9 @@ public class PerformQuery<T> {
     // 查询条件
     public MPJLambdaWrapper<T> queryWrapper;
 
+    // 查询条件
+    public LambdaUpdateWrapper<T> updateWrapper;
+
     // 搜索组件
     public List<Object> searches;
 
@@ -25,9 +29,20 @@ public class PerformQuery<T> {
     public Map<String, String> defaultQueryOrder;
 
     // 构造函数
-    public PerformQuery(Context context, MPJLambdaWrapper<T> queryWrapper) {
+    public PerformQuery(Context context) {
         this.context = context;
+    }
+
+    // 设置搜索组件
+    public PerformQuery<T> setQueryWrapper(MPJLambdaWrapper<T> queryWrapper) {
         this.queryWrapper = queryWrapper;
+        return this;
+    }
+
+    // 设置搜索组件
+    public PerformQuery<T> setUpdateWrapper(LambdaUpdateWrapper<T> updateWrapper) {
+        this.updateWrapper = updateWrapper;
+        return this;
     }
 
     // 设置搜索组件

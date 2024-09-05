@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
@@ -428,26 +429,27 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
             defaultQueryOrder = this.indexQueryOrder;
         }
 
-        queryWrapper = new PerformQuery<T>(context, queryWrapper).
+        queryWrapper = new PerformQuery<T>(context).
             setSearches(this.searches(context)).
+            setQueryWrapper(queryWrapper).
             setDefaultOrder(defaultQueryOrder).
             buildIndexQuery();
-
-        // 设置查询条件
-        resourceService.
-            setContext(context).
-            setQueryWrapper(queryWrapper);
 
         // 获取分页
         Object perPage = this.getPerPage();
         if (perPage == null || !((perPage instanceof Integer) || (perPage instanceof Long))) {
-            List<T> data = resourceService.getListByContext();
+            List<T> data = resourceService.list(queryWrapper);
             return table.setDatasource(data);
         }
 
-        // 解析分页数据
+        // 默认分页数量
         long pageSize = ((Number) perPage).longValue();
-        IPage<T> data = resourceService.getPageByContext(pageSize);
+
+        // 获取分页参数
+        IPage<T> page = new Page<T>(context.getPageFromSearch(), context.getPageSizeFromSearch(pageSize));
+
+        // 获取分页数据
+        IPage<T> data = resourceService.page(page, queryWrapper);
         long current = data.getCurrent();
         long total = data.getTotal();
         long defaultCurrent = 1;
