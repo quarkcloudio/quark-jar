@@ -611,7 +611,9 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
 
     // 获取编辑表单值
     public Object editValuesRender(Context context) {
-        return Message.success("操作成功！");
+        T data = this.resourceService.setContext(context).getOneByContext();
+        data = beforeEditing(context, data);
+        return Message.success("获取成功！", null, data);
     }
 
     // 保存编辑数据
