@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.apache.commons.lang3.reflect.TypeUtils;
 
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+
 import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
 import io.quarkcloud.quarkadmin.service.ResourceService;
 import io.quarkcloud.quarkadmin.template.resource.Action;
@@ -42,7 +44,7 @@ public class ActionImpl<M extends ResourceMapper<T>, T> implements Action<T> {
     }
 
     // 执行行为句柄
-    public Object handle(Context context, ResourceService<ResourceMapper<T>, T> resourceService) {
+    public Object handle(Context context, LambdaUpdateWrapper<T> updateWrapper, ResourceService<ResourceMapper<T>, T> resourceService) {
         return "Method not implemented";
     }
 

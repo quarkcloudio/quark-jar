@@ -39,10 +39,10 @@ public interface Resource<T> {
     public boolean isWithExport();
 
     // 全局查询
-    public MPJLambdaWrapper<T> query(Context context, MPJLambdaWrapper<T> queryWrapper);
+    public MPJLambdaWrapper<T> queryWrapper(Context context, MPJLambdaWrapper<T> queryWrapper);
 
     // 列表查询
-    public MPJLambdaWrapper<T> indexQuery(Context context, MPJLambdaWrapper<T> queryWrapper);
+    public MPJLambdaWrapper<T> indexQueryWrapper(Context context, MPJLambdaWrapper<T> queryWrapper);
 
     // 字段
     public List<Object> fields(Context context);

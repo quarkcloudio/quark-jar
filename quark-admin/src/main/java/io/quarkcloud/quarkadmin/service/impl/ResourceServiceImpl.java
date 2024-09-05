@@ -11,6 +11,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -34,15 +35,24 @@ public class ResourceServiceImpl<M extends ResourceMapper<T>, T> implements Reso
     // 查询条件
     protected MPJLambdaWrapper<T> queryWrapper;
 
+    // 查询条件
+    protected LambdaUpdateWrapper<T> updateWrapper;
+
     // 设置上下文
     public ResourceServiceImpl<M, T> setContext(Context context) {
         this.context = context;
         return this;
     }
 
-    // 设置查询条件
+    // 设置查询Wrapper
     public ResourceServiceImpl<M, T> setQueryWrapper(MPJLambdaWrapper<T> queryWrapper) {
         this.queryWrapper = queryWrapper;
+        return this;
+    }
+
+    // 设置更新Wrapper
+    public ResourceServiceImpl<M, T> setUpdateWrapper(LambdaUpdateWrapper<T> updateWrapper) {
+        this.updateWrapper = updateWrapper;
         return this;
     }
 

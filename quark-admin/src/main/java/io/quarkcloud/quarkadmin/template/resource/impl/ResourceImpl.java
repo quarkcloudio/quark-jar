@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -173,12 +174,42 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     }
 
     // 全局查询
-    public MPJLambdaWrapper<T> query(Context context, MPJLambdaWrapper<T> queryWrapper) {
+    public MPJLambdaWrapper<T> queryWrapper(Context context, MPJLambdaWrapper<T> queryWrapper) {
         return queryWrapper;
     }
 
+    // 全局查询
+    public LambdaUpdateWrapper<T> updateWrapper(Context context, LambdaUpdateWrapper<T> updateWrapper) {
+        return updateWrapper;
+    }
+
     // 列表查询
-    public MPJLambdaWrapper<T> indexQuery(Context context, MPJLambdaWrapper<T> queryWrapper) {
+    public MPJLambdaWrapper<T> indexQueryWrapper(Context context, MPJLambdaWrapper<T> queryWrapper) {
+        return queryWrapper;
+    }
+
+    // 列表行内编辑查询
+    public LambdaUpdateWrapper<T> editableQueryWrapper(Context context, LambdaUpdateWrapper<T> updateWrapper) {
+        return updateWrapper;
+    }
+
+    // 执行行为查询
+    public LambdaUpdateWrapper<T> actionQueryWrapper(Context context, LambdaUpdateWrapper<T> updateWrapper) {
+        return updateWrapper;
+    }
+
+    // 编辑页面查询
+    public MPJLambdaWrapper<T> editQueryWrapper(Context context, MPJLambdaWrapper<T> queryWrapper) {
+        return queryWrapper;
+    }
+
+    // 详情页面查询
+    public MPJLambdaWrapper<T> detailQueryWrapper(Context context, MPJLambdaWrapper<T> queryWrapper) {
+        return queryWrapper;
+    }
+
+    // 导出数据查询
+    public MPJLambdaWrapper<T> exportQueryWrapper(Context context, MPJLambdaWrapper<T> queryWrapper) {
         return queryWrapper;
     }
 
@@ -387,10 +418,10 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         MPJLambdaWrapper<T> queryWrapper = new MPJLambdaWrapper<>();
 
         // 获取全局查询条件
-        queryWrapper = this.query(context, queryWrapper);
+        queryWrapper = this.queryWrapper(context, queryWrapper);
 
         // 获取列表查询条件
-        queryWrapper = this.indexQuery(context, queryWrapper);
+        queryWrapper = this.indexQueryWrapper(context, queryWrapper);
 
         Map<String, String> defaultQueryOrder = this.queryOrder;
         if (defaultQueryOrder == null) {
@@ -604,15 +635,45 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
 
     // 编辑页组件渲染
     public Object editRender(Context context) {
-        T data = this.resourceService.setContext(context).getOneByContext();
+
+        // 查询条件
+        MPJLambdaWrapper<T> queryWrapper = new MPJLambdaWrapper<>();
+
+        // 获取全局查询条件
+        queryWrapper = this.queryWrapper(context, queryWrapper);
+
+        // 获取编辑页查询条件
+        queryWrapper = this.editQueryWrapper(context, queryWrapper);
+
+        // 获取编辑数据
+        T data = this.resourceService.setContext(context).setQueryWrapper(queryWrapper).getOneByContext();
+
+        // 编辑数据前回调
         data = beforeEditing(context, data);
+
+        // 渲染编辑页组件
         return this.pageComponentRender(context, editComponentRender(context, data));
     }
 
     // 获取编辑表单值
     public Object editValuesRender(Context context) {
-        T data = this.resourceService.setContext(context).getOneByContext();
+        
+        // 查询条件
+        MPJLambdaWrapper<T> queryWrapper = new MPJLambdaWrapper<>();
+
+        // 获取全局查询条件
+        queryWrapper = this.queryWrapper(context, queryWrapper);
+
+        // 获取编辑页查询条件
+        queryWrapper = this.editQueryWrapper(context, queryWrapper);
+
+        // 获取编辑数据
+        T data = this.resourceService.setContext(context).setQueryWrapper(queryWrapper).getOneByContext();
+
+        // 编辑数据前回调
         data = beforeEditing(context, data);
+
+        // 渲染编辑页数据
         return Message.success("获取成功！", null, data);
     }
 
@@ -653,19 +714,42 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
 
     // 表格行内编辑
     public Object editableRender(Context context) {
+
+        // 查询条件
+        LambdaUpdateWrapper<T> updateWrapper = new LambdaUpdateWrapper<T>();
+
+        // 获取全局查询条件
+        updateWrapper = this.updateWrapper(context, updateWrapper);
+
+        // 获取行内编辑查询条件
+        updateWrapper = this.editableQueryWrapper(context, updateWrapper);
+
+        // 更新数据
         T result = this.resourceService.setContext(context).editableUpdate(this.entity);
         if (result == null) {
             return Message.error("操作失败！");
         }
+
+        // 返回成功
         return Message.success("操作成功！");
     }
 
     // 行为解析
     @SuppressWarnings("unchecked")
     public Object actionRender(Context context) {
+
+        // 行为结果
         Object result = null;
-        MPJLambdaWrapper<T> queryWrapper = new MPJLambdaWrapper<>();
-        queryWrapper = this.query(context, queryWrapper);
+
+        // 查询条件
+        LambdaUpdateWrapper<T> queryWrapper = new LambdaUpdateWrapper<>();
+
+        // 获取全局查询条件
+        queryWrapper = this.updateWrapper(context, queryWrapper);
+
+        // 获取行为查询条件
+        queryWrapper = this.actionQueryWrapper(context, queryWrapper);
+
         List<Object> actions = this.actions(context);
         for (Object item : actions) {
             Action<T> actionInstance = (Action<T>)item;
@@ -677,8 +761,8 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
                     String dropdownUriKey = dropdownActioner.getUriKey(dropdownAction);
                     if (context.getPathVariable("uriKey").equals(dropdownUriKey)) {
                         Action<T> dropdownActionInstance = (Action<T>) dropdownAction;
-                        ResourceService<ResourceMapper<T>, T> getResourceService = (ResourceService<ResourceMapper<T>, T>) resourceService.setQueryWrapper(queryWrapper);
-                        result = dropdownActionInstance.handle(context, getResourceService);
+                        ResourceService<ResourceMapper<T>, T> getResourceService = (ResourceService<ResourceMapper<T>, T>) resourceService;
+                        result = dropdownActionInstance.handle(context, queryWrapper, getResourceService);
                         Object err = this.afterAction(context, dropdownUriKey, getResourceService);
                         if (err!=null) {
                             return err;
@@ -687,8 +771,8 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
                 }
             } else {
                 if (context.getPathVariable("uriKey").equals(uriKey)) {
-                    ResourceService<ResourceMapper<T>, T> getResourceService = (ResourceService<ResourceMapper<T>, T>) resourceService.setQueryWrapper(queryWrapper);
-                    result = actionInstance.handle(context, getResourceService);
+                    ResourceService<ResourceMapper<T>, T> getResourceService = (ResourceService<ResourceMapper<T>, T>) resourceService;
+                    result = actionInstance.handle(context, queryWrapper, getResourceService);
                     Object err = this.afterAction(context, uriKey, getResourceService);
                     if (err!=null) {
                         return err;
