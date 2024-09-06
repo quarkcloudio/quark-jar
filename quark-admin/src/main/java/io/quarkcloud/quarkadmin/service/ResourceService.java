@@ -12,18 +12,6 @@ import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
 public interface ResourceService<M extends ResourceMapper<T>, T> {
 
     /**
-     * 检查字段是否唯一
-     * 
-     */
-    boolean uniqueValidate(String table, String field, Object fieldValue);
-
-    /**
-     * 检查字段是否唯一
-     * 
-     */
-    boolean uniqueValidate(String table, String field, Object fieldValue, String ignoreField, Object ignoreValue);
-
-    /**
      * 插入数据
      * 
      * @param resourceEntity 要插入的实体
@@ -141,4 +129,16 @@ public interface ResourceService<M extends ResourceMapper<T>, T> {
 
     // 条件分页查询
     IPage<Map<String, Object>> pageMaps(IPage<Map<String, Object>> page, Wrapper<T> queryWrapper);
+
+    /**
+     * 检查字段是否唯一
+     * 
+     */
+    boolean uniqueValidate(String table, String field, Object fieldValue);
+
+    /**
+     * 检查字段是否唯一
+     * 
+     */
+    boolean uniqueValidate(String table, String field, Object fieldValue, String ignoreField, Object ignoreValue);
 }
