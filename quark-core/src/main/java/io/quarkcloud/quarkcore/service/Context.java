@@ -1,6 +1,8 @@
 package io.quarkcloud.quarkcore.service;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -26,7 +28,7 @@ import lombok.Data;
 @Data
 public class Context {
 
-    // joinPoint
+    // 连接点
     public ProceedingJoinPoint joinPoint;
 
     // 得到连接点执行的方法对象
@@ -35,16 +37,30 @@ public class Context {
     // 得到连接点执行的方法
     private Method joinPointMethod;
 
-    // request
+    // 请求对象
     public HttpServletRequest request;
 
-    // response
+    // 响应对象
     public HttpServletResponse response;
 
-    // constructor
+    // 请求体，这里可能会有性能问题
+    public String readerBody;
+
+    // 构造函数
     public Context(HttpServletRequest request, HttpServletResponse response) {
         this.request = request;
         this.response = response;
+        StringBuilder stringBuilder = new StringBuilder();
+        try {
+            BufferedReader reader = request.getReader();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        readerBody = stringBuilder.toString();
     }
 
     // setJoinPoint
@@ -58,6 +74,11 @@ public class Context {
     // getJoinPointAnnotation
     public <T extends Annotation> T getJoinPointAnnotation(Class<T> annotationClass) {
         return this.joinPointMethod.getAnnotation(annotationClass);
+    }
+
+    // getReader
+    public BufferedReader getReader() {
+        return new BufferedReader(new StringReader(readerBody));
     }
 
     // getRequestMapping
@@ -133,7 +154,7 @@ public class Context {
         ObjectMapper mapper = new ObjectMapper();
         T map = null;
         try {
-            map = mapper.readValue(request.getReader(), valueType);
+            map = mapper.readValue(this.getReader(), valueType);
         } catch (StreamReadException e) {
             e.printStackTrace();
         } catch (DatabindException e) {
@@ -150,7 +171,7 @@ public class Context {
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> map = null;
         try {
-            map = mapper.readValue(request.getReader(), Map.class);
+            map = mapper.readValue(this.getReader(), Map.class);
         } catch (StreamReadException e) {
             e.printStackTrace();
         } catch (DatabindException e) {

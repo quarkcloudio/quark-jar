@@ -118,8 +118,8 @@ public class PerformQuery<T> {
     
     // 创建更新查询
     public UpdateWrapper<T> buildUpdateQuery() {
-        String id = (String) context.getRequestParam("id");
-        if (id != null && !id.isEmpty()) {
+        Object id = context.getRequestParam("id");
+        if (id != null) {
             this.updateWrapper.eq("id", id);
         }
         return this.updateWrapper;
