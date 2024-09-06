@@ -1,9 +1,6 @@
 package io.quarkcloud.quarkadmin.service.impl;
 
 import java.io.Serializable;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -11,13 +8,10 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.github.yulichang.wrapper.MPJLambdaWrapper;
 
 import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
 import io.quarkcloud.quarkadmin.service.ResourceService;
-import io.quarkcloud.quarkcore.service.Context;
 import io.quarkcloud.quarkcore.util.Reflect;
 
 public class ResourceServiceImpl<M extends ResourceMapper<T>, T> implements ResourceService<M, T> {
@@ -25,134 +19,6 @@ public class ResourceServiceImpl<M extends ResourceMapper<T>, T> implements Reso
     // 资源mapper
     @Autowired
     protected M resourceMapper;
-
-    // 上下文
-    protected Context context;
-
-    // 查询条件
-    protected MPJLambdaWrapper<T> queryWrapper;
-
-    // 查询条件
-    protected LambdaUpdateWrapper<T> updateWrapper;
-
-    // 设置上下文
-    public ResourceServiceImpl<M, T> setContext(Context context) {
-        this.context = context;
-        return this;
-    }
-
-    // 设置查询Wrapper
-    public ResourceServiceImpl<M, T> setQueryWrapper(MPJLambdaWrapper<T> queryWrapper) {
-        this.queryWrapper = queryWrapper;
-        return this;
-    }
-
-    // 设置更新Wrapper
-    public ResourceServiceImpl<M, T> setUpdateWrapper(LambdaUpdateWrapper<T> updateWrapper) {
-        this.updateWrapper = updateWrapper;
-        return this;
-    }
-
-    // 保存
-    @SuppressWarnings("unchecked")
-    public T saveByContext(T entity) {
-        entity = (T) context.getRequestBody(entity.getClass());
-        this.resourceMapper.insert(entity);
-        return entity;
-    }
-
-    // 解析表格列可编辑数据
-    private Object resolveEditableBody(Context context, Class<? extends Object> clazz) {
-        Object entity = null;
-        try {
-            entity = clazz.getDeclaredConstructor().newInstance();
-        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
-                | NoSuchMethodException | SecurityException e) {
-            e.printStackTrace();
-        }
-        Map<String, String[]> map = context.getParameterMap();
-        for (Map.Entry<String, String[]> entry : map.entrySet()) {
-            String fieldName = entry.getKey();
-            String[] fieldValue = entry.getValue();
-            Field field;
-            try {
-                field = clazz.getDeclaredField(fieldName);
-                field.setAccessible(true);
-                try {
-                    // 根据字段类型转换值
-                    Class<?> fieldType = field.getType();
-                    if (fieldType == String.class) {
-                        field.set(entity, fieldValue[0]);
-                    } else if (fieldType == int.class || fieldType == Integer.class) {
-                        if (fieldValue[0].equals("true")) {
-                            field.set(entity, 1);
-                        } else if (fieldValue[0].equals("false")) {
-                            field.set(entity, 0);
-                        } else {
-                            field.set(entity, Integer.parseInt(fieldValue[0]));
-                        }
-                    } else if (fieldType == long.class || fieldType == Long.class) {
-                        field.set(entity, Long.parseLong(fieldValue[0]));
-                    } else if (fieldType == double.class || fieldType == Double.class) {
-                        field.set(entity, Double.parseDouble(fieldValue[0]));
-                    } else if (fieldType == float.class || fieldType == Float.class) {
-                        field.set(entity, Float.parseFloat(fieldValue[0]));
-                    } else if (fieldType == short.class || fieldType == Short.class) {
-                        field.set(entity, Short.parseShort(fieldValue[0]));
-                    } else if (fieldType == byte.class || fieldType == Byte.class) {
-                        field.set(entity, Byte.parseByte(fieldValue[0]));
-                    } else if (fieldType == boolean.class || fieldType == Boolean.class) {
-                        field.set(entity, Boolean.parseBoolean(fieldValue[0]));
-                    } else if (fieldType == char.class || fieldType == Character.class) {
-                        field.set(entity, fieldValue[0].charAt(0));
-                    }
-                } catch (IllegalArgumentException | IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            } catch (NoSuchFieldException | SecurityException e) {
-                e.printStackTrace();
-            }
-        }
-        return entity;
-    }
-
-    // 更新
-    @SuppressWarnings("unchecked")
-    public T editableUpdate(T entity) {
-        entity = (T) this.resolveEditableBody(context, entity.getClass());
-        this.resourceMapper.updateById(entity);
-        return entity;
-    }
-
-    // 更新
-    @SuppressWarnings("unchecked")
-    public T updateByContext(T entity) {
-        entity = (T) context.getRequestBody(entity.getClass());
-        this.resourceMapper.updateById(entity);
-        return entity;
-    }
-
-    // 获取单个
-    public T getOneByContext() {
-        String id = context.getParameter("id");
-        return this.resourceMapper.selectById(id);
-    }
-
-    // 删除
-    public boolean removeByContext() {
-        String id = context.getParameter("id");
-        boolean result = false;
-        if (id != null && !id.isEmpty()) {
-            if (id.contains(",")) {
-                String[] ids = id.split(",");
-                List<String> idList = Arrays.asList(ids);
-                result = this.removeByIds(idList);
-            } else {
-                result = this.removeById(id);
-            }
-        }
-        return result;
-    }
 
     // 唯一性校验
     public boolean uniqueValidate(String table, String field, Object fieldValue) {

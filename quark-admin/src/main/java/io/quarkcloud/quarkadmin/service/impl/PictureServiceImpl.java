@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.yulichang.wrapper.MPJLambdaWrapper;
 
 import io.quarkcloud.quarkadmin.entity.PictureEntity;
 import io.quarkcloud.quarkadmin.mapper.PictureMapper;
@@ -76,8 +77,8 @@ public class PictureServiceImpl extends ResourceServiceImpl<PictureMapper, Pictu
             }
         }
 
-        // 查询数据库
-        this.queryWrapper.eq("id", id);
+        // 查询条件
+        MPJLambdaWrapper<PictureEntity> queryWrapper = new MPJLambdaWrapper<PictureEntity>().eq("id", id);
         PictureEntity picture = this.getOne(queryWrapper);
         if (picture != null && picture.getId() != 0) {
             path = picture.getUrl();

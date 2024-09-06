@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.yulichang.wrapper.MPJLambdaWrapper;
 
 import io.quarkcloud.quarkadmin.entity.FileEntity;
 import io.quarkcloud.quarkadmin.mapper.FileMapper;
@@ -74,8 +75,8 @@ public class FileServiceImpl extends ResourceServiceImpl<FileMapper, FileEntity>
             }
         }
 
-        // 查询数据库
-        this.queryWrapper.eq("id", id);
+        // 查询条件
+        MPJLambdaWrapper<FileEntity> queryWrapper = new MPJLambdaWrapper<FileEntity>().eq("id", id);
         FileEntity file = this.getOne(queryWrapper);
         if (file != null && file.getId() != 0) {
             path = file.getUrl();

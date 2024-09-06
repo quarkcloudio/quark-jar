@@ -2,7 +2,7 @@ package io.quarkcloud.quarkadmin.template.resource;
 
 import java.util.List;
 
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 
 import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
 import io.quarkcloud.quarkadmin.service.ResourceService;
@@ -11,7 +11,7 @@ import io.quarkcloud.quarkcore.service.Context;
 public interface Action<T> {
 
     // 执行行为
-    Object handle(Context context, LambdaUpdateWrapper<T> updateWrapper, ResourceService<ResourceMapper<T>, T> resourceService);
+    Object handle(Context context, UpdateWrapper<T> updateWrapper, ResourceService<ResourceMapper<T>, T> resourceService);
 
     // 行为key
     String getUriKey(Object action);

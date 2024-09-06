@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -179,8 +179,8 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         return queryWrapper;
     }
 
-    // 全局查询
-    public LambdaUpdateWrapper<T> updateWrapper(Context context, LambdaUpdateWrapper<T> updateWrapper) {
+    // 全局更新
+    public UpdateWrapper<T> updateWrapper(Context context, UpdateWrapper<T> updateWrapper) {
         return updateWrapper;
     }
 
@@ -190,12 +190,12 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     }
 
     // 列表行内编辑查询
-    public LambdaUpdateWrapper<T> editableQueryWrapper(Context context, LambdaUpdateWrapper<T> updateWrapper) {
+    public UpdateWrapper<T> editableQueryWrapper(Context context, UpdateWrapper<T> updateWrapper) {
         return updateWrapper;
     }
 
     // 执行行为查询
-    public LambdaUpdateWrapper<T> actionQueryWrapper(Context context, LambdaUpdateWrapper<T> updateWrapper) {
+    public UpdateWrapper<T> actionQueryWrapper(Context context, UpdateWrapper<T> updateWrapper) {
         return updateWrapper;
     }
 
@@ -203,6 +203,12 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     public MPJLambdaWrapper<T> editQueryWrapper(Context context, MPJLambdaWrapper<T> queryWrapper) {
         return queryWrapper;
     }
+
+    // 保存编辑查询
+    public UpdateWrapper<T> saveWrapper(Context context, UpdateWrapper<T> updateWrapper) {
+        return updateWrapper;
+    }
+
 
     // 详情页面查询
     public MPJLambdaWrapper<T> detailQueryWrapper(Context context, MPJLambdaWrapper<T> queryWrapper) {
@@ -647,8 +653,13 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         // 获取编辑页查询条件
         queryWrapper = this.editQueryWrapper(context, queryWrapper);
 
+        // 构建查询条件
+        queryWrapper = new PerformQuery<T>(context).
+            setQueryWrapper(queryWrapper).
+            buildEditQuery();
+
         // 获取编辑数据
-        T data = this.resourceService.setContext(context).setQueryWrapper(queryWrapper).getOneByContext();
+        T data = this.resourceService.getOne(queryWrapper);
 
         // 编辑数据前回调
         data = beforeEditing(context, data);
@@ -669,8 +680,13 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         // 获取编辑页查询条件
         queryWrapper = this.editQueryWrapper(context, queryWrapper);
 
+        // 构建查询条件
+        queryWrapper = new PerformQuery<T>(context).
+            setQueryWrapper(queryWrapper).
+            buildEditQuery();
+
         // 获取编辑数据
-        T data = this.resourceService.setContext(context).setQueryWrapper(queryWrapper).getOneByContext();
+        T data = this.resourceService.getOne(queryWrapper);
 
         // 编辑数据前回调
         data = beforeEditing(context, data);
@@ -695,8 +711,22 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
             return Message.error(validationResult);
         }
 
+        // 查询条件
+        UpdateWrapper<T> queryWrapper = new UpdateWrapper<T>();
+
+        // 获取全局查询条件
+        queryWrapper = this.updateWrapper(context, queryWrapper);
+
+        // 获取查询条件
+        queryWrapper = this.saveWrapper(context, queryWrapper);
+
+        // 构建查询条件
+        queryWrapper = new PerformQuery<T>(context).
+            setUpdateWrapper(queryWrapper).
+            buildUpdateQuery();
+
         // 保存数据
-        this.resourceService.updateById(getEntity);
+        this.resourceService.update(getEntity, queryWrapper);
 
         // 保存后回调
         return this.afterSaved(context, getEntity);
@@ -715,10 +745,11 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     }
 
     // 表格行内编辑
+    @SuppressWarnings("unchecked")
     public Object editableRender(Context context) {
 
         // 查询条件
-        LambdaUpdateWrapper<T> updateWrapper = new LambdaUpdateWrapper<T>();
+        UpdateWrapper<T> updateWrapper = new UpdateWrapper<T>();
 
         // 获取全局查询条件
         updateWrapper = this.updateWrapper(context, updateWrapper);
@@ -726,9 +757,17 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         // 获取行内编辑查询条件
         updateWrapper = this.editableQueryWrapper(context, updateWrapper);
 
+        // 构建查询条件
+        updateWrapper = new PerformQuery<T>(context).
+            setUpdateWrapper(updateWrapper).
+            buildEditableQuery();
+
+        // 获取实体数据
+        T getEntity = (T) context.getEditableBody(entity.getClass());
+
         // 更新数据
-        T result = this.resourceService.setContext(context).editableUpdate(this.entity);
-        if (result == null) {
+        boolean result = this.resourceService.update(getEntity, updateWrapper);
+        if (!result) {
             return Message.error("操作失败！");
         }
 
@@ -744,7 +783,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         Object result = null;
 
         // 查询条件
-        LambdaUpdateWrapper<T> queryWrapper = new LambdaUpdateWrapper<>();
+        UpdateWrapper<T> queryWrapper = new UpdateWrapper<>();
 
         // 获取全局查询条件
         queryWrapper = this.updateWrapper(context, queryWrapper);

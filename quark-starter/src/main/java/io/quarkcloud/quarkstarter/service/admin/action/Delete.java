@@ -2,7 +2,7 @@ package io.quarkcloud.quarkstarter.service.admin.action;
 
 import java.util.Arrays;
 
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 
 import io.quarkcloud.quarkadmin.component.message.Message;
 import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
@@ -63,8 +63,8 @@ public class Delete<M, T> extends ActionImpl<ResourceMapper<T>, T> {
     }
 
     // 执行行为句柄
-    public Object handle(Context context, LambdaUpdateWrapper<T> updateWrapper, ResourceService<ResourceMapper<T>, T> resourceService) {
-        boolean result = resourceService.setContext(context).removeByContext();
+    public Object handle(Context context, UpdateWrapper<T> updateWrapper, ResourceService<ResourceMapper<T>, T> resourceService) {
+        boolean result = resourceService.remove(updateWrapper);
         if (!result) {
             return Message.error("操作失败！");
         }

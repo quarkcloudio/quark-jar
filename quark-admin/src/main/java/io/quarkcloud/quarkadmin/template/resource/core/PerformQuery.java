@@ -1,9 +1,10 @@
 package io.quarkcloud.quarkadmin.template.resource.core;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
@@ -19,8 +20,8 @@ public class PerformQuery<T> {
     // 查询条件
     public MPJLambdaWrapper<T> queryWrapper;
 
-    // 查询条件
-    public LambdaUpdateWrapper<T> updateWrapper;
+    // 更新条件
+    public UpdateWrapper<T> updateWrapper;
 
     // 搜索组件
     public List<Object> searches;
@@ -40,7 +41,7 @@ public class PerformQuery<T> {
     }
 
     // 设置搜索组件
-    public PerformQuery<T> setUpdateWrapper(LambdaUpdateWrapper<T> updateWrapper) {
+    public PerformQuery<T> setUpdateWrapper(UpdateWrapper<T> updateWrapper) {
         this.updateWrapper = updateWrapper;
         return this;
     }
@@ -57,25 +58,77 @@ public class PerformQuery<T> {
         return this;
     }
 
-    // 构建查询条件
-    public MPJLambdaWrapper<T> buildIndexQuery() {
+    // 构建行为查询
+    public UpdateWrapper<T> buildActionQuery() {
+        String id = context.getParameter("id");
+        if (id != null && !id.isEmpty()) {
+            if (id.contains(",")) {
+                String[] ids = id.split(",");
+                List<String> idList = Arrays.asList(ids);
+                this.updateWrapper.in("id", idList);
+            } else {
+                this.updateWrapper.eq("id", id);
+            }
+        }
+        return this.updateWrapper;
+    }
 
-        // 搜索组件
-        MPJLambdaWrapper<T> getQueryWrapper = this.applySearch(this.queryWrapper);
+    // 构建详情查询
+    public MPJLambdaWrapper<T> buildDetailQuery() {
+        String id = context.getParameter("id");
+        if (id != null && !id.isEmpty()) {
+            this.queryWrapper.eq("id", id);
+        }
+        return this.queryWrapper;
+    }
 
-        // 列过滤器
-        getQueryWrapper = this.applyColumnFilters(getQueryWrapper);
-
-        // 排序
-        getQueryWrapper = this.applyOrderings(getQueryWrapper);
-        
-        // 返回
-        return getQueryWrapper;
+    // 构建详情查询
+    public MPJLambdaWrapper<T> buildEditQuery() {
+        String id = context.getParameter("id");
+        if (id != null && !id.isEmpty()) {
+            this.queryWrapper.eq("id", id);
+        }
+        return this.queryWrapper;
     }
 
     // 创建导出查询
     public MPJLambdaWrapper<T> buildExportQuery() {
-        return queryWrapper;
+        MPJLambdaWrapper<T> getQueryWrapper = this.applySearch(this.queryWrapper);
+        getQueryWrapper = this.applyColumnFilters(getQueryWrapper);
+        getQueryWrapper = this.applyOrderings(getQueryWrapper);
+        return getQueryWrapper;
+    }
+
+    // 构建列表查询
+    public MPJLambdaWrapper<T> buildIndexQuery() {
+        MPJLambdaWrapper<T> getQueryWrapper = this.applySearch(this.queryWrapper);
+        getQueryWrapper = this.applyColumnFilters(getQueryWrapper);
+        getQueryWrapper = this.applyOrderings(getQueryWrapper);
+        return getQueryWrapper;
+    }
+
+    // 构建行内编辑查询
+    public UpdateWrapper<T> buildEditableQuery() {
+        String id = context.getParameter("id");
+        if (id != null && !id.isEmpty()) {
+            this.updateWrapper.eq("id", id);
+        }
+        return this.updateWrapper;
+    }
+    
+    // 创建更新查询
+    public UpdateWrapper<T> buildUpdateQuery() {
+        String id = (String) context.getRequestParam("id");
+        if (id != null && !id.isEmpty()) {
+            if (id.contains(",")) {
+                String[] ids = id.split(",");
+                List<String> idList = Arrays.asList(ids);
+                this.updateWrapper.in("id", idList);
+            } else {
+                this.updateWrapper.eq("id", id);
+            }
+        }
+        return this.updateWrapper;
     }
 
     // 构建查询条件
