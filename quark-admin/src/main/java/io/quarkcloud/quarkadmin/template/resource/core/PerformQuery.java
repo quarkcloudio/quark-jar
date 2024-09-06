@@ -120,13 +120,7 @@ public class PerformQuery<T> {
     public UpdateWrapper<T> buildUpdateQuery() {
         String id = (String) context.getRequestParam("id");
         if (id != null && !id.isEmpty()) {
-            if (id.contains(",")) {
-                String[] ids = id.split(",");
-                List<String> idList = Arrays.asList(ids);
-                this.updateWrapper.in("id", idList);
-            } else {
-                this.updateWrapper.eq("id", id);
-            }
+            this.updateWrapper.eq("id", id);
         }
         return this.updateWrapper;
     }
