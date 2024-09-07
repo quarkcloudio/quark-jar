@@ -93,4 +93,43 @@ public class FileServiceImpl extends ResourceServiceImpl<FileMapper, FileEntity>
 
         return null;
     }
+
+    @SuppressWarnings("unchecked")
+    public String getFilePath(Object id) {
+        String path = "";
+        if (id instanceof String) {
+            String getId = (String) id;
+            if (getId.contains("{")) {
+                ObjectMapper objectMapper = new ObjectMapper();
+                try {
+                    Object jsonData = objectMapper.readValue(getId, Object.class);
+                    if (jsonData instanceof Map) {
+                        Map<String, Object> mapData = (Map<String, Object>) jsonData;
+                        path = (String) mapData.get("path");
+                    }
+                    if (jsonData instanceof List) {
+                        List<Map<String, Object>> arrayData = (List<Map<String, Object>>) jsonData;
+                        path = (String) arrayData.get(0).get("path");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if (!path.isEmpty()) {
+                    return path;
+                }
+            }
+        }
+
+        // 查询条件
+        MPJLambdaWrapper<FileEntity> queryWrapper = new MPJLambdaWrapper<FileEntity>().eq("id", id);
+        FileEntity file = this.getOne(queryWrapper);
+        if (file != null && file.getId() != 0) {
+            path = file.getPath();
+        }
+        if (!path.isEmpty()) {
+            return path;
+        }
+
+        return path;
+    }
 }

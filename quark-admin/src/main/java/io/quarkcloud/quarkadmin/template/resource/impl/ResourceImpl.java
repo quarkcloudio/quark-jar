@@ -1,5 +1,6 @@
 package io.quarkcloud.quarkadmin.template.resource.impl;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,7 +18,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
+import cn.hutool.core.util.IdUtil;
+import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
 import cn.hutool.poi.excel.ExcelWriter;
 import io.quarkcloud.quarkcore.service.Context;
@@ -34,6 +38,7 @@ import io.quarkcloud.quarkadmin.component.table.Table;
 import io.quarkcloud.quarkadmin.component.table.ToolBar;
 import io.quarkcloud.quarkadmin.component.tabs.Tabs;
 import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
+import io.quarkcloud.quarkadmin.service.FileService;
 import io.quarkcloud.quarkadmin.service.ResourceService;
 import io.quarkcloud.quarkadmin.template.resource.Action;
 import io.quarkcloud.quarkadmin.template.resource.Resource;
@@ -49,6 +54,9 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
 
     @Autowired
     ResourceService<M, T> resourceService;
+
+    @Autowired
+    private FileService fileService;
 
     // 注解实例
     protected AdminResource annotationClass = null;
@@ -978,8 +986,8 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         List<Object> getFields = fields(context);
         List<Object> fields = new ResolveField(getFields, context).importFields(context);
         ResolveImport resolveImport = new ResolveImport();
-
         List<String> exportTitles = new ArrayList<>();
+
         for (Object v : fields) {
             String label = resolveImport.getFieldLabel(v);
             exportTitles.add(label + resolveImport.getFieldRemark(v));
@@ -1003,8 +1011,154 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     }
 
     // 导入数据
+    @SuppressWarnings("unchecked")
     public Object importRender(Context context) {
-        return Message.success("操作成功！");
+        Object fileId = context.getRequestParam("fileId");
+        if (fileId == null) {
+            return Message.error("参数错误！");
+        }
+
+        List<Object> getFileId= (List<Object>) fileId;
+        if (getFileId.size()==0) {
+            return Message.error("参数错误！");
+        }
+
+        Reflect fieldReflect = new Reflect(getFileId.get(0));
+        boolean idFieldExist = fieldReflect.checkFieldExist("id");
+        if (!idFieldExist) {
+            return Message.error("参数错误！");
+        }
+
+        Object id = fieldReflect.getFieldValue("id");
+        if (id == null) {
+            return Message.error("参数错误！");
+        }
+
+        String excelFilePath = fileService.getFilePath(id);
+        if (excelFilePath == null || excelFilePath.contains("")) {
+            return Message.error("未找到上传的文件！");
+        }
+
+        ExcelReader reader = ExcelUtil.getReader(excelFilePath);
+        List<List<Object>> importData = reader.read();
+        if (importData.size() == 0) {
+            return Message.error("导入数据为空！");
+        }
+
+        // 表格头部
+        List<Object> importHead = importData.get(0);
+        importData.remove(0); // 去除表格头部
+
+        // 导入前回调
+        List<List<Object>> lists = this.beforeImporting(context, importData);
+
+        boolean importResult = true;
+        int importTotalNum = lists.size();
+        int importSuccessedNum = 0;
+        int importFailedNum = 0;
+        List<List<Object>> importFailedData = new ArrayList<>();
+
+        // 获取字段
+        List<Object> getFields = fields(context);
+        List<Object> fields = new ResolveField(getFields, context).importFields(context);
+        ResolveImport resolveImport = new ResolveImport();
+        ResourceService<ResourceMapper<T>, T> getResourceService = (ResourceService<ResourceMapper<T>, T>) this.resourceService;
+
+        // 解析字段
+        for (List<Object> item : lists) {
+            // 获取表单数据
+            Map<String, Object> formValues = resolveImport.transformFormValues(fields, item);
+
+            // 验证表单条件
+            Object validationResult = new PerformValidation<T>(context, this.fields(context), getResourceService).validatorForImport(formValues);
+            if (validationResult != null) {
+                importResult = false;
+                importFailedNum++;
+                item.add(validationResult);
+                importFailedData.add(item);
+                continue;
+            }
+
+            // 验证保存前回调条件
+            Map<String, Object> submitData;
+            try {
+                submitData = this.beforeSaving(context, formValues);
+            } catch (Exception e) {
+                importResult = false;
+                importFailedNum++;
+                item.add(e.getMessage());
+                importFailedData.add(item);
+                continue;
+            }
+
+            // 插入数据库
+            Map<String, Object> data = resolveImport.getSubmitData(fields, submitData);
+            ObjectMapper mapper = new ObjectMapper();
+            T resourceEntity = (T) mapper.convertValue(data, this.entity.getClass());
+            boolean result = this.resourceService.save(resourceEntity);
+            if (!result) {
+                importResult = false;
+                importFailedNum++;
+                item.add("操作失败");
+                importFailedData.add(item);
+                continue;
+            }
+
+            // 保存后回调
+            try {
+                this.afterSaved(context, resourceEntity);
+            } catch (Exception e) {
+                importResult = false;
+                importFailedNum++;
+                item.add(e.getMessage());
+                importFailedData.add(item);
+                continue;
+            }
+
+            importSuccessedNum++;
+        }
+
+        // 返回导入失败错误数据
+        if (!importResult) {
+            String filePath = "public/storage/failImports/";
+            String fileName = IdUtil.simpleUUID() + ".xlsx";
+            String fileUrl = "//" + context.request.getRemoteHost() + "/storage/failImports/" + fileName;
+
+            // 不存在路径，则创建
+            File dir = FileUtil.file(filePath);
+            if (!FileUtil.exist(dir)) {
+                FileUtil.mkdir(dir);
+            }
+
+            List<List<Object>> rows = new ArrayList<>();
+            importHead.add("错误信息");
+            rows.add(importHead);
+            rows.addAll(importFailedData);
+
+            // 通过工具类创建writer
+            ExcelWriter writer = ExcelUtil.getWriter(filePath + fileName);
+            writer.write(rows, true);
+            writer.close();
+
+            // 创建组件
+            String tpl1 = "导入总量: " + importTotalNum;
+            String tpl2 = "成功数量: " + importSuccessedNum;
+            String tpl3 = "失败数量: <span style='color:#ff4d4f'>" + importFailedNum + "</span> <a href='" + fileUrl + "' target='_blank'>下载失败数据</a>";
+
+            String component = "<div style='margin-left: 50px; margin-bottom: 20px;'>"
+                    + "<div>" + tpl1 + "</div>"
+                    + "<div>" + tpl2 + "</div>"
+                    + "<div>" + tpl3 + "</div>"
+                    + "</div>";
+
+            return component;
+        }
+
+        // 重定向
+        String redirectUrl = "/layout/index?api=/api/admin/{resource}/index".replace("{resource}", context.getPathVariable("resource"));
+        
+        // 返回重定向
+        return Message.success("操作成功！", redirectUrl);
     }
 
     // 导出数据
