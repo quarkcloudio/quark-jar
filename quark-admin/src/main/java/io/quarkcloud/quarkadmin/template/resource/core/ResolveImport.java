@@ -10,7 +10,7 @@ import io.quarkcloud.quarkadmin.component.form.fields.SelectField;
 import io.quarkcloud.quarkadmin.component.form.fields.SwitchField;
 import io.quarkcloud.quarkcore.util.Reflect;
 
-public class ResolveImportTemplate {
+public class ResolveImport {
 
     // 获取导入模板字段Label
     public String getFieldLabel(Object field) {

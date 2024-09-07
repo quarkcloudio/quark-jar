@@ -41,7 +41,7 @@ import io.quarkcloud.quarkadmin.template.resource.core.PerformQuery;
 import io.quarkcloud.quarkadmin.template.resource.core.PerformValidation;
 import io.quarkcloud.quarkadmin.template.resource.core.ResolveAction;
 import io.quarkcloud.quarkadmin.template.resource.core.ResolveField;
-import io.quarkcloud.quarkadmin.template.resource.core.ResolveImportTemplate;
+import io.quarkcloud.quarkadmin.template.resource.core.ResolveImport;
 import io.quarkcloud.quarkadmin.template.resource.core.ResolveSearch;
 import io.quarkcloud.quarkadmin.template.resource.impl.action.Dropdown;
 
@@ -977,12 +977,12 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     public Object importTemplateRender(Context context) throws IOException {
         List<Object> getFields = fields(context);
         List<Object> fields = new ResolveField(getFields, context).importFields(context);
-        ResolveImportTemplate resolveImportTemplate = new ResolveImportTemplate();
+        ResolveImport resolveImport = new ResolveImport();
 
         List<String> exportTitles = new ArrayList<>();
         for (Object v : fields) {
-            String label = resolveImportTemplate.getFieldLabel(v);
-            exportTitles.add(label + resolveImportTemplate.getFieldRemark(v));
+            String label = resolveImport.getFieldLabel(v);
+            exportTitles.add(label + resolveImport.getFieldRemark(v));
         }
 
         // 通过工具类创建writer，默认创建xls格式
