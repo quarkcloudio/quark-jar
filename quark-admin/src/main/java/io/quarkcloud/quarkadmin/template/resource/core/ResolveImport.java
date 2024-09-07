@@ -1,7 +1,12 @@
 package io.quarkcloud.quarkadmin.template.resource.core;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.quarkcloud.quarkadmin.component.form.Rule;
 import io.quarkcloud.quarkadmin.component.form.fields.Checkbox;
@@ -140,5 +145,79 @@ public class ResolveImport {
         }
 
         return String.join("，", messages);
+    }
+
+    // 将表格数据转换成表单数据
+    public Map<String, Object> transformFormValues(List<Object> fields, List<Object> data) {
+        Map<String, Object> result = new HashMap<>();
+        for (int k = 0; k < fields.size(); k++) {
+            if (data.get(k) != null) {
+                Reflect fieldReflect = new Reflect(fields.get(k));
+                boolean nameFieldExist = fieldReflect.checkFieldExist("name");
+                if (nameFieldExist) {
+                    String name = (String) fieldReflect.getFieldValue("name");
+                    result.put(name, data.get(k));
+                }
+            }
+        }
+        return result;
+    }
+
+    // 获取提交表单的数据
+    public Map<String, Object> getSubmitData(List<Object> fields, Map<String, Object> submitData) {
+        Map<String, Object> result = new HashMap<>();
+        ObjectMapper objectMapper = new ObjectMapper();
+        String component = "";
+        String name = "";
+        for (Object field : fields) {
+            Reflect fieldReflect = new Reflect(field);
+
+            // 获取字段组件名称
+            boolean componentFieldExist = fieldReflect.checkFieldExist("component");
+            if (componentFieldExist) {
+                component = (String) fieldReflect.getFieldValue("component");
+            }
+
+            // 获取字段名称
+            boolean nameFieldExist = fieldReflect.checkFieldExist("name");
+            if (nameFieldExist) {
+                name = (String) fieldReflect.getFieldValue("name");
+            }
+
+            if (componentFieldExist && nameFieldExist) {
+                Object value = submitData.get(name);
+                switch (component) {
+                    case "inputNumberField":
+                        result.put(name, value);
+                        break;
+                    case "textField":
+                        result.put(name, value.toString().trim());
+                        break;
+                    case "selectField":
+                    case "checkboxField":
+                    case "radioField":
+                        Radio radioField = (Radio) field;
+                        result.put(name, radioField.getOptionValue(value.toString()));
+                        break;
+                    case "switchField":
+                        SwitchField switchField = (SwitchField) field;
+                        result.put(name, switchField.getOptionValue(value.toString()));
+                        break;
+                    default:
+                        result.put(name, value);
+                        break;
+                }
+    
+                Object fieldValue = result.get(name);
+                if (fieldValue instanceof List || fieldValue instanceof Map) {
+                    try {
+                        result.put(name, objectMapper.writeValueAsString(fieldValue));
+                    } catch (JsonProcessingException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        return result;
     }
 }
