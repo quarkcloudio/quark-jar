@@ -89,6 +89,26 @@ public class AdminResourceController {
         return new Context(request, response);
     }
 
+    @RequestMapping("/api/admin/{resource}/detail")
+    @ResponseBody
+    @AdminResourceDetailRender
+    public Object detail(HttpServletRequest request, HttpServletResponse response) {
+        return new Context(request, response);
+    }
+
+    @RequestMapping("/api/admin/{resource}/{uriKey}/form")
+    @ResponseBody
+    public Object form(HttpServletRequest request, HttpServletResponse response) {
+        return new Context(request, response);
+    }
+
+    @RequestMapping("/api/admin/{resource}/import/template")
+    @ResponseBody
+    @AdminResourceImportTemplateRender
+    public Object importTemplate(HttpServletRequest request, HttpServletResponse response) {
+        return new Context(request, response);
+    }
+
     @RequestMapping("/api/admin/{resource}/import")
     @ResponseBody
     @AdminResourceImportRender
@@ -100,26 +120,6 @@ public class AdminResourceController {
     @ResponseBody
     @AdminResourceExportRender
     public Object excelExport(HttpServletRequest request, HttpServletResponse response) {
-        return new Context(request, response);
-    }
-
-    @RequestMapping("/api/admin/{resource}/detail")
-    @ResponseBody
-    @AdminResourceDetailRender
-    public Object detail(HttpServletRequest request, HttpServletResponse response) {
-        return new Context(request, response);
-    }
-
-    @RequestMapping("/api/admin/{resource}/import/template")
-    @ResponseBody
-    @AdminResourceImportTemplateRender
-    public Object importTemplate(HttpServletRequest request, HttpServletResponse response) {
-        return new Context(request, response);
-    }
-
-    @RequestMapping("/api/admin/{resource}/{uriKey}/form")
-    @ResponseBody
-    public Object form(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
 }
