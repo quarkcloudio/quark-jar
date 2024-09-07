@@ -1,5 +1,7 @@
 package io.quarkcloud.quarkadmin.controller;
 
+import java.io.IOException;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -90,7 +92,7 @@ public class AdminResourceController {
     @RequestMapping("/api/admin/{resource}/import")
     @ResponseBody
     @AdminResourceImportRender
-    public Object excelImport(HttpServletRequest request, HttpServletResponse response) {
+    public Object excelImport(HttpServletRequest request, HttpServletResponse response) throws IOException {
         return new Context(request, response);
     }
 

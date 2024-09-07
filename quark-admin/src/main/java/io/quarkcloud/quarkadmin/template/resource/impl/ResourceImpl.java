@@ -1,6 +1,9 @@
 package io.quarkcloud.quarkadmin.template.resource.impl;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,8 +17,12 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 
+import cn.hutool.core.io.IoUtil;
+import cn.hutool.poi.excel.ExcelUtil;
+import cn.hutool.poi.excel.ExcelWriter;
 import io.quarkcloud.quarkcore.service.Context;
 import io.quarkcloud.quarkcore.util.Reflect;
+import jakarta.servlet.ServletOutputStream;
 import io.quarkcloud.quarkadmin.annotation.AdminResource;
 import io.quarkcloud.quarkadmin.component.card.Card;
 import io.quarkcloud.quarkadmin.component.form.Closure;
@@ -34,6 +41,7 @@ import io.quarkcloud.quarkadmin.template.resource.core.PerformQuery;
 import io.quarkcloud.quarkadmin.template.resource.core.PerformValidation;
 import io.quarkcloud.quarkadmin.template.resource.core.ResolveAction;
 import io.quarkcloud.quarkadmin.template.resource.core.ResolveField;
+import io.quarkcloud.quarkadmin.template.resource.core.ResolveImportTemplate;
 import io.quarkcloud.quarkadmin.template.resource.core.ResolveSearch;
 import io.quarkcloud.quarkadmin.template.resource.impl.action.Dropdown;
 
@@ -966,8 +974,32 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     }
 
     // 导入模板
-    public Object importTemplateRender(Context context) {
-        return Message.success("操作成功！");
+    public Object importTemplateRender(Context context) throws IOException {
+        List<Object> getFields = fields(context);
+        List<Object> fields = new ResolveField(getFields, context).importFields(context);
+        ResolveImportTemplate resolveImportTemplate = new ResolveImportTemplate();
+
+        List<String> exportTitles = new ArrayList<>();
+        for (Object v : fields) {
+            String label = resolveImportTemplate.getFieldLabel(v);
+            exportTitles.add(label + resolveImportTemplate.getFieldRemark(v));
+        }
+
+        // 通过工具类创建writer，默认创建xls格式
+        ExcelWriter writer = ExcelUtil.getWriter(true);
+
+        //创建xlsx格式的
+        writer.write(exportTitles, true);
+        context.response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"); 
+        context.response.setHeader("Content-Disposition","attachment;filename=data_" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".xlsx"); 
+        ServletOutputStream out=context.response.getOutputStream(); 
+
+        //out为OutputStream，需要写出到的目标流
+        writer.flush(out, true);
+        writer.close();
+        IoUtil.close(out);
+
+        return null;
     }
 
     // 导入数据
