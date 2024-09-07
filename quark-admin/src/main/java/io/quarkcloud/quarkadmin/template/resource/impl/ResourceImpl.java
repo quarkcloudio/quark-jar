@@ -2,6 +2,7 @@ package io.quarkcloud.quarkadmin.template.resource.impl;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,6 +19,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.IdUtil;
@@ -45,6 +47,7 @@ import io.quarkcloud.quarkadmin.template.resource.Resource;
 import io.quarkcloud.quarkadmin.template.resource.core.PerformQuery;
 import io.quarkcloud.quarkadmin.template.resource.core.PerformValidation;
 import io.quarkcloud.quarkadmin.template.resource.core.ResolveAction;
+import io.quarkcloud.quarkadmin.template.resource.core.ResolveExport;
 import io.quarkcloud.quarkadmin.template.resource.core.ResolveField;
 import io.quarkcloud.quarkadmin.template.resource.core.ResolveImport;
 import io.quarkcloud.quarkadmin.template.resource.core.ResolveSearch;
@@ -394,6 +397,58 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         return this.beforeIndexShowing(context, lists);
     }
 
+    // 解析导出表格数据
+    public List<T> performsExportList(Context context, List<T> lists) {
+        List<Object> getFields = fields(context);
+        List<Object> indexFields = new ResolveField(getFields, context).exportFields(context);
+        T tempEntity = this.entity;
+        for (T item : lists) {
+            this.entity = item;
+            Reflect itemReflect = new Reflect(item);
+            for (Object fieldObj : indexFields) {
+                Reflect fieldReflect = new Reflect(fieldObj);
+                String fieldName = (String) fieldReflect.getFieldValue("name");
+                boolean hasItemName = itemReflect.checkFieldExist(fieldName);
+                if (hasItemName) {
+                    Closure callback = (Closure) fieldReflect.getFieldValue("callback");
+                    // 解析回调函数值
+                    if (callback != null) {
+                        Object callbackValue = callback.callback();
+                        itemReflect.setFieldValue(fieldName, callbackValue);
+                    } else {
+                        Object itemValue = itemReflect.getFieldValue(fieldName);
+                        if (itemValue instanceof String) {
+                            String getItemValue = (String) itemValue;
+                            ObjectMapper mapper = new ObjectMapper();
+                            try {
+                                if (getItemValue.startsWith("[") && getItemValue.endsWith("]")) {
+                                    List<?> list = mapper.readValue(getItemValue, new TypeReference<List<Object>>() {});
+                                    itemReflect.setFieldValue(fieldName, list);
+                                } else if (getItemValue.startsWith("{") && getItemValue.endsWith("}")) {
+                                    Map<?, ?> map = mapper.readValue(getItemValue, new TypeReference<Map<String, Object>>() {});
+                                    itemReflect.setFieldValue(fieldName, map);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }
+            }
+
+            // 归还原始对象
+            this.entity = tempEntity;
+        }
+
+        // 显示前回调
+        return this.beforeExportshowing(context, lists);
+    }
+
+    // 导出数据显示前回调
+    public List<T> beforeExportshowing(Context context, List<T> list) {
+        return list;
+    }
+
     // 列表页面显示前回调
     public List<T> beforeIndexShowing(Context context, List<T> list) {
         return list;
@@ -461,7 +516,8 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         Object perPage = this.getPerPage();
         if (perPage == null || !((perPage instanceof Integer) || (perPage instanceof Long))) {
             List<T> data = resourceService.list(queryWrapper);
-            return table.setDatasource(data);
+            Object items = this.performsIndexList(context, data);
+            return table.setDatasource(items);
         }
 
         // 默认分页数量
@@ -1162,7 +1218,69 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     }
 
     // 导出数据
-    public Object exportRender(Context context) {
-        return Message.success("操作成功！");
+    public Object exportRender(Context context) throws IOException {
+
+        // 查询条件
+        MPJLambdaWrapper<T> queryWrapper = new MPJLambdaWrapper<>();
+
+        // 获取全局查询条件
+        queryWrapper = this.queryWrapper(context, queryWrapper);
+
+        // 获取列表查询条件
+        queryWrapper = this.exportQueryWrapper(context, queryWrapper);
+
+        Map<String, String> defaultQueryOrder = this.queryOrder;
+        if (defaultQueryOrder == null) {
+            defaultQueryOrder = this.exportQueryOrder;
+        }
+
+        queryWrapper = new PerformQuery<T>(context).
+            setSearches(this.searches(context)).
+            setQueryWrapper(queryWrapper).
+            setDefaultOrder(defaultQueryOrder).
+            buildExportQuery();
+
+        List<T> data = this.performsExportList(context, resourceService.list(queryWrapper));
+        List<Object> getFields = fields(context);
+        List<Object> fields = new ResolveField(getFields, context).exportFields(context);
+
+        // 创建 ExcelWriter
+        ExcelWriter writer = ExcelUtil.getWriter();
+        ResolveExport resolveExport = new ResolveExport();
+        List<Object[]> rows = new ArrayList<>();
+
+        // 创建表头
+        Object[] headers = new Object[fields.size()];
+        for (int i = 0; i < fields.size(); i++) {
+            String label = resolveExport.getFieldLabel(fields.get(i));
+            if (!label.equals("")) {
+                headers[i] = label;
+            }
+        }
+        rows.add(headers);
+
+        // 填充数据
+        for (Object rowData : data) {
+            Object[] rowValues = new Object[fields.size()];
+            for (int j = 0; j < fields.size(); j++) {
+                Object field = fields.get(j);
+                String name = resolveExport.getFieldName(field);
+                String component = resolveExport.getFieldComponent(field);
+                Object cellValue = resolveExport.getCellValue(component, field, rowData, name);
+                rowValues[j] = cellValue;
+            }
+            rows.add(rowValues);
+        }
+
+        // 设置响应
+        context.response.setHeader("Content-Disposition", "attachment; filename=data_" + DateUtil.formatDateTime(new Date()) + ".xlsx");
+        context.response.setContentType("application/octet-stream");
+        writer.write(rows, true);
+        ServletOutputStream out=context.response.getOutputStream(); 
+        writer.flush(out, true);
+        writer.close();
+        IoUtil.close(out);
+
+        return null;
     }
 }
