@@ -961,7 +961,8 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
 
     // 表单渲染
     public Object formRender(Context context) {
-        return Message.success("操作成功！");
+        T data = beforeCreating(context);
+        return this.pageComponentRender(context, creationComponentRender(context, data));
     }
 
     // 导入模板
