@@ -862,9 +862,101 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         return Message.success("操作成功！", null, data);
     }
 
+    // 详情标题
+    public String detailTitle(Context context) {
+        String title = this.getTitle();
+
+        return title + "详情";
+    }
+
+    // 详情页页面显示前回调
+    public T beforeDetailShowing(Context context, T data) {
+        return data;
+    }
+
+    // 渲染详情页组件
+    public Object detailComponentRender(Context context, T data) {
+        String title = detailTitle(context);
+        List<Object> getActions = actions(context);
+        List<Object> getFields = fields(context);
+
+        // 详情页右上角自定义区域行为
+        Object formExtraActions = new ResolveAction<ResourceMapper<T>, T>(getActions, context).getDetailExtraActions();
+
+        // 包裹在组件内的详情页字段
+        Object fields = new ResolveField(getFields, context).detailFieldsWithinComponents(context, data);
+
+        // 包裹在组件内的详情页字段
+        Object formActions = new ResolveAction<ResourceMapper<T>, T>(getActions, context).getDetailActions();
+
+        return detailWithinCard(
+            context,
+            title,
+            formExtraActions,
+            fields,
+            formActions,
+            data
+        );
+    }
+
+    // 在卡片内的详情页组件
+    public Object detailWithinCard(
+            Context context,
+            String title,
+            Object extra,
+            Object fields,
+            Object actions,
+            T data) {
+
+        Card cardComponent = new Card();
+        cardComponent.setTitle(title)
+                .setHeaderBordered(true)
+                .setExtra(extra)
+                .setBody(fields);
+
+        return cardComponent;
+    }
+
+    // 在标签页内的详情页组件
+    public Object detailWithinTabs(
+            Context context,
+            String title,
+            Object extra,
+            Object fields,
+            List<Object> actions,
+            T data) {
+
+        Tabs tabsComponent = new Tabs();
+        tabsComponent.setTabPanes(fields).setTabBarExtraContent(extra);
+
+        return tabsComponent;
+    }
+
     // 详情页面
     public Object detailRender(Context context) {
-        return Message.success("操作成功！");
+
+        // 查询条件
+        MPJLambdaWrapper<T> queryWrapper = new MPJLambdaWrapper<>();
+
+        // 获取全局查询条件
+        queryWrapper = this.queryWrapper(context, queryWrapper);
+
+        // 获取查询条件
+        queryWrapper = this.detailQueryWrapper(context, queryWrapper);
+
+        // 构建查询条件
+        queryWrapper = new PerformQuery<T>(context).
+            setQueryWrapper(queryWrapper).
+            buildDetailQuery();
+
+        // 获取数据
+        T data = this.resourceService.getOne(queryWrapper);
+
+        // 数据前回调
+        data = beforeDetailShowing(context, data);
+
+        // 渲染组件
+        return this.pageComponentRender(context, detailComponentRender(context, data));
     }
 
     // 表单渲染

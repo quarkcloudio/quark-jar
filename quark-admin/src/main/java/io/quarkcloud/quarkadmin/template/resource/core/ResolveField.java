@@ -447,7 +447,7 @@ public class ResolveField {
     }
 
     // 包裹在组件内的详情页字段
-    public Object detailFieldsWithinComponents(Context context, Map<String, Object> data) {
+    public Object detailFieldsWithinComponents(Context context, Object data) {
         List<Object> items = new ArrayList<>();
         String componentType = "description";
 
