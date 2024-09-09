@@ -18,7 +18,6 @@ import io.quarkcloud.quarkstarter.service.admin.action.FormExtraBack;
 import io.quarkcloud.quarkstarter.service.admin.action.FormReset;
 import io.quarkcloud.quarkstarter.service.admin.action.FormSubmit;
 import io.quarkcloud.quarkstarter.service.admin.search.Input;
-import io.quarkcloud.quarkstarter.service.admin.search.Status;
 
 @Component(value = "permissionResource")
 public class Permission extends ResourceImpl<PermissionMapper, PermissionEntity> {
@@ -35,11 +34,12 @@ public class Permission extends ResourceImpl<PermissionMapper, PermissionEntity>
         return Arrays.asList(
             Field.id("id", "ID"),
             Field.text("name", "名称"),
+            Field.text("path", "路径"),
             Field.switchField("status", "状态").
-            setTrueValue("正常").
-            setFalseValue("禁用").
-            setEditable(true).
-            setDefaultValue(true)
+                setTrueValue("正常").
+                setFalseValue("禁用").
+                setEditable(true).
+                setDefaultValue(true)
         );
     }
 
@@ -47,7 +47,7 @@ public class Permission extends ResourceImpl<PermissionMapper, PermissionEntity>
     public List<Object> searches(Context context) {
         return Arrays.asList(
             new Input<PermissionEntity>("name", "名称"),
-            new Status<PermissionEntity>()
+            new Input<PermissionEntity>("path", "路径")
         );
     }
     
