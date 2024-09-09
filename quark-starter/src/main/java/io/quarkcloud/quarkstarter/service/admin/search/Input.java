@@ -2,10 +2,10 @@ package io.quarkcloud.quarkstarter.service.admin.search;
 
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 
-import io.quarkcloud.quarkadmin.template.resource.impl.SearchImpl;
+import io.quarkcloud.quarkadmin.template.resource.impl.search.InputImpl;
 import io.quarkcloud.quarkcore.service.Context;
 
-public class Input<T> extends SearchImpl<T> {
+public class Input<T> extends InputImpl<T> {
 
     // 构造方法
     public Input(String column, String name) {
