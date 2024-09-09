@@ -3,7 +3,6 @@ package io.quarkcloud.quarkadmin.template.resource.impl.search;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.quarkcloud.quarkcore.service.Context;
 import io.quarkcloud.quarkadmin.component.form.fields.Radio.Option;
 import io.quarkcloud.quarkadmin.template.resource.impl.SearchImpl;
 
@@ -13,7 +12,7 @@ public class Radio<T> extends SearchImpl<T> {
     public List<Option> options;
 
     // 构造方法
-    public Radio(Context context) {
+    public Radio() {
         this.component = "radioField";
         this.options = new ArrayList<>();
     }

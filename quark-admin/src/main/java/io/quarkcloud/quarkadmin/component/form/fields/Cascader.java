@@ -317,10 +317,10 @@ public class Cascader extends Component {
         this.showOnImport = true;
         this.column = new Column();
         this.placeholder = "请选择";
-        this.setWidth(400);
         this.setComponentKey();
         this.style = new HashMap<>();
         this.rules = new ArrayList<>();
+        this.setWidth(400);
     }
 
     // Field 的长度，我们归纳了常用的 Field 长度以及适合的场景，支持了一些枚举 "xs" , "s" , "m" , "l" , "x"

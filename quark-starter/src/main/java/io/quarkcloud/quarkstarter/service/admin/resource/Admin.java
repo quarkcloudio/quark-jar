@@ -20,6 +20,7 @@ import io.quarkcloud.quarkstarter.service.admin.action.FormExtraBack;
 import io.quarkcloud.quarkstarter.service.admin.action.FormReset;
 import io.quarkcloud.quarkstarter.service.admin.action.FormSubmit;
 import io.quarkcloud.quarkstarter.service.admin.search.Input;
+import io.quarkcloud.quarkstarter.service.admin.search.Status;
 
 @Component(value = "adminResource")
 public class Admin extends ResourceImpl<AdminMapper,AdminEntity> {
@@ -64,7 +65,8 @@ public class Admin extends ResourceImpl<AdminMapper,AdminEntity> {
     public List<Object> searches(Context context) {
         return Arrays.asList(
             new Input<AdminEntity>("username", "用户名"),
-            new Input<AdminEntity>("nickname", "昵称")
+            new Input<AdminEntity>("nickname", "昵称"),
+            new Status<AdminEntity>()
         );
     }
     
