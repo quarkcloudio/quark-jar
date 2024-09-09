@@ -24,7 +24,7 @@ import io.quarkcloud.quarkstarter.service.admin.search.Input;
 import io.quarkcloud.quarkstarter.service.admin.search.Status;
 
 @Component(value = "adminResource")
-public class Admin extends ResourceImpl<AdminMapper,AdminEntity> {
+public class Admin extends ResourceImpl<AdminMapper, AdminEntity> {
 
     // 构造函数
     public Admin() {
