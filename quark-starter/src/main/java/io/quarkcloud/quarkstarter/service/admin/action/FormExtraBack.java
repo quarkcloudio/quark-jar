@@ -1,9 +1,9 @@
 package io.quarkcloud.quarkstarter.service.admin.action;
 
 import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
-import io.quarkcloud.quarkadmin.template.resource.impl.ActionImpl;
+import io.quarkcloud.quarkadmin.template.resource.impl.action.BackImpl;
 
-public class FormExtraBack<M, T> extends ActionImpl<ResourceMapper<T>, T> {
+public class FormExtraBack<M, T> extends BackImpl<ResourceMapper<T>, T> {
     // 构造函数
     public FormExtraBack() {
         this.name = "返回上一页";

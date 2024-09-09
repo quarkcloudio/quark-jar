@@ -1,9 +1,9 @@
 package io.quarkcloud.quarkstarter.service.admin.action;
 
 import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
-import io.quarkcloud.quarkadmin.template.resource.impl.ActionImpl;
+import io.quarkcloud.quarkadmin.template.resource.impl.action.ResetImpl;
 
-public class FormReset<M, T> extends ActionImpl<ResourceMapper<T>, T> {
+public class FormReset<M, T> extends ResetImpl<ResourceMapper<T>, T> {
 
     // 构造函数
     public FormReset() {
@@ -11,9 +11,6 @@ public class FormReset<M, T> extends ActionImpl<ResourceMapper<T>, T> {
 
         // 类型
         this.type = "default";
-
-        // 行为类型
-        this.actionType = "reset";
 
         // 设置展示位置
         this.setShowOnForm();
@@ -25,9 +22,6 @@ public class FormReset<M, T> extends ActionImpl<ResourceMapper<T>, T> {
         
         // 类型
         this.type = "default";
-
-        // 行为类型
-        this.actionType = "reset";
 
         // 设置展示位置
         this.setShowOnForm();

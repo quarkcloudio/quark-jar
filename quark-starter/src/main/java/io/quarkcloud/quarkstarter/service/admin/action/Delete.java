@@ -7,10 +7,10 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import io.quarkcloud.quarkadmin.component.message.Message;
 import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
 import io.quarkcloud.quarkadmin.service.ResourceService;
-import io.quarkcloud.quarkadmin.template.resource.impl.ActionImpl;
+import io.quarkcloud.quarkadmin.template.resource.impl.action.AjaxImpl;
 import io.quarkcloud.quarkcore.service.Context;
 
-public class Delete<M, T> extends ActionImpl<ResourceMapper<T>, T> {
+public class Delete<M, T> extends AjaxImpl<ResourceMapper<T>, T> {
 
     // 构造函数
     public Delete() {

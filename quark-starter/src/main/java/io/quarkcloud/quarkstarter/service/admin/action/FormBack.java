@@ -1,9 +1,9 @@
 package io.quarkcloud.quarkstarter.service.admin.action;
 
 import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
-import io.quarkcloud.quarkadmin.template.resource.impl.ActionImpl;
+import io.quarkcloud.quarkadmin.template.resource.impl.action.BackImpl;
 
-public class FormBack<M, T> extends ActionImpl<ResourceMapper<T>, T> {
+public class FormBack<M, T> extends BackImpl<ResourceMapper<T>, T> {
 
     // 构造函数
     public FormBack() {
@@ -13,9 +13,6 @@ public class FormBack<M, T> extends ActionImpl<ResourceMapper<T>, T> {
 
         // 类型
         this.type = "default";
-
-        // 行为类型
-        this.actionType = "back";
 
         // 在表单页展示
         setShowOnForm();
@@ -32,9 +29,6 @@ public class FormBack<M, T> extends ActionImpl<ResourceMapper<T>, T> {
         
         // 类型
         this.type = "default";
-
-        // 行为类型
-        this.actionType = "back";
 
         // 在表单页展示
         setShowOnForm();

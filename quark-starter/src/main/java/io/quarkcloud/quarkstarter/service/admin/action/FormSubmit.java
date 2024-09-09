@@ -1,9 +1,9 @@
 package io.quarkcloud.quarkstarter.service.admin.action;
 
 import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
-import io.quarkcloud.quarkadmin.template.resource.impl.ActionImpl;
+import io.quarkcloud.quarkadmin.template.resource.impl.action.SubmitImpl;
 
-public class FormSubmit<M, T> extends ActionImpl<ResourceMapper<T>, T> {
+public class FormSubmit<M, T> extends SubmitImpl<ResourceMapper<T>, T> {
 
     // 构造函数
     public FormSubmit() {
@@ -12,9 +12,6 @@ public class FormSubmit<M, T> extends ActionImpl<ResourceMapper<T>, T> {
 
         // 类型
         this.setType("primary");
-
-        // 行为类型
-        this.setActionType("submit");
 
         // 是否具有loading，当action 的作用类型为ajax,submit时有效
         this.setWithLoading(true);
@@ -30,9 +27,6 @@ public class FormSubmit<M, T> extends ActionImpl<ResourceMapper<T>, T> {
 
         // 类型
         this.setType("primary");
-
-        // 行为类型
-        this.setActionType("submit");
 
         // 是否具有loading，当action 的作用类型为ajax,submit时有效
         this.setWithLoading(true);
