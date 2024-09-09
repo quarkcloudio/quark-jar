@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import io.quarkcloud.quarkadmin.component.form.Field;
+import io.quarkcloud.quarkadmin.component.form.fields.SelectField;
 import io.quarkcloud.quarkadmin.entity.PermissionEntity;
 import io.quarkcloud.quarkadmin.mapper.PermissionMapper;
 import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
@@ -35,11 +36,20 @@ public class Permission extends ResourceImpl<PermissionMapper, PermissionEntity>
             Field.id("id", "ID"),
             Field.text("name", "名称"),
             Field.text("path", "路径"),
-            Field.switchField("status", "状态").
-                setTrueValue("正常").
-                setFalseValue("禁用").
-                setEditable(true).
-                setDefaultValue(true)
+            Field.select("method", "方法").
+                setOptions(Arrays.asList(
+                    new SelectField.Option("Any","Any"),
+                    new SelectField.Option("GET","GET"),
+                    new SelectField.Option("HEAD","HEAD"),
+                    new SelectField.Option("OPTIONS","OPTIONS"),
+                    new SelectField.Option("POST","POST"),
+                    new SelectField.Option("PUT","PUT"),
+                    new SelectField.Option("PATCH","PATCH"),
+                    new SelectField.Option("DELETE","DELETE")
+                )).
+                setFilters(true).
+                setDefaultValue("GET"),
+            Field.text("remark", "备注")
         );
     }
 
