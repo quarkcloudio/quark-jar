@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import io.quarkcloud.quarkadmin.component.form.Field;
-import io.quarkcloud.quarkadmin.component.form.fields.SelectField;
 import io.quarkcloud.quarkadmin.entity.PermissionEntity;
 import io.quarkcloud.quarkadmin.mapper.PermissionMapper;
 import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
@@ -38,14 +37,14 @@ public class Permission extends ResourceImpl<PermissionMapper, PermissionEntity>
             Field.text("path", "路径"),
             Field.select("method", "方法").
                 setOptions(Arrays.asList(
-                    new SelectField.Option("Any","Any"),
-                    new SelectField.Option("GET","GET"),
-                    new SelectField.Option("HEAD","HEAD"),
-                    new SelectField.Option("OPTIONS","OPTIONS"),
-                    new SelectField.Option("POST","POST"),
-                    new SelectField.Option("PUT","PUT"),
-                    new SelectField.Option("PATCH","PATCH"),
-                    new SelectField.Option("DELETE","DELETE")
+                    Field.selectOption("Any","Any"),
+                    Field.selectOption("GET","GET"),
+                    Field.selectOption("HEAD","HEAD"),
+                    Field.selectOption("OPTIONS","OPTIONS"),
+                    Field.selectOption("POST","POST"),
+                    Field.selectOption("PUT","PUT"),
+                    Field.selectOption("PATCH","PATCH"),
+                    Field.selectOption("DELETE","DELETE")
                 )).
                 setFilters(true).
                 setDefaultValue("GET"),

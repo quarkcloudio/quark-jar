@@ -392,6 +392,10 @@ public class Field {
         return new SelectField().setName(name).setLabel(label).setCallback(callback);
     }
 
+    public static SelectField.Option selectOption(String label, Object value) {
+        return new SelectField.Option(label, value);
+    }
+
     public static Selects selects(String name) {
         return new Selects().setName(name);
     }
