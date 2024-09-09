@@ -3,17 +3,17 @@ package io.quarkcloud.quarkadmin.template.resource.impl.search;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.quarkcloud.quarkadmin.component.form.fields.Cascader.Option;
+import io.quarkcloud.quarkadmin.component.form.fields.Radio.Option;
 import io.quarkcloud.quarkadmin.template.resource.impl.SearchImpl;
 
-public class Cascader<T> extends SearchImpl<T> {
+public class RadioImpl<T> extends SearchImpl<T> {
 
     // 属性值
     public List<Option> options;
 
     // 构造方法
-    public Cascader() {
-        this.component = "cascaderField";
+    public RadioImpl() {
+        this.component = "radioField";
         this.options = new ArrayList<>();
     }
 

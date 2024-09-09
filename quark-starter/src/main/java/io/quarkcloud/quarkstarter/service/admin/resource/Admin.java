@@ -19,6 +19,7 @@ import io.quarkcloud.quarkstarter.service.admin.action.FormBack;
 import io.quarkcloud.quarkstarter.service.admin.action.FormExtraBack;
 import io.quarkcloud.quarkstarter.service.admin.action.FormReset;
 import io.quarkcloud.quarkstarter.service.admin.action.FormSubmit;
+import io.quarkcloud.quarkstarter.service.admin.search.DatetimeRange;
 import io.quarkcloud.quarkstarter.service.admin.search.Input;
 import io.quarkcloud.quarkstarter.service.admin.search.Status;
 
@@ -66,7 +67,8 @@ public class Admin extends ResourceImpl<AdminMapper,AdminEntity> {
         return Arrays.asList(
             new Input<AdminEntity>("username", "用户名"),
             new Input<AdminEntity>("nickname", "昵称"),
-            new Status<AdminEntity>()
+            new Status<AdminEntity>(),
+            new DatetimeRange<AdminEntity>("last_login_time", "最后登录时间")
         );
     }
     

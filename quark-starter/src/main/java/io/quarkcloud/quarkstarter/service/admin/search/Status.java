@@ -3,10 +3,10 @@ package io.quarkcloud.quarkstarter.service.admin.search;
 import java.util.Arrays;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 
-import io.quarkcloud.quarkadmin.template.resource.impl.search.Select;
+import io.quarkcloud.quarkadmin.template.resource.impl.search.SelectImpl;
 import io.quarkcloud.quarkcore.service.Context;
 
-public class Status<T> extends Select<T> {
+public class Status<T> extends SelectImpl<T> {
 
     // 构造方法
     public Status() {

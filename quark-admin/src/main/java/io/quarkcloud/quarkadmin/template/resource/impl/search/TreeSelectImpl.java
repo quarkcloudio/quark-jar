@@ -6,13 +6,13 @@ import java.util.List;
 import io.quarkcloud.quarkadmin.component.form.fields.TreeSelect.TreeData;
 import io.quarkcloud.quarkadmin.template.resource.impl.SearchImpl;
 
-public class TreeSelect<T> extends SearchImpl<T> {
+public class TreeSelectImpl<T> extends SearchImpl<T> {
 
     // 属性值
     public List<TreeData> options;
 
     // 构造方法
-    public TreeSelect() {
+    public TreeSelectImpl() {
         this.component = "treeSelectField";
         this.options = new ArrayList<>();
     }

@@ -3,17 +3,17 @@ package io.quarkcloud.quarkadmin.template.resource.impl.search;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.quarkcloud.quarkadmin.component.form.fields.SelectField.Option;
+import io.quarkcloud.quarkadmin.component.form.fields.Cascader.Option;
 import io.quarkcloud.quarkadmin.template.resource.impl.SearchImpl;
 
-public class Select<T> extends SearchImpl<T> {
+public class CascaderImpl<T> extends SearchImpl<T> {
 
     // 属性值
     public List<Option> options;
 
     // 构造方法
-    public Select() {
-        this.component = "selectField";
+    public CascaderImpl() {
+        this.component = "cascaderField";
         this.options = new ArrayList<>();
     }
 

@@ -2,10 +2,10 @@ package io.quarkcloud.quarkadmin.template.resource.impl.search;
 
 import io.quarkcloud.quarkadmin.template.resource.impl.SearchImpl;
 
-public class DateRange<T> extends SearchImpl<T> {
+public class DateRangeImpl<T> extends SearchImpl<T> {
 
     // 构造方法
-    public DateRange() {
+    public DateRangeImpl() {
         this.component = "dateRangeField";
     }
 }
