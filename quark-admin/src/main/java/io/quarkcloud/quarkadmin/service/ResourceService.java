@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 
 import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
+
 public interface ResourceService<M extends ResourceMapper<T>, T> {
 
     /**
