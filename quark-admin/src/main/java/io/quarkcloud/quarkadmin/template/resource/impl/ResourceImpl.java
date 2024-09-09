@@ -50,7 +50,7 @@ import io.quarkcloud.quarkadmin.template.resource.core.ResolveExport;
 import io.quarkcloud.quarkadmin.template.resource.core.ResolveField;
 import io.quarkcloud.quarkadmin.template.resource.core.ResolveImport;
 import io.quarkcloud.quarkadmin.template.resource.core.ResolveSearch;
-import io.quarkcloud.quarkadmin.template.resource.impl.action.Dropdown;
+import io.quarkcloud.quarkadmin.template.resource.impl.action.DropdownImpl;
 
 public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T> {
 
@@ -868,7 +868,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
             String uriKey = actionInstance.getUriKey(item);
             String actionType = actionInstance.getActionType();
             if ("dropdown".equals(actionType)) {
-                Dropdown<M,T> dropdownActioner = (Dropdown<M,T>) actionInstance;
+                DropdownImpl<M,T> dropdownActioner = (DropdownImpl<M,T>) actionInstance;
                 for (Object dropdownAction : dropdownActioner.getActions()) {
                     String dropdownUriKey = dropdownActioner.getUriKey(dropdownAction);
                     if (context.getPathVariable("uriKey").equals(dropdownUriKey)) {
@@ -908,7 +908,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
             // 获取行为类型
             String actionType = actionInstance.getActionType();
             if ("dropdown".equals(actionType)) {
-                Dropdown<M,T> dropdownActioner = (Dropdown<M,T>) actionInstance;
+                DropdownImpl<M,T> dropdownActioner = (DropdownImpl<M,T>) actionInstance;
                 for (Object dropdownAction : dropdownActioner.getActions()) {
                     String dropdownUriKey = dropdownActioner.getUriKey(dropdownAction);
                     if (context.getPathVariable("uriKey").equals(dropdownUriKey)) {

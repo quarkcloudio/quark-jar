@@ -8,7 +8,7 @@ import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
 import io.quarkcloud.quarkadmin.template.resource.impl.ActionImpl;
 import io.quarkcloud.quarkcore.service.Context;
 
-public class ModalForm<M, T> extends ActionImpl<ResourceMapper<T>, T> {
+public class DrawerFormImpl<M, T> extends ActionImpl<ResourceMapper<T>, T> {
 
     // 抽屉弹出层宽度
     public int width;
@@ -23,8 +23,8 @@ public class ModalForm<M, T> extends ActionImpl<ResourceMapper<T>, T> {
     public String submitText;
 
     // 初始化
-    public ModalForm() {
-        this.setActionType("modalForm");
+    public DrawerFormImpl() {
+        this.setActionType("drawerForm");
         this.width = 520;
         this.setReload("table");
         this.cancelText = "取消";

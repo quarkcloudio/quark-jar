@@ -10,7 +10,7 @@ import io.quarkcloud.quarkadmin.template.resource.core.ResolveAction;
 import io.quarkcloud.quarkadmin.template.resource.impl.ActionImpl;
 import io.quarkcloud.quarkcore.service.Context;
 
-public class Dropdown<M, T> extends ActionImpl<ResourceMapper<T>, T> {
+public class DropdownImpl<M, T> extends ActionImpl<ResourceMapper<T>, T> {
 
     /**
      * 下拉框箭头是否显示
@@ -38,7 +38,7 @@ public class Dropdown<M, T> extends ActionImpl<ResourceMapper<T>, T> {
     public List<Action<T>> actions;
 
     // 初始化
-    public Dropdown() {
+    public DropdownImpl() {
         this.actionType = "dropdown";
         this.placement = "bottomLeft";
         this.trigger.add("hover");
@@ -81,7 +81,7 @@ public class Dropdown<M, T> extends ActionImpl<ResourceMapper<T>, T> {
      * @param actions 下拉菜单行为列表
      * @return Dropdown 实例
      */
-    public Dropdown<M, T> setActions(List<Action<T>> actions) {
+    public DropdownImpl<M, T> setActions(List<Action<T>> actions) {
         this.actions = actions;
         return this;
     }

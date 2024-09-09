@@ -6,7 +6,7 @@ import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
 import io.quarkcloud.quarkadmin.template.resource.impl.ActionImpl;
 import io.quarkcloud.quarkcore.service.Context;
 
-public class Drawer<M, T> extends ActionImpl<ResourceMapper<T>, T> {
+public class ModalImpl<M, T> extends ActionImpl<ResourceMapper<T>, T> {
 
     // 抽屉弹出层宽度
     public int width;
@@ -15,8 +15,8 @@ public class Drawer<M, T> extends ActionImpl<ResourceMapper<T>, T> {
     public boolean destroyOnClose;
 
     // 初始化
-    public Drawer() {
-        this.setActionType("drawer");
+    public ModalImpl() {
+        this.setActionType("modal");
         this.width = 520;
     }
 
