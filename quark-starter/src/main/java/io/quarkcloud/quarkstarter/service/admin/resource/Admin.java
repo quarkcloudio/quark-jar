@@ -68,7 +68,7 @@ public class Admin extends ResourceImpl<AdminMapper, AdminEntity> {
             new Input<AdminEntity>("username", "用户名"),
             new Input<AdminEntity>("nickname", "昵称"),
             new Status<AdminEntity>(),
-            new DatetimeRange<AdminEntity>("last_login_time", "最后登录时间")
+            new DatetimeRange<AdminEntity>("last_login_time", "登录时间")
         );
     }
     
