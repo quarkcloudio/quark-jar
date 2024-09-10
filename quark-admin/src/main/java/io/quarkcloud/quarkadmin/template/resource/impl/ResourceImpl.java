@@ -635,6 +635,16 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         return context.getRequest().getRequestURI().replace("/create", "/store");
     }
 
+    // 创建表单的字段
+    public List<Object> creationFields(Context context) {
+        return new ResolveField(this.fields(context), context).creationFieldsWithinComponents(context);
+    }
+
+    // 创建表单的数据
+    public T creationData(Context context) {
+        return this.beforeCreating(context);
+    }
+
     // 创建页面显示前回调
     public T beforeCreating(Context context) {
         return this.entity;
@@ -646,8 +656,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         List<Object> getActions = actions(context);
         Object formExtraActions = new ResolveAction<ResourceMapper<T>, T>(getActions, context).getFormExtraActions();
         String api = creationApi(context);
-        List<Object> getFields = fields(context);
-        Object fields = new ResolveField(getFields, context).creationFieldsWithinComponents(context);
+        Object fields = creationFields(context);
         Object formActions = new ResolveAction<ResourceMapper<T>, T>(getActions, context).getFormActions();
         return this.formComponentRender(context, title, formExtraActions, api, fields, formActions, data);
 
@@ -655,7 +664,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
 
     // 创建页组件渲染
     public Object creationRender(Context context) {
-        T data = beforeCreating(context);
+        T data = this.creationData(context);
         return this.pageComponentRender(context, creationComponentRender(context, data));
     }
 
@@ -695,6 +704,48 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         return context.getRequest().getRequestURI().replace("/edit", "/save");
     }
 
+    // 编辑页面获取表单数据接口
+    public String editValueApi(Context context) {
+        String formApi = this.formApi(context);
+        if (!formApi.isEmpty()) {
+            return formApi;
+        }
+        String[] uri = context.getRequest().getRequestURI().split("/");
+        if (uri[uri.length - 1].equals("index")) {
+            return context.getRequest().getRequestURI().replace("/index", "/edit/values?id=${id}");
+        }
+        return context.getRequest().getRequestURI().replace("/edit", "/edit/values?id=${id}");
+    }
+
+    // 编辑表单的字段
+    public List<Object> editFields(Context context) {
+        return new ResolveField(this.fields(context), context).updateFieldsWithinComponents(context);
+    }
+
+    // 编辑表单的数据
+    public T editData(Context context) {
+        // 查询条件
+        MPJLambdaWrapper<T> queryWrapper = new MPJLambdaWrapper<>();
+
+        // 获取全局查询条件
+        queryWrapper = this.queryWrapper(context, queryWrapper);
+
+        // 获取编辑页查询条件
+        queryWrapper = this.editQueryWrapper(context, queryWrapper);
+
+        // 构建查询条件
+        queryWrapper = new PerformQuery<T>(context).
+            setQueryWrapper(queryWrapper).
+            buildEditQuery();
+
+        // 获取编辑数据
+        T data = this.resourceService.getOne(queryWrapper);
+
+        // 编辑数据前回调
+        return beforeEditing(context, data);
+    }
+
+
     // 编辑页面显示前回调
     public T beforeEditing(Context context,T data) {
         return data;
@@ -706,8 +757,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         List<Object> getActions = actions(context);
         Object formExtraActions = new ResolveAction<ResourceMapper<T>, T>(getActions, context).getFormExtraActions();
         String api = editApi(context);
-        List<Object> getFields = fields(context);
-        Object fields = new ResolveField(getFields, context).updateFieldsWithinComponents(context);
+        Object fields = editFields(context);
         Object formActions = new ResolveAction<ResourceMapper<T>, T>(getActions, context).getFormActions();
         return this.formComponentRender(context, title, formExtraActions, api, fields, formActions, data);
     }
@@ -715,25 +765,8 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     // 编辑页组件渲染
     public Object editRender(Context context) {
 
-        // 查询条件
-        MPJLambdaWrapper<T> queryWrapper = new MPJLambdaWrapper<>();
-
-        // 获取全局查询条件
-        queryWrapper = this.queryWrapper(context, queryWrapper);
-
-        // 获取编辑页查询条件
-        queryWrapper = this.editQueryWrapper(context, queryWrapper);
-
-        // 构建查询条件
-        queryWrapper = new PerformQuery<T>(context).
-            setQueryWrapper(queryWrapper).
-            buildEditQuery();
-
         // 获取编辑数据
-        T data = this.resourceService.getOne(queryWrapper);
-
-        // 编辑数据前回调
-        data = beforeEditing(context, data);
+        T data = this.editData(context);
 
         // 渲染编辑页组件
         return this.pageComponentRender(context, editComponentRender(context, data));
@@ -742,25 +775,8 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     // 获取编辑表单值
     public Object editValuesRender(Context context) {
         
-        // 查询条件
-        MPJLambdaWrapper<T> queryWrapper = new MPJLambdaWrapper<>();
-
-        // 获取全局查询条件
-        queryWrapper = this.queryWrapper(context, queryWrapper);
-
-        // 获取编辑页查询条件
-        queryWrapper = this.editQueryWrapper(context, queryWrapper);
-
-        // 构建查询条件
-        queryWrapper = new PerformQuery<T>(context).
-            setQueryWrapper(queryWrapper).
-            buildEditQuery();
-
         // 获取编辑数据
-        T data = this.resourceService.getOne(queryWrapper);
-
-        // 编辑数据前回调
-        data = beforeEditing(context, data);
+        T data = this.editData(context);
 
         // 渲染编辑页数据
         return Message.success("获取成功！", null, data);

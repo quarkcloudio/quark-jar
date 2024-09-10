@@ -75,7 +75,7 @@ public class Admin extends ResourceImpl<AdminMapper, AdminEntity> {
     // 行为
     public List<Object> actions(Context context) {
         return Arrays.asList(
-            new Create<AdminMapper, AdminEntity>(this.title),
+            new Create<AdminMapper, AdminEntity>(this.getTitle()),
             new Edit<AdminMapper, AdminEntity>(),
             new Delete<AdminMapper, AdminEntity>(),
             new FormExtraBack<AdminMapper, AdminEntity>(),
