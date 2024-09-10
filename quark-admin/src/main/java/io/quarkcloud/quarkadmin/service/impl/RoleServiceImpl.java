@@ -6,8 +6,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-
 import io.quarkcloud.quarkadmin.entity.PermissionEntity;
 import io.quarkcloud.quarkadmin.entity.RoleEntity;
 import io.quarkcloud.quarkadmin.entity.RoleHasPermissionEntity;
@@ -18,7 +16,7 @@ import io.quarkcloud.quarkadmin.service.RoleService;
 import jakarta.annotation.Resource;
 
 @Service
-public class RoleServiceImpl extends ServiceImpl<RoleMapper, RoleEntity> implements RoleService {
+public class RoleServiceImpl extends ResourceServiceImpl<RoleMapper, RoleEntity> implements RoleService {
     
     // 角色权限关联表
     @Resource
