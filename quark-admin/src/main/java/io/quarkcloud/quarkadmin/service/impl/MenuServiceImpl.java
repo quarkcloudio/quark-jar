@@ -28,9 +28,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, MenuEntity> impleme
         QueryWrapper<MenuEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("guard_name", "admin");
         queryWrapper.eq("status", 1);
-
         List<MenuEntity> list = menuMapper.selectList(queryWrapper);
-
         return list;
     }
 }
