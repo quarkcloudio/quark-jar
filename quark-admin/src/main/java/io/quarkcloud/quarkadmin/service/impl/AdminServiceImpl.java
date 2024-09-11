@@ -21,6 +21,7 @@ import io.quarkcloud.quarkadmin.mapper.RoleMapper;
 import io.quarkcloud.quarkadmin.mapper.UserHasRoleMapper;
 import io.quarkcloud.quarkadmin.service.AdminService;
 import io.quarkcloud.quarkadmin.service.MenuService;
+import io.quarkcloud.quarkadmin.service.PermissionService;
 import io.quarkcloud.quarkadmin.service.RoleService;
 import io.quarkcloud.quarkcore.util.Lister;
 import jakarta.annotation.Resource;
@@ -43,6 +44,10 @@ public class AdminServiceImpl extends ResourceServiceImpl<AdminMapper, AdminEnti
     // 用户角色
     @Autowired
     private RoleService roleService;
+
+    // 用户权限
+    @Autowired
+    private PermissionService permissionService;
 
     // 菜单服务
     @Autowired
@@ -76,7 +81,6 @@ public class AdminServiceImpl extends ResourceServiceImpl<AdminMapper, AdminEnti
     public List<RoleEntity> getRolesById(Long adminId) {
         QueryWrapper<RoleEntity> queryWrapper = new QueryWrapper<>();
         List<Long> roleIds= this.getRoleIdsById(adminId);
-
         queryWrapper.in("id", roleIds);
 
         return roleMapper.selectList(queryWrapper);
@@ -85,7 +89,6 @@ public class AdminServiceImpl extends ResourceServiceImpl<AdminMapper, AdminEnti
     // 根据用户id获取角色Id列表
     public List<Long> getRoleIdsById(Long adminId) {
         List<Long> list = new ArrayList<>();
-
         QueryWrapper<UserHasRoleEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("uid", adminId);
         queryWrapper.eq("guard_name", "admin");
@@ -101,8 +104,16 @@ public class AdminServiceImpl extends ResourceServiceImpl<AdminMapper, AdminEnti
     // 根据用户id获取菜单列表
     public List<MenuEntity> getMenusById(Long adminId) {
         List<MenuEntity> list = new ArrayList<>();
+        List<Long> menuIds= new ArrayList<>();
         if (adminId == 1) {
             list = menuService.getList();
+        } else {
+            List<PermissionEntity> permissions= this.getPermissionsById(adminId);
+            for (PermissionEntity permission : permissions) {
+                List<Long> getMenuIds = permissionService.getMenuIdsById(permission.getId());
+                menuIds.addAll(getMenuIds);
+            }
+            menuService.listByIds(menuIds);
         }
 
         return list;
@@ -116,26 +127,21 @@ public class AdminServiceImpl extends ResourceServiceImpl<AdminMapper, AdminEnti
     public ArrayNode getMenuTreeById(Long adminId) {
         List<MenuEntity> list = getMenusById(adminId);
         ArrayNode menuTree = new ObjectMapper().createArrayNode();
-
         List<MenuEntity> newMenus = new ArrayList<>();
-
         for (MenuEntity v : list) {
             v.setKey(UUID.randomUUID().toString());
             v.setLocale("menu" + v.getPath().replace("/", "."));
-
             v.setHideInMenu(!v.getShow());
-
             if (v.getType() == 2 && v.getIsEngine()) {
                 v.setPath("/layout/index?api=" + v.getPath());
             }
-
             if (!this.hasMenu(newMenus, v.getId()) && v.getType() != 3) {
                 newMenus.add(v);
             }
         }
 
         try {
-            menuTree = Lister.listToTree(list, "id", "pid", "routes", 0);
+            menuTree = Lister.listToTree(list, "id", "pid", "routes", 0L);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }

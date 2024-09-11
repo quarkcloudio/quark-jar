@@ -1,10 +1,10 @@
 package io.quarkcloud.quarkadmin.service;
 
 import java.util.List;
-import com.baomidou.mybatisplus.extension.service.IService;
 import io.quarkcloud.quarkadmin.entity.MenuEntity;
+import io.quarkcloud.quarkadmin.mapper.MenuMapper;
 
-public interface MenuService extends IService<MenuEntity> {
+public interface MenuService extends ResourceService<MenuMapper, MenuEntity> {
 
     // 获取菜单列表
     public List<MenuEntity> getList();

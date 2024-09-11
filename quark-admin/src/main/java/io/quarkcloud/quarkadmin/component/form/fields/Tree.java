@@ -38,6 +38,12 @@ public class Tree extends Component {
     @Data
     public static class TreeData {
 
+        // 选项的标签
+        public TreeData(String title, Object key) {
+            this.title = title;
+            this.key = key;
+        }
+
         // 当树为 checkable 时，设置独立节点是否展示 Checkbox
         @JsonInclude(JsonInclude.Include.NON_DEFAULT)
         boolean checkable;
@@ -71,7 +77,7 @@ public class Tree extends Component {
 
         // 子节点
         @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-        TreeData[] children;
+        List<TreeData> children;
     }
 
     // 开启 grid 模式时传递给 Row, 仅在ProFormGroup, ProFormList, ProFormFieldSet 中有效，默认：{

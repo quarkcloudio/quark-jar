@@ -51,7 +51,7 @@ public class TreeSelect extends Component {
         Object value;
 
         @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-        TreeData[] children;
+        List<TreeData> children;
 
         @JsonInclude(JsonInclude.Include.NON_DEFAULT)
         boolean disabled;
