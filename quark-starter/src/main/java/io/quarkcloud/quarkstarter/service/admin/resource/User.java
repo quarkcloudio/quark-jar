@@ -39,7 +39,7 @@ public class User extends ResourceImpl<UserMapper, UserEntity> {
             Field.id("id", "ID"),
             Field.image("avatar", "头像").onlyOnForms(),
             Field.text("username", "用户名", () -> {
-                return String.format("<a href='#/layout/index?api=/api/admin/admin/edit&id=%d'>%s</a>", this.entity.getId(), this.entity.getUsername());
+                return String.format("<a href='#/layout/index?api=/api/admin/user/edit&id=%d'>%s</a>", this.entity.getId(), this.entity.getUsername());
             }).setRules(Arrays.asList(
                 Rule.required(true, "用户名必须填写"),
                 Rule.min(6, "用户名不能少于6个字符"),
