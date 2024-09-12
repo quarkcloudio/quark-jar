@@ -186,7 +186,7 @@ public class MenuServiceImpl extends ResourceServiceImpl<MenuMapper, MenuEntity>
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        return menuTree; // 假设存在该方法
+        return menuTree;
     }
 
     // 检查菜单是否已经存在
