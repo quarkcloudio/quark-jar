@@ -356,6 +356,10 @@ public class Field {
         return new Radio().setName(name).setLabel(label).setCallback(callback);
     }
 
+    public static Radio.Option radioOption(String label, Object value) {
+        return new Radio.Option(label, value);
+    }
+
     public static Search search(String name) {
         return new Search().setName(name);
     }
