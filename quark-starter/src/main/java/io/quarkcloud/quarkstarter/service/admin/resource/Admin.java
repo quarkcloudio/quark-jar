@@ -49,16 +49,18 @@ public class Admin extends ResourceImpl<AdminMapper, AdminEntity> {
             Field.text("email", "邮箱"),
             Field.text("phone", "手机号"),
             Field.radio("sex", "性别").setOptions(Arrays.asList(
-                new Radio.Option("男",1),
-                new Radio.Option("女",2)
-            )).setFilters(true).setDefaultValue(1),
+                    new Radio.Option("男",1),
+                    new Radio.Option("女",2)
+                ))
+                .setFilters(true)
+                .setDefaultValue(1),
             Field.password("password", "密码").onlyOnForms(),
             Field.datetime("lastLoginTime", "最后登录时间").onlyOnIndex(),
             Field.switchField("status", "状态").
-            setTrueValue("正常").
-            setFalseValue("禁用").
-            setEditable(true).
-            setDefaultValue(true)
+                setTrueValue("正常").
+                setFalseValue("禁用").
+                setEditable(true).
+                setDefaultValue(true)
         );
     }
 
