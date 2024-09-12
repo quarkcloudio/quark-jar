@@ -4,18 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
 import io.quarkcloud.quarkadmin.component.form.fields.TreeSelect.TreeData;
-import io.quarkcloud.quarkadmin.component.menu.Menu;
 import io.quarkcloud.quarkadmin.entity.MenuEntity;
 import io.quarkcloud.quarkadmin.mapper.MenuHasPermissionMapper;
 import io.quarkcloud.quarkadmin.mapper.MenuMapper;
+import io.quarkcloud.quarkadmin.service.AdminService;
 import io.quarkcloud.quarkadmin.service.MenuService;
 import io.quarkcloud.quarkcore.util.Lister;
 import jakarta.annotation.Resource;
@@ -30,6 +30,10 @@ public class MenuServiceImpl extends ResourceServiceImpl<MenuMapper, MenuEntity>
     // 菜单权限关联
     @Resource
     private MenuHasPermissionMapper menuHasPermissionMapper;
+
+    // 用户角色
+    @Autowired
+    private AdminService adminService;
 
     // 获取菜单列表
     public List<MenuEntity> getList() {
@@ -121,7 +125,7 @@ public class MenuServiceImpl extends ResourceServiceImpl<MenuMapper, MenuEntity>
     }
 
     // 根据管理员 ID 获取菜单列表
-    public Object getListByAdminId(Long adminId) {
+    public ArrayNode getListByAdminId(Long adminId) {
         List<MenuEntity> menus = new ArrayList<>();
         if (adminId == 1) { // 如果是超级管理员
             QueryWrapper<MenuEntity> query = new QueryWrapper<>();
@@ -133,13 +137,8 @@ public class MenuServiceImpl extends ResourceServiceImpl<MenuMapper, MenuEntity>
             return menuParser(menus); // 解析菜单数据
         }
 
-        List<Long> menuIds = new ArrayList<>();
-        List<MenuEntity> roleHasMenus = getUserMenus(adminId); // 假设存在该方法
-        if (roleHasMenus.isEmpty()) return null;
-
-        for (MenuEntity menu : roleHasMenus) {
-            menuIds.add(menu.getId()); // 收集角色有的菜单 ID
-        }
+        List<Long> menuIds = adminService.getMenuIdsById(adminId);
+        if (menuIds.isEmpty()) return null;
 
         QueryWrapper<MenuEntity> query = new QueryWrapper<>();
         query.eq("guard_name", "admin")
@@ -167,13 +166,13 @@ public class MenuServiceImpl extends ResourceServiceImpl<MenuMapper, MenuEntity>
     }
 
     // 解析菜单数据
-    private Object menuParser(List<MenuEntity> menus) {
+    private ArrayNode menuParser(List<MenuEntity> menus) {
         ArrayNode menuTree = new ObjectMapper().createArrayNode();
         List<MenuEntity> newMenus = new ArrayList<>();
         for (MenuEntity menu : menus) {
             menu.setKey(UUID.randomUUID().toString()); // 生成唯一标识
             menu.setLocale("menu" + menu.getPath().replace("/", "."));
-            menu.setHideInMenu(menu.getShow()); // 设置是否隐藏
+            menu.setHideInMenu(!menu.getShow()); // 设置是否隐藏
             if (menu.getType() == 2 && menu.getIsEngine()) {
                 menu.setPath("/layout/index?api=" + menu.getPath()); // 设置路径
             }

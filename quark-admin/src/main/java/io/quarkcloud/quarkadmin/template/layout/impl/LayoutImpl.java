@@ -13,14 +13,14 @@ import cn.hutool.jwt.JWT;
 import io.quarkcloud.quarkadmin.annotation.AdminLayout;
 import io.quarkcloud.quarkadmin.component.action.Action;
 import io.quarkcloud.quarkadmin.component.footer.Footer;
-import io.quarkcloud.quarkadmin.service.AdminService;
+import io.quarkcloud.quarkadmin.service.MenuService;
 import io.quarkcloud.quarkadmin.template.layout.Layout;
 import io.quarkcloud.quarkcore.service.Context;
 
 public class LayoutImpl implements Layout {
 
     @Autowired
-    AdminService adminService;
+    MenuService menuService;
 
     // 注解实例
     protected AdminLayout annotationClass = null;
@@ -403,7 +403,7 @@ public class LayoutImpl implements Layout {
         // 获取当前登录用户ID
         Long adminId = Long.parseLong(jwt.getPayload("id").toString());
 
-        return adminService.getMenuTreeById(adminId);
+        return menuService.getListByAdminId(adminId);
     }
 
     // 组件渲染

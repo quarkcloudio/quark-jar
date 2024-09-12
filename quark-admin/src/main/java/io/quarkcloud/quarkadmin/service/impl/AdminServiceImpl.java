@@ -2,17 +2,13 @@ package io.quarkcloud.quarkadmin.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 
 import io.quarkcloud.quarkadmin.entity.AdminEntity;
-import io.quarkcloud.quarkadmin.entity.MenuEntity;
 import io.quarkcloud.quarkadmin.entity.PermissionEntity;
 import io.quarkcloud.quarkadmin.entity.RoleEntity;
 import io.quarkcloud.quarkadmin.entity.UserHasRoleEntity;
@@ -20,10 +16,8 @@ import io.quarkcloud.quarkadmin.mapper.AdminMapper;
 import io.quarkcloud.quarkadmin.mapper.RoleMapper;
 import io.quarkcloud.quarkadmin.mapper.UserHasRoleMapper;
 import io.quarkcloud.quarkadmin.service.AdminService;
-import io.quarkcloud.quarkadmin.service.MenuService;
 import io.quarkcloud.quarkadmin.service.PermissionService;
 import io.quarkcloud.quarkadmin.service.RoleService;
-import io.quarkcloud.quarkcore.util.Lister;
 import jakarta.annotation.Resource;
 
 @Service
@@ -48,10 +42,6 @@ public class AdminServiceImpl extends ResourceServiceImpl<AdminMapper, AdminEnti
     // 用户权限
     @Autowired
     private PermissionService permissionService;
-
-    // 菜单服务
-    @Autowired
-    private MenuService menuService;
 
     // 根据用户id，判断是否有访问权限
     public boolean checkPermission(Long adminId, String urlPath, String method) {
@@ -92,7 +82,6 @@ public class AdminServiceImpl extends ResourceServiceImpl<AdminMapper, AdminEnti
         QueryWrapper<UserHasRoleEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("uid", adminId);
         queryWrapper.eq("guard_name", "admin");
-
         List<UserHasRoleEntity> userHasRoles = userHasRoleMapper.selectList(queryWrapper);
         for (UserHasRoleEntity userHasRole : userHasRoles) {
             list.add(userHasRole.getRoleId());
@@ -102,51 +91,14 @@ public class AdminServiceImpl extends ResourceServiceImpl<AdminMapper, AdminEnti
     }
 
     // 根据用户id获取菜单列表
-    public List<MenuEntity> getMenusById(Long adminId) {
-        List<MenuEntity> list = new ArrayList<>();
+    public List<Long> getMenuIdsById(Long adminId) {
         List<Long> menuIds= new ArrayList<>();
-        if (adminId == 1) {
-            list = menuService.getList();
-        } else {
-            List<PermissionEntity> permissions= this.getPermissionsById(adminId);
-            for (PermissionEntity permission : permissions) {
-                List<Long> getMenuIds = permissionService.getMenuIdsById(permission.getId());
-                menuIds.addAll(getMenuIds);
-            }
-            menuService.listByIds(menuIds);
+        List<PermissionEntity> permissions= this.getPermissionsById(adminId);
+        for (PermissionEntity permission : permissions) {
+            List<Long> getMenuIds = permissionService.getMenuIdsById(permission.getId());
+            menuIds.addAll(getMenuIds);
         }
-
-        return list;
-    }
-
-    public boolean hasMenu(List<MenuEntity> menus, long id) {
-        return menus.stream().anyMatch(menu -> menu.getId() == id);
-    }
-
-    // 根据用户id获取菜单Tree
-    public ArrayNode getMenuTreeById(Long adminId) {
-        List<MenuEntity> list = getMenusById(adminId);
-        ArrayNode menuTree = new ObjectMapper().createArrayNode();
-        List<MenuEntity> newMenus = new ArrayList<>();
-        for (MenuEntity v : list) {
-            v.setKey(UUID.randomUUID().toString());
-            v.setLocale("menu" + v.getPath().replace("/", "."));
-            v.setHideInMenu(!v.getShow());
-            if (v.getType() == 2 && v.getIsEngine()) {
-                v.setPath("/layout/index?api=" + v.getPath());
-            }
-            if (!this.hasMenu(newMenus, v.getId()) && v.getType() != 3) {
-                newMenus.add(v);
-            }
-        }
-
-        try {
-            menuTree = Lister.listToTree(list, "id", "pid", "routes", 0L);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-
-        return menuTree;
+        return menuIds;
     }
 
     // 根据账号查询
