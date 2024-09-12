@@ -26,7 +26,7 @@ public class FileEntity extends Model<FileEntity> {
     private Long objId;
 
     // 文件分类id
-    private Long fileCategorId;
+    private Long fileCategoryId;
 
     // 排序
     private Integer sort;

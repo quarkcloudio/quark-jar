@@ -26,7 +26,7 @@ public class PictureEntity extends Model<PictureEntity> {
     private Long objId;
 
     // 文件分类id
-    private Long fileCategorId;
+    private Long pictureCategoryId;
 
     // 排序
     private Integer sort;
