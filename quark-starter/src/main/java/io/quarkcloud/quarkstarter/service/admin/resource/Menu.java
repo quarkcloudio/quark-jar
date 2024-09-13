@@ -11,6 +11,7 @@ import io.quarkcloud.quarkadmin.entity.MenuEntity;
 import io.quarkcloud.quarkadmin.mapper.MenuMapper;
 import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
 import io.quarkcloud.quarkcore.service.Context;
+import io.quarkcloud.quarkcore.util.Lister;
 import io.quarkcloud.quarkstarter.service.admin.action.Create;
 import io.quarkcloud.quarkstarter.service.admin.action.Delete;
 import io.quarkcloud.quarkstarter.service.admin.action.Edit;
@@ -30,6 +31,17 @@ public class Menu extends ResourceImpl<MenuMapper, MenuEntity> {
         this.title = "菜单";
         this.perPage = false;
         this.queryOrder = Map.of("sort", "asc");
+    }
+
+    public Object beforeIndexShowing(Context context, List<MenuEntity> list) {
+        String search = context.getParameter("search");
+        if (search!=null && !search.isEmpty() && !search.equals("{}")) {
+            // 返回原始列表
+            return list;
+        }
+
+        // 转换成树形结构
+        return Lister.listToTree(list, "id", "pid", "children", 0L);
     }
 
     // 字段

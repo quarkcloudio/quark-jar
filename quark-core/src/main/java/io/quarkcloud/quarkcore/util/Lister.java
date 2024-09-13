@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 public class Lister {
 
     // Convert generic list of Node objects to Tree
-    public static <T> ArrayNode listToTree(List<T> list, String pk, String pid, String child, Long root) throws IllegalAccessException {
+    public static <T> ArrayNode listToTree(List<T> list, String pk, String pid, String child, Long root) {
         ObjectMapper mapper = new ObjectMapper();
         ArrayNode arrayNode = mapper.createArrayNode();
         arrayNode = mapper.valueToTree(list);

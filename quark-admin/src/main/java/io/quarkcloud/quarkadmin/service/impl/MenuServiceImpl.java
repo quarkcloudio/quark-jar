@@ -181,11 +181,8 @@ public class MenuServiceImpl extends ResourceServiceImpl<MenuMapper, MenuEntity>
             }
         }
 
-        try {
-            menuTree = Lister.listToTree(newMenus, "id", "pid", "routes", 0L);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
+        menuTree = Lister.listToTree(newMenus, "id", "pid", "routes", 0L);
+        
         return menuTree;
     }
 

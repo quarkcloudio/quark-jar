@@ -350,7 +350,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     }
 
     // 解析列表页表格数据
-    public List<T> performsIndexList(Context context, List<T> lists) {
+    public Object performsIndexList(Context context, List<T> lists) {
         List<Object> getFields = fields(context);
         List<Object> indexFields = new ResolveField(getFields, context).indexFields(context);
         T tempEntity = this.entity;
@@ -449,7 +449,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     }
 
     // 列表页面显示前回调
-    public List<T> beforeIndexShowing(Context context, List<T> list) {
+    public Object beforeIndexShowing(Context context, List<T> list) {
         return list;
     }
 
