@@ -878,6 +878,11 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         // 获取行为查询条件
         queryWrapper = this.actionQueryWrapper(context, queryWrapper);
 
+        // 构建查询条件
+        queryWrapper = new PerformQuery<T>(context).
+            setUpdateWrapper(queryWrapper).
+            buildActionQuery();
+
         List<Object> actions = this.actions(context);
         for (Object item : actions) {
             Action<T> actionInstance = (Action<T>)item;
