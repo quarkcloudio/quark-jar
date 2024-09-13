@@ -563,7 +563,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         String api,
         Object fields,
         Object actions,
-        T data) {
+        Object data) {
 
         Object formComponent = this.form
             .setStyle(Map.of("padding", "24px"))
@@ -587,7 +587,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         String api,
         Object fields,
         Object actions,
-        T data) {
+        Object data) {
         Tabs tabsComponent = new Tabs().setTabPanes(fields).setTabBarExtraContent(extra);
         return this.form.setStyle(Map.of("backgroundColor", "#fff", "paddingBottom", "20px"))
             .setApi(api)
@@ -607,7 +607,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         String api,
         Object fields,
         Object actions,
-        T data) {
+        Object data) {
         if (fields instanceof List && !((List<?>) fields).isEmpty()) {
             Reflect fieldReflect = new Reflect(((List<?>) fields).get(0));
             String component = (String) fieldReflect.getFieldValue("component");
@@ -637,17 +637,17 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     }
 
     // 创建表单的数据
-    public T creationData(Context context) {
+    public Object creationData(Context context) {
         return this.beforeCreating(context);
     }
 
     // 创建页面显示前回调
-    public T beforeCreating(Context context) {
+    public Object beforeCreating(Context context) {
         return this.entity;
     }
 
     // 渲染创建页组件
-    public Object creationComponentRender(Context context, T data) {
+    public Object creationComponentRender(Context context, Object data) {
         String title = formTitle(context);
         List<Object> getActions = actions(context);
         Object formExtraActions = new ResolveAction<ResourceMapper<T>, T>(getActions, context).getFormExtraActions();
@@ -660,7 +660,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
 
     // 创建页组件渲染
     public Object creationRender(Context context) {
-        T data = this.creationData(context);
+        Object data = this.creationData(context);
         return this.pageComponentRender(context, creationComponentRender(context, data));
     }
 
@@ -1049,7 +1049,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
 
     // 表单渲染
     public Object formRender(Context context) {
-        T data = beforeCreating(context);
+        Object data = beforeCreating(context);
         return this.pageComponentRender(context, creationComponentRender(context, data));
     }
 
