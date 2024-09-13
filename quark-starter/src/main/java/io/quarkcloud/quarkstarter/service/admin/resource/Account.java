@@ -46,7 +46,6 @@ public class Account extends ResourceImpl<AdminMapper, AdminEntity> {
             Field.image("avatar", "头像"),
 
             Field.text("nickname", "昵称")
-                .setEditable(true)
                 .setRules(Arrays.asList(
                     new Rule().setRequired().setMessage("昵称必须填写")
                 )),
@@ -54,17 +53,11 @@ public class Account extends ResourceImpl<AdminMapper, AdminEntity> {
             Field.text("email", "邮箱")
                 .setRules(Arrays.asList(
                     new Rule().setRequired().setMessage("邮箱必须填写")
-                ))
-                .setCreationRules(Arrays.asList(
-                    new Rule().setUnique("admins", "email").setMessage("邮箱已存在")
                 )),
 
             Field.text("phone", "手机号")
                 .setRules(Arrays.asList(
                     new Rule().setRequired().setMessage("手机号必须填写")
-                ))
-                .setCreationRules(Arrays.asList(
-                    new Rule().setUnique("admins", "phone").setMessage("手机号已存在")
                 )),
 
             Field.radio("sex", "性别")
