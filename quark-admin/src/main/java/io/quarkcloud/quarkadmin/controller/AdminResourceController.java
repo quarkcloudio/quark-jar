@@ -17,6 +17,7 @@ import io.quarkcloud.quarkadmin.annotation.AdminResourceEditRender;
 import io.quarkcloud.quarkadmin.annotation.AdminResourceEditValuesRender;
 import io.quarkcloud.quarkadmin.annotation.AdminResourceEditableRender;
 import io.quarkcloud.quarkadmin.annotation.AdminResourceExportRender;
+import io.quarkcloud.quarkadmin.annotation.AdminResourceFormRender;
 import io.quarkcloud.quarkadmin.annotation.AdminResourceImportRender;
 import io.quarkcloud.quarkadmin.annotation.AdminResourceImportTemplateRender;
 import io.quarkcloud.quarkcore.service.Context;
@@ -98,6 +99,7 @@ public class AdminResourceController {
 
     @RequestMapping("/api/admin/{resource}/{uriKey}/form")
     @ResponseBody
+    @AdminResourceFormRender
     public Object form(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
