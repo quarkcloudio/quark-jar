@@ -2,6 +2,7 @@ package io.quarkcloud.quarkstarter.service.admin.resource;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
@@ -27,7 +28,8 @@ public class Menu extends ResourceImpl<MenuMapper, MenuEntity> {
     public Menu() {
         this.entity = new MenuEntity();
         this.title = "菜单";
-        this.perPage = 10;
+        this.perPage = false;
+        this.queryOrder = Map.of("sort", "asc");
     }
 
     // 字段
