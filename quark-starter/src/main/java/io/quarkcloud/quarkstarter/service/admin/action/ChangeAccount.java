@@ -17,6 +17,7 @@ import io.quarkcloud.quarkcore.service.Context;
 public class ChangeAccount<M, T> extends AjaxImpl<ResourceMapper<T>, T> {
 
     // 执行行为句柄
+    @SuppressWarnings("unchecked")
     public Object handle(Context context, UpdateWrapper<T> updateWrapper, ResourceService<ResourceMapper<T>, T> resourceService) {
         JWT jwt = context.parseToken();
         AdminEntity adminEntity = context.getRequestBody(AdminEntity.class);
