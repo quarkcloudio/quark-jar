@@ -35,7 +35,7 @@ public class ConfigEntity extends Model<ConfigEntity> {
     private String groupName;
 
     // 配置值
-    private String value;
+    private Object value;
 
     // 备注信息
     private String remark;

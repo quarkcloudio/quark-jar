@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -118,6 +119,18 @@ public interface ResourceService<M extends ResourceMapper<T>, T> {
 
     // 查询列表
     List<Map<String, Object>> listMaps(Wrapper<T> queryWrapper);
+
+    // 查询全部记录
+    List<Object> listObjs();
+
+    // 查询全部记录
+    <V> List<V> listObjs(Function<? super Object, V> mapper);
+
+    // 根据 Wrapper 条件，查询全部记录
+    List<Object> listObjs(Wrapper<T> queryWrapper);
+    
+    // 根据 Wrapper 条件，查询全部记录
+    <V> List<V> listObjs(Wrapper<T> queryWrapper, Function<? super Object, V> mapper);
 
     // 无条件分页查询
     IPage<T> page(IPage<T> page);

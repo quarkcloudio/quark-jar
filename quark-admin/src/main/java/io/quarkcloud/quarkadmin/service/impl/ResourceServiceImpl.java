@@ -1,9 +1,11 @@
 package io.quarkcloud.quarkadmin.service.impl;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -144,6 +146,36 @@ public class ResourceServiceImpl<M extends ResourceMapper<T>, T> implements Reso
     // 查询列表
     public List<Map<String, Object>> listMaps(Wrapper<T> queryWrapper) {
         return this.resourceMapper.selectMaps(queryWrapper);
+    }
+
+    // 查询全部记录
+    public List<Object> listObjs() {
+        return this.resourceMapper.selectObjs(null);
+    }
+
+    // 查询全部记录
+    public <V> List<V> listObjs(Function<? super Object, V> mapper) {
+        List<V> list = new ArrayList<>();
+        List<T> objects = this.resourceMapper.selectList(null);
+        for (Object object : objects) {
+            list.add(mapper.apply(object));
+        }
+        return list;
+    }
+
+    // 根据 Wrapper 条件，查询全部记录
+    public List<Object> listObjs(Wrapper<T> queryWrapper) {
+        return this.resourceMapper.selectObjs(queryWrapper);
+    }
+    
+    // 根据 Wrapper 条件，查询全部记录
+    public <V> List<V> listObjs(Wrapper<T> queryWrapper, Function<? super Object, V> mapper) {
+        List<V> list = new ArrayList<>();
+        List<T> objects = this.resourceMapper.selectList(queryWrapper);
+        for (Object object : objects) {
+            list.add(mapper.apply(object));
+        }
+        return list;
     }
 
     // 无条件分页查询
