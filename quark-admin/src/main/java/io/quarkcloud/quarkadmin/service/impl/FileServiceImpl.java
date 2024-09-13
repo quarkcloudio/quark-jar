@@ -24,8 +24,8 @@ public class FileServiceImpl extends ResourceServiceImpl<FileMapper, FileEntity>
     public String getPath(Object id) {
         String http = "";
         String path = "";
-        String webSiteDomain = configService.getValue("WEB_SITE_DOMAIN");
-        String webConfig = configService.getValue("SSL_OPEN");
+        String webSiteDomain = (String) configService.getValue("WEB_SITE_DOMAIN");
+        String webConfig = (String) configService.getValue("SSL_OPEN");
         if (webSiteDomain != null && !webSiteDomain.isEmpty()) {
             if ("1".equals(webConfig)) {
                 http = "https://";

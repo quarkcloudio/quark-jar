@@ -11,5 +11,5 @@ public interface ConfigService extends ResourceService<ConfigMapper, ConfigEntit
      * @param key 要获取值的键
      * @return 与键对应的值
      */
-    public String getValue(String key);
+    public Object getValue(String key);
 }

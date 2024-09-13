@@ -609,14 +609,10 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         Object actions,
         T data) {
         if (fields instanceof List && !((List<?>) fields).isEmpty()) {
-            String component;
-            try {
-                component = ((List<?>) fields).get(0).getClass().getField("component").toString();
-                if (component.equals("tabPane")) {
-                    return this.formWithinTabs(context, title, extra, api, fields, actions, data);
-                }
-            } catch (NoSuchFieldException | SecurityException e) {
-                e.printStackTrace();
+            Reflect fieldReflect = new Reflect(((List<?>) fields).get(0));
+            String component = (String) fieldReflect.getFieldValue("component");
+            if (component.equals("tabPane")) {
+                return this.formWithinTabs(context, title, extra, api, fields, actions, data);
             }
         }
         return this.formWithinCard(context, title, extra, api, fields, actions, data);

@@ -85,7 +85,7 @@ public class WebConfig extends ResourceImpl<ConfigMapper, ConfigEntity> {
                         break;
                 }
             }
-            tabPanes.add(new TabPane().init().setTitle(groupName).setBody(fields));
+            tabPanes.add(new TabPane().setTitle(groupName).setBody(fields));
         }
 
         return tabPanes;

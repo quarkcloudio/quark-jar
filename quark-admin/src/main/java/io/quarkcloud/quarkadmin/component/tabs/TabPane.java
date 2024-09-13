@@ -19,11 +19,11 @@ public class TabPane extends Component {
     private Object body;
 
     // 初始化
-    public TabPane init() {
+    public TabPane() {
         this.title = "";
         this.body = null;
         this.setComponentKey();
-        return this;
+        this.component = "tabPane";
     }
 
     // 设置样式

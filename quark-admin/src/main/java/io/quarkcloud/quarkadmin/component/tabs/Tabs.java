@@ -12,39 +12,38 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 public class Tabs  extends Component {
 
-    /** 组件类型标识 */
-    private String element; 
-    
     /** 是否居中显示标签 */
-    private boolean centered; 
+    public boolean centered; 
     
     /** 默认激活的 tab 面板的 key */
-    private String defaultActiveKey; 
+    public String defaultActiveKey; 
     
     /** 组件大小 (large, default, small) */
-    private String size; 
+    public String size; 
     
     /** tab bar 上额外的元素 */
-    private Object tabBarExtraContent; 
+    public Object tabBarExtraContent; 
     
     /** tabs 之间的间隙 (以像素为单位) */
-    private int tabBarGutter; 
+    public int tabBarGutter; 
     
     /** tab bar 的样式对象 */
-    private Object tabBarStyle; 
+    public Object tabBarStyle; 
     
     /** 页签位置 (top, right, bottom, left) */
-    private String tabPosition; 
+    public String tabPosition; 
     
     /** 页签的基本样式 (line, card, editable-card) */
-    private String type; 
+    public String type; 
     
     /** tab 的内容 */
-    private Object tabPanes;
+    public Object tabPanes;
+
+    public Object body;
 
     // 初始化
     public Tabs() {
-        this.element = "tabs";
+        this.component = "tabs";
         this.size = "default";
         this.tabPosition = "top";
         this.type = "line";

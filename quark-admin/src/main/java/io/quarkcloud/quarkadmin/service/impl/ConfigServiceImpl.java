@@ -11,7 +11,7 @@ import io.quarkcloud.quarkadmin.service.ConfigService;
 @Service
 public class ConfigServiceImpl extends ResourceServiceImpl<ConfigMapper, ConfigEntity> implements ConfigService {
 
-    public String getValue(String key) {
+    public Object getValue(String key) {
         MPJLambdaWrapper<ConfigEntity> queryWrapper = new MPJLambdaWrapper<ConfigEntity>().eq("name", key);
         ConfigEntity configEntity = this.getOne(queryWrapper);
         return configEntity == null ? null : configEntity.getValue();

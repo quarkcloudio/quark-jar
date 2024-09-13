@@ -204,13 +204,16 @@ public class Form extends Component {
             return items;
         }
 
-        String component = (String) new Reflect(v).invoke("getComponent");
-        if (component.contains("Field")) {
-            items.add(v);
-            if (when) {
-                List<Object> whenFields = getWhenFields(v);
-                if (!whenFields.isEmpty()) {
-                    items.addAll(whenFields);
+        boolean isHasGetComponent = new Reflect(v).checkMethodExist("getComponent");
+        if (isHasGetComponent) {
+            String component = (String) new Reflect(v).invoke("getComponent");
+            if (component.contains("Field")) {
+                items.add(v);
+                if (when) {
+                    List<Object> whenFields = getWhenFields(v);
+                    if (!whenFields.isEmpty()) {
+                        items.addAll(whenFields);
+                    }
                 }
             }
         }
