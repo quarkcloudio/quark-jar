@@ -26,7 +26,10 @@ public class Lister {
 
         for (JsonNode node : list) {
             if (node.get(pid).asLong() == root) {
-                ((ObjectNode) node).set(child, parserToTree(list, pk, pid, child, node.get(pk).asLong()));
+                ArrayNode childNode= parserToTree(list, pk, pid, child, node.get(pk).asLong());
+                if (childNode.size() > 0) {
+                    ((ObjectNode) node).set(child, childNode);
+                }
                 treeList.add(node);
             }
         }

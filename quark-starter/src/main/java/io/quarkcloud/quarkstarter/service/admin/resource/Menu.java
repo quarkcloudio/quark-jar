@@ -49,6 +49,7 @@ public class Menu extends ResourceImpl<MenuMapper, MenuEntity> {
         return Arrays.asList(
             Field.hidden("id", "ID"),
             Field.hidden("pid", "PID").onlyOnIndex(),
+            Field.text("name", "名称"),
             Field.switchField("status", "状态").
                 setTrueValue("正常").
                 setFalseValue("禁用").
