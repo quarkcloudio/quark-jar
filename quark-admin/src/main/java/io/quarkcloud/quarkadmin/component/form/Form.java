@@ -237,11 +237,14 @@ public class Form extends Component {
         if (!itemsIsValid) {
             return items;
         }
-        Object whenItems = new Reflect(item).invoke("getItems");
+        Object whenItems = new Reflect(getWhen).invoke("getItems");
         if (whenItems == null) {
             return items;
         }
-        
+        if (!(whenItems instanceof List<?>)) {
+            return items;
+        }
+
         for (Object v : (List<?>) whenItems) {
             Object body = new Reflect(v).invoke("getBody");
             if (body instanceof List<?>) {
