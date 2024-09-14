@@ -12,6 +12,9 @@ import io.quarkcloud.quarkadmin.entity.AdminEntity;
 import io.quarkcloud.quarkadmin.mapper.AdminMapper;
 import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
 import io.quarkcloud.quarkcore.service.Context;
+import io.quarkcloud.quarkstarter.service.admin.action.BatchDelete;
+import io.quarkcloud.quarkstarter.service.admin.action.BatchDisable;
+import io.quarkcloud.quarkstarter.service.admin.action.BatchEnable;
 import io.quarkcloud.quarkstarter.service.admin.action.Create;
 import io.quarkcloud.quarkstarter.service.admin.action.Delete;
 import io.quarkcloud.quarkstarter.service.admin.action.Edit;
@@ -80,6 +83,9 @@ public class Admin extends ResourceImpl<AdminMapper, AdminEntity> {
             new Create<AdminMapper, AdminEntity>(this.getTitle()),
             new Edit<AdminMapper, AdminEntity>(),
             new Delete<AdminMapper, AdminEntity>(),
+            new BatchDelete<AdminMapper, AdminEntity>(),
+            new BatchDisable<AdminMapper, AdminEntity>(),
+            new BatchEnable<AdminMapper, AdminEntity>(),
             new FormExtraBack<AdminMapper, AdminEntity>(),
             new FormSubmit<AdminMapper, AdminEntity>(),
             new FormReset<AdminMapper, AdminEntity>(),

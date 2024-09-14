@@ -11,7 +11,9 @@ import io.quarkcloud.quarkadmin.component.form.Field;
 import io.quarkcloud.quarkadmin.component.form.Rule;
 import io.quarkcloud.quarkadmin.component.form.fields.Transfer.DataSource;
 import io.quarkcloud.quarkadmin.component.form.fields.TreeSelect;
+import io.quarkcloud.quarkadmin.entity.AdminEntity;
 import io.quarkcloud.quarkadmin.entity.MenuEntity;
+import io.quarkcloud.quarkadmin.mapper.AdminMapper;
 import io.quarkcloud.quarkadmin.mapper.MenuMapper;
 import io.quarkcloud.quarkadmin.service.MenuService;
 import io.quarkcloud.quarkadmin.service.PermissionService;
@@ -19,6 +21,10 @@ import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
 import io.quarkcloud.quarkcore.service.Context;
 import io.quarkcloud.quarkcore.util.Lister;
 import io.quarkcloud.quarkstarter.service.admin.action.MenuCreateDrawer;
+import io.quarkcloud.quarkstarter.service.admin.action.BatchDelete;
+import io.quarkcloud.quarkstarter.service.admin.action.BatchDisable;
+import io.quarkcloud.quarkstarter.service.admin.action.BatchEnable;
+import io.quarkcloud.quarkstarter.service.admin.action.ChangeStatus;
 import io.quarkcloud.quarkstarter.service.admin.action.Delete;
 import io.quarkcloud.quarkstarter.service.admin.action.MenuEditDrawer;
 import io.quarkcloud.quarkstarter.service.admin.action.FormBack;
@@ -184,8 +190,12 @@ public class Menu extends ResourceImpl<MenuMapper, MenuEntity> {
     public List<Object> actions(Context context) {
         return Arrays.asList(
             new MenuCreateDrawer<MenuMapper, MenuEntity>(this.getTitle(), this.creationApi(context), this.creationFields(context), this.creationData(context)),
+            new ChangeStatus<AdminMapper, AdminEntity>(),
             new MenuEditDrawer<MenuMapper, MenuEntity>("编辑", this.editApi(context), this.editValueApi(context), this.editFields(context)),
             new Delete<MenuMapper, MenuEntity>(),
+            new BatchDelete<AdminMapper, AdminEntity>(),
+            new BatchDisable<AdminMapper, AdminEntity>(),
+            new BatchEnable<AdminMapper, AdminEntity>(),
             new FormExtraBack<MenuMapper, MenuEntity>(),
             new FormSubmit<MenuMapper, MenuEntity>(),
             new FormReset<MenuMapper, MenuEntity>(),
