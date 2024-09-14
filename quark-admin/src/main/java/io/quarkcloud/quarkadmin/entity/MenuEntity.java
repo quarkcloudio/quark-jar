@@ -39,16 +39,16 @@ public class MenuEntity {
 
     // 是否显示
     @TableField(value = "`show`")
-    private Boolean show;
+    private Short show;
 
     // 是否为引擎路由
-    private Boolean isEngine;
+    private Short isEngine;
 
     // 是否打开新页面
-    private Boolean isLink;
+    private Short isLink;
 
     // 状态
-    private Boolean status;
+    private Short status;
 
     // 组件key
     @TableField(value = "`key`")

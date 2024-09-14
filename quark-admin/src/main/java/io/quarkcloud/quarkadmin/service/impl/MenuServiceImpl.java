@@ -172,8 +172,8 @@ public class MenuServiceImpl extends ResourceServiceImpl<MenuMapper, MenuEntity>
         for (MenuEntity menu : menus) {
             menu.setKey(UUID.randomUUID().toString()); // 生成唯一标识
             menu.setLocale("menu" + menu.getPath().replace("/", "."));
-            menu.setHideInMenu(!menu.getShow()); // 设置是否隐藏
-            if (menu.getType() == 2 && menu.getIsEngine()) {
+            menu.setHideInMenu(!(menu.getShow()==1)); // 设置是否隐藏
+            if (menu.getType() == 2 && menu.getIsEngine()==1) {
                 menu.setPath("/layout/index?api=" + menu.getPath()); // 设置路径
             }
             if (!hasMenu(newMenus, menu.getId()) && menu.getType() != 3) {
