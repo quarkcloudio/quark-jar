@@ -315,13 +315,13 @@ public class Password extends Component {
         boolean isEditing = (uri[uri.length - 1].equals("edit")) || (uri[uri.length - 1].equals("update"));
         Function<List<Rule>, List<Rule>> convertToFrontendRules = Rule::convertToFrontendRules;
         frontendRules.addAll(convertToFrontendRules.apply(this.rules));
-        if (isCreating) {
+        
+        if (isCreating && this.creationRules != null) {
             frontendRules.addAll(convertToFrontendRules.apply(this.creationRules));
         }
-        if (isEditing) {
+        if (isEditing && this.updateRules != null) {
             frontendRules.addAll(convertToFrontendRules.apply(this.updateRules));
         }
-        
         this.frontendRules = frontendRules;
 
         return this;

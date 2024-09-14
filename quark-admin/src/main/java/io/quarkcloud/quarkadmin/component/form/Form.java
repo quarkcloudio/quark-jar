@@ -136,7 +136,7 @@ public class Form extends Component {
             return null;
         }
         String name = (String) new Reflect(item).invoke("getName");
-        if (name.isEmpty()) {
+        if (name == null || name.isEmpty()) {
             return null;
         }
 

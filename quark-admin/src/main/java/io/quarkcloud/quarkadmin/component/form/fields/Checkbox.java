@@ -294,11 +294,10 @@ public class Checkbox extends Component {
         Function<List<Rule>, List<Rule>> convertToFrontendRules = Rule::convertToFrontendRules;
         frontendRules.addAll(convertToFrontendRules.apply(this.rules));
 
-        if (isCreating) {
+        if (isCreating && this.creationRules != null) {
             frontendRules.addAll(convertToFrontendRules.apply(this.creationRules));
         }
-
-        if (isEditing) {
+        if (isEditing && this.updateRules != null) {
             frontendRules.addAll(convertToFrontendRules.apply(this.updateRules));
         }
         this.frontendRules = frontendRules;
