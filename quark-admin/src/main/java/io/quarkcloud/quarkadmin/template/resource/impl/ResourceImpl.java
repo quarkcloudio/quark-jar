@@ -341,7 +341,8 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
 
     // 列表页批量操作
     public Object indexTableAlertActions(Context context) {
-        return null;
+        List<Object> getActions = actions(context);
+        return new ResolveAction<ResourceMapper<T>, T>(getActions, context).getIndexTableAlertActions();
     }
 
     // 列表页标题
@@ -735,7 +736,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
             buildEditQuery();
 
         // 获取编辑数据
-        T data = this.resourceService.getOne(queryWrapper);
+        T data = resourceService.getOne(queryWrapper);
 
         // 编辑数据前回调
         return beforeEditing(context, data);

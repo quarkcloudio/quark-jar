@@ -10,6 +10,7 @@ import io.quarkcloud.quarkadmin.entity.ActionLogEntity;
 import io.quarkcloud.quarkadmin.mapper.ActionLogMapper;
 import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
 import io.quarkcloud.quarkcore.service.Context;
+import io.quarkcloud.quarkstarter.service.admin.action.BatchDelete;
 import io.quarkcloud.quarkstarter.service.admin.action.Delete;
 import io.quarkcloud.quarkstarter.service.admin.search.Input;
 import io.quarkcloud.quarkstarter.service.admin.search.Status;
@@ -47,7 +48,8 @@ public class ActionLog extends ResourceImpl<ActionLogMapper, ActionLogEntity> {
     // 行为
     public List<Object> actions(Context context) {
         return Arrays.asList(
-            new Delete<ActionLogMapper, ActionLogEntity>()
+            new Delete<ActionLogMapper, ActionLogEntity>(),
+            new BatchDelete<>()
         );
     }
 }
