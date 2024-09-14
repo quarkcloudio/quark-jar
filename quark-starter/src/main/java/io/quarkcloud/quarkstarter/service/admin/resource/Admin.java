@@ -23,6 +23,7 @@ import io.quarkcloud.quarkstarter.service.admin.action.FormBack;
 import io.quarkcloud.quarkstarter.service.admin.action.FormExtraBack;
 import io.quarkcloud.quarkstarter.service.admin.action.FormReset;
 import io.quarkcloud.quarkstarter.service.admin.action.FormSubmit;
+import io.quarkcloud.quarkstarter.service.admin.action.More;
 import io.quarkcloud.quarkstarter.service.admin.search.DatetimeRange;
 import io.quarkcloud.quarkstarter.service.admin.search.Input;
 import io.quarkcloud.quarkstarter.service.admin.search.Status;
@@ -83,8 +84,10 @@ public class Admin extends ResourceImpl<AdminMapper, AdminEntity> {
         return Arrays.asList(
             new CreateLink<AdminMapper, AdminEntity>(this.getTitle()),
             new DetailLink<AdminMapper, AdminEntity>(),
-            new EditLink<AdminMapper, AdminEntity>(),
-            new Delete<AdminMapper, AdminEntity>(),
+            new More<AdminMapper, AdminEntity>().setActions(Arrays.asList(
+                new EditLink<AdminMapper, AdminEntity>(),
+                new Delete<AdminMapper, AdminEntity>()
+            )),
             new BatchDelete<AdminMapper, AdminEntity>(),
             new BatchDisable<AdminMapper, AdminEntity>(),
             new BatchEnable<AdminMapper, AdminEntity>(),

@@ -41,7 +41,8 @@ public class DropdownImpl<M, T> extends ActionImpl<ResourceMapper<T>, T> {
     public DropdownImpl() {
         this.actionType = "dropdown";
         this.placement = "bottomLeft";
-        this.trigger.add("hover");
+        this.trigger = new ArrayList<String>();
+        this.overlayStyle = new java.util.HashMap<String, Object>();
     }
 
     /**

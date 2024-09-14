@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import io.quarkcloud.quarkadmin.component.Component;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -63,13 +65,13 @@ public class Dropdown extends Component {
     public List<String> trigger;
 
     // 菜单是否显示
-    public boolean Visible;
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    public boolean visible;
 
     public Dropdown() {
         this.component = "dropdown";
         this.setComponentKey();
         this.style = new HashMap<>();
-        this.Visible = true;
     }
 
     // 设置按钮图标
