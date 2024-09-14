@@ -18,9 +18,9 @@ import io.quarkcloud.quarkadmin.service.PermissionService;
 import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
 import io.quarkcloud.quarkcore.service.Context;
 import io.quarkcloud.quarkcore.util.Lister;
-import io.quarkcloud.quarkstarter.service.admin.action.Create;
+import io.quarkcloud.quarkstarter.service.admin.action.MenuCreateDrawer;
 import io.quarkcloud.quarkstarter.service.admin.action.Delete;
-import io.quarkcloud.quarkstarter.service.admin.action.Edit;
+import io.quarkcloud.quarkstarter.service.admin.action.MenuEditDrawer;
 import io.quarkcloud.quarkstarter.service.admin.action.FormBack;
 import io.quarkcloud.quarkstarter.service.admin.action.FormExtraBack;
 import io.quarkcloud.quarkstarter.service.admin.action.FormReset;
@@ -183,8 +183,8 @@ public class Menu extends ResourceImpl<MenuMapper, MenuEntity> {
     // 行为
     public List<Object> actions(Context context) {
         return Arrays.asList(
-            new Create<MenuMapper, MenuEntity>(this.getTitle()),
-            new Edit<MenuMapper, MenuEntity>(),
+            new MenuCreateDrawer<MenuMapper, MenuEntity>(this.getTitle(), this.creationApi(context), this.creationFields(context), this.creationData(context)),
+            new MenuEditDrawer<MenuMapper, MenuEntity>("编辑", this.editApi(context), this.editValueApi(context), this.editFields(context)),
             new Delete<MenuMapper, MenuEntity>(),
             new FormExtraBack<MenuMapper, MenuEntity>(),
             new FormSubmit<MenuMapper, MenuEntity>(),

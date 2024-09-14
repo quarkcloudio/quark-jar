@@ -138,9 +138,11 @@ public class List extends Component {
     java.util.List<Rule> frontendRules;
 
     // When组件
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     When when;
 
     // When组件里的字段
+    @JsonIgnore
     java.util.List<WhenItem> whenItem;
 
     // 在列表页展示

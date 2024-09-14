@@ -138,9 +138,11 @@ public class Space extends Component {
     List<Rule> frontendRules;
 
     // When组件
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     When when;
 
     // When组件里的字段
+    @JsonIgnore
     List<WhenItem> whenItem;
 
     // 在列表页展示

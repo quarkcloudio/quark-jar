@@ -142,9 +142,11 @@ public class Dependency extends Component {
     List<Rule> frontendRules;
 
     // When组件
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     When when;
 
     // When组件里的字段
+    @JsonIgnore
     List<WhenItem> whenItem;
 
     // 在列表页展示
@@ -191,6 +193,7 @@ public class Dependency extends Component {
         this.column = new Column();
         this.whenItem = new ArrayList<>();
         this.when = new When();
+        this.names = new ArrayList<>();
         this.setComponentKey();
         this.onlyOnForms();
     }
@@ -296,25 +299,25 @@ public class Dependency extends Component {
 
     // 设置When组件数据
     //
-    // new Dependency().setWhen(option, callback)
-    public Dependency setWhen(Object option, Closure callback) {
-        this.setWhen("=", option, callback);
+    // new Dependency().setWhen(name, option, callback)
+    public Dependency setWhen(String name, Object option, Closure callback) {
+        this.setWhen(name, "=", option, callback);
         return this;
     }
 
     // 设置When组件数据
     //
-    // new Dependency().setWhen(">", option, callback)
-    public Dependency setWhen(String operator, Object option, Closure callback) {
+    // new Dependency().setWhen(name, ">", option, callback)
+    public Dependency setWhen(String name, String operator, Object option, Closure callback) {
         WhenItem item = new WhenItem();
 
         item.body = callback.callback();
-        item.conditionName = this.name;
+        item.conditionName = name;
         item.conditionOperator = operator;
         item.option = option;
 
         StringBuilder conditionBuilder = new StringBuilder();
-        conditionBuilder.append("<%=String(").append(this.name).append(")");
+        conditionBuilder.append("<%=String(").append(name).append(")");
 
         switch (operator) {
             case "=":
@@ -353,6 +356,7 @@ public class Dependency extends Component {
         item.condition = conditionBuilder.toString();
         whenItem.add(item);
         when.setItems(whenItem);
+        this.names.add(name);
 
         return this;
     }

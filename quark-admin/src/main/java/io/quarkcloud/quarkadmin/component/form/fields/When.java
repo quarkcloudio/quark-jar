@@ -23,7 +23,7 @@ public class When {
     List<WhenItem> items;
 
     public When() {
-        this.component = "whenField";
+        this.component = "when";
         this.setComponentKey("", true);
     }
 

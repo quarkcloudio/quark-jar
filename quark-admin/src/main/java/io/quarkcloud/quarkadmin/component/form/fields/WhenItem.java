@@ -28,6 +28,6 @@ public class WhenItem {
 	Object body;
 
     public WhenItem() {
-        this.component = "whenField";
+        this.component = "whenItem";
     }
 }
