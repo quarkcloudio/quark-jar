@@ -566,7 +566,7 @@ public class ResolveField {
                 Reflect bodyReflect = new Reflect(v);
                 boolean bodyFieldExist = bodyReflect.checkFieldExist("body");
                 if (bodyFieldExist) {
-                    Object body = bodyReflect.getFieldValue();
+                    Object body = bodyReflect.getFieldValue("body");
                     List<Object> getItems = findFields(body, true);
                     if (getItems != null && !getItems.isEmpty()) {
                         items.addAll(getItems);
@@ -618,7 +618,7 @@ public class ResolveField {
                 Reflect bodyReflect = new Reflect(v);
                 boolean bodyFieldExist = bodyReflect.checkFieldExist("body");
                 if (bodyFieldExist) {
-                    Object body = bodyReflect.getFieldValue();
+                    Object body = bodyReflect.getFieldValue("body");
                     if (body instanceof List<?>) {
                         items.addAll((List<?>) body);
                     } else {
