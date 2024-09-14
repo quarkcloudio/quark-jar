@@ -183,7 +183,6 @@ public class Hidden extends Component {
 
     public Hidden() {
         this.component = "hiddenField";
-        this.setComponentKey();
         this.style = new HashMap<>();
         this.rules = new ArrayList<>();
         this.colon = true;
@@ -195,6 +194,9 @@ public class Hidden extends Component {
         this.showOnExport = true;
         this.showOnImport = true;
         this.column = new Column();
+        this.whenItem = new ArrayList<>();
+        this.when = new When();
+        this.setComponentKey();
     }
 
     // 校验规则，设置字段的校验逻辑

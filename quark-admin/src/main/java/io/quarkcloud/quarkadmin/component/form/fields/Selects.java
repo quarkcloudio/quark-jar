@@ -186,6 +186,8 @@ public class Selects extends Component {
         this.style = new HashMap<>();
         this.rules = new ArrayList<>();
         this.onlyOnForms();
+        this.whenItem = new ArrayList<>();
+        this.when = new When();
     }
 
     // 校验规则，设置字段的校验逻辑

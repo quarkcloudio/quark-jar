@@ -226,9 +226,11 @@ public class Image extends Component {
         this.limitWH = new HashMap<>();
         this.limitWH.put("width", 0);
         this.limitWH.put("height", 0);
-        this.setComponentKey();
         this.style = new HashMap<>();
         this.rules = new ArrayList<>();
+        this.whenItem = new ArrayList<>();
+        this.when = new When();
+        this.setComponentKey();
     }
 
     // 校验规则，设置字段的校验逻辑

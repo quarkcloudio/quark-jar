@@ -261,7 +261,6 @@ public class DateRange extends Component {
 
     public DateRange() {
         this.component = "dateRangeField";
-        this.setComponentKey();
         this.colon = true;
         this.labelAlign = "right";
         this.showOnIndex = true;
@@ -277,6 +276,9 @@ public class DateRange extends Component {
         this.defaultValue = new Object[]{null, null};
         this.style = new HashMap<>();
         this.rules = new ArrayList<>();
+        this.whenItem = new ArrayList<>();
+        this.when = new When();
+        this.setComponentKey();
     }
 
     // Field 的长度，我们归纳了常用的 Field 长度以及适合的场景，支持了一些枚举 "xs" , "s" , "m" , "l" , "x"

@@ -301,6 +301,8 @@ public class TimeRange extends Component {
         this.format = "HH:mm";
         this.placeholder = new String[]{"开始时间", "结束时间"};
         this.defaultValue = new Object[]{null, null};
+        this.whenItem = new ArrayList<>();
+        this.when = new When();
     }
 
     // Field 的长度，我们归纳了常用的 Field 长度以及适合的场景，支持了一些枚举 "xs" , "s" , "m" , "l" , "x"

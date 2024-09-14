@@ -317,9 +317,11 @@ public class Cascader extends Component {
         this.showOnImport = true;
         this.column = new Column();
         this.placeholder = "请选择";
-        this.setComponentKey();
         this.style = new HashMap<>();
         this.rules = new ArrayList<>();
+        this.whenItem = new ArrayList<>();
+        this.when = new When();
+        this.setComponentKey();
         this.setWidth(400);
     }
 

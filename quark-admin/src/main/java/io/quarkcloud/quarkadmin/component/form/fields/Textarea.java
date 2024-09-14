@@ -270,6 +270,8 @@ public class Textarea extends Component {
         this.rules = new ArrayList<>();
         this.setComponentKey();
         this.setWidth(200);
+        this.whenItem = new ArrayList<>();
+        this.when = new When();
     }
 
     // Field 的长度，我们归纳了常用的 Field 长度以及适合的场景，支持了一些枚举 "xs" , "s" , "m" , "l" , "x"

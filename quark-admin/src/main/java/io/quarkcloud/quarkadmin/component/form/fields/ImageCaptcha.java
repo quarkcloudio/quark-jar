@@ -236,7 +236,6 @@ public class ImageCaptcha extends Component {
 
     public ImageCaptcha() {
         this.component = "imageCaptchaField";
-        this.setComponentKey();
         this.style = new HashMap<>();
         this.rules = new ArrayList<>();
         this.colon = true;
@@ -250,7 +249,10 @@ public class ImageCaptcha extends Component {
         this.column = new Column();
         this.placeholder = "请输入";
         this.maxLength = 200;
+        this.whenItem = new ArrayList<>();
+        this.when = new When();
         this.setWidth(200);
+        this.setComponentKey();
     }
 
     // Field 的长度，我们归纳了常用的 Field 长度以及适合的场景，支持了一些枚举 "xs" , "s" , "m" , "l" , "x"

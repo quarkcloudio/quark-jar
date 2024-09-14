@@ -188,13 +188,15 @@ public class Group extends Component {
 
     public Group() {
         this.component = "groupField";
-        this.setComponentKey();
         this.style = new HashMap<>();
         this.rules = new ArrayList<>();
         this.colon = true;
         this.labelAlign = "right";
         this.column = new Column();
         this.size = 32;
+        this.whenItem = new ArrayList<>();
+        this.when = new When();
+        this.setComponentKey();
         this.onlyOnForms();
     }
 

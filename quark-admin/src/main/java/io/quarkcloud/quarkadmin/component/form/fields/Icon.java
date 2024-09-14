@@ -205,7 +205,6 @@ public class Icon extends Component {
 
     public Icon() {
         this.component = "iconField";
-        this.setComponentKey();
         this.style = new HashMap<>();
         this.rules = new ArrayList<>();
         this.colon = true;
@@ -277,8 +276,11 @@ public class Icon extends Component {
             "icon-barchart", "icon-pointmap", "icon-container", "icon-atom", "icon-zanwutupian", "icon-safetycertificate",
             "icon-password", "icon-article", "icon-page", "icon-plugin", "icon-admin", "icon-banner"
         );
-        this.setWidth(200);
         this.defaultValue = "";
+        this.setWidth(200);
+        this.setComponentKey();
+        this.whenItem = new ArrayList<>();
+        this.when = new When();
     }
 
     // Field 的长度，我们归纳了常用的 Field 长度以及适合的场景，支持了一些枚举 "xs" , "s" , "m" , "l" , "x"

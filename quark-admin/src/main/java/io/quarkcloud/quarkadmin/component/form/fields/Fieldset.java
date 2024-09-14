@@ -185,13 +185,15 @@ public class Fieldset extends Component {
 
     public Fieldset() {
         this.component = "fieldsetField";
-        this.setComponentKey();
         this.style = new HashMap<>();
         this.rules = new ArrayList<>();
         this.colon = true;
         this.labelAlign = "right";
         this.column = new Column();
+        this.whenItem = new ArrayList<>();
+        this.when = new When();
         this.onlyOnForms();
+        this.setComponentKey();
     }
 
     // Field 的长度，我们归纳了常用的 Field 长度以及适合的场景，支持了一些枚举 "xs" , "s" , "m" , "l" , "x"

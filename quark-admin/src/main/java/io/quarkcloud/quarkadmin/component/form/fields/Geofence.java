@@ -202,7 +202,6 @@ public class Geofence extends Component {
 
     public Geofence() {
         this.component = "geofenceField";
-        this.setComponentKey();
         this.style = new HashMap<>();
         this.rules = new ArrayList<>();
         this.colon = true;
@@ -229,6 +228,9 @@ public class Geofence extends Component {
         this.style.put("height", 500);
         this.style.put("width", "100%");
         this.style.put("marginTop", "10px");
+        this.setComponentKey();
+        this.whenItem = new ArrayList<>();
+        this.when = new When();
     }
 
     // 校验规则，设置字段的校验逻辑

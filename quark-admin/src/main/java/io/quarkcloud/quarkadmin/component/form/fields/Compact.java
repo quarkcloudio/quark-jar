@@ -193,13 +193,15 @@ public class Compact extends Component {
 
     public Compact() {
         this.component = "compactField";
-        this.setComponentKey();
         this.colon = true;
         this.labelAlign = "right";
         this.column = new Column();
-        this.onlyOnForms();
         this.style = new HashMap<>();
         this.rules = new ArrayList<>();
+        this.whenItem = new ArrayList<>();
+        this.when = new When();
+        this.onlyOnForms();
+        this.setComponentKey();
     }
 
     // Field 的长度，我们归纳了常用的 Field 长度以及适合的场景，支持了一些枚举 "xs" , "s" , "m" , "l" , "x"

@@ -197,7 +197,6 @@ public class List extends Component {
 
     public List() {
         this.component = "listField";
-        this.setComponentKey();
         this.style = new HashMap<>();
         this.rules = new ArrayList<>();
         this.colon = true;
@@ -212,6 +211,9 @@ public class List extends Component {
         this.buttonText = "添加一行数据";
         this.buttonPosition = "top";
         this.alwaysShowItemLabel = true;
+        this.whenItem = new ArrayList<>();
+        this.when = new When();
+        this.setComponentKey();
     }
 
     // 校验规则，设置字段的校验逻辑

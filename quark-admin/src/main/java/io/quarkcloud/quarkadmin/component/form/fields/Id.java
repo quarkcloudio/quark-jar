@@ -204,9 +204,11 @@ public class Id extends Component {
         this.showOnImport = false;
         this.onIndexDisplayed = true;
         this.column = new Column();
-        this.setComponentKey();
         this.style = new HashMap<>();
         this.rules = new ArrayList<>();
+        this.whenItem = new ArrayList<>();
+        this.when = new When();
+        this.setComponentKey();
     }
 
     // 校验规则，设置字段的校验逻辑

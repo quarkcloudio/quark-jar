@@ -26,7 +26,7 @@ import lombok.experimental.Accessors;
 public class Transfer extends Component {
 
     @Data
-    public static class Datasource {
+    public static class DataSource {
 
         // 主键
         @JsonInclude(JsonInclude.Include.NON_DEFAULT)
@@ -198,7 +198,7 @@ public class Transfer extends Component {
 
     // 数据源，其中的数据将会被渲染到左边一栏中，targetKeys 中指定的除外
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    List<Datasource> dataSource;
+    List<DataSource> dataSource;
 
     // 是否禁用
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
@@ -295,6 +295,8 @@ public class Transfer extends Component {
         this.style = new HashMap<>();
         this.rules = new ArrayList<>();
         this.setWidth(400);
+        this.whenItem = new ArrayList<>();
+        this.when = new When();
     }
 
     // Field 的长度，我们归纳了常用的 Field 长度以及适合的场景，支持了一些枚举 "xs" , "s" , "m" , "l" , "x"

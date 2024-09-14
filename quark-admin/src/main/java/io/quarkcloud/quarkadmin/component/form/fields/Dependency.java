@@ -184,12 +184,14 @@ public class Dependency extends Component {
 
     public Dependency() {
         this.component = "dependencyField";
-        this.setComponentKey();
         this.style = new HashMap<>();
         this.rules = new ArrayList<>();
         this.colon = true;
         this.labelAlign = "right";
         this.column = new Column();
+        this.whenItem = new ArrayList<>();
+        this.when = new When();
+        this.setComponentKey();
         this.onlyOnForms();
     }
 
@@ -305,7 +307,6 @@ public class Dependency extends Component {
     //
     // new Dependency().setWhen(">", option, callback)
     public Dependency setWhen(String operator, Object option, Closure callback) {
-
         WhenItem item = new WhenItem();
 
         item.body = callback.callback();

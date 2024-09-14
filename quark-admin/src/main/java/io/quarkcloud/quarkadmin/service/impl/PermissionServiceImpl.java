@@ -2,6 +2,7 @@ package io.quarkcloud.quarkadmin.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,7 @@ import io.quarkcloud.quarkadmin.entity.PermissionEntity;
 import io.quarkcloud.quarkadmin.mapper.MenuHasPermissionMapper;
 import io.quarkcloud.quarkadmin.mapper.PermissionMapper;
 import io.quarkcloud.quarkadmin.service.PermissionService;
+import io.quarkcloud.quarkadmin.component.form.fields.Transfer.DataSource;
 import jakarta.annotation.Resource;
 
 @Service
@@ -35,5 +37,17 @@ public class PermissionServiceImpl extends ResourceServiceImpl<PermissionMapper,
             menuIds.add(menuHasPermission.getMenuId());
         }
         return menuIds;
+    }
+    
+    public List<DataSource> getDataSource() {
+        List<PermissionEntity> permissions = this.list();
+        // 将权限转换为数据源格式
+        return permissions.stream().map(permission -> {
+            DataSource option = new DataSource();
+            option.setKey(permission.getId());
+            option.setTitle(permission.getName());
+            option.setDescription(permission.getRemark());
+            return option;
+        }).collect(Collectors.toList());
     }
 }

@@ -68,16 +68,8 @@ public class Field {
         return new Checkbox().setName(name).setLabel(label).setCallback(callback);
     }
 
-    public static Compact compact(String name) {
-        return new Compact().setName(name);
-    }
-
-    public static Compact compact(String name, String label) {
-        return new Compact().setName(name).setLabel(label);
-    }
-
-    public static Compact compact(String name, String label, Closure callback) {
-        return new Compact().setName(name).setLabel(label).setCallback(callback);
+    public static Compact compact(String label, Object body) {
+        return new Compact().setLabel(label).setBody(body);
     }
 
     public static Date date(String name) {
@@ -128,28 +120,12 @@ public class Field {
         return new DatetimeRange().setName(name).setLabel(label).setCallback(callback);
     }
 
-    public static Dependency dependency(String name) {
-        return new Dependency().setName(name);
+    public static Dependency dependency() {
+        return new Dependency();
     }
 
-    public static Dependency dependency(String name, String label) {
-        return new Dependency().setName(name).setLabel(label);
-    }
-    
-    public static Dependency dependency(String name, String label, Closure callback) {
-        return new Dependency().setName(name).setLabel(label).setCallback(callback);
-    }
-
-    public static Display display(String name) {
-        return new Display().setName(name);
-    }
-
-    public static Display display(String name, String label) {
-        return new Display().setName(name).setLabel(label);
-    }
-
-    public static Display display(String name, String label, Closure callback) {
-        return new Display().setName(name).setLabel(label).setCallback(callback);
+    public static Display display(String label) {
+        return new Display().setLabel(label);
     }
 
     public static Editor editor(String name) {
@@ -200,16 +176,12 @@ public class Field {
         return new Geofence().setName(name).setLabel(label).setCallback(callback);
     }
 
-    public static Group group(String name) {
-        return new Group().setName(name);
+    public static Group group(Object body) {
+        return new Group().setBody(body);
     }
 
-    public static Group group(String name, String label) {
-        return new Group().setName(name).setLabel(label);
-    }
-
-    public static Group group(String name, String label, Closure callback) {
-        return new Group().setName(name).setLabel(label).setCallback(callback);
+    public static Group group(String title, String body) {
+        return new Group().setTitle(title).setBody(body);
     }
 
     public static Hidden hidden(String name) {
@@ -236,14 +208,29 @@ public class Field {
         return new Icon().setName(name).setLabel(label).setCallback(callback);
     }
 
+    /** 
+     * ID组件
+     * 
+     * Field.Id("id")
+     */
     public static Id id(String name) {
         return new Id().setName(name);
     }
 
+    /** 
+     * ID组件
+     * 
+     * Field.Id("id", "ID")
+     */
     public static Id id(String name, String label) {
         return new Id().setName(name).setLabel(label);
     }
 
+    /** 
+     * ID组件
+     * 
+     * Field.Id("id", "ID",  () -> { return this.entity.getUsername(); })
+     */
     public static Id id(String name, String label, Closure callback) {
         return new Id().setName(name).setLabel(label).setCallback(callback);
     }
@@ -400,16 +387,8 @@ public class Field {
         return new SelectField.Option(label, value);
     }
 
-    public static Selects selects(String name) {
-        return new Selects().setName(name);
-    }
-
-    public static Selects selects(String name, String label) {
-        return new Selects().setName(name).setLabel(label);
-    }
-
-    public static Selects selects(String name, String label, Closure callback) {
-        return new Selects().setName(name).setLabel(label).setCallback(callback);
+    public static Selects selects(Object body) {
+        return new Selects().setBody(body);
     }
 
     public static SmsCaptcha smsCaptcha(String name) {
@@ -424,16 +403,12 @@ public class Field {
         return new SmsCaptcha().setName(name).setLabel(label).setCallback(callback);
     }
 
-    public static Space space(String name) {
-        return new Space().setName(name);
+    public static Space space(Object body) {
+        return new Space().setBody(body);
     }
 
-    public static Space space(String name, String label) {
-        return new Space().setName(name).setLabel(label);
-    }
-
-    public static Space space(String name, String label, Closure callback) {
-        return new Space().setName(name).setLabel(label).setCallback(callback);
+    public static Space space(String label, Object body) {
+        return new Space().setLabel(label).setBody(body);
     }
 
     public static SwitchField switchField(String name) {
