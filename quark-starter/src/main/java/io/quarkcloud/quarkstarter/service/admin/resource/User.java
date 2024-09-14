@@ -12,9 +12,9 @@ import io.quarkcloud.quarkadmin.entity.UserEntity;
 import io.quarkcloud.quarkadmin.mapper.UserMapper;
 import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
 import io.quarkcloud.quarkcore.service.Context;
-import io.quarkcloud.quarkstarter.service.admin.action.Create;
+import io.quarkcloud.quarkstarter.service.admin.action.CreateLink;
 import io.quarkcloud.quarkstarter.service.admin.action.Delete;
-import io.quarkcloud.quarkstarter.service.admin.action.Edit;
+import io.quarkcloud.quarkstarter.service.admin.action.EditLink;
 import io.quarkcloud.quarkstarter.service.admin.action.FormBack;
 import io.quarkcloud.quarkstarter.service.admin.action.FormExtraBack;
 import io.quarkcloud.quarkstarter.service.admin.action.FormReset;
@@ -75,8 +75,8 @@ public class User extends ResourceImpl<UserMapper, UserEntity> {
     // 行为
     public List<Object> actions(Context context) {
         return Arrays.asList(
-            new Create<UserMapper, UserEntity>(this.getTitle()),
-            new Edit<UserMapper, UserEntity>(),
+            new CreateLink<UserMapper, UserEntity>(this.getTitle()),
+            new EditLink<UserMapper, UserEntity>(),
             new Delete<UserMapper, UserEntity>(),
             new FormExtraBack<UserMapper, UserEntity>(),
             new FormSubmit<UserMapper, UserEntity>(),

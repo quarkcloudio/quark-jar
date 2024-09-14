@@ -4,13 +4,13 @@ import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
 import io.quarkcloud.quarkadmin.template.resource.impl.action.LinkImpl;
 import io.quarkcloud.quarkcore.service.Context;
 
-public class Edit<M, T> extends LinkImpl<ResourceMapper<T>, T> {
+public class DetailLink<M, T> extends LinkImpl<ResourceMapper<T>, T> {
 
     // 构造函数
-    public Edit() {
+    public DetailLink() {
 
         // 文字
-        this.name = "编辑";
+        this.name = "详情";
 
         // 设置按钮类型,primary | ghost | dashed | link | text | default
         this.type = "link";
@@ -23,7 +23,7 @@ public class Edit<M, T> extends LinkImpl<ResourceMapper<T>, T> {
     }
 
     // 构造函数
-    public Edit(String title) {
+    public DetailLink(String title) {
 
         // 文字
         this.name = title;
@@ -43,8 +43,8 @@ public class Edit<M, T> extends LinkImpl<ResourceMapper<T>, T> {
         // 从上下文中获取当前路径
         String path = context.getRequest().getRequestURI();
 
-        // 将路径中的 "/index" 替换为 "/edit"
-        String modifiedPath = path.replace("/index", "/edit&id=${id}");
+        // 将路径中的 "/index" 替换为 "/detail"
+        String modifiedPath = path.replace("/index", "/detail&id=${id}");
         
         // 构建最终的 URL
         return "#/layout/index?api=" + modifiedPath;

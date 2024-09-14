@@ -4,10 +4,10 @@ import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
 import io.quarkcloud.quarkadmin.template.resource.impl.action.LinkImpl;
 import io.quarkcloud.quarkcore.service.Context;
 
-public class Create<M, T> extends LinkImpl<ResourceMapper<T>, T> {
+public class CreateLink<M, T> extends LinkImpl<ResourceMapper<T>, T> {
 
     // 构造函数
-    public Create(String title) {
+    public CreateLink(String title) {
 
         // 文字
         this.name = "创建" + title;

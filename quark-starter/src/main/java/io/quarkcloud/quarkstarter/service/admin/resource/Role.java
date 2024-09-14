@@ -15,9 +15,9 @@ import io.quarkcloud.quarkadmin.mapper.RoleMapper;
 import io.quarkcloud.quarkadmin.service.MenuService;
 import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
 import io.quarkcloud.quarkcore.service.Context;
-import io.quarkcloud.quarkstarter.service.admin.action.Create;
+import io.quarkcloud.quarkstarter.service.admin.action.CreateLink;
 import io.quarkcloud.quarkstarter.service.admin.action.Delete;
-import io.quarkcloud.quarkstarter.service.admin.action.Edit;
+import io.quarkcloud.quarkstarter.service.admin.action.EditLink;
 import io.quarkcloud.quarkstarter.service.admin.action.FormBack;
 import io.quarkcloud.quarkstarter.service.admin.action.FormExtraBack;
 import io.quarkcloud.quarkstarter.service.admin.action.FormReset;
@@ -62,8 +62,8 @@ public class Role extends ResourceImpl<RoleMapper, RoleEntity> {
     // 行为
     public List<Object> actions(Context context) {
         return Arrays.asList(
-            new Create<AdminMapper, AdminEntity>(this.getTitle()),
-            new Edit<AdminMapper, AdminEntity>(),
+            new CreateLink<AdminMapper, AdminEntity>(this.getTitle()),
+            new EditLink<AdminMapper, AdminEntity>(),
             new Delete<RoleMapper, RoleEntity>(),
             new FormExtraBack<RoleMapper, RoleEntity>(),
             new FormSubmit<RoleMapper, RoleEntity>(),

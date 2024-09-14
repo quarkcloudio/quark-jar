@@ -11,9 +11,9 @@ import io.quarkcloud.quarkadmin.entity.ConfigEntity;
 import io.quarkcloud.quarkadmin.mapper.ConfigMapper;
 import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
 import io.quarkcloud.quarkcore.service.Context;
-import io.quarkcloud.quarkstarter.service.admin.action.Create;
+import io.quarkcloud.quarkstarter.service.admin.action.CreateLink;
 import io.quarkcloud.quarkstarter.service.admin.action.Delete;
-import io.quarkcloud.quarkstarter.service.admin.action.Edit;
+import io.quarkcloud.quarkstarter.service.admin.action.EditLink;
 import io.quarkcloud.quarkstarter.service.admin.action.FormBack;
 import io.quarkcloud.quarkstarter.service.admin.action.FormExtraBack;
 import io.quarkcloud.quarkstarter.service.admin.action.FormReset;
@@ -73,8 +73,8 @@ public class Config extends ResourceImpl<ConfigMapper, ConfigEntity> {
     // 行为
     public List<Object> actions(Context context) {
         return Arrays.asList(
-            new Create<ConfigMapper, ConfigEntity>(this.getTitle()),
-            new Edit<ConfigMapper, ConfigEntity>(),
+            new CreateLink<ConfigMapper, ConfigEntity>(this.getTitle()),
+            new EditLink<ConfigMapper, ConfigEntity>(),
             new Delete<ConfigMapper, ConfigEntity>(),
             new FormExtraBack<ConfigMapper, ConfigEntity>(),
             new FormSubmit<ConfigMapper, ConfigEntity>(),
