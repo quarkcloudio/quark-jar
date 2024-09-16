@@ -10,7 +10,7 @@
     </parent>
     <groupId>io.quarkcloud</groupId>
     <artifactId>quark-starter-parent</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>quark-starter-parent</name>
     <packaging>pom</packaging>
     <description>quark-starter-parent</description>
@@ -23,11 +23,14 @@
         <module>quark-starter</module>
     </modules>
     <dependencies>
+        <!-- 统一版本管理 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <artifactId>spring-boot-dependencies</artifactId>
+            <version>3.2.3</version>
+            <type>pom</type>
+            <scope>import</scope>
         </dependency>
-
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>

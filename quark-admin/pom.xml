@@ -5,11 +5,11 @@
     <parent>
         <groupId>io.quarkcloud</groupId>
         <artifactId>quark-starter-parent</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
     <groupId>io.quarkcloud</groupId>
     <artifactId>quark-admin</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>quark-admin</name>
     <description>quark-admin</description>
     <properties>
@@ -31,7 +31,7 @@
         <dependency>
             <groupId>io.quarkcloud</groupId>
             <artifactId>quark-core</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -76,6 +76,9 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <skip>
+                        true
+                    </skip>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
@@ -86,5 +89,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
