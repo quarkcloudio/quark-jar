@@ -11,8 +11,15 @@ import java.util.HashMap;
 import java.util.Map;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
+
+import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -26,10 +33,14 @@ import cn.hutool.jwt.JWTValidator;
 import lombok.Data;
 
 @Data
-public class Context {
+@Component
+public class Context implements ApplicationContextAware {
+
+    // SpringBoot上下文
+    private static ApplicationContext applicationContext = null;
 
     // 连接点
-    public ProceedingJoinPoint joinPoint;
+    private ProceedingJoinPoint joinPoint;
 
     // 得到连接点执行的方法对象
     private MethodSignature joinPointSignature;
@@ -38,13 +49,16 @@ public class Context {
     private Method joinPointMethod;
 
     // 请求对象
-    public HttpServletRequest request;
+    private HttpServletRequest request;
 
     // 响应对象
-    public HttpServletResponse response;
+    private HttpServletResponse response;
 
     // 请求体，这里可能会有性能问题
-    public String readerBody;
+    private String readerBody;
+
+    // 构造函数
+    public Context() {}
 
     // 构造函数
     public Context(HttpServletRequest request, HttpServletResponse response) {
@@ -63,7 +77,19 @@ public class Context {
         readerBody = stringBuilder.toString();
     }
 
-    // setJoinPoint
+    @Override
+    public void setApplicationContext(@SuppressWarnings("null") ApplicationContext applicationContext) throws BeansException {
+        if (Context.applicationContext == null) {
+            Context.applicationContext = applicationContext;
+        }
+    }
+
+    //获取SpringBoot上下文
+    public static ApplicationContext getApplicationContext() {
+        return applicationContext;
+    }
+
+    // 设置连接点
     public Context setJoinPoint(ProceedingJoinPoint joinPoint) {
         this.joinPointSignature = (MethodSignature) joinPoint.getSignature();
         this.joinPointMethod = joinPointSignature.getMethod();
@@ -71,7 +97,12 @@ public class Context {
         return this;
     }
 
-    // getJoinPointAnnotation
+    // 获取SpringBoot上下文
+    public ApplicationContext getSpringBootContext() {
+        return Context.getApplicationContext();
+    }
+
+    // 获取连接点注解
     public <T extends Annotation> T getJoinPointAnnotation(Class<T> annotationClass) {
         return this.joinPointMethod.getAnnotation(annotationClass);
     }
@@ -134,6 +165,16 @@ public class Context {
         return pathVariables;
     }
 
+    // getRemoteHost
+    public String getRemoteHost() {
+        return request.getRemoteHost();
+    }
+
+    // getRequestURI
+    public String getRequestURI() {
+        return request.getRequestURI();
+    }
+
     // getHeader
     public String getHeader(String arg0) {
         return request.getHeader(arg0);
@@ -147,6 +188,11 @@ public class Context {
     // getParameterMap
     public Map<String, String[]> getParameterMap() {
         return request.getParameterMap();
+    }
+
+    // getQueryString
+    public String getQueryString() {
+        return request.getQueryString();
     }
 
     // getRequestBody
@@ -340,9 +386,24 @@ public class Context {
         return entity;
     }
 
+    // getOutputStream
+    public void setContentType(String contentType) {
+        response.setContentType(contentType);
+    }
+
+    // setHeader
+    public void setHeader(String arg0, String arg1) {
+        response.setHeader(arg0, arg1);
+    }
+
+    // getOutputStream
+    public ServletOutputStream getOutputStream() throws IOException {
+        return response.getOutputStream();
+    }
+
     // 解析token
     public JWT parseToken() {
-        String authHeader = request.getHeader("Authorization");
+        String authHeader = getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return null;
         }
@@ -362,34 +423,34 @@ public class Context {
     }
 
     public boolean isIndex() {
-        String[] uri = this.request.getRequestURI().split("/");
+        String[] uri = getRequestURI().split("/");
         return uri[uri.length - 1].equals("index");
     }
 
     public boolean isCreating() {
-        String[] uri = this.request.getRequestURI().split("/");
+        String[] uri = getRequestURI().split("/");
         String lastSegment = uri[uri.length - 1];
         return lastSegment.equals("create") || lastSegment.equals("store");
     }
 
     public boolean isEditing() {
-        String[] uri = this.request.getRequestURI().split("/");
+        String[] uri = getRequestURI().split("/");
         String lastSegment = uri[uri.length - 1];
         return lastSegment.equals("edit") || lastSegment.equals("save");
     }
 
     public boolean isDetail() {
-        String[] uri = this.request.getRequestURI().split("/");
+        String[] uri = getRequestURI().split("/");
         return uri[uri.length - 1].equals("detail");
     }
 
     public boolean isExport() {
-        String[] uri = this.request.getRequestURI().split("/");
+        String[] uri = getRequestURI().split("/");
         return uri[uri.length - 1].equals("export");
     }
 
     public boolean isImport() {
-        String[] uri = this.request.getRequestURI().split("/");
+        String[] uri = getRequestURI().split("/");
         return uri[uri.length - 1].equals("import");
     }
 }

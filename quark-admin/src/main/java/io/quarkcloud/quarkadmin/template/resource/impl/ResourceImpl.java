@@ -1071,9 +1071,9 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
 
         //创建xlsx格式的
         writer.write(exportTitles, true);
-        context.response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"); 
-        context.response.setHeader("Content-Disposition","attachment;filename=data_" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".xlsx"); 
-        ServletOutputStream out=context.response.getOutputStream(); 
+        context.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"); 
+        context.setHeader("Content-Disposition","attachment;filename=data_" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".xlsx"); 
+        ServletOutputStream out=context.getOutputStream(); 
 
         //out为OutputStream，需要写出到的目标流
         writer.flush(out, true);
@@ -1195,7 +1195,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         if (!importResult) {
             String filePath = "public/storage/failImports/";
             String fileName = IdUtil.simpleUUID() + ".xlsx";
-            String fileUrl = "//" + context.request.getRemoteHost() + "/storage/failImports/" + fileName;
+            String fileUrl = "//" + context.getRemoteHost() + "/storage/failImports/" + fileName;
 
             // 不存在路径，则创建
             File dir = FileUtil.file(filePath);
@@ -1290,10 +1290,10 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         }
 
         // 设置响应
-        context.response.setHeader("Content-Disposition", "attachment; filename=data_" + DateUtil.formatDateTime(new Date()) + ".xlsx");
-        context.response.setContentType("application/octet-stream");
+        context.setHeader("Content-Disposition", "attachment; filename=data_" + DateUtil.formatDateTime(new Date()) + ".xlsx");
+        context.setContentType("application/octet-stream");
         writer.write(rows, true);
-        ServletOutputStream out=context.response.getOutputStream(); 
+        ServletOutputStream out = context.getOutputStream(); 
         writer.flush(out, true);
         writer.close();
         IoUtil.close(out);

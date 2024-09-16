@@ -2,36 +2,18 @@ package io.quarkcloud.quarkcore.service;
 
 import java.lang.reflect.InvocationTargetException;
 import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ClassLoader implements ApplicationContextAware {
+public class ClassLoader {
 
     // 类路径
     public String classPath;
 
-    // spring上下文
-    private static ApplicationContext applicationContext = null;
-
     // 加载当前类
     public ClassLoader setClassPath(String classPath) {
         this.classPath = classPath;
-
         return this;
-    }
-
-    @Override
-    public void setApplicationContext(@SuppressWarnings("null") ApplicationContext applicationContext) throws BeansException {
-        if (ClassLoader.applicationContext == null) {
-            ClassLoader.applicationContext = applicationContext;
-        }
-    }
-
-    //获取 applicationContext
-    public static ApplicationContext getApplicationContext() {
-        return applicationContext;
     }
 
     /**
@@ -49,7 +31,7 @@ public class ClassLoader implements ApplicationContextAware {
         Object classInstance = null;
         try {
             Class<?> clazz = Class.forName(classPath);
-            classInstance = ClassLoader.getApplicationContext().getBean(clazz);
+            classInstance = Context.getApplicationContext().getBean(clazz);
         } catch (BeansException | ClassNotFoundException e) {
             e.printStackTrace();
         }

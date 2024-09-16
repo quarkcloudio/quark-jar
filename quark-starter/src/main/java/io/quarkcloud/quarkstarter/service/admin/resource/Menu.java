@@ -137,7 +137,7 @@ public class Menu extends ResourceImpl<MenuMapper, MenuEntity> {
                         .setEditable(true)
                         .setHelp("前端路由")
                         .setWidth(400)
-                        .buildFrontendRules(context.request.getRequestURI())
+                        .buildFrontendRules(context.getRequestURI())
                 )),
 
             Field.dependency()
@@ -160,7 +160,7 @@ public class Menu extends ResourceImpl<MenuMapper, MenuEntity> {
                         .setHelp("前端路由或后端api")
                         .setWidth(400)
                         .onlyOnForms()
-                        .buildFrontendRules(context.request.getRequestURI())
+                        .buildFrontendRules(context.getRequestURI())
                 )),
 
             Field.dependency()

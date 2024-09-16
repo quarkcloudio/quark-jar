@@ -212,7 +212,7 @@ public class LoginImpl implements Login {
         Cache.getInstance().put(id, lineCaptcha.getCode());
 
         try {
-            lineCaptcha.write(context.response.getOutputStream());
+            lineCaptcha.write(context.getOutputStream());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -251,7 +251,7 @@ public class LoginImpl implements Login {
                         String getComponent = (String) component;
                         if (getComponent.contains("Field")) {
                             Method method = field.getClass().getMethod("buildFrontendRules", String.class);
-                            method.invoke(field, context.request.getQueryString());
+                            method.invoke(field, context.getQueryString());
                         }
                     } catch (NoSuchFieldException | NoSuchMethodException | SecurityException | IllegalAccessException
                             | InvocationTargetException e) {

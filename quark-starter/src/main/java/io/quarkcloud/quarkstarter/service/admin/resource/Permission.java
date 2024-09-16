@@ -17,6 +17,7 @@ import io.quarkcloud.quarkstarter.service.admin.action.FormBack;
 import io.quarkcloud.quarkstarter.service.admin.action.FormExtraBack;
 import io.quarkcloud.quarkstarter.service.admin.action.FormReset;
 import io.quarkcloud.quarkstarter.service.admin.action.FormSubmit;
+import io.quarkcloud.quarkstarter.service.admin.action.SyncPermission;
 import io.quarkcloud.quarkstarter.service.admin.search.Input;
 
 @Component(value = "permissionResource")
@@ -63,6 +64,7 @@ public class Permission extends ResourceImpl<PermissionMapper, PermissionEntity>
     // 行为
     public List<Object> actions(Context context) {
         return Arrays.asList(
+            new SyncPermission<PermissionMapper, PermissionEntity>(),
             new CreateModal<PermissionMapper, PermissionEntity>(this.getTitle(), this.creationApi(context), this.creationFields(context), this.creationData(context)),
             new EditModal<PermissionMapper, PermissionEntity>("编辑", this.editApi(context), this.editValueApi(context), this.editFields(context)),
             new Delete<PermissionMapper, PermissionEntity>(),
