@@ -25,8 +25,7 @@ QuarkJar是一个基于SpringBoot的低代码工具；它提供的丰富组件�
 ``` bash
 java -jar quark-starter/target/quark-starter-1.0.0.jar
 ```
-
-启动服务，访问后台地址： ```http://127.0.0.1:8080/admin/```
+后台地址： ```http://127.0.0.1:8080/admin/```
 
 账号：```administrator```
 密码：```123456```
