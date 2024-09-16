@@ -12,8 +12,6 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,7 +40,7 @@ public class AdminUploadController {
     @Autowired
     private FileService fileService;
 
-    @GetMapping("/api/admin/upload/image/getList")
+    @RequestMapping(value = "/api/admin/upload/image/getList", method = {RequestMethod.GET})
     @ResponseBody
     public Object getImageList(@RequestParam("file") MultipartFile file) {
         return "";
@@ -54,13 +52,13 @@ public class AdminUploadController {
         return "";
     }
 
-    @PostMapping("/api/admin/upload/image/crop")
+    @RequestMapping(value = "/api/admin/upload/image/crop", method = {RequestMethod.POST})
     @ResponseBody
     public Object imageCrop(@RequestParam("file") MultipartFile file) {
         return "";
     }
 
-    @PostMapping("/api/admin/upload/image/handle")
+    @RequestMapping(value = "/api/admin/upload/image/handle", method = {RequestMethod.POST})
     @ResponseBody
     public Object imageHandle(@RequestParam("file") MultipartFile file) throws IOException, NoSuchAlgorithmException {
         byte[] fileBytes = file.getBytes();
@@ -147,13 +145,13 @@ public class AdminUploadController {
         ));
     }
 
-    @PostMapping("/api/admin/upload/image/base64Handle")
+    @RequestMapping(value = "/api/admin/upload/image/base64Handle", method = {RequestMethod.POST})
     @ResponseBody
     public Object imageBase64Handle(@RequestParam("file") MultipartFile file) throws IOException {
         return "";
     }
 
-    @PostMapping("/api/admin/upload/file/handle")
+    @RequestMapping(value = "/api/admin/upload/file/handle", method = {RequestMethod.POST})
     @ResponseBody
     public Object fileHandle(@RequestParam("file") MultipartFile file) throws IOException, NoSuchAlgorithmException {
         byte[] fileBytes = file.getBytes();

@@ -2,8 +2,6 @@ package io.quarkcloud.quarkadmin.controller;
 
 import java.io.IOException;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -30,14 +28,14 @@ import jakarta.servlet.http.HttpServletResponse;
 @RestController
 public class AdminResourceController {
 
-    @GetMapping("/api/admin/{resource}/index")
+    @RequestMapping(value = "/api/admin/{resource}/index", method = {RequestMethod.GET})
     @ResponseBody
     @AdminResourceIndexRender
     public Object index(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
 
-    @GetMapping("/api/admin/{resource}/editable")
+    @RequestMapping(value = "/api/admin/{resource}/editable", method = {RequestMethod.GET})
     @ResponseBody
     @AdminResourceEditableRender
     public Object editable(HttpServletRequest request, HttpServletResponse response) {
@@ -58,70 +56,70 @@ public class AdminResourceController {
         return new Context(request, response);
     }
 
-    @GetMapping("/api/admin/{resource}/create")
+    @RequestMapping(value = "/api/admin/{resource}/create", method = {RequestMethod.GET})
     @ResponseBody
     @AdminResourceCreateRender
     public Object create(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
 
-    @PostMapping("/api/admin/{resource}/store")
+    @RequestMapping(value = "/api/admin/{resource}/store", method = {RequestMethod.POST})
     @ResponseBody
     @AdminResourceStoreRender
     public Object store(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
 
-    @GetMapping("/api/admin/{resource}/edit")
+    @RequestMapping(value = "/api/admin/{resource}/edit", method = {RequestMethod.GET})
     @ResponseBody
     @AdminResourceEditRender
     public Object edit(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
 
-    @GetMapping("/api/admin/{resource}/edit/values")
+    @RequestMapping(value = "/api/admin/{resource}/edit/values", method = {RequestMethod.GET})
     @ResponseBody
     @AdminResourceEditValuesRender
     public Object editValues(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
 
-    @PostMapping("/api/admin/{resource}/save")
+    @RequestMapping(value = "/api/admin/{resource}/save", method = {RequestMethod.POST})
     @ResponseBody
     @AdminResourceSaveRender
     public Object save(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
 
-    @GetMapping("/api/admin/{resource}/detail")
+    @RequestMapping(value = "/api/admin/{resource}/detail", method = {RequestMethod.GET})
     @ResponseBody
     @AdminResourceDetailRender
     public Object detail(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
 
-    @GetMapping("/api/admin/{resource}/{uriKey}/form")
+    @RequestMapping(value = "/api/admin/{resource}/{uriKey}/form", method = {RequestMethod.GET})
     @ResponseBody
     @AdminResourceFormRender
     public Object form(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
 
-    @GetMapping("/api/admin/{resource}/import/template")
+    @RequestMapping(value = "/api/admin/{resource}/import/template", method = {RequestMethod.GET})
     @ResponseBody
     @AdminResourceImportTemplateRender
     public Object importTemplate(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
 
-    @PostMapping("/api/admin/{resource}/import")
+    @RequestMapping(value = "/api/admin/{resource}/import", method = {RequestMethod.POST})
     @ResponseBody
     @AdminResourceImportRender
     public Object excelImport(HttpServletRequest request, HttpServletResponse response) throws IOException {
         return new Context(request, response);
     }
 
-    @GetMapping("/api/admin/{resource}/export")
+    @RequestMapping(value = "/api/admin/{resource}/export", method = {RequestMethod.GET})
     @ResponseBody
     @AdminResourceExportRender
     public Object excelExport(HttpServletRequest request, HttpServletResponse response) {
