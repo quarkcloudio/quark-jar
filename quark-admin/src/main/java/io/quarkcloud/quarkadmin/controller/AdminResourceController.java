@@ -2,7 +2,10 @@ package io.quarkcloud.quarkadmin.controller;
 
 import java.io.IOException;
 
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,98 +30,98 @@ import jakarta.servlet.http.HttpServletResponse;
 @RestController
 public class AdminResourceController {
 
-    @RequestMapping("/api/admin/{resource}/index")
+    @GetMapping("/api/admin/{resource}/index")
     @ResponseBody
     @AdminResourceIndexRender
     public Object index(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
 
-    @RequestMapping("/api/admin/{resource}/editable")
+    @GetMapping("/api/admin/{resource}/editable")
     @ResponseBody
     @AdminResourceEditableRender
     public Object editable(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
 
-    @RequestMapping("/api/admin/{resource}/action/{uriKey}")
+    @RequestMapping(value = "/api/admin/{resource}/action/{uriKey}", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     @AdminResourceActionRender
     public Object action(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
 
-    @RequestMapping("/api/admin/{resource}/action/{uriKey}/values")
+    @RequestMapping(value = "/api/admin/{resource}/action/{uriKey}/values", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     @AdminResourceActionValuesRender
     public Object actionValues(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
 
-    @RequestMapping("/api/admin/{resource}/create")
+    @GetMapping("/api/admin/{resource}/create")
     @ResponseBody
     @AdminResourceCreateRender
     public Object create(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
 
-    @RequestMapping("/api/admin/{resource}/store")
+    @PostMapping("/api/admin/{resource}/store")
     @ResponseBody
     @AdminResourceStoreRender
     public Object store(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
 
-    @RequestMapping("/api/admin/{resource}/edit")
+    @GetMapping("/api/admin/{resource}/edit")
     @ResponseBody
     @AdminResourceEditRender
     public Object edit(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
 
-    @RequestMapping("/api/admin/{resource}/edit/values")
+    @GetMapping("/api/admin/{resource}/edit/values")
     @ResponseBody
     @AdminResourceEditValuesRender
     public Object editValues(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
 
-    @RequestMapping("/api/admin/{resource}/save")
+    @PostMapping("/api/admin/{resource}/save")
     @ResponseBody
     @AdminResourceSaveRender
     public Object save(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
 
-    @RequestMapping("/api/admin/{resource}/detail")
+    @GetMapping("/api/admin/{resource}/detail")
     @ResponseBody
     @AdminResourceDetailRender
     public Object detail(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
 
-    @RequestMapping("/api/admin/{resource}/{uriKey}/form")
+    @GetMapping("/api/admin/{resource}/{uriKey}/form")
     @ResponseBody
     @AdminResourceFormRender
     public Object form(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
 
-    @RequestMapping("/api/admin/{resource}/import/template")
+    @GetMapping("/api/admin/{resource}/import/template")
     @ResponseBody
     @AdminResourceImportTemplateRender
     public Object importTemplate(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
 
-    @RequestMapping("/api/admin/{resource}/import")
+    @PostMapping("/api/admin/{resource}/import")
     @ResponseBody
     @AdminResourceImportRender
     public Object excelImport(HttpServletRequest request, HttpServletResponse response) throws IOException {
         return new Context(request, response);
     }
 
-    @RequestMapping("/api/admin/{resource}/export")
+    @GetMapping("/api/admin/{resource}/export")
     @ResponseBody
     @AdminResourceExportRender
     public Object excelExport(HttpServletRequest request, HttpServletResponse response) {
