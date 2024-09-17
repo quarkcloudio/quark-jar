@@ -98,7 +98,7 @@ public class AdminResourceController {
         return new Context(request, response);
     }
 
-    @RequestMapping(value = "/api/admin/{resource}/{uriKey}/form", method = {RequestMethod.GET})
+    @RequestMapping(value = "/api/admin/{resource}/form", method = {RequestMethod.GET})
     @ResponseBody
     @AdminResourceFormRender
     public Object form(HttpServletRequest request, HttpServletResponse response) {

@@ -132,7 +132,7 @@ public class LayoutImpl implements Layout {
                 setType("link", false).
                 setIcon("setting").
                 setStyle(Map.of("color","rgb(0 0 0 / 88%)")).
-                setHref("#/layout/index?api=/api/admin/account/setting/form").
+                setHref("#/layout/index?api=/api/admin/account/form").
                 setSize("small"),
 
             new Action().

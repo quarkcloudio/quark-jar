@@ -205,7 +205,7 @@ INSERT INTO `menus` VALUES (5, '权限列表', 'admin', '', 2, 3, 0, '/api/admin
 INSERT INTO `menus` VALUES (6, '角色列表', 'admin', '', 2, 3, 0, '/api/admin/role/index', 1, 1, 0, 1, NULL, NULL, NULL, '2024-05-16 17:10:19.463', '2024-05-16 17:10:19.463');
 INSERT INTO `menus` VALUES (7, '系统配置', 'admin', 'icon-setting', 1, 0, 100, '/system', 1, 0, 0, 1, NULL, NULL, NULL, '2024-05-16 17:10:19.463', '2024-05-16 17:10:19.463');
 INSERT INTO `menus` VALUES (8, '设置管理', 'admin', '', 1, 7, 0, '/system/config', 1, 0, 0, 1, NULL, NULL, NULL, '2024-05-16 17:10:19.463', '2024-05-16 17:10:19.463');
-INSERT INTO `menus` VALUES (9, '网站设置', 'admin', '', 2, 8, 0, '/api/admin/webConfig/setting/form', 1, 1, 0, 1, NULL, NULL, NULL, '2024-05-16 17:10:19.463', '2024-05-16 17:10:19.463');
+INSERT INTO `menus` VALUES (9, '网站设置', 'admin', '', 2, 8, 0, '/api/admin/webConfig/form', 1, 1, 0, 1, NULL, NULL, NULL, '2024-05-16 17:10:19.463', '2024-05-16 17:10:19.463');
 INSERT INTO `menus` VALUES (10, '配置管理', 'admin', '', 2, 8, 0, '/api/admin/config/index', 1, 1, 0, 1, NULL, NULL, NULL, '2024-05-16 17:10:19.463', '2024-05-16 17:10:19.463');
 INSERT INTO `menus` VALUES (11, '菜单管理', 'admin', '', 2, 7, 0, '/api/admin/menu/index', 1, 1, 0, 1, NULL, NULL, NULL, '2024-05-16 17:10:19.463', '2024-05-16 17:10:19.463');
 INSERT INTO `menus` VALUES (12, '操作日志', 'admin', '', 2, 7, 100, '/api/admin/actionLog/index', 1, 1, 0, 1, NULL, NULL, NULL, '2024-05-16 17:10:19.463', '2024-05-16 17:10:19.463');
@@ -213,7 +213,7 @@ INSERT INTO `menus` VALUES (13, '附件空间', 'admin', 'icon-attachment', 1, 0
 INSERT INTO `menus` VALUES (14, '文件管理', 'admin', '', 2, 13, 0, '/api/admin/file/index', 1, 1, 0, 1, NULL, NULL, NULL, '2024-05-16 17:10:19.463', '2024-05-16 17:10:19.463');
 INSERT INTO `menus` VALUES (15, '图片管理', 'admin', '', 2, 13, 0, '/api/admin/picture/index', 1, 1, 0, 1, NULL, NULL, NULL, '2024-05-16 17:10:19.463', '2024-05-16 17:10:19.463');
 INSERT INTO `menus` VALUES (16, '我的账号', 'admin', 'icon-user', 1, 0, 100, '/account', 1, 0, 0, 1, NULL, NULL, NULL, '2024-05-16 17:10:19.463', '2024-05-16 17:10:19.463');
-INSERT INTO `menus` VALUES (17, '个人设置', 'admin', '', 2, 16, 0, '/api/admin/account/setting/form', 1, 1, 0, 1, NULL, NULL, NULL, '2024-05-16 17:10:19.463', '2024-05-16 17:10:19.463');
+INSERT INTO `menus` VALUES (17, '个人设置', 'admin', '', 2, 16, 0, '/api/admin/account/form', 1, 1, 0, 1, NULL, NULL, NULL, '2024-05-16 17:10:19.463', '2024-05-16 17:10:19.463');
 INSERT INTO `menus` VALUES (18, '用户管理', 'admin', 'icon-user', 1, 0, 0, '/user', 1, 0, 0, 1, NULL, NULL, NULL, '2024-05-16 17:10:19.483', '2024-05-16 17:10:19.483');
 INSERT INTO `menus` VALUES (19, '用户列表', 'admin', '', 2, 18, 0, '/api/admin/user/index', 1, 1, 0, 1, NULL, NULL, NULL, '2024-05-16 17:10:19.483', '2024-05-16 17:10:19.483');
 
