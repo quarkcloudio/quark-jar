@@ -10,9 +10,18 @@ public class ClassLoader {
     // 类路径
     public String classPath;
 
+    // 类实例
+    public Class<?> clazz;
+
     // 加载当前类
     public ClassLoader setClassPath(String classPath) {
         this.classPath = classPath;
+        return this;
+    }
+
+    // 加载当前类
+    public ClassLoader setClazz(Class<?> clazz) {
+        this.clazz = clazz;
         return this;
     }
 
@@ -23,17 +32,21 @@ public class ClassLoader {
      * @return 返回加载的类的实例，如果加载失败或无法实例化，则返回null。
      */
     public Object getInstance() {
-        String classPath = this.classPath;
-        if (classPath=="") {
-            return null;
+        Object classInstance = null;
+        if (classPath!=null && !classPath.isEmpty()) {
+            try {
+                clazz = Class.forName(classPath);
+            } catch (BeansException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
         }
 
-        Object classInstance = null;
-        try {
-            Class<?> clazz = Class.forName(classPath);
-            classInstance = Context.getApplicationContext().getBean(clazz);
-        } catch (BeansException | ClassNotFoundException e) {
-            e.printStackTrace();
+        if (clazz != null) {
+            try {
+                classInstance = Context.getApplicationContext().getBean(clazz);
+            } catch (BeansException e) {
+                e.printStackTrace();
+            }
         }
 
         return classInstance;
@@ -48,19 +61,14 @@ public class ClassLoader {
 
         Object result = null;
         try {
-            Class<?> clazz = Class.forName(classPath);
-            try {
-                result = clazz.getMethod(methodName).invoke(classInstance);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            } catch (SecurityException e) {
-                e.printStackTrace();
-            }
-        } catch (ClassNotFoundException e) {
+            result = clazz.getMethod(methodName).invoke(classInstance);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (SecurityException e) {
             e.printStackTrace();
         }
 
@@ -76,19 +84,14 @@ public class ClassLoader {
 
         Object result = null;
         try {
-            Class<?> clazz = Class.forName(classPath);
-            try {
-                result = clazz.getMethod(methodName,Context.class).invoke(classInstance, context);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            } catch (SecurityException e) {
-                e.printStackTrace();
-            }
-        } catch (ClassNotFoundException e) {
+            result = clazz.getMethod(methodName,Context.class).invoke(classInstance, context);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (SecurityException e) {
             e.printStackTrace();
         }
 
