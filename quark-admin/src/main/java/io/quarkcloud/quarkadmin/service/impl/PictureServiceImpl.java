@@ -7,6 +7,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
@@ -138,5 +140,19 @@ public class PictureServiceImpl extends ResourceServiceImpl<PictureMapper, Pictu
         }
 
         return paths;
+    }
+
+    // 查询列表
+    public IPage<PictureEntity> getListBySearch(String objType, Object objId, Object categoryId, String name, String startDate, String endDate, Integer page) {
+        MPJLambdaWrapper<PictureEntity> queryWrapper = new MPJLambdaWrapper<PictureEntity>()
+                .eq(PictureEntity::getObjType, objType)
+                .eq(PictureEntity::getObjId, objId)
+                .eq(PictureEntity::getPictureCategoryId, categoryId)
+                .like(PictureEntity::getName, name)
+                .between(PictureEntity::getCreatedAt,startDate, endDate);
+
+                IPage<PictureEntity> pageData = new Page<>(page, 8);
+
+                return this.page(pageData, queryWrapper);
     }
 }

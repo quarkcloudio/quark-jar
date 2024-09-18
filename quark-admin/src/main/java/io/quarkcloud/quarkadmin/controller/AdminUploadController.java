@@ -7,6 +7,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileTypeUtil;
 import cn.hutool.core.io.FileUtil;
@@ -31,9 +34,11 @@ import cn.hutool.jwt.JWTValidator;
 import io.quarkcloud.quarkadmin.component.message.Message;
 import io.quarkcloud.quarkadmin.entity.PictureEntity;
 import io.quarkcloud.quarkadmin.entity.FileEntity;
+import io.quarkcloud.quarkadmin.entity.PictureCategoryEntity;
 import io.quarkcloud.quarkadmin.service.PictureService;
 import io.quarkcloud.quarkcore.service.Env;
 import io.quarkcloud.quarkadmin.service.FileService;
+import io.quarkcloud.quarkadmin.service.PictureCategoryService;
 
 @RestController
 public class AdminUploadController {
@@ -42,20 +47,62 @@ public class AdminUploadController {
     @Autowired
     private PictureService pictureService;
 
+    // 注入图片分类服务
+    @Autowired
+    private PictureCategoryService pictureCategoryService;
+
     // 注入文件服务
     @Autowired
     private FileService fileService;
 
     @RequestMapping(value = "/api/admin/upload/image/getList", method = {RequestMethod.GET})
     @ResponseBody
-    public Object getImageList(@RequestParam("file") MultipartFile file) {
-        return "";
+    public Object getImageList(
+        @RequestParam(value = "page", defaultValue = "1") Integer page,
+        @RequestParam(value = "pictureCategoryId", defaultValue = "") Integer categoryId,
+        @RequestParam(value = "pictureSearchName", defaultValue = "") String name,
+        @RequestParam(value = "pictureSearchDate", defaultValue = "") String[] date,
+        @RequestHeader(value = "Authorization", defaultValue = "") String authorization
+    ) {
+        if (authorization == null || authorization.isEmpty() || !authorization.startsWith("Bearer ")) {
+            throw new RuntimeException("参数错误");
+        }
+        String token = authorization.substring("Bearer ".length());
+        String appKey = Env.getProperty("app.key");
+        if (!JWT.of(token).setKey(appKey.getBytes()).verify()) {
+            return Message.error("无权操作");
+        }
+        try {
+            JWTValidator.of(token).validateDate(DateUtil.date());
+        } catch (Exception e) {
+            return Message.error("认证已过期");
+        }
+        final JWT jwt = JWTUtil.parseToken(token);
+
+        IPage<PictureEntity> result = pictureService.getListBySearch("ADMINID", jwt.getPayload("id"), categoryId, name, date[0], date[1], page);
+
+        List<PictureCategoryEntity> categorys = pictureCategoryService.getListByObj("ADMINID", jwt.getPayload("id"));
+
+        return Message.success("获取成功","", Map.of(
+            "pagination",Map.of("total", result.getTotal(), "pageSize", result.getSize(), "current", result.getCurrent(),"defaultCurrent",1),
+            "list", result.getRecords(),
+            "categorys", categorys
+        ));
     }
 
     @RequestMapping(value = "/api/admin/upload/image/delete", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    public Object imageDelete(@RequestParam("file") MultipartFile file) {
-        return "";
+    public Object imageDelete(@RequestParam("id") String id) {
+        if (id==null || id.isEmpty()) {
+            return Message.error("参数错误");
+        }
+
+        boolean result = pictureService.removeById(id);
+        if (!result) {
+            return Message.error("操作失败，请重试");
+        }
+
+        return Message.success("操作成功");
     }
 
     @RequestMapping(value = "/api/admin/upload/image/crop", method = {RequestMethod.POST})
