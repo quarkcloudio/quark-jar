@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,14 +20,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileTypeUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.jwt.JWT;
+import cn.hutool.jwt.JWTUtil;
+import cn.hutool.jwt.JWTValidator;
 import io.quarkcloud.quarkadmin.component.message.Message;
 import io.quarkcloud.quarkadmin.entity.PictureEntity;
 import io.quarkcloud.quarkadmin.entity.FileEntity;
 import io.quarkcloud.quarkadmin.service.PictureService;
+import io.quarkcloud.quarkcore.service.Env;
 import io.quarkcloud.quarkadmin.service.FileService;
 
 @RestController
@@ -60,7 +66,7 @@ public class AdminUploadController {
 
     @RequestMapping(value = "/api/admin/upload/image/handle", method = {RequestMethod.POST})
     @ResponseBody
-    public Object imageHandle(@RequestParam("file") MultipartFile file) throws IOException, NoSuchAlgorithmException {
+    public Object imageHandle(@RequestParam("file") MultipartFile file, @RequestHeader(value = "Authorization", defaultValue = "") String authorization) throws IOException, NoSuchAlgorithmException {
         byte[] fileBytes = file.getBytes();
         String fileName = file.getOriginalFilename();
 
@@ -68,6 +74,21 @@ public class AdminUploadController {
         if (fileBytes == null || StrUtil.isBlank(fileName)) {
             throw new RuntimeException("文件不存在或文件名为空");
         }
+
+        if (authorization == null || authorization.isEmpty() || !authorization.startsWith("Bearer ")) {
+            throw new RuntimeException("参数错误");
+        }
+        String token = authorization.substring("Bearer ".length());
+        String appKey = Env.getProperty("app.key");
+        if (!JWT.of(token).setKey(appKey.getBytes()).verify()) {
+            throw new RuntimeException("无权操作");
+        }
+        try {
+            JWTValidator.of(token).validateDate(DateUtil.date());
+        } catch (Exception e) {
+            throw new RuntimeException("认证已过期");
+        }
+        final JWT jwt = JWTUtil.parseToken(token);
  
         // 获取当前日期
         LocalDate now = LocalDate.now();
@@ -116,6 +137,8 @@ public class AdminUploadController {
         int height = image.getHeight();
 
         PictureEntity pictureEntity = new PictureEntity();
+        pictureEntity.setObjType("ADMINID");
+        pictureEntity.setObjId((Long) jwt.getPayload("id"));
         pictureEntity.setName(fileName);
         pictureEntity.setPath(filePath);
         pictureEntity.setSize(fileSize);
@@ -153,7 +176,7 @@ public class AdminUploadController {
 
     @RequestMapping(value = "/api/admin/upload/file/handle", method = {RequestMethod.POST})
     @ResponseBody
-    public Object fileHandle(@RequestParam("file") MultipartFile file) throws IOException, NoSuchAlgorithmException {
+    public Object fileHandle(@RequestParam("file") MultipartFile file, @RequestHeader(value = "Authorization", defaultValue = "") String authorization) throws IOException, NoSuchAlgorithmException {
         byte[] fileBytes = file.getBytes();
         String fileName = file.getOriginalFilename();
 
@@ -161,6 +184,21 @@ public class AdminUploadController {
         if (fileBytes == null || StrUtil.isBlank(fileName)) {
             throw new RuntimeException("文件不存在或文件名为空");
         }
+
+        if (authorization == null || authorization.isEmpty()|| !authorization.startsWith("Bearer ")) {
+            throw new RuntimeException("参数错误");
+        }
+        String token = authorization.substring("Bearer ".length());
+        String appKey = Env.getProperty("app.key");
+        if (!JWT.of(token).setKey(appKey.getBytes()).verify()) {
+            throw new RuntimeException("无权操作");
+        }
+        try {
+            JWTValidator.of(token).validateDate(DateUtil.date());
+        } catch (Exception e) {
+            throw new RuntimeException("认证已过期");
+        }
+        final JWT jwt = JWTUtil.parseToken(token);
  
         // 获取当前日期
         LocalDate now = LocalDate.now();
@@ -202,6 +240,8 @@ public class AdminUploadController {
         String fileHash = sb.toString();
 
         FileEntity fileEntity = new FileEntity();
+        fileEntity.setObjType("ADMINID");
+        fileEntity.setObjId((Long) jwt.getPayload("id"));
         fileEntity.setName(fileName);
         fileEntity.setPath(filePath);
         fileEntity.setSize(fileSize);
