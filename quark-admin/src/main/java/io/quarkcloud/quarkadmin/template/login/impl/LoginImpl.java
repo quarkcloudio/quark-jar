@@ -26,11 +26,15 @@ import io.quarkcloud.quarkadmin.template.login.Login;
 import io.quarkcloud.quarkcore.service.Cache;
 import io.quarkcloud.quarkcore.service.Context;
 import io.quarkcloud.quarkcore.service.Env;
+import io.quarkcloud.quarkcore.service.Redis;
 
 public class LoginImpl implements Login {
 
     @Autowired
     AdminService adminService;
+
+    @Autowired
+    Redis redisClient;
 
     // 注解实例
     protected AdminLogin annotationClass = null;
@@ -180,8 +184,13 @@ public class LoginImpl implements Login {
         // 生成验证码ID
         String simpleUUID = IdUtil.simpleUUID();
 
-        // 放入缓存
-        Cache.getInstance().put(simpleUUID, "uninitialized");
+        String redisHost = Env.getProperty("spring.redis.host");
+        if (redisHost !=null && !redisHost.isEmpty()) {
+            redisClient.setKeyValue(simpleUUID, "uninitialized");
+        } else {
+            // 放入缓存
+            Cache.getInstance().put(simpleUUID, "uninitialized");
+        }
 
         // 返回验证码ID
         map.put("captchaId", simpleUUID);
@@ -196,20 +205,29 @@ public class LoginImpl implements Login {
             return;
         }
 
-        // 获取缓存
-        Object cacheValue = Cache.getInstance().get(id);
+        Object cacheValue = null;
+        String redisHost = Env.getProperty("spring.redis.host");
+        if (redisHost !=null && !redisHost.isEmpty()) {
+            cacheValue = redisClient.getValueByKey(id);
+        } else {
+            // 获取缓存
+            cacheValue = Cache.getInstance().get(id);
+        }
         if (cacheValue == null) {
             return;
         }
-        if ((String) cacheValue != "uninitialized") {
+        if (!cacheValue.equals("uninitialized")) {
             return;
         }
 
         // 定义图形验证码的长、宽、验证码字符数、干扰线宽度
         LineCaptcha lineCaptcha = CaptchaUtil.createLineCaptcha(150, 40, 5, 4);
-
-        // 将验证码放到缓存
-        Cache.getInstance().put(id, lineCaptcha.getCode());
+        if (redisHost !=null && !redisHost.isEmpty()) {
+            redisClient.setKeyValue(id, lineCaptcha.getCode());
+        } else {
+            // 将验证码放到缓存
+            Cache.getInstance().put(id, lineCaptcha.getCode());
+        }
 
         try {
             lineCaptcha.write(context.getOutputStream());
@@ -301,7 +319,14 @@ public class LoginImpl implements Login {
             return Message.error("验证码不能为空！");
         }
 
-        Object cacheCaptchaValue = Cache.getInstance().get(id, false);
+        Object cacheCaptchaValue = null;
+        String redisHost = Env.getProperty("spring.redis.host");
+        if (redisHost !=null && !redisHost.isEmpty()) {
+            cacheCaptchaValue = redisClient.getValueByKey(id);
+        } else {
+            cacheCaptchaValue = Cache.getInstance().get(id, false);
+        }
+
         if (cacheCaptchaValue == null) {
             return Message.error("验证码错误！");
         }
