@@ -10,13 +10,10 @@ import io.quarkcloud.quarkadmin.entity.PermissionEntity;
 import io.quarkcloud.quarkadmin.mapper.PermissionMapper;
 import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
 import io.quarkcloud.quarkcore.service.Context;
+import io.quarkcloud.quarkstarter.service.admin.action.BatchDelete;
 import io.quarkcloud.quarkstarter.service.admin.action.CreateModal;
 import io.quarkcloud.quarkstarter.service.admin.action.Delete;
 import io.quarkcloud.quarkstarter.service.admin.action.EditModal;
-import io.quarkcloud.quarkstarter.service.admin.action.FormBack;
-import io.quarkcloud.quarkstarter.service.admin.action.FormExtraBack;
-import io.quarkcloud.quarkstarter.service.admin.action.FormReset;
-import io.quarkcloud.quarkstarter.service.admin.action.FormSubmit;
 import io.quarkcloud.quarkstarter.service.admin.action.SyncPermission;
 import io.quarkcloud.quarkstarter.service.admin.search.Input;
 
@@ -68,10 +65,7 @@ public class Permission extends ResourceImpl<PermissionMapper, PermissionEntity>
             new CreateModal<PermissionMapper, PermissionEntity>(this.getTitle(), this.creationApi(context), this.creationFields(context), this.creationData(context)),
             new EditModal<PermissionMapper, PermissionEntity>("编辑", this.editApi(context), this.editValueApi(context), this.editFields(context)),
             new Delete<PermissionMapper, PermissionEntity>(),
-            new FormExtraBack<PermissionMapper, PermissionEntity>(),
-            new FormSubmit<PermissionMapper, PermissionEntity>(),
-            new FormReset<PermissionMapper, PermissionEntity>(),
-            new FormBack<PermissionMapper, PermissionEntity>()
+            new BatchDelete<PermissionMapper, PermissionEntity>()
         );
     }
 }

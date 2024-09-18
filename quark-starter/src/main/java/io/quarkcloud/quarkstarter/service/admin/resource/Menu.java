@@ -27,10 +27,6 @@ import io.quarkcloud.quarkstarter.service.admin.action.BatchEnable;
 import io.quarkcloud.quarkstarter.service.admin.action.ChangeStatus;
 import io.quarkcloud.quarkstarter.service.admin.action.Delete;
 import io.quarkcloud.quarkstarter.service.admin.action.MenuEditDrawer;
-import io.quarkcloud.quarkstarter.service.admin.action.FormBack;
-import io.quarkcloud.quarkstarter.service.admin.action.FormExtraBack;
-import io.quarkcloud.quarkstarter.service.admin.action.FormReset;
-import io.quarkcloud.quarkstarter.service.admin.action.FormSubmit;
 import io.quarkcloud.quarkstarter.service.admin.search.Input;
 import io.quarkcloud.quarkstarter.service.admin.search.Status;
 
@@ -195,11 +191,7 @@ public class Menu extends ResourceImpl<MenuMapper, MenuEntity> {
             new Delete<MenuMapper, MenuEntity>(),
             new BatchDelete<AdminMapper, AdminEntity>(),
             new BatchDisable<AdminMapper, AdminEntity>(),
-            new BatchEnable<AdminMapper, AdminEntity>(),
-            new FormExtraBack<MenuMapper, MenuEntity>(),
-            new FormSubmit<MenuMapper, MenuEntity>(),
-            new FormReset<MenuMapper, MenuEntity>(),
-            new FormBack<MenuMapper, MenuEntity>()
+            new BatchEnable<AdminMapper, AdminEntity>()
         );
     }
 }

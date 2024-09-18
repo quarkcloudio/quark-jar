@@ -10,6 +10,7 @@ import io.quarkcloud.quarkadmin.entity.FileEntity;
 import io.quarkcloud.quarkadmin.mapper.FileMapper;
 import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
 import io.quarkcloud.quarkcore.service.Context;
+import io.quarkcloud.quarkstarter.service.admin.action.BatchDelete;
 import io.quarkcloud.quarkstarter.service.admin.action.Delete;
 import io.quarkcloud.quarkstarter.service.admin.search.Input;
 
@@ -45,7 +46,8 @@ public class File extends ResourceImpl<FileMapper, FileEntity> {
     // 行为
     public List<Object> actions(Context context) {
         return Arrays.asList(
-            new Delete<FileMapper, FileEntity>()
+            new Delete<FileMapper, FileEntity>(),
+            new BatchDelete<FileMapper, FileEntity>()
         );
     }
 }

@@ -49,7 +49,7 @@ public class ActionLog extends ResourceImpl<ActionLogMapper, ActionLogEntity> {
     public List<Object> actions(Context context) {
         return Arrays.asList(
             new Delete<ActionLogMapper, ActionLogEntity>(),
-            new BatchDelete<>()
+            new BatchDelete<ActionLogMapper, ActionLogEntity>()
         );
     }
 }

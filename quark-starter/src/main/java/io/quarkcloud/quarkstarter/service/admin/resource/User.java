@@ -12,6 +12,9 @@ import io.quarkcloud.quarkadmin.entity.UserEntity;
 import io.quarkcloud.quarkadmin.mapper.UserMapper;
 import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
 import io.quarkcloud.quarkcore.service.Context;
+import io.quarkcloud.quarkstarter.service.admin.action.BatchDelete;
+import io.quarkcloud.quarkstarter.service.admin.action.BatchDisable;
+import io.quarkcloud.quarkstarter.service.admin.action.BatchEnable;
 import io.quarkcloud.quarkstarter.service.admin.action.CreateLink;
 import io.quarkcloud.quarkstarter.service.admin.action.Delete;
 import io.quarkcloud.quarkstarter.service.admin.action.EditLink;
@@ -78,6 +81,9 @@ public class User extends ResourceImpl<UserMapper, UserEntity> {
             new CreateLink<UserMapper, UserEntity>(this.getTitle()),
             new EditLink<UserMapper, UserEntity>(),
             new Delete<UserMapper, UserEntity>(),
+            new BatchDelete<UserMapper, UserEntity>(),
+            new BatchDisable<UserMapper, UserEntity>(),
+            new BatchEnable<UserMapper, UserEntity>(),
             new FormExtraBack<UserMapper, UserEntity>(),
             new FormSubmit<UserMapper, UserEntity>(),
             new FormReset<UserMapper, UserEntity>(),

@@ -12,6 +12,7 @@ import io.quarkcloud.quarkadmin.mapper.PictureMapper;
 import io.quarkcloud.quarkadmin.service.PictureService;
 import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
 import io.quarkcloud.quarkcore.service.Context;
+import io.quarkcloud.quarkstarter.service.admin.action.BatchDelete;
 import io.quarkcloud.quarkstarter.service.admin.action.Delete;
 import io.quarkcloud.quarkstarter.service.admin.search.Input;
 
@@ -55,7 +56,8 @@ public class Picture extends ResourceImpl<PictureMapper, PictureEntity> {
     // 行为
     public List<Object> actions(Context context) {
         return Arrays.asList(
-            new Delete<PictureMapper, PictureEntity>()
+            new Delete<PictureMapper, PictureEntity>(),
+            new BatchDelete<PictureMapper, PictureEntity>()
         );
     }
 }

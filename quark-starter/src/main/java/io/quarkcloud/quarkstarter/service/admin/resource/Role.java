@@ -8,13 +8,12 @@ import org.springframework.stereotype.Component;
 
 import io.quarkcloud.quarkadmin.component.form.Field;
 import io.quarkcloud.quarkadmin.component.form.Rule;
-import io.quarkcloud.quarkadmin.entity.AdminEntity;
 import io.quarkcloud.quarkadmin.entity.RoleEntity;
-import io.quarkcloud.quarkadmin.mapper.AdminMapper;
 import io.quarkcloud.quarkadmin.mapper.RoleMapper;
 import io.quarkcloud.quarkadmin.service.MenuService;
 import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
 import io.quarkcloud.quarkcore.service.Context;
+import io.quarkcloud.quarkstarter.service.admin.action.BatchDelete;
 import io.quarkcloud.quarkstarter.service.admin.action.CreateLink;
 import io.quarkcloud.quarkstarter.service.admin.action.Delete;
 import io.quarkcloud.quarkstarter.service.admin.action.EditLink;
@@ -62,9 +61,10 @@ public class Role extends ResourceImpl<RoleMapper, RoleEntity> {
     // 行为
     public List<Object> actions(Context context) {
         return Arrays.asList(
-            new CreateLink<AdminMapper, AdminEntity>(this.getTitle()),
-            new EditLink<AdminMapper, AdminEntity>(),
+            new CreateLink<RoleMapper, RoleEntity>(this.getTitle()),
+            new EditLink<RoleMapper, RoleEntity>(),
             new Delete<RoleMapper, RoleEntity>(),
+            new BatchDelete<RoleMapper, RoleEntity>(),
             new FormExtraBack<RoleMapper, RoleEntity>(),
             new FormSubmit<RoleMapper, RoleEntity>(),
             new FormReset<RoleMapper, RoleEntity>(),
