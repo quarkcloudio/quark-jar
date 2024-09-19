@@ -389,8 +389,6 @@ public class AdminUploadController {
             return Message.error(e.getMessage());
         }
 
-        
-
         PictureEntity pictureEntity = new PictureEntity();
         pictureEntity.setObjType("ADMINID");
         pictureEntity.setObjId(Long.parseLong(jwt.getPayload("id").toString()));
