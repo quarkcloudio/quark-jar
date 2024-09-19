@@ -139,10 +139,13 @@ public class AdminUploadController {
             return Message.error("无权限");
         }
 
+        // 获取列表
         IPage<PictureEntity> result = pictureService.getListBySearch("ADMINID", jwt.getPayload("id"), categoryId, name, date[0], date[1], page);
 
+        // 获取分类
         List<PictureCategoryEntity> categorys = pictureCategoryService.getListByObj("ADMINID", jwt.getPayload("id"));
 
+        // 返回数据
         return Message.success("获取成功","", Map.of(
             "pagination",Map.of("total", result.getTotal(), "pageSize", result.getSize(), "current", result.getCurrent(),"defaultCurrent",1),
             "list", result.getRecords(),
@@ -153,10 +156,9 @@ public class AdminUploadController {
     @RequestMapping(value = "/api/admin/upload/image/delete", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public Object imageDelete(@RequestParam("id") String id) {
-        if (id==null || id.isEmpty()) {
+        if (id.isEmpty()) {
             return Message.error("参数错误");
         }
-
         boolean result = pictureService.removeById(id);
         if (!result) {
             return Message.error("操作失败，请重试");
@@ -239,8 +241,7 @@ public class AdminUploadController {
         }
     
         // 文件输入流
-        InputStream fileInputStream = new ByteArrayInputStream(fileData);  
-
+        InputStream fileInputStream = new ByteArrayInputStream(fileData);
         String fileExt = FileTypeUtil.getType(fileInputStream);
         Long fileSize = (long) fileData.length;
         String fileHash;
@@ -483,8 +484,7 @@ public class AdminUploadController {
         }
  
         // 文件输入流
-        InputStream fileInputStream = new ByteArrayInputStream(fileData);  
-
+        InputStream fileInputStream = new ByteArrayInputStream(fileData);
         String fileExt = FileTypeUtil.getType(fileInputStream);
         String originalFilename = IdUtil.simpleUUID() + "." + fileExt;
         String fileName = IdUtil.simpleUUID() + "." + fileExt;
