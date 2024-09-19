@@ -230,15 +230,6 @@ public class AdminUploadController {
         if(!jwt.getPayload("guard_name").equals("admin")) {
             return Message.error("无权限");
         }
-
-        // 文件保存路径
-        String savePath = uploadImageSavePath + LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + "/";
-        
-        // 目录不存在，则创建目录
-        File dir = FileUtil.file(savePath);
-        if (!FileUtil.exist(dir)) {
-            FileUtil.mkdir(dir);
-        }
     
         // 文件输入流
         InputStream fileInputStream = new ByteArrayInputStream(fileData);
