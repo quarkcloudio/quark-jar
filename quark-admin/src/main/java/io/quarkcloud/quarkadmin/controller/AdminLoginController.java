@@ -9,6 +9,7 @@ import io.quarkcloud.quarkadmin.annotation.AdminLoginCaptcha;
 import io.quarkcloud.quarkadmin.annotation.AdminLoginCaptchaId;
 import io.quarkcloud.quarkadmin.annotation.AdminLoginHandle;
 import io.quarkcloud.quarkadmin.annotation.AdminLoginRender;
+import io.quarkcloud.quarkadmin.annotation.AdminLoginLogout;
 import io.quarkcloud.quarkcore.service.Context;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -41,6 +42,13 @@ public class AdminLoginController {
     @ResponseBody
     @AdminLoginCaptcha
     public Object captcha(HttpServletRequest request, HttpServletResponse response) {
+        return new Context(request, response);
+    }
+
+    @RequestMapping(value = "/api/admin/logout/{resource}/handle", method = {RequestMethod.GET})
+    @ResponseBody
+    @AdminLoginLogout
+    public Object logout(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
 }

@@ -368,6 +368,11 @@ public class LoginImpl implements Login {
         return Message.success("登录成功！", null, result);
     }
     
+    // 执行退出
+    public Object logout(Context context) {
+        return Message.success("退出成功！","/");
+    }
+
     // 组件渲染
     public Object render(Context context) {
 

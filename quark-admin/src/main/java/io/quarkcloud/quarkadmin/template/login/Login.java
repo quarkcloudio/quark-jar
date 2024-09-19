@@ -36,6 +36,9 @@ public interface Login {
     // 执行登录
     public Object handle(Context context);
     
+    // 执行退出
+    public Object logout(Context context);
+
     // 组件渲染
     public Object render(Context context);
 }
