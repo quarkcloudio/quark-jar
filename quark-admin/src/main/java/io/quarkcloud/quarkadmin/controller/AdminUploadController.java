@@ -1,8 +1,10 @@
 package io.quarkcloud.quarkadmin.controller;
 
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
@@ -14,6 +16,7 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,13 +26,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.aliyun.oss.OSS;
+import com.aliyun.oss.OSSClientBuilder;
+import com.aliyun.oss.model.PutObjectRequest;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileTypeUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.IdUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.jwt.JWT;
 import cn.hutool.jwt.JWTUtil;
 import cn.hutool.jwt.JWTValidator;
@@ -38,8 +43,8 @@ import io.quarkcloud.quarkadmin.entity.PictureEntity;
 import io.quarkcloud.quarkadmin.entity.FileEntity;
 import io.quarkcloud.quarkadmin.entity.PictureCategoryEntity;
 import io.quarkcloud.quarkadmin.service.PictureService;
-import io.quarkcloud.quarkcore.service.Env;
 import jakarta.servlet.http.HttpServletRequest;
+import io.quarkcloud.quarkadmin.service.ConfigService;
 import io.quarkcloud.quarkadmin.service.FileService;
 import io.quarkcloud.quarkadmin.service.PictureCategoryService;
 
@@ -58,29 +63,81 @@ public class AdminUploadController {
     @Autowired
     private FileService fileService;
 
+    // 注入读取配置服务
+    @Autowired
+    private ConfigService configService;
+
+    @Value("${app.key}")
+    private String appKey;
+
+    @Value("${upload.image.size}")
+    private Long uploadImageSize;
+
+    @Value("${upload.image.type}")
+    private List<String> uploadImageType;
+
+    @Value("${upload.image.save-path}")
+    private String uploadImageSavePath;
+
+    @Value("${upload.file.size}")
+    private Long uploadFileSize;
+
+    @Value("${upload.file.type}")
+    private List<String> uploadFileType;
+
+    @Value("${upload.file.save-path}")
+    private String uploadFileSavePath;
+
+    // 计算文件哈希值
+    private String calculateHash(InputStream inputStream) throws NoSuchAlgorithmException, IOException {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] buffer = new byte[1024];
+        int bytesRead;
+        
+        while ((bytesRead = inputStream.read(buffer)) != -1) {
+            digest.update(buffer, 0, bytesRead);
+        }
+
+        byte[] hashBytes = digest.digest();
+        StringBuilder hexString = new StringBuilder();
+        for (byte b : hashBytes) {
+            String hex = Integer.toHexString(0xff & b);
+            if (hex.length() == 1) hexString.append('0');
+            hexString.append(hex);
+        }
+        return hexString.toString();
+    }
+
     @RequestMapping(value = "/api/admin/upload/image/getList", method = {RequestMethod.GET})
     @ResponseBody
     public Object getImageList(
-            @RequestParam(value = "page", defaultValue = "1") Integer page,
-            @RequestParam(value = "pictureCategoryId", defaultValue = "") Integer categoryId,
-            @RequestParam(value = "pictureSearchName", defaultValue = "") String name,
-            @RequestParam(value = "pictureSearchDate", defaultValue = "") String[] date,
-            @RequestHeader(value = "Authorization", defaultValue = "") String authorization
-        ) {
-        if (authorization == null || authorization.isEmpty() || !authorization.startsWith("Bearer ")) {
-            throw new RuntimeException("参数错误");
+        @RequestParam(value = "page", defaultValue = "1") Integer page,
+        @RequestParam(value = "pictureCategoryId", defaultValue = "") Integer categoryId,
+        @RequestParam(value = "pictureSearchName", defaultValue = "") String name,
+        @RequestParam(value = "pictureSearchDate", defaultValue = "") String[] date,
+        @RequestHeader(value = "Authorization", defaultValue = "") String authToken) {
+        
+        // 检查token
+        if (authToken.isEmpty() || !authToken.startsWith("Bearer ")) {
+            return Message.error("token不能为空");
         }
-        String token = authorization.substring("Bearer ".length());
-        String appKey = Env.getProperty("app.key");
+        String token = authToken.substring("Bearer ".length());
         if (!JWT.of(token).setKey(appKey.getBytes()).verify()) {
-            return Message.error("无权操作");
+            return Message.error("token验证失败");
         }
+
+        // 验证token是否过期
         try {
             JWTValidator.of(token).validateDate(DateUtil.date());
         } catch (Exception e) {
-            return Message.error("认证已过期");
+            return Message.error(e.getMessage());
         }
+
+        // 解析token
         final JWT jwt = JWTUtil.parseToken(token);
+        if(!jwt.getPayload("guard_name").equals("admin")) {
+            return Message.error("无权限");
+        }
 
         IPage<PictureEntity> result = pictureService.getListBySearch("ADMINID", jwt.getPayload("id"), categoryId, name, date[0], date[1], page);
 
@@ -111,93 +168,121 @@ public class AdminUploadController {
     @RequestMapping(value = "/api/admin/upload/image/crop", method = {RequestMethod.POST})
     @ResponseBody
     public Object imageCrop(
-            @RequestParam(value = "limitW", required = false) String limitW,
-            @RequestParam(value = "limitH", required = false) String limitH,
-            @RequestBody Map<String, Object> data,
-            @RequestHeader(value = "Authorization", defaultValue = "") String authorization,
-            HttpServletRequest request) {
+        @RequestParam(value = "limitW", required = false) String limitW,
+        @RequestParam(value = "limitH", required = false) String limitH,
+        @RequestBody Map<String, Object> data,
+        @RequestHeader(value = "Authorization", defaultValue = "") String authToken,
+        HttpServletRequest request) {
 
+        // 获取参数
         String id = (String) data.get("id");
-        String file = (String) data.get("file");
-        if (id == null || file == null) {
+        if (id == null) {
             return Message.error("参数错误！");
         }
 
-        PictureEntity pictureInfo = pictureService.getById(id);
+        PictureEntity pictureInfo = pictureService.getById(Integer.parseInt(id));
         if (pictureInfo == null || pictureInfo.getId() == 0) {
             return Message.error("文件不存在");
         }
 
-        if (authorization == null || authorization.isEmpty() || !authorization.startsWith("Bearer ")) {
-            return Message.error("参数错误！");
-        }
-        String token = authorization.substring("Bearer ".length());
-        String appKey = Env.getProperty("app.key");
-        if (!JWT.of(token).setKey(appKey.getBytes()).verify()) {
-            return Message.error("无权操作");
-        }
-        try {
-            JWTValidator.of(token).validateDate(DateUtil.date());
-        } catch (Exception e) {
-            return Message.error("认证已过期");
-        }
-        final JWT jwt = JWTUtil.parseToken(token);
-        if (jwt == null) {
-            return Message.error("认证失败");
+        // 检查文件是否为空
+        if (data.get("file") == null) {
+            return Message.error("请选择上传的文件");
         }
 
-        String[] files = file.split(",");
+        String[] files = ((String) data.get("file")).split(",");
         if (files.length != 2) {
-            return Message.error("格式错误");
+            return Message.error("文件格式错误");
         }
 
         byte[] fileData;
         try {
-            fileData = Base64.getDecoder().decode(files[1]);
+            fileData = Base64.getDecoder().decode(files[1]); // 解码Base64文件
         } catch (IllegalArgumentException e) {
-            return Message.error("文件数据解码失败");
-        }
-
-        File uploadFile = FileUtil.file(pictureInfo.getPath());
-
-        // 将文件写入服务器指定目录
-        FileUtil.writeBytes(fileData, uploadFile);
- 
-        // 文件大小
-        Long fileSize = uploadFile.length();
-        
-        // 文件hash
-        MessageDigest digest;
-        try {
-            digest = MessageDigest.getInstance("SHA-256");
-        } catch (NoSuchAlgorithmException e) {
             return Message.error(e.getMessage());
         }
-        byte[] hashBytes = digest.digest(fileData);
-        StringBuilder sb = new StringBuilder();
-        for (byte b : hashBytes) {
-            sb.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
+
+        // 文件不存在或文件名为空
+        if (fileData == null) {
+            return Message.error("文件格式错误");
         }
-        String fileHash = sb.toString();
+
+        // 检查token
+        if (authToken.isEmpty() || !authToken.startsWith("Bearer ")) {
+            return Message.error("token不能为空");
+        }
+        String token = authToken.substring("Bearer ".length());
+        if (!JWT.of(token).setKey(appKey.getBytes()).verify()) {
+            return Message.error("token验证失败");
+        }
+
+        // 验证token是否过期
+        try {
+            JWTValidator.of(token).validateDate(DateUtil.date());
+        } catch (Exception e) {
+            return Message.error(e.getMessage());
+        }
+
+        // 解析token
+        final JWT jwt = JWTUtil.parseToken(token);
+        if(!jwt.getPayload("guard_name").equals("admin")) {
+            return Message.error("无权限");
+        }
+
+        // 文件保存路径
+        String savePath = uploadImageSavePath + LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + "/";
+        
+        // 目录不存在，则创建目录
+        File dir = FileUtil.file(savePath);
+        if (!FileUtil.exist(dir)) {
+            FileUtil.mkdir(dir);
+        }
+    
+        // 文件输入流
+        InputStream fileInputStream = new ByteArrayInputStream(fileData);  
+
+        String fileExt = FileTypeUtil.getType(fileInputStream);
+        Long fileSize = (long) fileData.length;
+        String fileHash;
+        try {
+            fileHash = calculateHash(fileInputStream);
+        } catch (NoSuchAlgorithmException | IOException e) {
+            return Message.error(e.getMessage());
+        }
+
+        // 文件大小
+        if (fileSize > uploadImageSize) {
+            return Message.error("文件大小超出限制");
+        }
+
+        if (!uploadImageType.contains(fileExt)) {
+            return Message.error("文件类型不允许");
+        }
 
         // 读取图片
         BufferedImage image;
         try {
-            image = ImageIO.read(uploadFile);
+            image = ImageIO.read(fileInputStream);
         } catch (IOException e) {
             return Message.error(e.getMessage());
         }
-        
-        // 获取图片宽度和高度
-        int width = image.getWidth();
-        int height = image.getHeight();
+        int fileWidth = image.getWidth();
+        int fileHeight = image.getHeight();
+
+        // 文件字节数组
+        File dest = new File(pictureInfo.getPath());
+        try {
+            FileUtil.writeBytes(fileData, dest);
+        } catch (IllegalStateException e) {
+            return Message.error(e.getMessage());
+        }
 
         pictureInfo.setObjType("ADMINID");
-        pictureInfo.setObjId((Long) jwt.getPayload("id"));
+        pictureInfo.setObjId(Long.parseLong(jwt.getPayload("id").toString()));
         pictureInfo.setSize(fileSize);
         pictureInfo.setHash(fileHash);
-        pictureInfo.setHeight(height);
-        pictureInfo.setWidth(width);
+        pictureInfo.setWidth(fileWidth);
+        pictureInfo.setHeight(fileHeight);
 
         boolean result = pictureService.updateById(pictureInfo);
         if (!result) {
@@ -205,122 +290,121 @@ public class AdminUploadController {
         }
 
         // 返回上传成功的消息
-        return Message.success("操作成功", "", Map.of(
+        return Message.success("上传成功", "", Map.of(
             "id", pictureInfo.getId(),
+            "contentType", fileExt,
             "ext", pictureInfo.getExt(),
-            "hash", pictureInfo.getHash(),
-            "height", pictureInfo.getHeight(),
-            "width", pictureInfo.getWidth(),
+            "hash", fileHash,
+            "width", fileWidth,
+            "height", fileHeight,
             "name", pictureInfo.getName(),
             "path", pictureInfo.getPath(),
-            "size", pictureInfo.getSize(),
+            "size", fileSize,
             "url", pictureInfo.getUrl()
         ));
     }
 
     @RequestMapping(value = "/api/admin/upload/image/handle", method = {RequestMethod.POST})
     @ResponseBody
-    public Object imageHandle(@RequestParam("file") MultipartFile file, @RequestHeader(value = "Authorization", defaultValue = "") String authorization) {
-        byte[] fileBytes;
-        try {
-            fileBytes = file.getBytes();
-        } catch (IOException e) {
-            return Message.error(e.getMessage());
-        }
+    public Object imageHandle(
+        @RequestParam("file") MultipartFile file,
+        @RequestParam(value = "limitW", required = false) String limitW,
+        @RequestParam(value = "limitH", required = false) String limitH,
+        @RequestHeader(value = "Authorization", defaultValue = "") String authToken) {
         
-        String fileName = file.getOriginalFilename();
-
-        // 文件不存在或文件名为空
-        if (fileBytes == null || StrUtil.isBlank(fileName)) {
-            return Message.error("文件不存在或文件名为空");
+        // 检查文件是否为空
+        if (file.isEmpty()) {
+            return Message.error("请选择上传的文件");
         }
 
-        if (authorization == null || authorization.isEmpty() || !authorization.startsWith("Bearer ")) {
-            return Message.error("参数错误");
+        // 检查token
+        if (authToken.isEmpty() || !authToken.startsWith("Bearer ")) {
+            return Message.error("token不能为空");
         }
-        String token = authorization.substring("Bearer ".length());
-        String appKey = Env.getProperty("app.key");
+        String token = authToken.substring("Bearer ".length());
         if (!JWT.of(token).setKey(appKey.getBytes()).verify()) {
-            return Message.error("无权操作");
+            return Message.error("token验证失败");
         }
+
+        // 验证token是否过期
         try {
             JWTValidator.of(token).validateDate(DateUtil.date());
         } catch (Exception e) {
-            return Message.error("认证已过期");
+            return Message.error(e.getMessage());
         }
+
+        // 解析token
         final JWT jwt = JWTUtil.parseToken(token);
- 
-        // 获取当前日期
-        LocalDate now = LocalDate.now();
+        if(!jwt.getPayload("guard_name").equals("admin")) {
+            return Message.error("无权限");
+        }
 
-        // 格式化日期
-        String formattedDate = now.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-
-        // 指定上传文件夹
-        String uploadDir = "public/storage/images/"+formattedDate+"/";
-        File dir = FileUtil.file(uploadDir);
+        // 文件保存路径
+        String savePath = uploadImageSavePath + LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + "/";
+        
+        // 目录不存在，则创建目录
+        File dir = FileUtil.file(savePath);
         if (!FileUtil.exist(dir)) {
             FileUtil.mkdir(dir);
         }
  
         // 生成新的文件名，避免文件名冲突
-        String fileExt = FileUtil.extName(fileName);
-        String newFileName = IdUtil.simpleUUID() + "." + fileExt;
-        File uploadFile = FileUtil.file(dir, newFileName);
-
-        // 将文件写入服务器指定目录
-        FileUtil.writeBytes(fileBytes, uploadFile);
- 
-        // 文件保存路径
-        String filePath = uploadDir + newFileName;
-
-        // 文件类型
-        String fileType = FileTypeUtil.getType(uploadFile);
-
-        // 文件大小
-        Long fileSize = uploadFile.length();
-        
-        // 文件hash
-        MessageDigest digest;
+        String originalFilename = file.getOriginalFilename();
+        String fileExt = FileUtil.extName(originalFilename);
+        String fileName = IdUtil.simpleUUID() + "." + fileExt;
+        String filePath = savePath + fileName;
+        String fileType = file.getContentType();
+        Long fileSize = file.getSize();
+        String fileHash;
         try {
-            digest = MessageDigest.getInstance("SHA-256");
-        } catch (NoSuchAlgorithmException e) {
+            fileHash = calculateHash(file.getInputStream());
+        } catch (NoSuchAlgorithmException | IOException e) {
             return Message.error(e.getMessage());
         }
-        byte[] hashBytes = digest.digest(fileBytes);
-        StringBuilder sb = new StringBuilder();
-        for (byte b : hashBytes) {
-            sb.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
+
+        // 文件大小
+        if (fileSize > uploadImageSize) {
+            return Message.error("文件大小超出限制");
         }
-        String fileHash = sb.toString();
+
+        if (!uploadImageType.contains(fileType) && !uploadImageType.contains(fileExt)) {
+            return Message.error("文件类型不允许");
+        }
 
         // 读取图片
         BufferedImage image;
         try {
-            image = ImageIO.read(uploadFile);
+            image = ImageIO.read(file.getInputStream());
         } catch (IOException e) {
             return Message.error(e.getMessage());
         }
+        int fileWidth = image.getWidth();
+        int fileHeight = image.getHeight();
+
+        // 文件字节数组
+        File dest = new File(filePath);
+        try {
+            FileUtil.writeBytes(file.getBytes(), dest);
+        } catch (IllegalStateException | IOException e) {
+            return Message.error(e.getMessage());
+        }
+
         
-        // 获取图片宽度和高度
-        int width = image.getWidth();
-        int height = image.getHeight();
 
         PictureEntity pictureEntity = new PictureEntity();
         pictureEntity.setObjType("ADMINID");
-        pictureEntity.setObjId((Long) jwt.getPayload("id"));
-        pictureEntity.setName(fileName);
+        pictureEntity.setObjId(Long.parseLong(jwt.getPayload("id").toString()));
+        pictureEntity.setName(originalFilename);
         pictureEntity.setPath(filePath);
         pictureEntity.setSize(fileSize);
         pictureEntity.setHash(fileHash);
         pictureEntity.setExt(fileExt);
-        pictureEntity.setHeight(height);
-        pictureEntity.setWidth(width);
-
-        // 获取文件路径
-        String fileUrl = pictureService.getPath(filePath);
+        pictureEntity.setWidth(fileWidth);
+        pictureEntity.setHeight(fileHeight);
+        String fileUrl = pictureService.getPath(filePath); // 获取文件Url路径
         pictureEntity.setUrl(fileUrl);
 
+        // 保存文件记录
         Long fileId = pictureService.saveGetId(pictureEntity);
 
         // 返回上传成功的消息
@@ -329,8 +413,8 @@ public class AdminUploadController {
             "contentType", fileType,
             "ext", fileExt,
             "hash", fileHash,
-            "height", height,
-            "width", width,
+            "width", fileWidth,
+            "height", fileHeight,
             "name", fileName,
             "path", filePath,
             "size", fileSize,
@@ -344,32 +428,18 @@ public class AdminUploadController {
             @RequestParam(value = "limitW", required = false) String limitW,
             @RequestParam(value = "limitH", required = false) String limitH,
             @RequestBody Map<String, Object> data,
-            @RequestHeader(value = "Authorization", defaultValue = "") String authorization,
+            @RequestHeader(value = "Authorization", defaultValue = "") String authToken,
             HttpServletRequest request) {
 
+        // 检查文件是否为空
         if (data.get("file") == null) {
-            return Message.error("参数错误");
+            return Message.error("请选择上传的文件");
         }
 
         String[] files = ((String) data.get("file")).split(",");
         if (files.length != 2) {
-            return Message.error("格式错误");
+            return Message.error("文件格式错误");
         }
-
-        if (authorization == null || authorization.isEmpty() || !authorization.startsWith("Bearer ")) {
-            return Message.error("参数错误");
-        }
-        String token = authorization.substring("Bearer ".length());
-        String appKey = Env.getProperty("app.key");
-        if (!JWT.of(token).setKey(appKey.getBytes()).verify()) {
-            return Message.error("无权操作");
-        }
-        try {
-            JWTValidator.of(token).validateDate(DateUtil.date());
-        } catch (Exception e) {
-            return Message.error("认证已过期");
-        }
-        final JWT jwt = JWTUtil.parseToken(token);
 
         byte[] fileData;
         try {
@@ -380,84 +450,97 @@ public class AdminUploadController {
 
         // 文件不存在或文件名为空
         if (fileData == null) {
-            return Message.error("文件不存在或文件名为空");
+            return Message.error("文件格式错误");
         }
 
-        String fileExt = FileTypeUtil.getType(fileData.toString());
+        // 检查token
+        if (authToken.isEmpty() || !authToken.startsWith("Bearer ")) {
+            return Message.error("token不能为空");
+        }
+        String token = authToken.substring("Bearer ".length());
+        if (!JWT.of(token).setKey(appKey.getBytes()).verify()) {
+            return Message.error("token验证失败");
+        }
 
-        // 文件名称
-        String fileName = IdUtil.simpleUUID() + "." + fileExt;
+        // 验证token是否过期
+        try {
+            JWTValidator.of(token).validateDate(DateUtil.date());
+        } catch (Exception e) {
+            return Message.error(e.getMessage());
+        }
 
-        // 获取当前日期
-        LocalDate now = LocalDate.now();
+        // 解析token
+        final JWT jwt = JWTUtil.parseToken(token);
+        if(!jwt.getPayload("guard_name").equals("admin")) {
+            return Message.error("无权限");
+        }
 
-        // 格式化日期
-        String formattedDate = now.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-
-        // 指定上传文件夹
-        String uploadDir = "public/storage/images/"+formattedDate+"/";
-        File dir = FileUtil.file(uploadDir);
+        // 文件保存路径
+        String savePath = uploadImageSavePath + LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + "/";
+        
+        // 目录不存在，则创建目录
+        File dir = FileUtil.file(savePath);
         if (!FileUtil.exist(dir)) {
             FileUtil.mkdir(dir);
         }
  
-        // 生成新的文件名，避免文件名冲突
-        String newFileName = IdUtil.simpleUUID() + "." + fileExt;
-        File uploadFile = FileUtil.file(dir, newFileName);
+        // 文件输入流
+        InputStream fileInputStream = new ByteArrayInputStream(fileData);  
 
-        // 将文件写入服务器指定目录
-        FileUtil.writeBytes(fileData, uploadFile);
- 
-        // 文件保存路径
-        String filePath = uploadDir + newFileName;
-
-        // 文件类型
-        String fileType = FileTypeUtil.getType(uploadFile);
-
-        // 文件大小
-        Long fileSize = uploadFile.length();
-        
-        // 文件hash
-        MessageDigest digest;
+        String fileExt = FileTypeUtil.getType(fileInputStream);
+        String originalFilename = IdUtil.simpleUUID() + "." + fileExt;
+        String fileName = IdUtil.simpleUUID() + "." + fileExt;
+        String filePath = savePath + fileName;
+        String fileType = fileExt;
+        Long fileSize = (long) fileData.length;
+        String fileHash;
         try {
-            digest = MessageDigest.getInstance("SHA-256");
-        } catch (NoSuchAlgorithmException e) {
+            fileHash = calculateHash(fileInputStream);
+        } catch (NoSuchAlgorithmException | IOException e) {
             return Message.error(e.getMessage());
         }
-        byte[] hashBytes = digest.digest(fileData);
-        StringBuilder sb = new StringBuilder();
-        for (byte b : hashBytes) {
-            sb.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
+
+        // 文件大小
+        if (fileSize > uploadImageSize) {
+            return Message.error("文件大小超出限制");
         }
-        String fileHash = sb.toString();
+
+        if (!uploadImageType.contains(fileType) && !uploadImageType.contains(fileExt)) {
+            return Message.error("文件类型不允许");
+        }
 
         // 读取图片
         BufferedImage image;
         try {
-            image = ImageIO.read(uploadFile);
+            image = ImageIO.read(fileInputStream);
         } catch (IOException e) {
             return Message.error(e.getMessage());
         }
-        
-        // 获取图片宽度和高度
-        int width = image.getWidth();
-        int height = image.getHeight();
+        int fileWidth = image.getWidth();
+        int fileHeight = image.getHeight();
+
+        // 文件字节数组
+        File dest = new File(filePath);
+        try {
+            FileUtil.writeBytes(fileData, dest);
+        } catch (IllegalStateException e) {
+            return Message.error(e.getMessage());
+        }
 
         PictureEntity pictureEntity = new PictureEntity();
         pictureEntity.setObjType("ADMINID");
-        pictureEntity.setObjId((Long) jwt.getPayload("id"));
-        pictureEntity.setName(fileName);
+        pictureEntity.setObjId(Long.parseLong(jwt.getPayload("id").toString()));
+        pictureEntity.setName(originalFilename);
         pictureEntity.setPath(filePath);
         pictureEntity.setSize(fileSize);
         pictureEntity.setHash(fileHash);
         pictureEntity.setExt(fileExt);
-        pictureEntity.setHeight(height);
-        pictureEntity.setWidth(width);
-
-        // 获取文件路径
-        String fileUrl = pictureService.getPath(filePath);
+        pictureEntity.setWidth(fileWidth);
+        pictureEntity.setHeight(fileHeight);
+        String fileUrl = pictureService.getPath(filePath); // 获取文件Url路径
         pictureEntity.setUrl(fileUrl);
 
+        // 保存文件记录
         Long fileId = pictureService.saveGetId(pictureEntity);
 
         // 返回上传成功的消息
@@ -466,8 +549,8 @@ public class AdminUploadController {
             "contentType", fileType,
             "ext", fileExt,
             "hash", fileHash,
-            "height", height,
-            "width", width,
+            "width", fileWidth,
+            "height", fileHeight,
             "name", fileName,
             "path", filePath,
             "size", fileSize,
@@ -477,92 +560,89 @@ public class AdminUploadController {
 
     @RequestMapping(value = "/api/admin/upload/file/handle", method = {RequestMethod.POST})
     @ResponseBody
-    public Object fileHandle(@RequestParam("file") MultipartFile file, @RequestHeader(value = "Authorization", defaultValue = "") String authorization) {
-        byte[] fileBytes;
-        try {
-            fileBytes = file.getBytes();
-        } catch (IOException e) {
-            return Message.error(e.getMessage());
-        }
-        String fileName = file.getOriginalFilename();
-
-        // 文件不存在或文件名为空
-        if (fileBytes == null || StrUtil.isBlank(fileName)) {
-            throw new RuntimeException("文件不存在或文件名为空");
+    public Object fileHandle(
+        @RequestParam("file") MultipartFile file,
+        @RequestHeader(value = "Authorization", defaultValue = "") String authToken) {
+        
+        // 检查文件是否为空
+        if (file.isEmpty()) {
+            return Message.error("请选择上传的文件");
         }
 
-        if (authorization == null || authorization.isEmpty()|| !authorization.startsWith("Bearer ")) {
-            throw new RuntimeException("参数错误");
+        // 检查token
+        if (authToken.isEmpty() || !authToken.startsWith("Bearer ")) {
+            return Message.error("token不能为空");
         }
-        String token = authorization.substring("Bearer ".length());
-        String appKey = Env.getProperty("app.key");
+        String token = authToken.substring("Bearer ".length());
         if (!JWT.of(token).setKey(appKey.getBytes()).verify()) {
-            throw new RuntimeException("无权操作");
+            return Message.error("token验证失败");
         }
+
+        // 验证token是否过期
         try {
             JWTValidator.of(token).validateDate(DateUtil.date());
         } catch (Exception e) {
-            throw new RuntimeException("认证已过期");
+            return Message.error(e.getMessage());
         }
+
+        // 解析token
         final JWT jwt = JWTUtil.parseToken(token);
- 
-        // 获取当前日期
-        LocalDate now = LocalDate.now();
+        if(!jwt.getPayload("guard_name").equals("admin")) {
+            return Message.error("无权限");
+        }
 
-        // 格式化日期
-        String formattedDate = now.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-
-        // 指定上传文件夹
-        String uploadDir = "public/storage/files/"+formattedDate+"/";
-        File dir = FileUtil.file(uploadDir);
+        // 文件保存路径
+        String savePath = uploadFileSavePath + LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + "/";
+        
+        // 目录不存在，则创建目录
+        File dir = FileUtil.file(savePath);
         if (!FileUtil.exist(dir)) {
             FileUtil.mkdir(dir);
         }
  
         // 生成新的文件名，避免文件名冲突
-        String fileExt = FileUtil.extName(fileName);
-        String newFileName = IdUtil.simpleUUID() + "." + fileExt;
-        File uploadFile = FileUtil.file(dir, newFileName);
-
-        // 将文件写入服务器指定目录
-        FileUtil.writeBytes(fileBytes, uploadFile);
- 
-        // 文件保存路径
-        String filePath = uploadDir + newFileName;
-
-        // 文件类型
-        String fileType = FileTypeUtil.getType(uploadFile);
-
-        // 文件大小
-        Long fileSize = uploadFile.length();
-        
-        // 文件hash
-        MessageDigest digest;
+        String originalFilename = file.getOriginalFilename();
+        String fileExt = FileUtil.extName(originalFilename);
+        String fileName = IdUtil.simpleUUID() + "." + fileExt;
+        String filePath = savePath + fileName;
+        String fileType = file.getContentType();
+        Long fileSize = file.getSize();
+        String fileHash;
         try {
-            digest = MessageDigest.getInstance("SHA-256");
-        } catch (NoSuchAlgorithmException e) {
+            fileHash = calculateHash(file.getInputStream());
+        } catch (NoSuchAlgorithmException | IOException e) {
             return Message.error(e.getMessage());
         }
-        byte[] hashBytes = digest.digest(fileBytes);
-        StringBuilder sb = new StringBuilder();
-        for (byte b : hashBytes) {
-            sb.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
+
+        // 文件大小
+        if (fileSize > uploadFileSize) {
+            return Message.error("文件大小超出限制");
         }
-        String fileHash = sb.toString();
+
+        if (!uploadFileType.contains(fileType) && !uploadFileType.contains(fileExt)) {
+            return Message.error("文件类型不允许");
+        }
+
+        // 文件字节数组
+        File dest = new File(filePath);
+        try {
+            FileUtil.writeBytes(file.getBytes(), dest);
+        } catch (IllegalStateException | IOException e) {
+            return Message.error(e.getMessage());
+        }
 
         FileEntity fileEntity = new FileEntity();
         fileEntity.setObjType("ADMINID");
-        fileEntity.setObjId((Long) jwt.getPayload("id"));
-        fileEntity.setName(fileName);
+        fileEntity.setObjId(Long.parseLong(jwt.getPayload("id").toString()));
+        fileEntity.setName(originalFilename);
         fileEntity.setPath(filePath);
         fileEntity.setSize(fileSize);
         fileEntity.setHash(fileHash);
         fileEntity.setExt(fileExt);
-
-        // 获取文件路径
-        String fileUrl = fileService.getPath(filePath);
+        String fileUrl = fileService.getPath(filePath); // 获取文件Url路径
         fileEntity.setUrl(fileUrl);
 
+        // 保存文件记录
         Long fileId = fileService.saveGetId(fileEntity);
 
         // 返回上传成功的消息
