@@ -1,5 +1,7 @@
 package io.quarkcloud.quarkcore.service;
 
+import java.util.concurrent.TimeUnit;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,11 @@ public class Redis {
         redisTemplate.opsForValue().set(key, value);
     }
  
+   // 设置值和有效期
+   public void setValue(String key, Object value, long timeout, TimeUnit timeUnit) {
+        redisTemplate.opsForValue().set(key, value, timeout, timeUnit);
+    }
+
     public Object getValue(String key) {
         return redisTemplate.opsForValue().get(key);
     }

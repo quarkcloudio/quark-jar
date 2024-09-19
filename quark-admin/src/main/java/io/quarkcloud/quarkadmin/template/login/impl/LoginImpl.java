@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -223,7 +224,7 @@ public class LoginImpl implements Login {
         // 定义图形验证码的长、宽、验证码字符数、干扰线宽度
         LineCaptcha lineCaptcha = CaptchaUtil.createLineCaptcha(150, 40, 5, 4);
         if (redisHost !=null && !redisHost.isEmpty()) {
-            redisClient.setValue(id, lineCaptcha.getCode());
+            redisClient.setValue(id, lineCaptcha.getCode(), 5, TimeUnit.MINUTES);
         } else {
             // 将验证码放到缓存
             Cache.getInstance().put(id, lineCaptcha.getCode());
