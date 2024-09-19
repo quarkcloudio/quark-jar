@@ -186,7 +186,7 @@ public class LoginImpl implements Login {
 
         String redisHost = Env.getProperty("spring.redis.host");
         if (redisHost !=null && !redisHost.isEmpty()) {
-            redisClient.setKeyValue(simpleUUID, "uninitialized");
+            redisClient.setValue(simpleUUID, "uninitialized");
         } else {
             // 放入缓存
             Cache.getInstance().put(simpleUUID, "uninitialized");
@@ -208,7 +208,7 @@ public class LoginImpl implements Login {
         Object cacheValue = null;
         String redisHost = Env.getProperty("spring.redis.host");
         if (redisHost !=null && !redisHost.isEmpty()) {
-            cacheValue = redisClient.getValueByKey(id);
+            cacheValue = redisClient.getValueAndDelete(id);
         } else {
             // 获取缓存
             cacheValue = Cache.getInstance().get(id);
@@ -223,7 +223,7 @@ public class LoginImpl implements Login {
         // 定义图形验证码的长、宽、验证码字符数、干扰线宽度
         LineCaptcha lineCaptcha = CaptchaUtil.createLineCaptcha(150, 40, 5, 4);
         if (redisHost !=null && !redisHost.isEmpty()) {
-            redisClient.setKeyValue(id, lineCaptcha.getCode());
+            redisClient.setValue(id, lineCaptcha.getCode());
         } else {
             // 将验证码放到缓存
             Cache.getInstance().put(id, lineCaptcha.getCode());
@@ -322,7 +322,7 @@ public class LoginImpl implements Login {
         Object cacheCaptchaValue = null;
         String redisHost = Env.getProperty("spring.redis.host");
         if (redisHost !=null && !redisHost.isEmpty()) {
-            cacheCaptchaValue = redisClient.getValueByKey(id);
+            cacheCaptchaValue = redisClient.getValueAndDelete(id);
         } else {
             cacheCaptchaValue = Cache.getInstance().get(id, false);
         }
