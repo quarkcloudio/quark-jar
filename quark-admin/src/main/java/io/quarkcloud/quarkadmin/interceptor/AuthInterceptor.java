@@ -33,7 +33,6 @@ public class AuthInterceptor implements HandlerInterceptor {
     @Autowired
     private ActionLogService actionLogService;
 
-    @SuppressWarnings("null")
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // 从请求头中获取令牌
@@ -97,6 +96,7 @@ public class AuthInterceptor implements HandlerInterceptor {
     }
 
     private void errorResponse(HttpServletResponse response, HttpStatus status, String message) throws IOException {
+        
         // 设置响应状态码和内容类型
         response.setStatus(status.value());
         response.setContentType("application/json");
