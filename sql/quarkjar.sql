@@ -26,7 +26,7 @@ CREATE TABLE `action_logs`  (
   `object_id` smallint(6) NOT NULL,
   `username` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL,
   `url` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL,
   `ip` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   `type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   `status` tinyint(4) NOT NULL DEFAULT 1,

@@ -1,25 +1,37 @@
 package io.quarkcloud.quarkadmin.interceptor;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.jwt.JWT;
 import cn.hutool.jwt.JWTUtil;
 import cn.hutool.jwt.JWTValidator;
+import io.quarkcloud.quarkadmin.entity.ActionLogEntity;
+import io.quarkcloud.quarkadmin.service.ActionLogService;
 import io.quarkcloud.quarkadmin.service.AdminService;
-import io.quarkcloud.quarkadmin.service.impl.AdminServiceImpl;
 import io.quarkcloud.quarkcore.service.Env;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+@Component
 public class AuthInterceptor implements HandlerInterceptor {
     
     // 注入AdminService
+    @Autowired
     private AdminService adminService;
+
+    // 注入ActionLogService
+    @Autowired
+    private ActionLogService actionLogService;
 
     @SuppressWarnings("null")
     @Override
@@ -57,7 +69,6 @@ public class AuthInterceptor implements HandlerInterceptor {
             return false;
         }
 
-        adminService = new AdminServiceImpl();
         Long adminId = Long.parseLong(jwt.getPayload("id").toString());
         if (adminId != 1) {
             boolean checkResult = adminService.checkPermission(adminId, request.getRequestURI(), request.getMethod());
@@ -66,6 +77,21 @@ public class AuthInterceptor implements HandlerInterceptor {
                 return false;
             }
         }
+
+        // 记录日志
+        ActionLogEntity actionLogEntity = new ActionLogEntity();
+        actionLogEntity.setObjectId(adminId);
+        actionLogEntity.setUsername(jwt.getPayload("username").toString());
+        actionLogEntity.setUrl(request.getRequestURI());
+        actionLogEntity.setType("admin");
+        actionLogEntity.setCreatedAt(LocalDateTime.now().toString());
+        actionLogEntity.setUpdatedAt(LocalDateTime.now().toString());
+        String remoteAddr = request.getHeader("X-FORWARDED-FOR");
+        if (remoteAddr == null || "".equals(remoteAddr)) {
+            remoteAddr = request.getRemoteAddr();
+        }
+        actionLogEntity.setIp(remoteAddr);
+        actionLogService.save(actionLogEntity);
 
         return true; // 放行请求
     }

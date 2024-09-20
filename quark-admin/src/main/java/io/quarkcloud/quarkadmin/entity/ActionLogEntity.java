@@ -20,7 +20,7 @@ public class ActionLogEntity extends Model<ActionLogEntity> {
     private Long id;
 
     // 操作人id
-    private Integer objectId;
+    private Long objectId;
 
     // 操作人名
     private String username;
