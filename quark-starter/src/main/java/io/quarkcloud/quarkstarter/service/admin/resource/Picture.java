@@ -16,7 +16,7 @@ import io.quarkcloud.quarkstarter.service.admin.action.BatchDelete;
 import io.quarkcloud.quarkstarter.service.admin.action.Delete;
 import io.quarkcloud.quarkstarter.service.admin.search.Input;
 
-@Component(value = "pictureResource")
+@Component
 public class Picture extends ResourceImpl<PictureMapper, PictureEntity> {
 
     @Autowired

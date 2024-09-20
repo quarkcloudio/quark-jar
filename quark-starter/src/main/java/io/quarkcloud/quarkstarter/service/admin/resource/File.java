@@ -14,7 +14,7 @@ import io.quarkcloud.quarkstarter.service.admin.action.BatchDelete;
 import io.quarkcloud.quarkstarter.service.admin.action.Delete;
 import io.quarkcloud.quarkstarter.service.admin.search.Input;
 
-@Component(value = "fileResource")
+@Component
 public class File extends ResourceImpl<FileMapper, FileEntity> {
 
     // 构造函数

@@ -23,7 +23,7 @@ import io.quarkcloud.quarkstarter.service.admin.action.FormReset;
 import io.quarkcloud.quarkstarter.service.admin.action.FormSubmit;
 import io.quarkcloud.quarkstarter.service.admin.search.Input;
 
-@Component(value = "roleResource")
+@Component
 public class Role extends ResourceImpl<RoleMapper, RoleEntity> {
 
     // 注入菜单服务

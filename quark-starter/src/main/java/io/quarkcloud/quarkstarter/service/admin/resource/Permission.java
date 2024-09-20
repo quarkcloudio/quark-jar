@@ -17,7 +17,7 @@ import io.quarkcloud.quarkstarter.service.admin.action.EditModal;
 import io.quarkcloud.quarkstarter.service.admin.action.SyncPermission;
 import io.quarkcloud.quarkstarter.service.admin.search.Input;
 
-@Component(value = "permissionResource")
+@Component
 public class Permission extends ResourceImpl<PermissionMapper, PermissionEntity> {
 
     // 构造函数

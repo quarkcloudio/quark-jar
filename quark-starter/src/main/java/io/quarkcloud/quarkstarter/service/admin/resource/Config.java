@@ -24,7 +24,7 @@ import io.quarkcloud.quarkstarter.service.admin.action.FormSubmit;
 import io.quarkcloud.quarkstarter.service.admin.search.Input;
 import io.quarkcloud.quarkstarter.service.admin.search.Status;
 
-@Component(value = "configResource")
+@Component
 public class Config extends ResourceImpl<ConfigMapper, ConfigEntity> {
 
     // 构造函数

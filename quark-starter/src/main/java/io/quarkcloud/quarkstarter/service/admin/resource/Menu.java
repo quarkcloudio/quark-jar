@@ -30,7 +30,7 @@ import io.quarkcloud.quarkstarter.service.admin.action.MenuEditDrawer;
 import io.quarkcloud.quarkstarter.service.admin.search.Input;
 import io.quarkcloud.quarkstarter.service.admin.search.Status;
 
-@Component(value = "menuResource")
+@Component
 public class Menu extends ResourceImpl<MenuMapper, MenuEntity> {
 
     @Autowired

@@ -21,7 +21,7 @@ import io.quarkcloud.quarkstarter.service.admin.action.FormExtraBack;
 import io.quarkcloud.quarkstarter.service.admin.action.FormReset;
 import io.quarkcloud.quarkstarter.service.admin.action.FormSubmit;
 
-@Component(value = "accountResource")
+@Component
 public class Account extends ResourceImpl<AdminMapper, AdminEntity> {
 
     @Autowired

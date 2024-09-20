@@ -15,7 +15,7 @@ import io.quarkcloud.quarkstarter.service.admin.action.Delete;
 import io.quarkcloud.quarkstarter.service.admin.search.Input;
 import io.quarkcloud.quarkstarter.service.admin.search.Status;
 
-@Component(value = "actionLogResource")
+@Component
 public class ActionLog extends ResourceImpl<ActionLogMapper, ActionLogEntity> {
 
     // 构造函数

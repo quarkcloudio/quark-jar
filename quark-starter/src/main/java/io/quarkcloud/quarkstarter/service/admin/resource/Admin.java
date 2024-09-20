@@ -28,7 +28,7 @@ import io.quarkcloud.quarkstarter.service.admin.search.DatetimeRange;
 import io.quarkcloud.quarkstarter.service.admin.search.Input;
 import io.quarkcloud.quarkstarter.service.admin.search.Status;
 
-@Component(value = "adminResource")
+@Component
 public class Admin extends ResourceImpl<AdminMapper, AdminEntity> {
 
     // 构造函数
