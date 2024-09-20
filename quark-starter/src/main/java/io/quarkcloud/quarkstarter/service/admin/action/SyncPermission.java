@@ -46,6 +46,7 @@ public class SyncPermission<M, T> extends AjaxImpl<ResourceMapper<T>, T> {
     }
 
     // 执行行为句柄
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public Object handle(Context context, UpdateWrapper<T> updateWrapper, ResourceService<ResourceMapper<T>, T> resourceService) {
         Map<String, RequestMappingHandlerMapping> handlerMappingBeans = context.getSpringBootContext().getBeansOfType(RequestMappingHandlerMapping.class);
 
