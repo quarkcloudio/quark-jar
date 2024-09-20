@@ -26,8 +26,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.aliyun.oss.ClientException;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
+import com.aliyun.oss.OSSException;
 import com.aliyun.oss.model.PutObjectRequest;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 
@@ -261,12 +263,29 @@ public class AdminUploadController {
         int fileWidth = image.getWidth();
         int fileHeight = image.getHeight();
 
-        // 文件字节数组
-        File dest = new File(pictureInfo.getPath());
-        try {
-            FileUtil.writeBytes(fileData, dest);
-        } catch (IllegalStateException e) {
-            return Message.error(e.getMessage());
+        // 上传到OSS
+        if (configService.getValue("OSS_OPEN").equals("1")) {
+            String endpoint = (String) configService.getValue("OSS_ENDPOINT");
+            String accessKeyId = (String) configService.getValue("OSS_ACCESS_KEY_ID");
+            String accessKeySecret = (String) configService.getValue("OSS_ACCESS_KEY_SECRET");
+            String bucketName = (String) configService.getValue("OSS_BUCKET");
+            OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
+            
+            // 上传文件
+            try {
+                ossClient.putObject(new PutObjectRequest(bucketName, pictureInfo.getPath(), fileInputStream));
+            } catch (OSSException | ClientException e) {
+                return Message.error(e.getMessage());
+            }
+            ossClient.shutdown();
+        } else {
+            // 上传到本地
+            File dest = new File(pictureInfo.getPath());
+            try {
+                FileUtil.writeBytes(fileData, dest);
+            } catch (IllegalStateException e) {
+                return Message.error(e.getMessage());
+            }
         }
 
         pictureInfo.setObjType("ADMINID");
@@ -275,7 +294,6 @@ public class AdminUploadController {
         pictureInfo.setHash(fileHash);
         pictureInfo.setWidth(fileWidth);
         pictureInfo.setHeight(fileHeight);
-
         boolean result = pictureService.updateById(pictureInfo);
         if (!result) {
             return Message.error("操作失败，请重试！");
@@ -333,11 +351,14 @@ public class AdminUploadController {
 
         // 文件保存路径
         String savePath = uploadImageSavePath + LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + "/";
-        
-        // 目录不存在，则创建目录
-        File dir = FileUtil.file(savePath);
-        if (!FileUtil.exist(dir)) {
-            FileUtil.mkdir(dir);
+
+        // 上传到本地
+        if (!configService.getValue("OSS_OPEN").equals("1")) {
+            // 目录不存在，则创建目录
+            File dir = FileUtil.file(savePath);
+            if (!FileUtil.exist(dir)) {
+                FileUtil.mkdir(dir);
+            }
         }
  
         // 生成新的文件名，避免文件名冲突
@@ -373,14 +394,6 @@ public class AdminUploadController {
         int fileWidth = image.getWidth();
         int fileHeight = image.getHeight();
 
-        // 文件字节数组
-        File dest = new File(filePath);
-        try {
-            FileUtil.writeBytes(file.getBytes(), dest);
-        } catch (IllegalStateException | IOException e) {
-            return Message.error(e.getMessage());
-        }
-
         PictureEntity pictureEntity = new PictureEntity();
         pictureEntity.setObjType("ADMINID");
         pictureEntity.setObjId(Long.parseLong(jwt.getPayload("id").toString()));
@@ -391,7 +404,42 @@ public class AdminUploadController {
         pictureEntity.setExt(fileExt);
         pictureEntity.setWidth(fileWidth);
         pictureEntity.setHeight(fileHeight);
-        String fileUrl = pictureService.getPath(filePath); // 获取文件Url路径
+
+        String fileUrl = "";
+        // 上传到OSS
+        if (configService.getValue("OSS_OPEN").equals("1")) {
+            String endpoint = (String) configService.getValue("OSS_ENDPOINT");
+            String accessKeyId = (String) configService.getValue("OSS_ACCESS_KEY_ID");
+            String accessKeySecret = (String) configService.getValue("OSS_ACCESS_KEY_SECRET");
+            String bucketName = (String) configService.getValue("OSS_BUCKET");
+            OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
+            
+            // 上传文件
+            try {
+                ossClient.putObject(new PutObjectRequest(bucketName, filePath, file.getInputStream()));
+            } catch (OSSException | ClientException | IOException e) {
+                return Message.error(e.getMessage());
+            }
+            ossClient.shutdown();
+    
+            String ossMydomain = (String) configService.getValue("OSS_MYDOMAIN"); // 生成外网访问的URL
+            if (!ossMydomain.equals("")) {
+                fileUrl = String.format("https://%s/%s", ossMydomain, filePath);
+            } else {
+                fileUrl = String.format("https://%s.%s/%s", bucketName, endpoint, filePath);
+            }
+        } else {
+            // 上传到本地
+            File dest = new File(filePath);
+            try {
+                FileUtil.writeBytes(file.getBytes(), dest);
+            } catch (IllegalStateException | IOException e) {
+                return Message.error(e.getMessage());
+            }
+
+            fileUrl = pictureService.getPath(filePath); // 获取文件Url路径
+        }
+
         pictureEntity.setUrl(fileUrl);
 
         // 保存文件记录
@@ -468,10 +516,13 @@ public class AdminUploadController {
         // 文件保存路径
         String savePath = uploadImageSavePath + LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + "/";
         
-        // 目录不存在，则创建目录
-        File dir = FileUtil.file(savePath);
-        if (!FileUtil.exist(dir)) {
-            FileUtil.mkdir(dir);
+        // 上传到本地
+        if (!configService.getValue("OSS_OPEN").equals("1")) {
+            // 目录不存在，则创建目录
+            File dir = FileUtil.file(savePath);
+            if (!FileUtil.exist(dir)) {
+                FileUtil.mkdir(dir);
+            }
         }
  
         // 文件输入流
@@ -508,14 +559,6 @@ public class AdminUploadController {
         int fileWidth = image.getWidth();
         int fileHeight = image.getHeight();
 
-        // 文件字节数组
-        File dest = new File(filePath);
-        try {
-            FileUtil.writeBytes(fileData, dest);
-        } catch (IllegalStateException e) {
-            return Message.error(e.getMessage());
-        }
-
         PictureEntity pictureEntity = new PictureEntity();
         pictureEntity.setObjType("ADMINID");
         pictureEntity.setObjId(Long.parseLong(jwt.getPayload("id").toString()));
@@ -526,7 +569,42 @@ public class AdminUploadController {
         pictureEntity.setExt(fileExt);
         pictureEntity.setWidth(fileWidth);
         pictureEntity.setHeight(fileHeight);
-        String fileUrl = pictureService.getPath(filePath); // 获取文件Url路径
+
+        String fileUrl = "";
+        // 上传到OSS
+        if (configService.getValue("OSS_OPEN").equals("1")) {
+            String endpoint = (String) configService.getValue("OSS_ENDPOINT");
+            String accessKeyId = (String) configService.getValue("OSS_ACCESS_KEY_ID");
+            String accessKeySecret = (String) configService.getValue("OSS_ACCESS_KEY_SECRET");
+            String bucketName = (String) configService.getValue("OSS_BUCKET");
+            OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
+            
+            // 上传文件
+            try {
+                ossClient.putObject(new PutObjectRequest(bucketName, filePath, fileInputStream));
+            } catch (OSSException | ClientException e) {
+                return Message.error(e.getMessage());
+            }
+            ossClient.shutdown();
+    
+            String ossMydomain = (String) configService.getValue("OSS_MYDOMAIN"); // 生成外网访问的URL
+            if (!ossMydomain.equals("")) {
+                fileUrl = String.format("https://%s/%s", ossMydomain, filePath);
+            } else {
+                fileUrl = String.format("https://%s.%s/%s", bucketName, endpoint, filePath);
+            }
+        } else {
+            // 文件字节数组
+            File dest = new File(filePath);
+            try {
+                FileUtil.writeBytes(fileData, dest);
+            } catch (IllegalStateException e) {
+                return Message.error(e.getMessage());
+            }
+
+            fileUrl = pictureService.getPath(filePath); // 获取文件Url路径
+        }
+
         pictureEntity.setUrl(fileUrl);
 
         // 保存文件记录
@@ -583,10 +661,13 @@ public class AdminUploadController {
         // 文件保存路径
         String savePath = uploadFileSavePath + LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + "/";
         
-        // 目录不存在，则创建目录
-        File dir = FileUtil.file(savePath);
-        if (!FileUtil.exist(dir)) {
-            FileUtil.mkdir(dir);
+        // 上传到本地
+        if (!configService.getValue("OSS_OPEN").equals("1")) {
+            // 目录不存在，则创建目录
+            File dir = FileUtil.file(savePath);
+            if (!FileUtil.exist(dir)) {
+                FileUtil.mkdir(dir);
+            }
         }
  
         // 生成新的文件名，避免文件名冲突
@@ -612,14 +693,6 @@ public class AdminUploadController {
             return Message.error("文件类型不允许");
         }
 
-        // 文件字节数组
-        File dest = new File(filePath);
-        try {
-            FileUtil.writeBytes(file.getBytes(), dest);
-        } catch (IllegalStateException | IOException e) {
-            return Message.error(e.getMessage());
-        }
-
         FileEntity fileEntity = new FileEntity();
         fileEntity.setObjType("ADMINID");
         fileEntity.setObjId(Long.parseLong(jwt.getPayload("id").toString()));
@@ -628,7 +701,40 @@ public class AdminUploadController {
         fileEntity.setSize(fileSize);
         fileEntity.setHash(fileHash);
         fileEntity.setExt(fileExt);
-        String fileUrl = fileService.getPath(filePath); // 获取文件Url路径
+
+        String fileUrl = "";
+        // 上传到OSS
+        if (configService.getValue("OSS_OPEN").equals("1")) {
+            String endpoint = (String) configService.getValue("OSS_ENDPOINT");
+            String accessKeyId = (String) configService.getValue("OSS_ACCESS_KEY_ID");
+            String accessKeySecret = (String) configService.getValue("OSS_ACCESS_KEY_SECRET");
+            String bucketName = (String) configService.getValue("OSS_BUCKET");
+            OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
+            
+            // 上传文件
+            try {
+                ossClient.putObject(new PutObjectRequest(bucketName, filePath, file.getInputStream()));
+            } catch (OSSException | ClientException | IOException e) {
+                return Message.error(e.getMessage());
+            }
+            ossClient.shutdown();
+    
+            String ossMydomain = (String) configService.getValue("OSS_MYDOMAIN"); // 生成外网访问的URL
+            if (!ossMydomain.equals("")) {
+                fileUrl = String.format("https://%s/%s", ossMydomain, filePath);
+            } else {
+                fileUrl = String.format("https://%s.%s/%s", bucketName, endpoint, filePath);
+            }
+        } else {
+            // 文件字节数组
+            File dest = new File(filePath);
+            try {
+                FileUtil.writeBytes(file.getBytes(), dest);
+            } catch (IllegalStateException | IOException e) {
+                return Message.error(e.getMessage());
+            }
+        }
+
         fileEntity.setUrl(fileUrl);
 
         // 保存文件记录
