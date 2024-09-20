@@ -1,14 +1,19 @@
 package io.quarkcloud.quarkadmin.annotation;
 
 import java.lang.reflect.Method;
+import java.util.Set;
+
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.reflections.Reflections;
+import org.reflections.scanners.Scanners;
 import org.springframework.stereotype.Component;
 import io.quarkcloud.quarkcore.service.Config;
 import io.quarkcloud.quarkcore.service.Context;
+import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
 import io.quarkcloud.quarkcore.service.ClassLoader;
 
 @Aspect
@@ -18,18 +23,8 @@ public class AdminResourceEditableRenderAspect {
     // 加载基础资源包路径
     public String[] basePackages = Config.getInstance().getBasePackages("admin");
 
-    // 加载本资源包路径
-    public String[] packages = {".resource."};
-
     @Pointcut("@annotation(io.quarkcloud.quarkadmin.annotation.AdminResourceEditableRender)")
     private void AdminResourceEditableRender() {}
-
-    // 获取加载包路径
-    protected String[] getLoadPackages() {
-        String[] loadPackages = {this.basePackages[0]+this.packages[0]};
-
-        return loadPackages;
-    }
 
     /**
      * 环绕通知
@@ -71,11 +66,25 @@ public class AdminResourceEditableRenderAspect {
             return joinPoint.proceed();
         }
 
-        // 加载类，暂时只支持加载一个配置
-        String[] loadPackages = getLoadPackages();
-        ClassLoader classLoader = new ClassLoader();
+        Object result = null;
+
+        // 扫描包含的类
+        Reflections reflections = new Reflections(basePackages[0], Scanners.SubTypes, Scanners.TypesAnnotated);
+        
+        // 获取所有类
+        @SuppressWarnings("rawtypes")
+        Set<Class<? extends ResourceImpl>> classes = reflections.getSubTypesOf(ResourceImpl.class);
+        for (Class<?> clazz : classes) {
+            if(clazz.getSimpleName().equals(resource)) {
+                result = new ClassLoader().setClazz(clazz).doMethod("editableRender", newContext);
+            }
+        }
+
+        if (result == null) {
+            return joinPoint.proceed();
+        }
 
         // 调用类方法
-        return classLoader.setClassPath(loadPackages[0]+resource).doMethod("editableRender", newContext);
+        return result;
     }
 }
