@@ -597,7 +597,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
             .setInitialValues(data);
     }
 
-    public Map<String, Object> beforeSaving(Context context, Map<String, Object> submitData) {
+    public T beforeSaving(Context context, T submitData) {
         return submitData;
     }
 
@@ -680,6 +680,9 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         if (validationResult!= null) {
             return Message.error(validationResult);
         }
+
+        // 保存前
+        getEntity = this.beforeSaving(context, getEntity);
 
         // 保存数据
         this.resourceService.save(getEntity);
@@ -808,6 +811,9 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         queryWrapper = new PerformQuery<T>(context).
             setUpdateWrapper(queryWrapper).
             buildUpdateQuery();
+
+        // 保存前回调
+        getEntity = this.beforeSaving(context, getEntity);
 
         // 保存数据
         this.resourceService.update(getEntity, queryWrapper);
@@ -1152,22 +1158,15 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
                 continue;
             }
 
-            // 验证保存前回调条件
-            Map<String, Object> submitData;
-            try {
-                submitData = this.beforeSaving(context, formValues);
-            } catch (Exception e) {
-                importResult = false;
-                importFailedNum++;
-                item.add(e.getMessage());
-                importFailedData.add(item);
-                continue;
-            }
-
             // 插入数据库
-            Map<String, Object> data = resolveImport.getSubmitData(fields, submitData);
+            Map<String, Object> data = resolveImport.getSubmitData(fields, formValues);
             ObjectMapper mapper = new ObjectMapper();
             T resourceEntity = (T) mapper.convertValue(data, this.entity.getClass());
+
+            // 保存前回调
+            resourceEntity = this.beforeSaving(context, resourceEntity);
+
+            // 保存数据
             boolean result = this.resourceService.save(resourceEntity);
             if (!result) {
                 importResult = false;

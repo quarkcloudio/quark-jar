@@ -93,6 +93,8 @@ public class Account extends ResourceImpl<AdminMapper, AdminEntity> {
             return adminInfo;
         }
 
+        adminInfo.setPassword(null);
+
         return adminInfo;
     }
 }

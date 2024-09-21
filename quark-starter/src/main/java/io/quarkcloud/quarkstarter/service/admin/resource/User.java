@@ -2,7 +2,6 @@ package io.quarkcloud.quarkstarter.service.admin.resource;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -93,13 +92,19 @@ public class User extends ResourceImpl<UserMapper, UserEntity> {
         );
     }
 
+    // 编辑页面显示前回调
+    public UserEntity beforeEditing(Context context, UserEntity data) {
+        data.setPassword(null);
+        return data;
+    }
+
     // 保存数据前回调
-    public Map<String, Object> beforeSaving(Context context, Map<String, Object> submitData) {
-        Object password = submitData.get("password");
+    public UserEntity beforeSaving(Context context, UserEntity submitData) {
+        Object password = submitData.getPassword();
         if (password != null) {
             // 密码加密
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-            submitData.put("password", encoder.encode((String) password));
+            submitData.setPassword(encoder.encode((String) password));;
         }
         return submitData;
     }

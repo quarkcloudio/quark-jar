@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import io.quarkcloud.quarkadmin.component.Component;
 import io.quarkcloud.quarkcore.util.Reflect;
@@ -261,6 +263,8 @@ public class Form extends Component {
     @SuppressWarnings("unchecked")
     public Form setInitialValues(Object initialValues) {
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        objectMapper.registerModule(new JavaTimeModule());
         Map<String, Object> data = objectMapper.convertValue(initialValues, Map.class);
         List<Object> fields = findFields(this.body, true);
         for (Object v : fields) {

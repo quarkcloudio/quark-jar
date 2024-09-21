@@ -2,7 +2,6 @@ package io.quarkcloud.quarkstarter.service.admin.resource;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -133,24 +132,25 @@ public class Admin extends ResourceImpl<AdminMapper, AdminEntity> {
 
     // 编辑页面显示前回调
     public AdminEntity beforeEditing(Context context,AdminEntity data) {
+        data.setPassword(null);
         List<Long> roleIds = adminService.getRoleIdsById(data.getId());
         data.setRoleIds(roleIds);
         return data;
     }
 
     // 保存数据前回调
-    public Map<String, Object> beforeSaving(Context context, Map<String, Object> submitData) {
-        Object password = submitData.get("password");
+    public AdminEntity beforeSaving(Context context, AdminEntity submitData) {
+        Object password = submitData.getPassword();
         if (password != null) {
             // 密码加密
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-            submitData.put("password", encoder.encode((String) password));
+            submitData.setPassword(encoder.encode((String) password));;
         }
         return submitData;
     }
 
     // 保存数据后回调
-    public Object afterSaved(Context context,AdminEntity result) {
+    public Object afterSaved(Context context, AdminEntity result) {
         if (context.isImport()) {
             return result;
         }

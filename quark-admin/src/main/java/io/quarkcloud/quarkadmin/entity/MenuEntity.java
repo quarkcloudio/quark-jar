@@ -43,20 +43,20 @@ public class MenuEntity {
 
     // 是否显示
     @TableField(value = "`show`")
-    private Short show;
+    private Boolean show;
 
     // 是否为引擎路由
-    private Short isEngine;
+    private Boolean isEngine;
 
     // 是否打开新页面
-    private Short isLink;
+    private Boolean isLink;
 
     // 权限ID
     @TableField(exist = false)
     private List<Long> permissionIds;
 
     // 状态
-    private Short status;
+    private Boolean status;
 
     // 组件key
     @TableField(value = "`key`")

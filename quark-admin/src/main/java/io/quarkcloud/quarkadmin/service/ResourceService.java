@@ -148,11 +148,11 @@ public interface ResourceService<M extends ResourceMapper<T>, T> {
      * 检查字段是否唯一
      * 
      */
-    boolean uniqueValidate(String table, String field, Object fieldValue);
+    boolean checkUnique(String table, String field, Object fieldValue);
 
     /**
      * 检查字段是否唯一
      * 
      */
-    boolean uniqueValidate(String table, String field, Object fieldValue, String ignoreField, Object ignoreValue);
+    boolean checkUnique(String table, String field, Object fieldValue, String ignoreField, Object ignoreValue);
 }
