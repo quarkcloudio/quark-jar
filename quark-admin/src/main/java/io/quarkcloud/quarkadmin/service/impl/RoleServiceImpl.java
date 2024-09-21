@@ -128,7 +128,7 @@ public class RoleServiceImpl extends ResourceServiceImpl<RoleMapper, RoleEntity>
         queryWrapper.eq("guard_name", "admin");
 
         // 判断是否已存在
-        if (this.roleHasPermissionMapper.selectOne(queryWrapper).getId() != null) {
+        if (this.roleHasPermissionMapper.selectOne(queryWrapper) != null) {
             return true;
         }
 

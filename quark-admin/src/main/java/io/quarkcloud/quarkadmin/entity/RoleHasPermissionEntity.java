@@ -5,11 +5,15 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
+
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper=false)
 @TableName("role_has_permissions")
-public class RoleHasPermissionEntity {
+public class RoleHasPermissionEntity extends Model<RoleHasPermissionEntity> {
 
     // 主键
     @TableId(type = IdType.AUTO)

@@ -16,9 +16,9 @@ import io.quarkcloud.quarkadmin.service.PermissionService;
 import io.quarkcloud.quarkadmin.service.RoleService;
 import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
 import io.quarkcloud.quarkcore.service.Context;
-import io.quarkcloud.quarkstarter.service.admin.action.BatchDelete;
+import io.quarkcloud.quarkstarter.service.admin.action.BatchDeleteRole;
 import io.quarkcloud.quarkstarter.service.admin.action.CreateLink;
-import io.quarkcloud.quarkstarter.service.admin.action.Delete;
+import io.quarkcloud.quarkstarter.service.admin.action.DeleteRole;
 import io.quarkcloud.quarkstarter.service.admin.action.EditLink;
 import io.quarkcloud.quarkstarter.service.admin.action.FormBack;
 import io.quarkcloud.quarkstarter.service.admin.action.FormExtraBack;
@@ -55,7 +55,7 @@ public class Role extends ResourceImpl<RoleMapper, RoleEntity> {
             Field.text("name", "名称").setRules(Arrays.asList(
                 Rule.required(true, "名称必须填写")
             )),
-            Field.text("guardName", "守卫"),
+            Field.text("guardName", "守卫").setDefaultValue("admin"),
             Field.tree("menuIds", "权限").setTreeData(menuService.tree()).onlyOnForms(),
             Field.datetime("createdAt", "创建时间").onlyOnIndex(),
             Field.datetime("updatedAt", "更新时间").onlyOnIndex()
@@ -74,8 +74,8 @@ public class Role extends ResourceImpl<RoleMapper, RoleEntity> {
         return Arrays.asList(
             new CreateLink<RoleMapper, RoleEntity>(this.getTitle()),
             new EditLink<RoleMapper, RoleEntity>(),
-            new Delete<RoleMapper, RoleEntity>(),
-            new BatchDelete<RoleMapper, RoleEntity>(),
+            new DeleteRole<RoleMapper, RoleEntity>(),
+            new BatchDeleteRole<RoleMapper, RoleEntity>(),
             new FormExtraBack<RoleMapper, RoleEntity>(),
             new FormSubmit<RoleMapper, RoleEntity>(),
             new FormReset<RoleMapper, RoleEntity>(),

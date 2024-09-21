@@ -31,8 +31,8 @@ public class BatchDisable<M, T> extends AjaxImpl<ResourceMapper<T>, T> {
         this.withConfirm("确定要禁用吗？", "禁用后数据将无法使用，请谨慎操作！", "modal");
 
         // 在表格行内展示
-        this.setOnlyOnIndexTableAlert(true)
-;
+        this.setOnlyOnIndexTableAlert(true);
+
         // 行为接口接收的参数，当行为在表格行展示的时候，可以配置当前行的任意字段
         this.setApiParams(Arrays.asList("id"));
     }
@@ -56,8 +56,8 @@ public class BatchDisable<M, T> extends AjaxImpl<ResourceMapper<T>, T> {
         this.withConfirm("确定要禁用吗？", "禁用后数据将无法使用，请谨慎操作！", "modal");
 
         // 在表格行内展示
-        this.setOnlyOnIndexTableAlert(true)
-;
+        this.setOnlyOnIndexTableAlert(true);
+        
         // 行为接口接收的参数，当行为在表格行展示的时候，可以配置当前行的任意字段
         this.setApiParams(Arrays.asList("id"));
     }
