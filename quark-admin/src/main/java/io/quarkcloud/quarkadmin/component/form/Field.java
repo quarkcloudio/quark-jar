@@ -68,6 +68,10 @@ public class Field {
         return new Checkbox().setName(name).setLabel(label).setCallback(callback);
     }
 
+    public static Checkbox.Option checkboxOption(String label, Object value) {
+        return new Checkbox.Option(label, value);
+    }
+
     public static Compact compact(String label, Object body) {
         return new Compact().setLabel(label).setBody(body);
     }

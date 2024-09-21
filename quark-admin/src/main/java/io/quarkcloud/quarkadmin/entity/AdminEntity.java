@@ -1,5 +1,7 @@
 package io.quarkcloud.quarkadmin.entity;
 
+import java.util.List;
+
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -24,6 +26,10 @@ public class AdminEntity extends Model<AdminEntity> {
     // 账号
     private String username;
 
+    // 角色ids
+    @TableField(exist = false)
+    private List<Long> roleIds; // 这个字段在数据库操作时会被忽略
+
     // 昵称
     private String nickname;
 
@@ -37,7 +43,8 @@ public class AdminEntity extends Model<AdminEntity> {
     private String phone;
 
     // 密码
-    private String password;
+    @TableField(select = false)
+    private String password; // 密码字段在查询时将被忽略
 
     // 头像
     @JsonDeserialize(using = RawJsonDeserializer.class)

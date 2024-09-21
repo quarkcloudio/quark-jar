@@ -25,4 +25,10 @@ public interface AdminService extends ResourceService<AdminMapper, AdminEntity> 
 
     // 根据账号查询
     public AdminEntity getByUsername(String username);
+
+    // 给管理员添加角色
+    public boolean addRole(Long adminId, Long roleId);
+
+    // 清理管理员所有角色
+    public boolean removeAllRoles(Long adminId);
 }

@@ -200,15 +200,19 @@ public class Checkbox extends Component {
     Closure callback;
 
     // 默认的选中项
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object defaultValue;
 
     // 禁用
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object disabled;
 
     // 可选项数据源
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     List<Option> options;
 
     // 指定选中项，string[] | number[]
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object value;
 
     public Checkbox() {

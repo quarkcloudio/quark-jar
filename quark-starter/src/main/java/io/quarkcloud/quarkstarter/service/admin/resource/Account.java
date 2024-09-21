@@ -2,8 +2,10 @@ package io.quarkcloud.quarkstarter.service.admin.resource;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import cn.hutool.jwt.JWT;
@@ -90,12 +92,27 @@ public class Account extends ResourceImpl<AdminMapper, AdminEntity> {
         // 获取登录管理员信息
         AdminEntity adminInfo = adminService.getById(adminId);
         if (adminInfo == null) {
-            return adminInfo; // 可以返回一个特定的错误信息
+            return adminInfo;
         }
 
-        // 删除密码字段
-        adminInfo.setPassword(null);;
-
         return adminInfo;
+    }
+
+    public Map<String, Object> beforeSaving(Context context, Map<String, Object> submitData) {
+        // 重写管理员id
+        JWT jwt = context.parseToken();
+        Long adminId = Long.parseLong(jwt.getPayload("id").toString());
+        submitData.put("id", adminId);
+
+        // 密码加密
+        Object password = submitData.get("password");
+        if (password != null) {
+            // 密码加密
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            submitData.put("password", encoder.encode((String) password));
+        }
+
+        // 返回数据
+        return submitData;
     }
 }

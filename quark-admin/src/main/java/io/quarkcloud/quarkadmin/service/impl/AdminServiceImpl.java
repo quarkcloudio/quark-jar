@@ -109,4 +109,31 @@ public class AdminServiceImpl extends ResourceServiceImpl<AdminMapper, AdminEnti
 
         return adminInfo;
     }
+
+    // 给管理员添加角色
+    public boolean addRole(Long adminId, Long roleId) {
+        UserHasRoleEntity userHasRoleEntity = new UserHasRoleEntity();
+        userHasRoleEntity.setUid(adminId);
+        userHasRoleEntity.setRoleId(roleId);
+        userHasRoleEntity.setGuardName("admin");
+        Integer result = this.userHasRoleMapper.insert(userHasRoleEntity);
+        if (result > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // 清理管理员所有角色
+    public boolean removeAllRoles(Long adminId) {
+        QueryWrapper<UserHasRoleEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("uid", adminId);
+        queryWrapper.eq("guard_name", "admin");
+        Integer result = this.userHasRoleMapper.delete(queryWrapper);
+        if (result > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

@@ -2,14 +2,20 @@ package io.quarkcloud.quarkstarter.service.admin.resource;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import io.quarkcloud.quarkadmin.component.form.Field;
 import io.quarkcloud.quarkadmin.component.form.Rule;
-import io.quarkcloud.quarkadmin.component.form.fields.Radio;
+import io.quarkcloud.quarkadmin.component.message.Message;
 import io.quarkcloud.quarkadmin.entity.AdminEntity;
+import io.quarkcloud.quarkadmin.entity.RoleEntity;
 import io.quarkcloud.quarkadmin.mapper.AdminMapper;
+import io.quarkcloud.quarkadmin.service.AdminService;
+import io.quarkcloud.quarkadmin.service.RoleService;
 import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
 import io.quarkcloud.quarkcore.service.Context;
 import io.quarkcloud.quarkstarter.service.admin.action.BatchDelete;
@@ -31,6 +37,12 @@ import io.quarkcloud.quarkstarter.service.admin.search.Status;
 @Component
 public class Admin extends ResourceImpl<AdminMapper, AdminEntity> {
 
+    @Autowired
+    private RoleService roleService;
+
+    @Autowired
+    private AdminService adminService;
+
     // 构造函数
     public Admin() {
         this.entity = new AdminEntity();
@@ -40,6 +52,7 @@ public class Admin extends ResourceImpl<AdminMapper, AdminEntity> {
 
     // 字段
     public List<Object> fields(Context context) {
+
         return Arrays.asList(
             Field.id("id", "ID"),
             Field.image("avatar", "头像").onlyOnForms(),
@@ -54,6 +67,14 @@ public class Admin extends ResourceImpl<AdminMapper, AdminEntity> {
             )).setUpdateRules(Arrays.asList(
                     Rule.unique("admins", "username", "{id}", "用户名已存在")
             )),
+            Field.checkbox("roleIds", "角色", () -> {
+                List<RoleEntity> roleEntities = adminService.getRolesById(this.entity.getId());
+                return roleEntities.stream().map(roleEntity -> {
+                    return String.format("<span class='label label-primary'>%s</span>", roleEntity.getName());
+                }).reduce((a, b) -> {
+                    return a + " " + b;
+                }).orElse("");
+            }).setOptions(roleService.getCheckboxOptions()),
             Field.text("nickname", "昵称").setEditable(true).setRules(Arrays.asList(
                 Rule.required(true, "昵称必须填写")
             )),
@@ -64,8 +85,8 @@ public class Admin extends ResourceImpl<AdminMapper, AdminEntity> {
                 Rule.required(true, "手机号必须填写")
             )),
             Field.radio("sex", "性别").setOptions(Arrays.asList(
-                    new Radio.Option("男",1),
-                    new Radio.Option("女",2)
+                    Field.radioOption("男",1),
+                    Field.radioOption("女",2)
                 ))
                 .setFilters(true)
                 .setDefaultValue(1),
@@ -112,7 +133,50 @@ public class Admin extends ResourceImpl<AdminMapper, AdminEntity> {
 
     // 编辑页面显示前回调
     public AdminEntity beforeEditing(Context context,AdminEntity data) {
-        data.setPassword(null);
+        List<Long> roleIds = adminService.getRoleIdsById(this.entity.getId());
+        data.setRoleIds(roleIds);
         return data;
+    }
+
+    // 保存数据前回调
+    public Map<String, Object> beforeSaving(Context context, Map<String, Object> submitData) {
+        Object password = submitData.get("password");
+        if (password != null) {
+            // 密码加密
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            submitData.put("password", encoder.encode((String) password));
+        }
+        return submitData;
+    }
+
+    // 保存数据后回调
+    public Object afterSaved(Context context,AdminEntity result) {
+        if (context.isImport()) {
+            return result;
+        }
+        if (result == null) {
+            return Message.error("操作失败！");
+        }
+
+        // 保存角色关联
+        Long adminId = result.getId();
+        List<Long> roleIds = result.getRoleIds();
+        boolean insertRoleResult = true;
+        if (roleIds.size() > 0) {
+            adminService.removeAllRoles(adminId);
+            for (Long roleId : roleIds) {
+                boolean insertRole = adminService.addRole(adminId, roleId);
+                if (insertRole == false) {
+                    insertRoleResult = false;
+                }
+            }
+        }
+
+        if (!insertRoleResult) {
+            return Message.error("操作失败！");
+        }
+
+        String redirectUrl = "/layout/index?api=/api/admin/{resource}/index".replace("{resource}", context.getPathVariable("resource"));
+        return Message.success("操作成功！", redirectUrl);
     }
 }

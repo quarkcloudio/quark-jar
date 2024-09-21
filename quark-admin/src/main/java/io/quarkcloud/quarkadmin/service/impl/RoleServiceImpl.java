@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+
+import io.quarkcloud.quarkadmin.component.form.fields.Checkbox.Option;
 import io.quarkcloud.quarkadmin.entity.PermissionEntity;
 import io.quarkcloud.quarkadmin.entity.RoleEntity;
 import io.quarkcloud.quarkadmin.entity.RoleHasPermissionEntity;
@@ -18,6 +20,10 @@ import jakarta.annotation.Resource;
 @Service
 public class RoleServiceImpl extends ResourceServiceImpl<RoleMapper, RoleEntity> implements RoleService {
     
+    // 角色表
+    @Resource
+    private RoleMapper roleMapper;
+
     // 角色权限关联表
     @Resource
     private RoleHasPermissionMapper roleHasPermissionMapper;
@@ -48,6 +54,16 @@ public class RoleServiceImpl extends ResourceServiceImpl<RoleMapper, RoleEntity>
             list.add(roleHasPermission.getPermissionId());
         }
         
+        return list;
+    }
+
+    // 获取复选框选项
+    public List<Option> getCheckboxOptions() {
+        List<Option> list = new ArrayList<>();
+        List<RoleEntity> roleEntities = this.list();
+        for (RoleEntity roleEntity : roleEntities) {
+            list.add(new Option(roleEntity.getName(), roleEntity.getId()));
+        }
         return list;
     }
 }
