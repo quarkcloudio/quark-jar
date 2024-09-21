@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 
 import io.quarkcloud.quarkadmin.component.form.fields.TreeSelect.TreeData;
 import io.quarkcloud.quarkadmin.entity.MenuEntity;
+import io.quarkcloud.quarkadmin.entity.MenuHasPermissionEntity;
 import io.quarkcloud.quarkadmin.mapper.MenuHasPermissionMapper;
 import io.quarkcloud.quarkadmin.mapper.MenuMapper;
 import io.quarkcloud.quarkadmin.service.AdminService;
@@ -196,5 +197,32 @@ public class MenuServiceImpl extends ResourceServiceImpl<MenuMapper, MenuEntity>
         QueryWrapper<MenuEntity> query = new QueryWrapper<>();
         query.eq("status", 1).eq("id", id);
         return getOne(query); // 使用 MyBatis-Plus 查询单个结果
+    }
+
+    // 给菜单绑定权限
+    public boolean addPermission(Long menuId, Long permissionId) {
+        MenuHasPermissionEntity menuHasPermissionEntity = new MenuHasPermissionEntity();
+        menuHasPermissionEntity.setMenuId(menuId);
+        menuHasPermissionEntity.setPermissionId(permissionId);
+        menuHasPermissionEntity.setGuardName("admin");
+        Integer result = this.menuHasPermissionMapper.insert(menuHasPermissionEntity);
+        if (result > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // 清理菜单所有权限
+    public boolean removeAllPermissions(Long menuId) {
+        QueryWrapper<MenuHasPermissionEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("menu_id", menuId);
+        queryWrapper.eq("guard_name", "admin");
+        Integer result = this.menuHasPermissionMapper.delete(queryWrapper);
+        if (result > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

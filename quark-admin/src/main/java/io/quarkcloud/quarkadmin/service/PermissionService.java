@@ -13,4 +13,7 @@ public interface PermissionService extends ResourceService<PermissionMapper, Per
 
     // 获取菜单数据源
     public List<DataSource> getDataSource();
+
+    // 根据菜单ID获取权限IDS列表
+    public List<Long> getIdsByMenuId(Long menuId);
 }

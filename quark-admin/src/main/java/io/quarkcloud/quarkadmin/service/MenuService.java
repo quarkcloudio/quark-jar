@@ -21,4 +21,10 @@ public interface MenuService extends ResourceService<MenuMapper, MenuEntity> {
 
     // 根据管理员 ID 获取菜单列表
     public ArrayNode getListByAdminId(Long adminId);
+
+    // 给菜单绑定权限
+    public boolean addPermission(Long menuId, Long permissionId);
+
+    // 清理菜单所有权限
+    public boolean removeAllPermissions(Long menuId);
 }

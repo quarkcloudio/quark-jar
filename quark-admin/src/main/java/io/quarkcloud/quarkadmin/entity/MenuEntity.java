@@ -1,5 +1,7 @@
 package io.quarkcloud.quarkadmin.entity;
 
+import java.util.List;
+
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -46,6 +48,10 @@ public class MenuEntity {
 
     // 是否打开新页面
     private Short isLink;
+
+    // 权限ID
+    @TableField(exist = false)
+    private List<Long> permissionIds;
 
     // 状态
     private Short status;

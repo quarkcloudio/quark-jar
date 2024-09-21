@@ -50,4 +50,15 @@ public class PermissionServiceImpl extends ResourceServiceImpl<PermissionMapper,
             return option;
         }).collect(Collectors.toList());
     }
+
+    public List<Long> getIdsByMenuId(Long menuId) {
+        List<Long> permissionIds = new ArrayList<Long>();
+        QueryWrapper<MenuHasPermissionEntity> query = new QueryWrapper<>();
+        query.eq("menu_id", menuId);
+        List<MenuHasPermissionEntity>  menuHasPermissions= menuHasPermissionMapper.selectList(query);
+        for (MenuHasPermissionEntity menuHasPermission : menuHasPermissions) {
+            permissionIds.add(menuHasPermission.getPermissionId());
+        }
+        return permissionIds;
+    }
 }

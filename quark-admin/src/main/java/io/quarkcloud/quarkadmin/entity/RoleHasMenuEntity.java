@@ -1,7 +1,5 @@
 package io.quarkcloud.quarkadmin.entity;
 
-import java.util.List;
-
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -10,19 +8,18 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 @Data
-@TableName("roles")
-public class RoleEntity {
+@TableName("role_has_menus")
+public class RoleHasMenuEntity {
 
     // 主键
     @TableId(type = IdType.AUTO)
     private Long id;
 
-    // 角色名称
-    private String name;
+    // 角色ID
+    private Long roleId;
 
-    // 权限ID
-    @TableField(exist = false)
-    private List<Long> menuIds;
+    // 菜单ID
+    private Long menuId;
 
     // 守卫名称
     private String guardName;

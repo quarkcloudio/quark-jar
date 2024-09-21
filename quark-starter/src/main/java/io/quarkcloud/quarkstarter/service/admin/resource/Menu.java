@@ -11,9 +11,8 @@ import io.quarkcloud.quarkadmin.component.form.Field;
 import io.quarkcloud.quarkadmin.component.form.Rule;
 import io.quarkcloud.quarkadmin.component.form.fields.Transfer.DataSource;
 import io.quarkcloud.quarkadmin.component.form.fields.TreeSelect;
-import io.quarkcloud.quarkadmin.entity.AdminEntity;
+import io.quarkcloud.quarkadmin.component.message.Message;
 import io.quarkcloud.quarkadmin.entity.MenuEntity;
-import io.quarkcloud.quarkadmin.mapper.AdminMapper;
 import io.quarkcloud.quarkadmin.mapper.MenuMapper;
 import io.quarkcloud.quarkadmin.service.MenuService;
 import io.quarkcloud.quarkadmin.service.PermissionService;
@@ -186,12 +185,50 @@ public class Menu extends ResourceImpl<MenuMapper, MenuEntity> {
     public List<Object> actions(Context context) {
         return Arrays.asList(
             new MenuCreateDrawer<MenuMapper, MenuEntity>(this.getTitle(), this.creationApi(context), this.creationFields(context), this.creationData(context)),
-            new ChangeStatus<AdminMapper, AdminEntity>(),
+            new ChangeStatus<MenuMapper, MenuEntity>(),
             new MenuEditDrawer<MenuMapper, MenuEntity>("编辑", this.editApi(context), this.editValueApi(context), this.editFields(context)),
             new Delete<MenuMapper, MenuEntity>(),
-            new BatchDelete<AdminMapper, AdminEntity>(),
-            new BatchDisable<AdminMapper, AdminEntity>(),
-            new BatchEnable<AdminMapper, AdminEntity>()
+            new BatchDelete<MenuMapper, MenuEntity>(),
+            new BatchDisable<MenuMapper, MenuEntity>(),
+            new BatchEnable<MenuMapper, MenuEntity>()
         );
+    }
+
+    // 编辑页面显示前回调
+    public MenuEntity beforeEditing(Context context,MenuEntity data) {
+        List<Long> roleIds = permissionService.getIdsByMenuId(this.entity.getId());
+        data.setPermissionIds(roleIds);
+        return data;
+    }
+
+    // 保存数据后回调
+    public Object afterSaved(Context context,MenuEntity result) {
+        if (context.isImport()) {
+            return result;
+        }
+        if (result == null) {
+            return Message.error("操作失败！");
+        }
+
+        // 保存菜单权限关联
+        Long menuId = result.getId();
+        List<Long> permissionIds = result.getPermissionIds();
+        boolean insertAllResult = true;
+        if (permissionIds.size() > 0) {
+            menuService.removeAllPermissions(menuId);
+            for (Long permissionId : permissionIds) {
+                boolean insertResult = menuService.addPermission(menuId, permissionId);
+                if (insertResult == false) {
+                    insertAllResult = false;
+                }
+            }
+        }
+
+        if (!insertAllResult) {
+            return Message.error("操作失败！");
+        }
+
+        String redirectUrl = "/layout/index?api=/api/admin/{resource}/index".replace("{resource}", context.getPathVariable("resource"));
+        return Message.success("操作成功！", redirectUrl);
     }
 }
