@@ -61,7 +61,7 @@ public class AdminEntity extends Model<AdminEntity> {
     private String lastLoginTime;
 
     // 状态
-    private Integer status;
+    private Boolean status;
 
     // 创建时间
     @TableField(value = "created_at", fill = FieldFill.INSERT)

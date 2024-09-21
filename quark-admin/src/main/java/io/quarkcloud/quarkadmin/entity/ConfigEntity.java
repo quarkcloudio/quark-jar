@@ -44,7 +44,7 @@ public class ConfigEntity extends Model<ConfigEntity> {
     private String remark;
 
     // 状态
-    private Integer status;
+    private Boolean status;
 
     // 创建时间
     @TableField(value = "created_at", fill = FieldFill.INSERT)

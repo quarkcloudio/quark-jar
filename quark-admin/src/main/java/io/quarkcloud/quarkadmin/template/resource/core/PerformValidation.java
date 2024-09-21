@@ -95,7 +95,6 @@ public class PerformValidation<T> {
                     if (except != null && !except.isEmpty()) {
                         String ignoreField = except.replace("{", "").replace("}", "");
                         Object ignoreValue = reflect.getFieldValue(ignoreField);
-                        fieldValue = reflect.getFieldValue(rule.getName());
                         checkUniqueResult = resourceService.uniqueValidate(table, field, fieldValue, ignoreField, ignoreValue);
                     } else {
                         checkUniqueResult = resourceService.uniqueValidate(table, field, fieldValue);
