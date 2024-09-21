@@ -47,7 +47,7 @@ public class AdminEntity extends Model<AdminEntity> {
     private String phone;
 
     // 密码
-    @TableField(select = false)
+    @JsonIgnore
     private String password; // 密码字段在查询时将被忽略
 
     // 头像

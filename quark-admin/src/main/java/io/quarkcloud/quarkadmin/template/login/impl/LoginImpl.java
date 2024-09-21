@@ -344,6 +344,8 @@ public class LoginImpl implements Login {
 
         // 创建 BCryptPasswordEncoder 实例
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        System.out.println(password);
+        System.out.println(adminInfo.getPassword());
         if (!encoder.matches((String) password, adminInfo.getPassword())) {
             return Message.error("用户名或密码错误！");
         }
