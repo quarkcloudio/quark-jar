@@ -270,7 +270,7 @@ public class LoginImpl implements Login {
                         String getComponent = (String) component;
                         if (getComponent.contains("Field")) {
                             Method method = field.getClass().getMethod("buildFrontendRules", String.class);
-                            method.invoke(field, context.getQueryString());
+                            method.invoke(field, context.getRequestURI());
                         }
                     } catch (NoSuchFieldException | NoSuchMethodException | SecurityException | IllegalAccessException
                             | InvocationTargetException e) {

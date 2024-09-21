@@ -308,7 +308,7 @@ public class ResolveField {
                         Object isShown = new Reflect(obj).invoke("isShownOnCreation");
                         if (isShown!=null && (Boolean) isShown) {
                             if ((Boolean) isShown) {
-                                new Reflect(obj).invoke("buildFrontendRules", String.class, context.getQueryString());
+                                new Reflect(obj).invoke("buildFrontendRules", String.class, context.getRequestURI());
                                 items.add(obj);
                             }
                         }
@@ -392,7 +392,7 @@ public class ResolveField {
                         Object isShown = new Reflect(obj).invoke("isShownOnUpdate");
                         if (isShown!=null && (Boolean) isShown) {
                             if ((Boolean) isShown) {
-                                new Reflect(obj).invoke("buildFrontendRules", String.class, context.getQueryString());
+                                new Reflect(obj).invoke("buildFrontendRules", String.class, context.getRequestURI());
                                 items.add(obj);
                             }
                         }
@@ -421,7 +421,7 @@ public class ResolveField {
                 } else {
                     String component = (String) bodyReflect.getFieldValue("component");
                     if (component.contains("Field")) {
-                        new Reflect(field).invoke("buildFrontendRules", String.class, context.getQueryString());
+                        new Reflect(field).invoke("buildFrontendRules", String.class, context.getRequestURI());
                     }
                 }
             });

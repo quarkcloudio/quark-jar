@@ -49,17 +49,29 @@ public class Admin extends ResourceImpl<AdminMapper, AdminEntity> {
                 Rule.required(true, "用户名必须填写"),
                 Rule.min(6, "用户名不能少于6个字符"),
                 Rule.max(20, "用户名不能超过20个字符")
+            )).setCreationRules(Arrays.asList(
+                Rule.unique("admins", "username", "用户名已存在")
+            )).setUpdateRules(Arrays.asList(
+                    Rule.unique("admins", "username", "{id}", "用户名已存在")
             )),
-            Field.text("nickname", "昵称").setEditable(true),
-            Field.text("email", "邮箱"),
-            Field.text("phone", "手机号"),
+            Field.text("nickname", "昵称").setEditable(true).setRules(Arrays.asList(
+                Rule.required(true, "昵称必须填写")
+            )),
+            Field.text("email", "邮箱").setRules(Arrays.asList(
+                Rule.required(true, "邮箱必须填写")
+            )),
+            Field.text("phone", "手机号").setRules(Arrays.asList(
+                Rule.required(true, "手机号必须填写")
+            )),
             Field.radio("sex", "性别").setOptions(Arrays.asList(
                     new Radio.Option("男",1),
                     new Radio.Option("女",2)
                 ))
                 .setFilters(true)
                 .setDefaultValue(1),
-            Field.password("password", "密码").onlyOnForms(),
+            Field.password("password", "密码").setCreationRules(Arrays.asList(
+                Rule.required(true, "密码必须填写")
+            )).onlyOnForms(),
             Field.datetime("lastLoginTime", "最后登录时间").onlyOnIndex(),
             Field.switchField("status", "状态").
                 setTrueValue("正常").
