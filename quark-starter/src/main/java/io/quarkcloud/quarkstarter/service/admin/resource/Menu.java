@@ -196,8 +196,8 @@ public class Menu extends ResourceImpl<MenuMapper, MenuEntity> {
 
     // 编辑页面显示前回调
     public MenuEntity beforeEditing(Context context,MenuEntity data) {
-        List<Long> roleIds = permissionService.getIdsByMenuId(this.entity.getId());
-        data.setPermissionIds(roleIds);
+        List<Long> permissionIds = permissionService.getIdsByMenuId(data.getId());
+        data.setPermissionIds(permissionIds);
         return data;
     }
 

@@ -85,7 +85,7 @@ public class Role extends ResourceImpl<RoleMapper, RoleEntity> {
 
     // 编辑页面显示前回调
     public RoleEntity beforeEditing(Context context, RoleEntity data) {
-        List<Long> menuIds = roleService.getMenuIdsById(this.entity.getId());
+        List<Long> menuIds = roleService.getMenuIdsById(data.getId());
         data.setMenuIds(menuIds);
         return data;
     }

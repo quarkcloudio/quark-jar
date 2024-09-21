@@ -133,7 +133,7 @@ public class Admin extends ResourceImpl<AdminMapper, AdminEntity> {
 
     // 编辑页面显示前回调
     public AdminEntity beforeEditing(Context context,AdminEntity data) {
-        List<Long> roleIds = adminService.getRoleIdsById(this.entity.getId());
+        List<Long> roleIds = adminService.getRoleIdsById(data.getId());
         data.setRoleIds(roleIds);
         return data;
     }
