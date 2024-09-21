@@ -82,8 +82,6 @@ public class AuthInterceptor implements HandlerInterceptor {
         actionLogEntity.setUsername(jwt.getPayload("username").toString());
         actionLogEntity.setUrl(request.getRequestURI());
         actionLogEntity.setType("admin");
-        actionLogEntity.setCreatedAt(LocalDateTime.now().toString());
-        actionLogEntity.setUpdatedAt(LocalDateTime.now().toString());
         String remoteAddr = request.getHeader("X-FORWARDED-FOR");
         if (remoteAddr == null || "".equals(remoteAddr)) {
             remoteAddr = request.getRemoteAddr();
