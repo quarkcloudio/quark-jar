@@ -52,7 +52,6 @@ public class AdminServiceImpl extends ResourceServiceImpl<AdminMapper, AdminEnti
                 hasPermission = true;
             }
         }
-
         return hasPermission;
     }
 
@@ -63,7 +62,6 @@ public class AdminServiceImpl extends ResourceServiceImpl<AdminMapper, AdminEnti
         for (Long roleId : roleIds) {
             list.addAll(roleService.getPermissionsById(roleId));
         }
-
         return list;
     }
 
@@ -71,8 +69,10 @@ public class AdminServiceImpl extends ResourceServiceImpl<AdminMapper, AdminEnti
     public List<RoleEntity> getRolesById(Long adminId) {
         QueryWrapper<RoleEntity> queryWrapper = new QueryWrapper<>();
         List<Long> roleIds= this.getRoleIdsById(adminId);
+        if (roleIds.size() == 0) {
+            return new ArrayList<RoleEntity>();
+        }
         queryWrapper.in("id", roleIds);
-
         return roleMapper.selectList(queryWrapper);
     }
 
@@ -86,7 +86,6 @@ public class AdminServiceImpl extends ResourceServiceImpl<AdminMapper, AdminEnti
         for (UserHasRoleEntity userHasRole : userHasRoles) {
             list.add(userHasRole.getRoleId());
         }
-
         return list;
     }
 
