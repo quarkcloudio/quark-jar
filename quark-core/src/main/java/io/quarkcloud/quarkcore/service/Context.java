@@ -401,6 +401,16 @@ public class Context implements ApplicationContextAware {
         return response.getOutputStream();
     }
 
+    // 获取头部的token
+    public String getToken() {
+        String authHeader = getHeader("Authorization");
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return null;
+        }
+        String token = authHeader.substring("Bearer ".length());
+        return token;
+    }
+
     // 解析token
     public JWT parseToken() {
         String authHeader = getHeader("Authorization");
