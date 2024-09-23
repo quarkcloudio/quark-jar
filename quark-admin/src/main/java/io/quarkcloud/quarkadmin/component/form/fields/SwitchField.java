@@ -588,16 +588,16 @@ public class SwitchField extends Component {
 
     // 当前列值的枚举 valueEnum
     public Map<?, ?> getValueEnum() {
-        Map<Integer, Object> data = new HashMap<>();
-        data.put(0, this.unCheckedChildren);
-        data.put(1, this.checkedChildren);
+        Map<Boolean, Object> data = new HashMap<>();
+        data.put(false, this.unCheckedChildren);
+        data.put(true, this.checkedChildren);
 
         return null;
     }
 
     // 根据value值获取Option的Label
     public Object getOptionLabel(Object value) {
-        return value.equals(1) ? this.checkedChildren : this.unCheckedChildren;
+        return (Boolean) value ? this.checkedChildren : this.unCheckedChildren;
     }
 
     // 根据label值获取Option的Value
@@ -615,7 +615,7 @@ public class SwitchField extends Component {
 
     // 当前可选项
     public Object getOptions() {
-        return Map.of(0, this.unCheckedChildren,1, this.checkedChildren);
+        return Map.of(false, this.unCheckedChildren,true, this.checkedChildren);
     }
 
     // 选中时的内容

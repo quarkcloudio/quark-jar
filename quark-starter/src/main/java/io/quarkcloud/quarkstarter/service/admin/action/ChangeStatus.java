@@ -16,7 +16,7 @@ public class ChangeStatus<M, T> extends AjaxImpl<ResourceMapper<T>, T> {
     public ChangeStatus() {
 
         // 行为名称，当行为在表格行展示时，支持js表达式
-        this.name = "<%= (status==1 ? '禁用' : '启用') %>";
+        this.name = "<%= (status==true ? '禁用' : '启用') %>";
 
         // 设置按钮类型,primary | ghost | dashed | link | text | default
         this.type = "link";
@@ -28,7 +28,7 @@ public class ChangeStatus<M, T> extends AjaxImpl<ResourceMapper<T>, T> {
         this.reload = "table";
 
         // 当行为在表格行展示时，支持js表达式
-        this.withConfirm("确定要<%= (status==1 ? '禁用' : '启用') %>数据吗？", "", "pop");
+        this.withConfirm("确定要<%= (status==true ? '禁用' : '启用') %>数据吗？", "", "pop");
 
         // 在表格行内展示
         this.setOnlyOnIndexTableRow(true)
@@ -45,7 +45,7 @@ public class ChangeStatus<M, T> extends AjaxImpl<ResourceMapper<T>, T> {
         }
 
         // 设置状态
-        if (status.equals("1")) {
+        if (status.equals("true")) {
             updateWrapper.set("status", 0);
         } else {
             updateWrapper.set("status", 1);
