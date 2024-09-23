@@ -214,7 +214,7 @@ public class Menu extends ResourceImpl<MenuMapper, MenuEntity> {
         Long menuId = result.getId();
         List<Long> permissionIds = result.getPermissionIds();
         boolean insertAllResult = true;
-        if (permissionIds.size() > 0) {
+        if (permissionIds !=null && permissionIds.size() > 0) {
             menuService.removeAllPermissions(menuId);
             for (Long permissionId : permissionIds) {
                 boolean insertResult = menuService.addPermission(menuId, permissionId);
