@@ -78,7 +78,7 @@ public class FileServiceImpl extends ResourceServiceImpl<FileMapper, FileEntity>
         // 查询条件
         MPJLambdaWrapper<FileEntity> queryWrapper = new MPJLambdaWrapper<FileEntity>().eq("id", id);
         FileEntity file = this.getOne(queryWrapper);
-        if (file != null && file.getId() != 0) {
+        if (file != null && !file.getId().equals(0L)) {
             path = file.getUrl();
             if (path.contains("//")) {
                 return path;
@@ -123,7 +123,7 @@ public class FileServiceImpl extends ResourceServiceImpl<FileMapper, FileEntity>
         // 查询条件
         MPJLambdaWrapper<FileEntity> queryWrapper = new MPJLambdaWrapper<FileEntity>().eq("id", id);
         FileEntity file = this.getOne(queryWrapper);
-        if (file != null && file.getId() != 0) {
+        if (file != null && !file.getId().equals(0L)) {
             path = file.getPath();
         }
         if (!path.isEmpty()) {

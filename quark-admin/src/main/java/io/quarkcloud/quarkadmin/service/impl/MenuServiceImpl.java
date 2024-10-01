@@ -115,7 +115,7 @@ public class MenuServiceImpl extends ResourceServiceImpl<MenuMapper, MenuEntity>
         if (menus.isEmpty()) return menus; // 如果没有菜单则返回空列表
 
         for (MenuEntity menu : menus) {
-            if (menu.getPid() != 0) {
+            if (!menu.getPid().equals(0L)) {
                 List<MenuEntity> parents = findParentTreeNode(menu.getPid()); // 查找父节点
                 if (!parents.isEmpty()) {
                     menus.addAll(parents); // 将父节点添加到菜单列表中
@@ -128,7 +128,7 @@ public class MenuServiceImpl extends ResourceServiceImpl<MenuMapper, MenuEntity>
     // 根据管理员 ID 获取菜单列表
     public ArrayNode getListByAdminId(Long adminId) {
         List<MenuEntity> menus = new ArrayList<>();
-        if (adminId == 1) { // 如果是超级管理员
+        if (adminId.equals(1L)) { // 如果是超级管理员
             QueryWrapper<MenuEntity> query = new QueryWrapper<>();
             query.eq("guard_name", "admin")
                  .eq("status", 1)
@@ -174,10 +174,10 @@ public class MenuServiceImpl extends ResourceServiceImpl<MenuMapper, MenuEntity>
             menu.setKey(UUID.randomUUID().toString()); // 生成唯一标识
             menu.setLocale("menu" + menu.getPath().replace("/", "."));
             menu.setHideInMenu(!menu.getShow()); // 设置是否隐藏
-            if (menu.getType() == 2 && menu.getIsEngine()) {
+            if (menu.getType().equals(2) && menu.getIsEngine()) {
                 menu.setPath("/layout/index?api=" + menu.getPath()); // 设置路径
             }
-            if (!hasMenu(newMenus, menu.getId()) && menu.getType() != 3) {
+            if (!hasMenu(newMenus, menu.getId()) && menu.getType().equals(3)) {
                 newMenus.add(menu); // 添加新菜单
             }
         }

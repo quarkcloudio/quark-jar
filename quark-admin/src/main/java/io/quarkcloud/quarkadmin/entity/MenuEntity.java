@@ -30,7 +30,7 @@ public class MenuEntity {
     private String icon;
 
     // 类型
-    private Long type;
+    private Integer type;
 
     // 父ID
     private Long pid;

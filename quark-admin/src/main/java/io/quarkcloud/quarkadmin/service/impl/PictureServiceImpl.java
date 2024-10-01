@@ -82,7 +82,7 @@ public class PictureServiceImpl extends ResourceServiceImpl<PictureMapper, Pictu
         // 查询条件
         MPJLambdaWrapper<PictureEntity> queryWrapper = new MPJLambdaWrapper<PictureEntity>().eq("id", id);
         PictureEntity picture = this.getOne(queryWrapper);
-        if (picture != null && picture.getId() != 0) {
+        if (picture != null && !picture.getId().equals(0L)) {
             path = picture.getUrl();
             if (path.contains("//")) {
                 return path;
@@ -150,7 +150,6 @@ public class PictureServiceImpl extends ResourceServiceImpl<PictureMapper, Pictu
                 .eq(PictureEntity::getPictureCategoryId, categoryId)
                 .like(PictureEntity::getName, name)
                 .between(PictureEntity::getCreatedAt,startDate, endDate);
-
                 IPage<PictureEntity> pageData = new Page<>(page, 8);
 
                 return this.page(pageData, queryWrapper);
