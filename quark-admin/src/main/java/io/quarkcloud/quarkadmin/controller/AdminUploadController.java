@@ -142,10 +142,10 @@ public class AdminUploadController {
         }
 
         // 获取列表
-        IPage<PictureEntity> result = pictureService.getListBySearch("ADMINID", jwt.getPayload("id"), categoryId, name, date[0], date[1], page);
+        IPage<PictureEntity> result = pictureService.getListBySearch("ADMIN", jwt.getPayload("id"), categoryId, name, date[0], date[1], page);
 
         // 获取分类
-        List<PictureCategoryEntity> categorys = pictureCategoryService.getListByObj("ADMINID", jwt.getPayload("id"));
+        List<PictureCategoryEntity> categorys = pictureCategoryService.getListByObj("ADMIN", jwt.getPayload("id"));
 
         // 返回数据
         return Message.success("获取成功","", Map.of(
@@ -288,7 +288,7 @@ public class AdminUploadController {
             }
         }
 
-        pictureInfo.setObjType("ADMINID");
+        pictureInfo.setObjType("ADMIN");
         pictureInfo.setObjId(Long.parseLong(jwt.getPayload("id").toString()));
         pictureInfo.setSize(fileSize);
         pictureInfo.setHash(fileHash);
@@ -395,7 +395,7 @@ public class AdminUploadController {
         int fileHeight = image.getHeight();
 
         PictureEntity pictureEntity = new PictureEntity();
-        pictureEntity.setObjType("ADMINID");
+        pictureEntity.setObjType("ADMIN");
         pictureEntity.setObjId(Long.parseLong(jwt.getPayload("id").toString()));
         pictureEntity.setName(originalFilename);
         pictureEntity.setPath(filePath);
@@ -560,7 +560,7 @@ public class AdminUploadController {
         int fileHeight = image.getHeight();
 
         PictureEntity pictureEntity = new PictureEntity();
-        pictureEntity.setObjType("ADMINID");
+        pictureEntity.setObjType("ADMIN");
         pictureEntity.setObjId(Long.parseLong(jwt.getPayload("id").toString()));
         pictureEntity.setName(originalFilename);
         pictureEntity.setPath(filePath);
@@ -694,7 +694,7 @@ public class AdminUploadController {
         }
 
         FileEntity fileEntity = new FileEntity();
-        fileEntity.setObjType("ADMINID");
+        fileEntity.setObjType("ADMIN");
         fileEntity.setObjId(Long.parseLong(jwt.getPayload("id").toString()));
         fileEntity.setName(originalFilename);
         fileEntity.setPath(filePath);

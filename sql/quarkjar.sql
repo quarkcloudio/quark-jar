@@ -69,7 +69,7 @@ CREATE TABLE `users`  (
 -- ----------------------------
 -- Records of users
 -- ----------------------------
-INSERT INTO `users` VALUES (1, 'administrator', '超级管理员', 1, 'admin@yourweb.com', '10086', '$2a$04$d/gRv3MdXWSByWOFp0xqce0g.RSyp3c91PCLcEIIX9rsJ/l2QocsW', '', '', '2024-05-16 17:10:19.457', 1, '2024-05-16 17:10:19.458', '2024-05-16 17:10:19.458', NULL);
+INSERT INTO `users` VALUES (1, 'administrator', '超级管理员', 1, 'admin@yourweb.com', '10086', '$2a$04$d/gRv3MdXWSByWOFp0xqce0g.RSyp3c91PCLcEIIX9rsJ/l2QocsW', '', '', '2024-05-16 17:10:19.457', '', '', 1, '2024-05-16 17:10:19.458', '2024-05-16 17:10:19.458', NULL);
 
 -- ----------------------------
 -- Table structure for configs
