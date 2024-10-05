@@ -177,7 +177,7 @@ public class MenuServiceImpl extends ResourceServiceImpl<MenuMapper, MenuEntity>
             if (menu.getType().equals(2) && menu.getIsEngine()) {
                 menu.setPath("/layout/index?api=" + menu.getPath()); // 设置路径
             }
-            if (!hasMenu(newMenus, menu.getId()) && menu.getType().equals(3)) {
+            if (!hasMenu(newMenus, menu.getId()) && !menu.getType().equals(3)) {
                 newMenus.add(menu); // 添加新菜单
             }
         }
