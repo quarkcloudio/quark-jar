@@ -6,18 +6,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import io.quarkcloud.quarkadmin.entity.AdminEntity;
-import io.quarkcloud.quarkadmin.mapper.AdminMapper;
+import io.quarkcloud.quarkadmin.entity.UserEntity;
+import io.quarkcloud.quarkadmin.mapper.UserMapper;
 
 @SpringBootTest
 public class AdminTest {
 
     @Autowired
-    private AdminMapper adminMapper;
+    private UserMapper adminMapper;
 
     @Test
     public void testSelect() {
-        List<AdminEntity> userList = adminMapper.selectList(null);
+        List<UserEntity> userList = adminMapper.selectList(null);
         userList.forEach(System.out::println);
     }
 }

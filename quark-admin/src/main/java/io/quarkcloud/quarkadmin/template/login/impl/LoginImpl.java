@@ -21,8 +21,8 @@ import io.quarkcloud.quarkadmin.component.form.Field;
 import io.quarkcloud.quarkadmin.component.form.Rule;
 import io.quarkcloud.quarkadmin.component.icon.Icon;
 import io.quarkcloud.quarkadmin.component.message.Message;
-import io.quarkcloud.quarkadmin.entity.AdminEntity;
-import io.quarkcloud.quarkadmin.service.AdminService;
+import io.quarkcloud.quarkadmin.entity.UserEntity;
+import io.quarkcloud.quarkadmin.service.UserService;
 import io.quarkcloud.quarkadmin.template.login.Login;
 import io.quarkcloud.quarkcore.service.Cache;
 import io.quarkcloud.quarkcore.service.Context;
@@ -32,7 +32,7 @@ import io.quarkcloud.quarkcore.service.Redis;
 public class LoginImpl implements Login {
 
     @Autowired
-    AdminService adminService;
+    UserService adminService;
 
     @Autowired
     Redis redisClient;
@@ -337,7 +337,7 @@ public class LoginImpl implements Login {
             return Message.error("验证码错误！");
         }
 
-        AdminEntity adminInfo = adminService.getByUsername((String) username);
+        UserEntity adminInfo = adminService.getByUsername((String) username);
         if (adminInfo == null) {
             return Message.error("用户名或密码错误！");
         }

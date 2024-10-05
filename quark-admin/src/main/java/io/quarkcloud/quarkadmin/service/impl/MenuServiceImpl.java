@@ -16,7 +16,7 @@ import io.quarkcloud.quarkadmin.entity.MenuEntity;
 import io.quarkcloud.quarkadmin.entity.MenuHasPermissionEntity;
 import io.quarkcloud.quarkadmin.mapper.MenuHasPermissionMapper;
 import io.quarkcloud.quarkadmin.mapper.MenuMapper;
-import io.quarkcloud.quarkadmin.service.AdminService;
+import io.quarkcloud.quarkadmin.service.UserService;
 import io.quarkcloud.quarkadmin.service.MenuService;
 import io.quarkcloud.quarkcore.util.Lister;
 import jakarta.annotation.Resource;
@@ -34,7 +34,7 @@ public class MenuServiceImpl extends ResourceServiceImpl<MenuMapper, MenuEntity>
 
     // 用户角色
     @Autowired
-    private AdminService adminService;
+    private UserService adminService;
 
     // 获取菜单列表
     public List<MenuEntity> getList() {

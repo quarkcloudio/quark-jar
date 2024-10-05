@@ -10,7 +10,7 @@ import io.quarkcloud.quarkadmin.template.metrics.Metrics;
 import io.quarkcloud.quarkcore.service.Context;
 import io.quarkcloud.quarkstarter.service.admin.metric.SystemInfo;
 import io.quarkcloud.quarkstarter.service.admin.metric.TeamInfo;
-import io.quarkcloud.quarkstarter.service.admin.metric.TotalAdmin;
+import io.quarkcloud.quarkstarter.service.admin.metric.TotalUser;
 import io.quarkcloud.quarkstarter.service.admin.metric.TotalFile;
 import io.quarkcloud.quarkstarter.service.admin.metric.TotalLog;
 import io.quarkcloud.quarkstarter.service.admin.metric.TotalPicture;
@@ -24,7 +24,7 @@ public class Index extends DashboardImpl {
     // 内容
     public List<Metrics> cards(Context context) {
         return Arrays.asList(
-            new TotalAdmin(),
+            new TotalUser(),
             new TotalLog(),
             new TotalFile(),
             new TotalPicture(),

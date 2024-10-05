@@ -15,7 +15,7 @@ import cn.hutool.jwt.JWTUtil;
 import cn.hutool.jwt.JWTValidator;
 import io.quarkcloud.quarkadmin.entity.ActionLogEntity;
 import io.quarkcloud.quarkadmin.service.ActionLogService;
-import io.quarkcloud.quarkadmin.service.AdminService;
+import io.quarkcloud.quarkadmin.service.UserService;
 import io.quarkcloud.quarkcore.service.Env;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,7 +25,7 @@ public class AuthInterceptor implements HandlerInterceptor {
     
     // 注入AdminService
     @Autowired
-    private AdminService adminService;
+    private UserService adminService;
 
     // 注入ActionLogService
     @Autowired

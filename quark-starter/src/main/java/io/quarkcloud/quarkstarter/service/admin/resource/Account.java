@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component;
 import cn.hutool.jwt.JWT;
 import io.quarkcloud.quarkadmin.component.form.Field;
 import io.quarkcloud.quarkadmin.component.form.Rule;
-import io.quarkcloud.quarkadmin.entity.AdminEntity;
-import io.quarkcloud.quarkadmin.mapper.AdminMapper;
-import io.quarkcloud.quarkadmin.service.AdminService;
+import io.quarkcloud.quarkadmin.entity.UserEntity;
+import io.quarkcloud.quarkadmin.mapper.UserMapper;
+import io.quarkcloud.quarkadmin.service.UserService;
 import io.quarkcloud.quarkadmin.template.resource.core.ResolveAction;
 import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
 import io.quarkcloud.quarkcore.service.Context;
@@ -22,22 +22,22 @@ import io.quarkcloud.quarkstarter.service.admin.action.FormReset;
 import io.quarkcloud.quarkstarter.service.admin.action.FormSubmit;
 
 @Component
-public class Account extends ResourceImpl<AdminMapper, AdminEntity> {
+public class Account extends ResourceImpl<UserMapper, UserEntity> {
 
     @Autowired
-    private AdminService adminService;
+    private UserService adminService;
 
     // 构造函数
     public Account() {
-        this.entity = new AdminEntity();
+        this.entity = new UserEntity();
         this.title = "个人设置";
     }
 
     public String formApi(Context context) {
-        ChangeAccount<AdminMapper, AdminEntity> changeAccount= new ChangeAccount<AdminMapper, AdminEntity>();
+        ChangeAccount<UserMapper, UserEntity> changeAccount= new ChangeAccount<UserMapper, UserEntity>();
         List<String> params = changeAccount.getApiParams();
         String uriKey = changeAccount.getUriKey(changeAccount);
-        return new ResolveAction<AdminMapper, AdminEntity>().buildActionApi(context, params, uriKey);
+        return new ResolveAction<UserMapper, UserEntity>().buildActionApi(context, params, uriKey);
     }
 
     // 字段
@@ -74,11 +74,11 @@ public class Account extends ResourceImpl<AdminMapper, AdminEntity> {
     // 行为
     public List<Object> actions(Context context) {
         return Arrays.asList(
-            new ChangeAccount<AdminMapper, AdminEntity>(),
-            new FormExtraBack<AdminMapper, AdminEntity>(),
-            new FormSubmit<AdminMapper, AdminEntity>(),
-            new FormReset<AdminMapper, AdminEntity>(),
-            new FormBack<AdminMapper, AdminEntity>()
+            new ChangeAccount<UserMapper, UserEntity>(),
+            new FormExtraBack<UserMapper, UserEntity>(),
+            new FormSubmit<UserMapper, UserEntity>(),
+            new FormReset<UserMapper, UserEntity>(),
+            new FormBack<UserMapper, UserEntity>()
         );
     }
 
@@ -88,7 +88,7 @@ public class Account extends ResourceImpl<AdminMapper, AdminEntity> {
         Long adminId = Long.parseLong(jwt.getPayload("id").toString());
 
         // 获取登录管理员信息
-        AdminEntity adminInfo = adminService.getById(adminId);
+        UserEntity adminInfo = adminService.getById(adminId);
         if (adminInfo == null) {
             return adminInfo;
         }

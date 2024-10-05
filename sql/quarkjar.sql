@@ -40,10 +40,10 @@ CREATE TABLE `action_logs`  (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for admins
+-- Table structure for users
 -- ----------------------------
-DROP TABLE IF EXISTS `admins`;
-CREATE TABLE `admins`  (
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE `users`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `username` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   `nickname` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
@@ -54,20 +54,22 @@ CREATE TABLE `admins`  (
   `avatar` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
   `last_login_ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
   `last_login_time` datetime(3) NULL DEFAULT NULL,
+  `wx_openid` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
+  `wx_unionid` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
   `status` tinyint(4) NOT NULL DEFAULT 1,
   `created_at` datetime(3) NULL DEFAULT NULL,
   `updated_at` datetime(3) NULL DEFAULT NULL,
   `deleted_at` datetime(3) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `admins_username_unique`(`username`) USING BTREE,
-  UNIQUE INDEX `admins_email_unique`(`email`) USING BTREE,
-  UNIQUE INDEX `admins_phone_unique`(`phone`) USING BTREE
+  UNIQUE INDEX `users_username_unique`(`username`) USING BTREE,
+  UNIQUE INDEX `users_email_unique`(`email`) USING BTREE,
+  UNIQUE INDEX `users_phone_unique`(`phone`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Records of admins
+-- Records of users
 -- ----------------------------
-INSERT INTO `admins` VALUES (1, 'administrator', '超级管理员', 1, 'admin@yourweb.com', '10086', '$2a$04$d/gRv3MdXWSByWOFp0xqce0g.RSyp3c91PCLcEIIX9rsJ/l2QocsW', '', '', '2024-05-16 17:10:19.457', 1, '2024-05-16 17:10:19.458', '2024-05-16 17:10:19.458', NULL);
+INSERT INTO `users` VALUES (1, 'administrator', '超级管理员', 1, 'admin@yourweb.com', '10086', '$2a$04$d/gRv3MdXWSByWOFp0xqce0g.RSyp3c91PCLcEIIX9rsJ/l2QocsW', '', '', '2024-05-16 17:10:19.457', 1, '2024-05-16 17:10:19.458', '2024-05-16 17:10:19.458', NULL);
 
 -- ----------------------------
 -- Table structure for configs
@@ -199,8 +201,8 @@ CREATE TABLE `menus`  (
 -- ----------------------------
 INSERT INTO `menus` VALUES (1, '控制台', 'admin', 'icon-home', 1, 0, 0, '/dashboard', 1, 0, 0, 1, NULL, NULL, NULL, '2024-05-16 17:10:19.463', '2024-05-16 17:10:19.463');
 INSERT INTO `menus` VALUES (2, '主页', 'admin', '', 2, 1, 0, '/api/admin/dashboard/index/index', 1, 1, 0, 1, NULL, NULL, NULL, '2024-05-16 17:10:19.463', '2024-05-16 17:10:19.463');
-INSERT INTO `menus` VALUES (3, '管理员', 'admin', 'icon-admin', 1, 0, 100, '/admin', 1, 0, 0, 1, NULL, NULL, NULL, '2024-05-16 17:10:19.463', '2024-05-16 17:10:19.463');
-INSERT INTO `menus` VALUES (4, '管理员列表', 'admin', '', 2, 3, 0, '/api/admin/admin/index', 1, 1, 0, 1, NULL, NULL, NULL, '2024-05-16 17:10:19.463', '2024-05-16 17:10:19.463');
+INSERT INTO `menus` VALUES (3, '用户管理', 'admin', 'icon-admin', 1, 0, 100, '/user', 1, 0, 0, 1, NULL, NULL, NULL, '2024-05-16 17:10:19.463', '2024-05-16 17:10:19.463');
+INSERT INTO `menus` VALUES (4, '用户列表', 'admin', '', 2, 3, 0, '/api/admin/user/index', 1, 1, 0, 1, NULL, NULL, NULL, '2024-05-16 17:10:19.463', '2024-05-16 17:10:19.463');
 INSERT INTO `menus` VALUES (5, '权限列表', 'admin', '', 2, 3, 0, '/api/admin/permission/index', 1, 1, 0, 1, NULL, NULL, NULL, '2024-05-16 17:10:19.463', '2024-05-16 17:10:19.463');
 INSERT INTO `menus` VALUES (6, '角色列表', 'admin', '', 2, 3, 0, '/api/admin/role/index', 1, 1, 0, 1, NULL, NULL, NULL, '2024-05-16 17:10:19.463', '2024-05-16 17:10:19.463');
 INSERT INTO `menus` VALUES (7, '系统配置', 'admin', 'icon-setting', 1, 0, 100, '/system', 1, 0, 0, 1, NULL, NULL, NULL, '2024-05-16 17:10:19.463', '2024-05-16 17:10:19.463');
@@ -214,8 +216,6 @@ INSERT INTO `menus` VALUES (14, '文件管理', 'admin', '', 2, 13, 0, '/api/adm
 INSERT INTO `menus` VALUES (15, '图片管理', 'admin', '', 2, 13, 0, '/api/admin/picture/index', 1, 1, 0, 1, NULL, NULL, NULL, '2024-05-16 17:10:19.463', '2024-05-16 17:10:19.463');
 INSERT INTO `menus` VALUES (16, '我的账号', 'admin', 'icon-user', 1, 0, 100, '/account', 1, 0, 0, 1, NULL, NULL, NULL, '2024-05-16 17:10:19.463', '2024-05-16 17:10:19.463');
 INSERT INTO `menus` VALUES (17, '个人设置', 'admin', '', 2, 16, 0, '/api/admin/account/form', 1, 1, 0, 1, NULL, NULL, NULL, '2024-05-16 17:10:19.463', '2024-05-16 17:10:19.463');
-INSERT INTO `menus` VALUES (18, '用户管理', 'admin', 'icon-user', 1, 0, 0, '/user', 1, 0, 0, 1, NULL, NULL, NULL, '2024-05-16 17:10:19.483', '2024-05-16 17:10:19.483');
-INSERT INTO `menus` VALUES (19, '用户列表', 'admin', '', 2, 18, 0, '/api/admin/user/index', 1, 1, 0, 1, NULL, NULL, NULL, '2024-05-16 17:10:19.483', '2024-05-16 17:10:19.483');
 
 -- ----------------------------
 -- Table structure for permissions
@@ -353,37 +353,5 @@ CREATE TABLE `user_has_roles`  (
 -- ----------------------------
 -- Records of user_has_roles
 -- ----------------------------
-
--- ----------------------------
--- Table structure for users
--- ----------------------------
-DROP TABLE IF EXISTS `users`;
-CREATE TABLE `users`  (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `username` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `nickname` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `sex` tinyint(4) NOT NULL DEFAULT 1,
-  `email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `phone` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `avatar` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
-  `last_login_ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
-  `last_login_time` datetime(3) NULL DEFAULT NULL,
-  `wx_openid` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
-  `wx_unionid` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
-  `status` tinyint(4) NOT NULL DEFAULT 1,
-  `created_at` datetime(3) NULL DEFAULT NULL,
-  `updated_at` datetime(3) NULL DEFAULT NULL,
-  `deleted_at` datetime(3) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `users_username_unique`(`username`) USING BTREE,
-  UNIQUE INDEX `users_email_unique`(`email`) USING BTREE,
-  UNIQUE INDEX `users_phone_unique`(`phone`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of users
--- ----------------------------
-INSERT INTO `users` VALUES (1, 'tangtanglove', '默认用户', 1, 'tangtanglove@yourweb.com', '10086', '$2a$04$JtjCIxWB/Iser6/VZyp6d.iisANtMHd.3mrfAL7deihn6cKlUa2rS', '', '', '2024-05-16 17:10:19.485', '', '', 1, '2024-05-16 17:10:19.485', '2024-05-16 17:10:19.485', NULL);
 
 SET FOREIGN_KEY_CHECKS = 1;

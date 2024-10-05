@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cn.hutool.jwt.JWT;
 import io.quarkcloud.quarkadmin.component.message.Message;
-import io.quarkcloud.quarkadmin.entity.AdminEntity;
+import io.quarkcloud.quarkadmin.entity.UserEntity;
 import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
 import io.quarkcloud.quarkadmin.service.ResourceService;
 import io.quarkcloud.quarkadmin.template.resource.impl.action.AjaxImpl;
@@ -20,7 +20,7 @@ public class ChangeAccount<M, T> extends AjaxImpl<ResourceMapper<T>, T> {
     @SuppressWarnings("unchecked")
     public Object handle(Context context, UpdateWrapper<T> updateWrapper, ResourceService<ResourceMapper<T>, T> resourceService) {
         JWT jwt = context.parseToken();
-        AdminEntity adminEntity = context.getRequestBody(AdminEntity.class);
+        UserEntity adminEntity = context.getRequestBody(UserEntity.class);
         Long adminId = Long.parseLong(jwt.getPayload("id").toString());
         if (adminEntity.getAvatar() != null) {
             ObjectMapper objectMapper = new ObjectMapper();
