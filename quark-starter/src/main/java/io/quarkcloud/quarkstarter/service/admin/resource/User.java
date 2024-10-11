@@ -11,7 +11,6 @@ import io.quarkcloud.quarkadmin.component.form.Field;
 import io.quarkcloud.quarkadmin.component.form.Rule;
 import io.quarkcloud.quarkadmin.component.message.Message;
 import io.quarkcloud.quarkadmin.entity.UserEntity;
-import io.quarkcloud.quarkadmin.entity.RoleEntity;
 import io.quarkcloud.quarkadmin.mapper.UserMapper;
 import io.quarkcloud.quarkadmin.service.UserService;
 import io.quarkcloud.quarkadmin.service.DepartmentService;
