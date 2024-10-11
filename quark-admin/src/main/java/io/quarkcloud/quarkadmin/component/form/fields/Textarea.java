@@ -271,7 +271,6 @@ public class Textarea extends Component {
         this.style = new HashMap<>();
         this.rules = new ArrayList<>();
         this.setComponentKey();
-        this.setWidth(200);
         this.whenItem = new ArrayList<>();
         this.when = new When();
     }
