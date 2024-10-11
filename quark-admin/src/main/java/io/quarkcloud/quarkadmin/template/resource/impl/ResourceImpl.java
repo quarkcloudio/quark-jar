@@ -79,10 +79,10 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     public Object perPage;
     
     // 表单页Form实例
-    public Form form = new Form();
+    public Form form;
     
     // 列表页Table实例
-    public Table table = new Table();
+    public Table table;
     
     // 列表页表格标题后缀
     public String tableTitleSuffix;
@@ -118,6 +118,8 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         this.tableActionColumnWidth = 200;
         this.backIcon = true;
         this.indexQueryOrder = Map.of("id", "desc");
+        this.form = new Form();
+        this.table = new Table();
     }
 
     // 获取标题
@@ -456,9 +458,6 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
 
     // 列表页组件渲染
     public Object indexComponentRender(Context context) {
-
-        // 表格组件
-        Table table = new Table();
 
         // 列表标题
         String tableTitle = indexTableTitle(context);

@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import io.quarkcloud.quarkadmin.component.Component;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,18 +22,44 @@ public class Table  extends Component {
      */
     @Data
     public static class Expandable {
+
+        @JsonInclude(JsonInclude.Include.NON_DEFAULT)
         public String childrenColumnName;        // 子列的名称
+
+        @JsonInclude(JsonInclude.Include.NON_DEFAULT)
         public Object columnTitle;               // 自定义的展开列标题
+
+        @JsonInclude(JsonInclude.Include.NON_DEFAULT)
         public Object columnWidth;               // 展开列的宽度
+
+        @JsonInclude(JsonInclude.Include.NON_DEFAULT)
         public boolean defaultExpandAllRows;     // 默认是否展开所有行
+
+        @JsonInclude(JsonInclude.Include.NON_DEFAULT)
         public List<Object> defaultExpandedRowKeys; // 默认展开的行的 key 值列表
+
+        @JsonInclude(JsonInclude.Include.NON_DEFAULT)
         public String expandedRowClassName;      // 展开行的自定义类名
+
+        @JsonInclude(JsonInclude.Include.NON_DEFAULT)
         public List<Object> expandedRowKeys;     // 当前展开的行的 key 值列表
+
+        @JsonInclude(JsonInclude.Include.NON_DEFAULT)
         public Object expandIcon;                // 自定义展开图标
+
+        @JsonInclude(JsonInclude.Include.NON_DEFAULT)
         public boolean expandRowByClick;         // 是否通过点击行来展开
+
+        @JsonInclude(JsonInclude.Include.NON_DEFAULT)
         public Object fixed;                     // 展开列是否固定
+
+        @JsonInclude(JsonInclude.Include.NON_DEFAULT)
         public int indentSize;                   // 缩进大小
+
+        @JsonInclude(JsonInclude.Include.NON_DEFAULT)
         public boolean rowExpandable;            // 行是否可展开
+
+        @JsonInclude(JsonInclude.Include.NON_DEFAULT)
         public boolean showExpandColumn;         // 是否显示展开列
     }
 

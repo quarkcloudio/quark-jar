@@ -53,16 +53,19 @@ public class PageHeader extends Component  {
     /**
      * pageHeader 的类型，将会改变背景颜色
      */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public boolean ghost;
 
     /**
      * 自定义的二级标题文字
      */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String subTitle;
 
     /**
      * title 旁的 tag 列表
      */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public Object tags;
 
     /**

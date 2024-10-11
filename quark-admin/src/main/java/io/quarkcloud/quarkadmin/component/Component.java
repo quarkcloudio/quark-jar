@@ -3,6 +3,8 @@ package io.quarkcloud.quarkadmin.component;
 import java.util.Map;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import lombok.experimental.Accessors;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -20,6 +22,7 @@ public class Component {
 	public String component;
 
     // 组件样式
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 	public Map<String, Object> style;
 
     // 组件Key
