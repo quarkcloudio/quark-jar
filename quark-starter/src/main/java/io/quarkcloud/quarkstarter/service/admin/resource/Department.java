@@ -10,9 +10,10 @@ import org.springframework.stereotype.Component;
 import io.quarkcloud.quarkadmin.component.form.Field;
 import io.quarkcloud.quarkadmin.component.form.Rule;
 import io.quarkcloud.quarkadmin.component.form.fields.TreeSelect;
+import io.quarkcloud.quarkadmin.component.table.Table.Expandable;
 import io.quarkcloud.quarkadmin.entity.DepartmentEntity;
 import io.quarkcloud.quarkadmin.mapper.DepartmentMapper;
-import io.quarkcloud.quarkadmin.service.MenuService;
+import io.quarkcloud.quarkadmin.service.DepartmentService;
 import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
 import io.quarkcloud.quarkcore.service.Context;
 import io.quarkcloud.quarkcore.util.Lister;
@@ -30,10 +31,11 @@ import io.quarkcloud.quarkstarter.service.admin.search.Status;
 public class Department extends ResourceImpl<DepartmentMapper, DepartmentEntity> {
 
     @Autowired
-    private MenuService menuService;
+    private DepartmentService departmentService;
 
     // 构造函数
     public Department() {
+        this.table.setExpandable((new Expandable()).setDefaultExpandedRowKeys(List.of(1)));
         this.entity = new DepartmentEntity();
         this.title = "部门";
         this.perPage = false;
@@ -44,7 +46,7 @@ public class Department extends ResourceImpl<DepartmentMapper, DepartmentEntity>
     public List<Object> fields(Context context) {
 
         // 菜单列表
-        List<TreeSelect.TreeData> menus = menuService.treeSelect(true);
+        List<TreeSelect.TreeData> menus = departmentService.treeSelect();
 
         return Arrays.asList(
             Field.hidden("id", "ID"), // 列表读取且不展示的字段
@@ -60,7 +62,7 @@ public class Department extends ResourceImpl<DepartmentMapper, DepartmentEntity>
                 .setWhen("id", ">", 1, () -> Arrays.asList(
                     Field.treeSelect("pid", "父节点")
                         .setTreeData(menus)
-                        .setDefaultValue(0)
+                        .setDefaultValue(1)
                         .onlyOnForms()
                 )),
 
