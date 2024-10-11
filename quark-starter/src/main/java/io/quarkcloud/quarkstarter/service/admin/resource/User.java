@@ -21,7 +21,7 @@ import io.quarkcloud.quarkstarter.service.admin.action.BatchDelete;
 import io.quarkcloud.quarkstarter.service.admin.action.BatchDisable;
 import io.quarkcloud.quarkstarter.service.admin.action.BatchEnable;
 import io.quarkcloud.quarkstarter.service.admin.action.CreateLink;
-import io.quarkcloud.quarkstarter.service.admin.action.Delete;
+import io.quarkcloud.quarkstarter.service.admin.action.DeleteSpecial;
 import io.quarkcloud.quarkstarter.service.admin.action.DetailLink;
 import io.quarkcloud.quarkstarter.service.admin.action.EditLink;
 import io.quarkcloud.quarkstarter.service.admin.action.FormBack;
@@ -118,7 +118,7 @@ public class User extends ResourceImpl<UserMapper, UserEntity> {
             new DetailLink<UserMapper, UserEntity>(),
             new More<UserMapper, UserEntity>().setActions(Arrays.asList(
                 new EditLink<UserMapper, UserEntity>(),
-                new Delete<UserMapper, UserEntity>()
+                new DeleteSpecial<UserMapper, UserEntity>()
             )),
             new BatchDelete<UserMapper, UserEntity>(),
             new BatchDisable<UserMapper, UserEntity>(),

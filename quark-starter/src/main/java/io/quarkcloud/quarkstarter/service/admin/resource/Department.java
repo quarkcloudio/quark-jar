@@ -22,7 +22,7 @@ import io.quarkcloud.quarkstarter.service.admin.action.BatchDisable;
 import io.quarkcloud.quarkstarter.service.admin.action.BatchEnable;
 import io.quarkcloud.quarkstarter.service.admin.action.ChangeStatus;
 import io.quarkcloud.quarkstarter.service.admin.action.CreateModal;
-import io.quarkcloud.quarkstarter.service.admin.action.Delete;
+import io.quarkcloud.quarkstarter.service.admin.action.DeleteSpecial;
 import io.quarkcloud.quarkstarter.service.admin.action.EditModal;
 import io.quarkcloud.quarkstarter.service.admin.search.Input;
 import io.quarkcloud.quarkstarter.service.admin.search.Status;
@@ -92,7 +92,7 @@ public class Department extends ResourceImpl<DepartmentMapper, DepartmentEntity>
             new CreateModal<DepartmentMapper, DepartmentEntity>(this.getTitle(), this.creationApi(context), this.creationFields(context), this.creationData(context)),
             new ChangeStatus<DepartmentMapper, DepartmentEntity>(),
             new EditModal<DepartmentMapper, DepartmentEntity>("编辑", this.editApi(context), this.editValueApi(context), this.editFields(context)),
-            new Delete<DepartmentMapper, DepartmentEntity>(),
+            new DeleteSpecial<DepartmentMapper, DepartmentEntity>(),
             new BatchDelete<DepartmentMapper, DepartmentEntity>(),
             new BatchDisable<DepartmentMapper, DepartmentEntity>(),
             new BatchEnable<DepartmentMapper, DepartmentEntity>()
