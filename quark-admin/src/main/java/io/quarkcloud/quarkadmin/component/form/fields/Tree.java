@@ -356,6 +356,7 @@ public class Tree extends Component {
     public Tree() {
         this.component = "treeField";
         this.setComponentKey();
+        this.checkable = true;
         this.style = new HashMap<>();
         this.rules = new ArrayList<>();
         this.colon = true;

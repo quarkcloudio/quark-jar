@@ -2,6 +2,7 @@ package io.quarkcloud.quarkadmin.component.table;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.quarkcloud.quarkadmin.component.Component;
@@ -14,6 +15,26 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 public class Table  extends Component {
+    /**
+     * Expandable 类表示表格行可扩展的相关属性配置
+     */
+    @Data
+    public static class Expandable {
+        public String childrenColumnName;        // 子列的名称
+        public Object columnTitle;               // 自定义的展开列标题
+        public Object columnWidth;               // 展开列的宽度
+        public boolean defaultExpandAllRows;     // 默认是否展开所有行
+        public List<Object> defaultExpandedRowKeys; // 默认展开的行的 key 值列表
+        public String expandedRowClassName;      // 展开行的自定义类名
+        public List<Object> expandedRowKeys;     // 当前展开的行的 key 值列表
+        public Object expandIcon;                // 自定义展开图标
+        public boolean expandRowByClick;         // 是否通过点击行来展开
+        public Object fixed;                     // 展开列是否固定
+        public int indentSize;                   // 缩进大小
+        public boolean rowExpandable;            // 行是否可展开
+        public boolean showExpandColumn;         // 是否显示展开列
+    }
+
     /**
      * 行键
      */
@@ -80,9 +101,19 @@ public class Table  extends Component {
     public Object toolBar;
 
     /**
+     * 树形栏
+     */
+    public Object treeBar;
+
+    /**
      * 表格额外渲染配置
      */
     public Object tableExtraRender;
+
+    /**
+     * 配置展开行
+     */
+    public Expandable expandable;
 
     /**
      * 表格滚动配置

@@ -56,7 +56,7 @@ public class Role extends ResourceImpl<RoleMapper, RoleEntity> {
                 Rule.required(true, "名称必须填写")
             )),
             Field.text("guardName", "守卫").setDefaultValue("admin"),
-            Field.tree("menuIds", "权限").setTreeData(menuService.tree()).onlyOnForms(),
+            Field.tree("menuIds", "菜单").setTreeData(menuService.tree()).onlyOnForms(),
             Field.datetime("createdAt", "创建时间").onlyOnIndex(),
             Field.datetime("updatedAt", "更新时间").onlyOnIndex()
         );
