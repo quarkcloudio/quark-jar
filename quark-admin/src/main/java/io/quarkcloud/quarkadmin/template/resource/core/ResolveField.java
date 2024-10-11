@@ -23,6 +23,9 @@ public class ResolveField {
     // context
     public Context context;
 
+    // column
+    public Column column;
+
     // 表格行为列标题
     public String tableActionColumnTitle;
 
@@ -42,6 +45,12 @@ public class ResolveField {
     public ResolveField(List<Object> fields, Context context) {
         this.fields = fields;
         this.context = context;
+    }
+
+    // 设置Column
+    public ResolveField setColumn(Column column) {
+        this.column = column;
+        return this;
     }
 
     // 设置表格行为列标题
@@ -103,7 +112,7 @@ public class ResolveField {
             String columnTitle = tableActionColumnTitle;
             int columnWidth = tableActionColumnWidth;
 
-            Column column = new Column()
+            column
                 .setTitle(columnTitle)
                 .setWidth(columnWidth)
                 .setAttribute("action")

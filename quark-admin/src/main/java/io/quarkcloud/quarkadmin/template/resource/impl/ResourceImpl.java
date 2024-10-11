@@ -35,8 +35,11 @@ import io.quarkcloud.quarkadmin.component.form.Form;
 import io.quarkcloud.quarkadmin.component.message.Message;
 import io.quarkcloud.quarkadmin.component.pagecontainer.PageContainer;
 import io.quarkcloud.quarkadmin.component.pagecontainer.PageHeader;
+import io.quarkcloud.quarkadmin.component.table.Column;
+import io.quarkcloud.quarkadmin.component.table.Search;
 import io.quarkcloud.quarkadmin.component.table.Table;
 import io.quarkcloud.quarkadmin.component.table.ToolBar;
+import io.quarkcloud.quarkadmin.component.table.TreeBar;
 import io.quarkcloud.quarkadmin.component.tabs.Tabs;
 import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
 import io.quarkcloud.quarkadmin.service.FileService;
@@ -83,6 +86,18 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     
     // 列表页Table实例
     public Table table;
+
+    // 列表Table组件中的搜索实例
+    public Search tableSearch;
+
+    // 列表Table组件中的Column实例
+	public Column tableColumn;
+
+    // 列表Table组件中的ToolBar实例
+	public ToolBar tableToolBar;
+
+    // 列表Table组件中的TreeBar实例
+	public TreeBar tableTreeBar;
     
     // 列表页表格标题后缀
     public String tableTitleSuffix;
@@ -113,13 +128,17 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         if (getClass().isAnnotationPresent(AdminResource.class)) {
             annotationClass = getClass().getAnnotation(AdminResource.class);
         }
+        this.form = new Form();
+        this.table = new Table();
+        this.tableSearch = new Search();
+        this.tableColumn = new Column();
+        this.tableToolBar = new ToolBar();
+        this.tableTreeBar = new TreeBar();
         this.tableTitleSuffix = "列表";
         this.tableActionColumnTitle = "操作";
         this.tableActionColumnWidth = 200;
         this.backIcon = true;
         this.indexQueryOrder = Map.of("id", "desc");
-        this.form = new Form();
-        this.table = new Table();
     }
 
     // 获取标题
@@ -323,9 +342,14 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     // 列表页工具栏
     public Object indexTableToolBar(Context context) {
         Object tableActions = new ResolveAction<ResourceMapper<T>, T>(actions(context), context).getIndexTableActions();
-        return new ToolBar().
+        return this.tableToolBar.
             setTitle(indexTableTitle(context)).
             setActions(tableActions);
+    }
+
+    // 列表页树形栏
+    public Object indexTableTreeBar(Context context) {
+        return this.tableTreeBar;
     }
 
     // 列表页表格列
@@ -334,6 +358,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         List<Object> getFields = fields(context);
         List<Object> tableActions = new ResolveAction<ResourceMapper<T>, T>(getActions, context).getIndexTableRowActions();
         List<Object> tableColumns = new ResolveField(getFields, context).
+            setColumn(tableColumn).
             setTableActionColumnTitle(tableActionColumnTitle).
             setTableActionColumnWidth(tableActionColumnWidth).
             setTableRowActions(tableActions).
@@ -471,6 +496,9 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         // 列表页工具栏
         Object tableToolBar = indexTableToolBar(context);
 
+        // 列表页工具栏
+        Object tableTreeBar = indexTableTreeBar(context);
+
         // 列表页表格列
         Object tableColumns = indexTableColumns(context);
 
@@ -478,7 +506,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         Object indexTableAlertActions = indexTableAlertActions(context);
 
         // 列表页搜索栏
-        Object indexSearches = new ResolveSearch<T>(this.searches(context), context).
+        Object indexSearches = new ResolveSearch<T>(tableSearch, this.searches(context), context).
             setWithExport(this.isWithExport()).
             indexSearches(context);
 
@@ -487,6 +515,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
             .setTitle(tableTitle)
             .setTableExtraRender(tableExtraRender)
             .setToolBar(tableToolBar)
+            .setTreeBar(tableTreeBar)
             .setColumns(tableColumns)
             .setBatchActions(indexTableAlertActions)
             .setSearches(indexSearches);

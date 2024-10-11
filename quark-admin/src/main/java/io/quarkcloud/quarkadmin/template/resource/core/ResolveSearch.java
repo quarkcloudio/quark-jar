@@ -12,6 +12,9 @@ import io.quarkcloud.quarkcore.service.Context;
 
 public class ResolveSearch<T> {
     
+    // search
+    public Search search;
+
     // searches
     public List<Object> searches;
 
@@ -22,7 +25,7 @@ public class ResolveSearch<T> {
     public boolean withExport;
 
     // 构造函数
-    public ResolveSearch(List<Object> searches, Context context) {
+    public ResolveSearch(Search search, List<Object> searches, Context context) {
         this.searches = searches;
         this.context = context;
     }

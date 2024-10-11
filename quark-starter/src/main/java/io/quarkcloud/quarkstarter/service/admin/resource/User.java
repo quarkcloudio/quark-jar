@@ -14,6 +14,7 @@ import io.quarkcloud.quarkadmin.entity.UserEntity;
 import io.quarkcloud.quarkadmin.entity.RoleEntity;
 import io.quarkcloud.quarkadmin.mapper.UserMapper;
 import io.quarkcloud.quarkadmin.service.UserService;
+import io.quarkcloud.quarkadmin.service.DepartmentService;
 import io.quarkcloud.quarkadmin.service.RoleService;
 import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
 import io.quarkcloud.quarkcore.service.Context;
@@ -42,11 +43,21 @@ public class User extends ResourceImpl<UserMapper, UserEntity> {
     @Autowired
     private UserService adminService;
 
+    @Autowired
+    private DepartmentService departmentService;
+
     // 构造函数
     public User() {
         this.entity = new UserEntity();
         this.title = "用户";
         this.perPage = 10;
+    }
+
+    // 列表页树形栏
+    public Object indexTableTreeBar(Context context) {
+        return this.tableTreeBar.
+            setName("departmentIds").
+            setData(departmentService.tableTree());
     }
 
     // 字段
@@ -56,7 +67,7 @@ public class User extends ResourceImpl<UserMapper, UserEntity> {
             Field.id("id", "ID"),
             Field.image("avatar", "头像").onlyOnForms(),
             Field.text("username", "用户名", () -> {
-                return String.format("<a href='#/layout/index?api=/api/admin/admin/edit&id=%d'>%s</a>", this.entity.getId(), this.entity.getUsername());
+                return String.format("<a href='#/layout/index?api=/api/admin/user/edit&id=%d'>%s</a>", this.entity.getId(), this.entity.getUsername());
             }).setRules(Arrays.asList(
                 Rule.required(true, "用户名必须填写"),
                 Rule.min(6, "用户名不能少于6个字符"),
@@ -66,20 +77,13 @@ public class User extends ResourceImpl<UserMapper, UserEntity> {
             )).setUpdateRules(Arrays.asList(
                     Rule.unique("users", "username", "{id}", "用户名已存在")
             )),
-            Field.checkbox("roleIds", "角色", () -> {
-                List<RoleEntity> roleEntities = adminService.getRolesById(this.entity.getId());
-                return roleEntities.stream().map(roleEntity -> {
-                    return String.format("<span class='label label-primary'>%s</span>", roleEntity.getName());
-                }).reduce((a, b) -> {
-                    return a + " " + b;
-                }).orElse("");
-            }).setOptions(roleService.getCheckboxOptions()),
+            Field.checkbox("roleIds").setOptions(roleService.getCheckboxOptions()).onlyOnForms(),
             Field.text("nickname", "昵称").setEditable(true).setRules(Arrays.asList(
                 Rule.required(true, "昵称必须填写")
             )),
             Field.text("email", "邮箱").setRules(Arrays.asList(
                 Rule.required(true, "邮箱必须填写")
-            )),
+            )).onlyOnForms(),
             Field.text("phone", "手机号").setRules(Arrays.asList(
                 Rule.required(true, "手机号必须填写")
             )),
