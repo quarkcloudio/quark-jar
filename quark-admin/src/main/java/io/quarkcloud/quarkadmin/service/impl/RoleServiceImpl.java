@@ -3,6 +3,7 @@ package io.quarkcloud.quarkadmin.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -12,6 +13,7 @@ import io.quarkcloud.quarkadmin.entity.PermissionEntity;
 import io.quarkcloud.quarkadmin.entity.RoleEntity;
 import io.quarkcloud.quarkadmin.entity.RoleHasMenuEntity;
 import io.quarkcloud.quarkadmin.entity.RoleHasDepartmentEntity;
+import io.quarkcloud.quarkadmin.entity.DepartmentEntity;
 import io.quarkcloud.quarkadmin.entity.RoleHasPermissionEntity;
 import io.quarkcloud.quarkadmin.mapper.PermissionMapper;
 import io.quarkcloud.quarkadmin.mapper.RoleHasMenuMapper;
@@ -19,6 +21,7 @@ import io.quarkcloud.quarkadmin.mapper.RoleHasDepartmentMapper;
 import io.quarkcloud.quarkadmin.mapper.RoleHasPermissionMapper;
 import io.quarkcloud.quarkadmin.mapper.RoleMapper;
 import io.quarkcloud.quarkadmin.service.RoleService;
+import io.quarkcloud.quarkadmin.service.DepartmentService;
 import jakarta.annotation.Resource;
 
 @Service
@@ -43,6 +46,10 @@ public class RoleServiceImpl extends ResourceServiceImpl<RoleMapper, RoleEntity>
     // 权限表
     @Resource
     private PermissionMapper permissionMapper;
+
+    // 部门
+    @Autowired
+    private DepartmentService departmentService;
 
     // 根据角色id获取权限列表
     public List<PermissionEntity> getPermissionsById(Long roleId) {
@@ -94,6 +101,20 @@ public class RoleServiceImpl extends ResourceServiceImpl<RoleMapper, RoleEntity>
         List<RoleHasDepartmentEntity> roleHasDepartments = roleHasDepartmentMapper.selectList(queryWrapper);
         for (RoleHasDepartmentEntity roleHasDepartment : roleHasDepartments) {
             list.add(roleHasDepartment.getDepartmentId());
+        }
+        
+        return list;
+    }
+
+    // 根据角色id获取部门列表
+    public List<DepartmentEntity> getDepartmentsById(Long roleId) {
+        List<DepartmentEntity> list = new ArrayList<>();
+        QueryWrapper<RoleHasDepartmentEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("role_id", roleId);
+        queryWrapper.eq("guard_name", "admin");
+        List<RoleHasDepartmentEntity> roleHasDepartments = roleHasDepartmentMapper.selectList(queryWrapper);
+        for (RoleHasDepartmentEntity roleHasDepartment : roleHasDepartments) {
+            list.add(departmentService.getById(roleHasDepartment.getDepartmentId()));
         }
         
         return list;
@@ -207,9 +228,13 @@ public class RoleServiceImpl extends ResourceServiceImpl<RoleMapper, RoleEntity>
         roleEntity.setDataScope(dataScope);
         boolean result = this.updateById(roleEntity);
         if (result) {
-            this.removeAllDepartments(roleId);
-            for (int i = 0; i < departmentIds.size(); i++) {
-                this.addDepartment(roleId, departmentIds.get(i));
+            if (dataScope==2) {
+                this.removeAllDepartments(roleId);
+                for (int i = 0; i < departmentIds.size(); i++) {
+                    this.addDepartment(roleId, departmentIds.get(i));
+                }
+            } else {
+                this.removeAllDepartments(roleId);
             }
         }
         return result;

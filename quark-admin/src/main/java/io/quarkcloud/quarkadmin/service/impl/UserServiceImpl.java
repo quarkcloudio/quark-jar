@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import io.quarkcloud.quarkadmin.entity.DepartmentEntity;
 
 import io.quarkcloud.quarkadmin.entity.UserEntity;
 import io.quarkcloud.quarkadmin.entity.PermissionEntity;
@@ -18,6 +19,7 @@ import io.quarkcloud.quarkadmin.mapper.UserHasRoleMapper;
 import io.quarkcloud.quarkadmin.service.UserService;
 import io.quarkcloud.quarkadmin.service.PermissionService;
 import io.quarkcloud.quarkadmin.service.RoleService;
+import io.quarkcloud.quarkadmin.service.DepartmentService;
 import jakarta.annotation.Resource;
 
 @Service
@@ -42,6 +44,10 @@ public class UserServiceImpl extends ResourceServiceImpl<UserMapper, UserEntity>
     // 用户权限
     @Autowired
     private PermissionService permissionService;
+
+    // 部门
+    @Autowired
+    private DepartmentService departmentService;
 
     // 根据用户id，判断是否有访问权限
     public boolean checkPermission(Long adminId, String urlPath, String method) {
@@ -99,6 +105,37 @@ public class UserServiceImpl extends ResourceServiceImpl<UserMapper, UserEntity>
         }
         return menuIds;
     }
+
+    // 根据用户id获取部门Id列表
+    public List<DepartmentEntity> getDepartmentsById(Long adminId) {
+        List<DepartmentEntity> list= new ArrayList<>();
+        List<RoleEntity> roles= this.getRolesById(adminId);
+        UserEntity userEntity = this.getById(adminId);
+        for (RoleEntity role : roles) {
+            switch (role.getDataScope()) {
+                case 1:
+                    list.addAll(departmentService.getList());
+                    break;
+                case 2:
+                    list.addAll(roleService.getDepartmentsById(role.getId()));
+                    break;
+                case 3:
+                    list.add(departmentService.getById(userEntity.getDepartmentId()));
+                    break;
+                case 4:
+                    list.add(departmentService.getById(userEntity.getDepartmentId()));
+                    list.addAll(departmentService.getChildrenDepartments(userEntity.getDepartmentId()));
+                    break;
+                case 5:
+                
+                    break;
+                default:
+                    break;
+            }
+        }
+        return list;
+    }
+
 
     // 根据账号查询
     public UserEntity getByUsername(String username) {

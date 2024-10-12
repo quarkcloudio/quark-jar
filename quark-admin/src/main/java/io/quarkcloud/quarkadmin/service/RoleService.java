@@ -5,6 +5,7 @@ import java.util.List;
 import io.quarkcloud.quarkadmin.component.form.fields.Checkbox.Option;
 import io.quarkcloud.quarkadmin.entity.PermissionEntity;
 import io.quarkcloud.quarkadmin.entity.RoleEntity;
+import io.quarkcloud.quarkadmin.entity.DepartmentEntity;
 import io.quarkcloud.quarkadmin.mapper.RoleMapper;
 
 public interface RoleService extends ResourceService<RoleMapper, RoleEntity> {
@@ -20,6 +21,9 @@ public interface RoleService extends ResourceService<RoleMapper, RoleEntity> {
 
     // 根据角色id获取部门ID列表
     public List<Long> getDepartmentIdsById(Long roleId);
+
+    // 根据角色id获取部门列表
+    public List<DepartmentEntity> getDepartmentsById(Long roleId);
 
     // 获取Checkbox Option列表
     public List<Option> getCheckboxOptions();

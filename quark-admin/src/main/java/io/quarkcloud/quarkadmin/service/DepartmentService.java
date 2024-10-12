@@ -20,4 +20,10 @@ public interface DepartmentService extends ResourceService<DepartmentMapper,Depa
 
     // 获取当前部门及子部门的ID集合
     public List<Long> getChildrenIds(Long pid);
+
+    // 获取当前部门集合
+    public List<DepartmentEntity> getList();
+
+    // 获取当子部门的集合
+    public List<DepartmentEntity> getChildrenDepartments(Long pid);
 }
