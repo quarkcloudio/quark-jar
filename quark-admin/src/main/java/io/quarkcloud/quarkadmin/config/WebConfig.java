@@ -8,7 +8,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
 
     @Override
-    @SuppressWarnings("null")
     public void addViewControllers(ViewControllerRegistry registry) {
 
         // "/admin"重定向到"/admin/"
