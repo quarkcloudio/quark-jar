@@ -71,4 +71,27 @@ public class DepartmentServiceImpl extends ResourceServiceImpl<DepartmentMapper,
         }
         return list;
     }
+
+    public List<Long> getChildrenIds(Long pid) {
+        QueryWrapper<DepartmentEntity> query = new QueryWrapper<>();
+        query.eq("pid", pid)
+             .eq("status", 1);
+        List<DepartmentEntity> departments = list(query);
+
+        List<Long> list = new ArrayList<>();
+        if (departments.isEmpty()) {
+            return list;
+        }
+
+        // 递归获取子部门
+        for (DepartmentEntity department : departments) {
+            List<Long> children = getChildrenIds(department.getId());
+            if (!children.isEmpty()) {
+                list.addAll(children);
+            }
+            list.add(department.getId());
+        }
+
+        return list;
+    }
 }

@@ -1,11 +1,18 @@
 package io.quarkcloud.quarkstarter.service.admin.resource;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.yulichang.wrapper.MPJLambdaWrapper;
 
 import io.quarkcloud.quarkadmin.component.form.Field;
 import io.quarkcloud.quarkadmin.component.form.Rule;
@@ -50,6 +57,35 @@ public class User extends ResourceImpl<UserMapper, UserEntity> {
         this.entity = new UserEntity();
         this.title = "用户";
         this.perPage = 10;
+    }
+
+    // 列表页查询
+    public MPJLambdaWrapper<UserEntity> indexQueryWrapper(Context context, MPJLambdaWrapper<UserEntity> queryWrapper) {
+
+        // 获取 departmentIds 参数
+        String departmentIds = context.getParameter("departmentIds");
+        if (!StringUtils.hasText(departmentIds)) {
+            return queryWrapper;
+        }
+
+        // 将 departmentIds 反序列化为 List<Long>
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<Long> ids = new ArrayList<>();
+        try {
+            ids = objectMapper.readValue(departmentIds, new TypeReference<List<Long>>() {});
+        } catch (JsonProcessingException e) {
+            return queryWrapper;
+        }
+
+        // 递归获取所有子部门 ID
+        for (int i = 0; i < ids.size(); i++) {
+            Long id = ids.get(i);
+            List<Long> childrenIds = departmentService.getChildrenIds(id);
+            ids.addAll(childrenIds);  // 直接添加新 ID
+        }
+
+        // 根据 IDs 构建查询条件
+        return queryWrapper.in("department_id", ids);
     }
 
     // 列表页树形栏

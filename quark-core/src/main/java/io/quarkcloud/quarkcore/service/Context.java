@@ -78,7 +78,7 @@ public class Context implements ApplicationContextAware {
     }
 
     @Override
-    public void setApplicationContext(@SuppressWarnings("null") ApplicationContext applicationContext) throws BeansException {
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         if (Context.applicationContext == null) {
             Context.applicationContext = applicationContext;
         }
@@ -107,12 +107,23 @@ public class Context implements ApplicationContextAware {
         return this.joinPointMethod.getAnnotation(annotationClass);
     }
 
-    // getReader
+    /**
+     * 获取BufferedReader对象，用于读取字符串内容
+     * 该方法将内部的readerBody字符串转换为BufferedReader对象，以便能够以流的方式读取内容
+     * 
+     * @return BufferedReader对象，用于读取readerBody字符串的内容
+     */
     public BufferedReader getReader() {
         return new BufferedReader(new StringReader(readerBody));
     }
 
-    // getRequestMapping
+    /**
+     * 获取当前类的RequestMapping注解的value属性值
+     * 该方法主要用于AOP切点中，以获取被切方法上的RequestMapping注解信息
+     * 如果被切方法没有RequestMapping注解，则返回null
+     * 
+     * @return RequestMapping注解的value属性值数组，如果没有注解则返回null
+     */
     public String[] getRequestMapping() {
         RequestMapping requestMapping= this.getJoinPointAnnotation(RequestMapping.class);
         if (requestMapping == null) {
@@ -121,7 +132,16 @@ public class Context implements ApplicationContextAware {
         return requestMapping.value();
     }
 
-    // getPathVariable
+    /**
+     * 获取路径变量值
+     * 
+     * 该方法用于从当前请求的URI中提取出特定的路径变量值
+     * 它首先获取到定义了@RequestMapping注解的请求映射路径，然后将此路径与当前请求的URI进行比较，
+     * 以提取出所有的路径变量如果找到了指定名称的路径变量，则返回其值
+     * 
+     * @param pathVariable 要提取的路径变量的名称
+     * @return 如果找到了指定的路径变量，则返回其值；否则返回null
+     */
     public String getPathVariable(String pathVariable) {
         RequestMapping requestMapping= this.getJoinPointAnnotation(RequestMapping.class);
         if (requestMapping == null) {
@@ -165,37 +185,80 @@ public class Context implements ApplicationContextAware {
         return pathVariables;
     }
 
-    // getRemoteHost
+    /**
+     * 获取远程主机的名称
+     * 
+     * 此方法用于获取当前请求的远程主机名称，即发起请求的客户端的主机名
+     * 在处理网络请求时，此信息可用于识别或审计请求来源
+     * 
+     * @return 返回远程主机的名称
+     */
     public String getRemoteHost() {
         return request.getRemoteHost();
     }
 
-    // getRequestURI
+    /**
+     * 获取请求的URI
+     * 
+     * 此方法简单地转发HttpServletRequest对象中的getRequestURI方法
+     * 用于获取当前请求的统一资源标识符字符串
+     * 
+     * @return 当前请求的URI字符串
+     */
     public String getRequestURI() {
         return request.getRequestURI();
     }
 
-    // getHeader
+    /**
+     * 获取请求头
+     * 
+     * @param arg0 请求头的名称
+     * @return 返回指定名称的请求头的值
+     */
     public String getHeader(String arg0) {
         return request.getHeader(arg0);
     }
 
-    // getParameter
+    /*
+    * 获取GET、POST请求参数数据
+    * 
+    * @param arg0 参数名称，用于指定需要获取的请求参数
+    * @return 返回参数的值，如果参数不存在或者出现异常，可能返回null或空字符串
+    */
     public String getParameter(String arg0) {
         return request.getParameter(arg0);
     }
 
-    // getParameterMap
+    /**
+     * 获取请求参数的映射表
+     * 
+     * 此方法用于获取所有请求参数的名称和值的映射表，其中参数名称对应一个字符串数组，
+     * 因为一个参数可以被多次发送，每次发送的值都包含在这个数组中
+     * 
+     * @return 包含请求参数名称和对应值的Map对象如果参数不存在，则对应的值为null
+     */
     public Map<String, String[]> getParameterMap() {
         return request.getParameterMap();
     }
 
-    // getQueryString
+    /**
+     * 获取查询字符串
+     * 
+     * 此方法返回当前HTTP请求中的查询字符串查询字符串是URL中跟随问号（?）的部分，包含键值对表示请求参数
+     * 
+     * @return 当前HTTP请求的查询字符串如果请求URL没有查询字符串，则返回null
+     */
     public String getQueryString() {
         return request.getQueryString();
     }
 
-    // getRequestBody
+    /**
+     * 读取请求体中的JSON数据，并将其转换为指定的Java对象
+     * 
+     * @param valueType 指定要转换的Java对象类型
+     * @param <T> 泛型标记，表示可以是任何类型
+     * @return 转换后的Java对象实例如果转换失败，可能返回null
+     */
     public <T> T getRequestBody(Class<T> valueType) {
         ObjectMapper mapper = new ObjectMapper();
         T map = null;
@@ -211,7 +274,16 @@ public class Context implements ApplicationContextAware {
         return map;
     }
 
-    // getRequestParam
+    /**
+     * 从请求中获取参数值
+     * 
+     * 该方法通过JSON请求体的字符串形式，解析出一个Map对象，并从该Map中获取指定的参数值
+     * 如果在解析过程中发生错误（如JSON格式错误，数据绑定错误，或IO错误），则打印错误信息
+     * 如果成功解析出非空的Map且指定参数存在，则返回该参数的值；否则，返回null
+     * 
+     * @param arg0 参数的名称
+     * @return 参数的值，如果参数不存在或解析失败则返回null
+     */
     @SuppressWarnings("unchecked")
     public Object getRequestParam(String arg0) {
         ObjectMapper mapper = new ObjectMapper();
@@ -231,7 +303,13 @@ public class Context implements ApplicationContextAware {
         return map;
     }
 
-    // getParameterBody
+    /**
+     * 根据请求参数填充指定类型的实体对象
+     * 
+     * @param valueType 实体对象的类型，必须提供一个无参构造函数
+     * @param <T>       泛型标记，表示实体对象的类型
+     * @return 填充后的实体对象实例
+     */
     public <T> T getParameterBody(Class<T> valueType) {
         T entity = null;
         try {
