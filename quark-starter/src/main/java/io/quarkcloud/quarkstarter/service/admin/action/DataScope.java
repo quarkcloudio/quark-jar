@@ -67,7 +67,7 @@ public class DataScope<M, T> extends ModalFormImpl<ResourceMapper<T>, T> {
         return List.of(
             Field.hidden("id", "ID"), // 隐藏字段
             Field.text("name", "名称"), // 禁用文本字段
-            Field.selectField("data_scope", "数据范围")
+            Field.selectField("dataScope", "数据范围")
                 .setOptions(
                     List.of(
                         Field.selectOption("全部数据权限", 1),
@@ -80,9 +80,9 @@ public class DataScope<M, T> extends ModalFormImpl<ResourceMapper<T>, T> {
                 .setRules(List.of(Rule.required(true,"请选择数据范围")))
                 .setDefaultValue(1),
             Field.dependency()
-                .setWhen("data_scope", 2, () -> {
+                .setWhen("dataScope", 2, () -> {
                     return List.of(
-                        Field.tree("department_ids", "数据权限")
+                        Field.tree("departmentIds", "数据权限")
                             .setDefaultExpandAll(true)
                             .setTreeData(departments)
                     );
@@ -98,8 +98,8 @@ public class DataScope<M, T> extends ModalFormImpl<ResourceMapper<T>, T> {
             RoleEntity entity = roleService.getById(id);
             data.put("id", entity.getId());
             data.put("name", entity.getName());
-            data.put("data_scope", entity.getDataScope());
-            data.put("department_ids", roleService.getDepartmentIdsById(Long.parseLong(id)));
+            data.put("dataScope", entity.getDataScope());
+            data.put("departmentIds", roleService.getDepartmentIdsById(Long.parseLong(id)));
         }
         return data;
     }
