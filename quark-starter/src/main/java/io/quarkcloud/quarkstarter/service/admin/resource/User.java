@@ -104,39 +104,57 @@ public class User extends ResourceImpl<UserMapper, UserEntity> {
 
         return Arrays.asList(
             Field.id("id", "ID"),
-            Field.image("avatar", "头像").onlyOnForms(),
+            Field.image("avatar", "头像")
+                .onlyOnForms(),
             Field.text("username", "用户名", () -> {
-                return String.format("<a href='#/layout/index?api=/api/admin/user/edit&id=%d'>%s</a>", this.entity.getId(), this.entity.getUsername());
-            }).setRules(Arrays.asList(
-                Rule.required(true, "用户名必须填写"),
-                Rule.min(6, "用户名不能少于6个字符"),
-                Rule.max(20, "用户名不能超过20个字符")
-            )).setCreationRules(Arrays.asList(
-                Rule.unique("users", "username", "用户名已存在")
-            )).setUpdateRules(Arrays.asList(
+                    return String.format("<a href='#/layout/index?api=/api/admin/user/edit&id=%d'>%s</a>", this.entity.getId(), this.entity.getUsername());
+                })
+                .setRules(Arrays.asList(
+                    Rule.required(true, "用户名必须填写"),
+                    Rule.min(6, "用户名不能少于6个字符"),
+                    Rule.max(20, "用户名不能超过20个字符")
+                ))
+                .setCreationRules(Arrays.asList(
+                    Rule.unique("users", "username", "用户名已存在")
+                ))
+                .setUpdateRules(Arrays.asList(
                     Rule.unique("users", "username", "{id}", "用户名已存在")
-            )),
-            Field.checkbox("roleIds","角色").setOptions(roleService.getCheckboxOptions()).onlyOnForms(),
-            Field.treeSelect("departmentId","部门").setTreeData(departmentService.treeSelect()).onlyOnForms(),
-            Field.checkbox("positionIds","职位").setOptions(positionService.getCheckboxOptions()).onlyOnForms(),
-            Field.text("nickname", "昵称").setEditable(true).setRules(Arrays.asList(
-                Rule.required(true, "昵称必须填写")
-            )),
-            Field.text("email", "邮箱").setRules(Arrays.asList(
-                Rule.required(true, "邮箱必须填写")
-            )).onlyOnForms(),
-            Field.text("phone", "手机号").setRules(Arrays.asList(
-                Rule.required(true, "手机号必须填写")
-            )),
-            Field.radio("sex", "性别").setOptions(Arrays.asList(
+                )),
+            Field.checkbox("roleIds","角色")
+                .setOptions(roleService.getCheckboxOptions())
+                .onlyOnForms(),
+            Field.treeSelect("departmentId","部门")
+                .setTreeData(departmentService.treeSelect())
+                .onlyOnForms(),
+            Field.checkbox("positionIds","职位")
+                .setOptions(positionService.getCheckboxOptions())
+                .onlyOnForms(),
+            Field.text("nickname", "昵称")
+                .setEditable(true)
+                .setRules(Arrays.asList(
+                    Rule.required(true, "昵称必须填写")
+                )),
+            Field.text("email", "邮箱")
+                .setRules(Arrays.asList(
+                    Rule.required(true, "邮箱必须填写")
+                ))
+                .onlyOnForms(),
+            Field.text("phone", "手机号")
+                .setRules(Arrays.asList(
+                    Rule.required(true, "手机号必须填写")
+                )),
+            Field.radio("sex", "性别")
+                .setOptions(Arrays.asList(
                     Field.radioOption("男",1),
                     Field.radioOption("女",2)
                 ))
                 .setFilters(true)
                 .setDefaultValue(1),
-            Field.password("password", "密码").setCreationRules(Arrays.asList(
-                Rule.required(true, "密码必须填写")
-            )).onlyOnForms(),
+            Field.password("password", "密码")
+                .setCreationRules(Arrays.asList(
+                    Rule.required(true, "密码必须填写")
+                ))
+                .onlyOnForms(),
             Field.datetime("lastLoginTime", "最后登录时间").onlyOnIndex(),
             Field.switchField("status", "状态").
                 setTrueValue("正常").
