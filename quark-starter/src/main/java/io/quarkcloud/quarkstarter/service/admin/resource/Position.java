@@ -15,6 +15,7 @@ import io.quarkcloud.quarkcore.service.Context;
 import io.quarkcloud.quarkstarter.service.admin.action.BatchDelete;
 import io.quarkcloud.quarkstarter.service.admin.action.BatchDisable;
 import io.quarkcloud.quarkstarter.service.admin.action.BatchEnable;
+import io.quarkcloud.quarkstarter.service.admin.action.ChangeStatus;
 import io.quarkcloud.quarkstarter.service.admin.action.CreateModal;
 import io.quarkcloud.quarkstarter.service.admin.action.Delete;
 import io.quarkcloud.quarkstarter.service.admin.action.EditModal;
@@ -63,6 +64,7 @@ public class Position extends ResourceImpl<PositionMapper, PositionEntity> {
     public List<Object> actions(Context context) {
         return Arrays.asList(
             new CreateModal<PositionMapper, PositionEntity>(this.getTitle(),this.creationApi(context), this.creationFields(context), this.creationData(context)),
+            new ChangeStatus<PositionMapper, PositionEntity>(),
             new EditModal<PositionMapper, PositionEntity>("编辑", this.editApi(context), this.editValueApi(context), this.editFields(context)),
             new Delete<PositionMapper, PositionEntity>(),
             new BatchDelete<PositionMapper, PositionEntity>(),
