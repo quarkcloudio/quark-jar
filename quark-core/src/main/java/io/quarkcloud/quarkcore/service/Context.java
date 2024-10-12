@@ -84,17 +84,17 @@ public class Context implements ApplicationContextAware {
         }
     }
 
-    //获取SpringBoot上下文
-    public static ApplicationContext getApplicationContext() {
-        return applicationContext;
-    }
-
     // 设置连接点
     public Context setJoinPoint(ProceedingJoinPoint joinPoint) {
         this.joinPointSignature = (MethodSignature) joinPoint.getSignature();
         this.joinPointMethod = joinPointSignature.getMethod();
         this.joinPoint = joinPoint;
         return this;
+    }
+
+    //获取SpringBoot上下文
+    public static ApplicationContext getApplicationContext() {
+        return applicationContext;
     }
 
     // 获取SpringBoot上下文

@@ -965,16 +965,16 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
                     String dropdownUriKey = dropdownActioner.getUriKey(dropdownAction);
                     if (context.getPathVariable("uriKey").equals(dropdownUriKey)) {
                         Reflect dropdownActionReflect = new Reflect(dropdownAction);
-                        boolean hasDataMethod = dropdownActionReflect.checkMethodExist("data");
+                        boolean hasDataMethod = dropdownActionReflect.checkMethodExist("data", context.getClass());
                         if (hasDataMethod) {
-                            data = ( Map<String,Object>) dropdownActionReflect.invoke("data",context.getClass(), context);
+                            data = ( Map<String,Object>) dropdownActionReflect.invoke("data", context.getClass(), context);
                         }
                     }
                 }
             } else {
                 if (context.getPathVariable("uriKey").equals(uriKey)) {
                     Reflect actionInstanceReflect = new Reflect(actionInstance);
-                    boolean hasDataMethod = actionInstanceReflect.checkMethodExist("data");
+                    boolean hasDataMethod = actionInstanceReflect.checkMethodExist("data", context.getClass());
                     if (hasDataMethod) {
                         data = ( Map<String,Object>) actionInstanceReflect.invoke("data",context.getClass(), context);
                     }

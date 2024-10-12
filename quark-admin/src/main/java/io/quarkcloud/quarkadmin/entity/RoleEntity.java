@@ -27,6 +27,13 @@ public class RoleEntity {
     @TableField(exist = false)
     private List<Long> menuIds;
 
+    // 数据范围
+    private Short dataScope;
+
+    // 部门ID
+    @TableField(exist = false)
+    private List<Long> departmentIds;
+
     // 守卫名称
     private String guardName;
 

@@ -13,6 +13,7 @@ import io.quarkcloud.quarkadmin.entity.RoleEntity;
 import io.quarkcloud.quarkadmin.mapper.RoleMapper;
 import io.quarkcloud.quarkadmin.service.MenuService;
 import io.quarkcloud.quarkadmin.service.PermissionService;
+import io.quarkcloud.quarkadmin.service.DepartmentService;
 import io.quarkcloud.quarkadmin.service.RoleService;
 import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
 import io.quarkcloud.quarkcore.service.Context;
@@ -24,6 +25,7 @@ import io.quarkcloud.quarkstarter.service.admin.action.FormBack;
 import io.quarkcloud.quarkstarter.service.admin.action.FormExtraBack;
 import io.quarkcloud.quarkstarter.service.admin.action.FormReset;
 import io.quarkcloud.quarkstarter.service.admin.action.FormSubmit;
+import io.quarkcloud.quarkstarter.service.admin.action.DataScope;
 import io.quarkcloud.quarkstarter.service.admin.search.Input;
 
 @Component
@@ -32,6 +34,10 @@ public class Role extends ResourceImpl<RoleMapper, RoleEntity> {
     // 注入菜单服务
     @Autowired
     private MenuService menuService;
+
+    // 注入部门服务
+    @Autowired
+    public DepartmentService departmentService;
 
     // 注入角色服务
     @Autowired
@@ -52,11 +58,14 @@ public class Role extends ResourceImpl<RoleMapper, RoleEntity> {
     public List<Object> fields(Context context) {
         return Arrays.asList(
             Field.id("id", "ID"),
-            Field.text("name", "名称").setRules(Arrays.asList(
-                Rule.required(true, "名称必须填写")
-            )),
+            Field.text("name", "名称")
+                .setRules(Arrays.asList(
+                    Rule.required(true, "名称必须填写")
+                )),
             Field.text("guardName", "守卫").setDefaultValue("admin"),
-            Field.tree("menuIds", "菜单").setTreeData(menuService.tree()).onlyOnForms(),
+            Field.tree("menuIds", "菜单")
+                .setTreeData(menuService.tree())
+                .onlyOnForms(),
             Field.datetime("createdAt", "创建时间").onlyOnIndex(),
             Field.datetime("updatedAt", "更新时间").onlyOnIndex()
         );
@@ -72,6 +81,9 @@ public class Role extends ResourceImpl<RoleMapper, RoleEntity> {
     // 行为
     public List<Object> actions(Context context) {
         return Arrays.asList(
+            new DataScope<RoleMapper, RoleEntity>()
+                .setDepartmentService(departmentService)
+                .setRoleService(roleService),
             new CreateLink<RoleMapper, RoleEntity>(this.getTitle()),
             new EditLink<RoleMapper, RoleEntity>(),
             new DeleteRole<RoleMapper, RoleEntity>(),

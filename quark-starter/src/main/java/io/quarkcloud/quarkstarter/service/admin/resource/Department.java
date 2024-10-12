@@ -35,7 +35,9 @@ public class Department extends ResourceImpl<DepartmentMapper, DepartmentEntity>
 
     // 构造函数
     public Department() {
-        this.table.setExpandable((new Expandable()).setDefaultExpandedRowKeys(List.of(1)));
+        this.table
+            .setExpandable((new Expandable())
+            .setDefaultExpandedRowKeys(List.of(1)));
         this.entity = new DepartmentEntity();
         this.title = "部门";
         this.perPage = false;

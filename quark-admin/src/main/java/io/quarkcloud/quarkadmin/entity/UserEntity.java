@@ -53,6 +53,13 @@ public class UserEntity extends Model<UserEntity> {
     @JsonDeserialize(using = RawJsonDeserializer.class)
     private Object avatar;
 
+    // 部门id
+    private Long departmentId;
+
+    // 职务ids
+    @JsonDeserialize(using = RawJsonDeserializer.class)
+    private Object positionIds;
+
     // 最后登录ip
     private String lastLoginIp;
 

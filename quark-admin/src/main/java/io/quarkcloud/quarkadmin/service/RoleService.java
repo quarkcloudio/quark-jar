@@ -18,6 +18,9 @@ public interface RoleService extends ResourceService<RoleMapper, RoleEntity> {
     // 根据角色id获取菜单ID列表
     public List<Long> getMenuIdsById(Long roleId);
 
+    // 根据角色id获取部门ID列表
+    public List<Long> getDepartmentIdsById(Long roleId);
+
     // 获取Checkbox Option列表
     public List<Option> getCheckboxOptions();
 

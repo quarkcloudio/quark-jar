@@ -11,9 +11,11 @@ import io.quarkcloud.quarkadmin.component.form.fields.Checkbox.Option;
 import io.quarkcloud.quarkadmin.entity.PermissionEntity;
 import io.quarkcloud.quarkadmin.entity.RoleEntity;
 import io.quarkcloud.quarkadmin.entity.RoleHasMenuEntity;
+import io.quarkcloud.quarkadmin.entity.RoleHasDepartmentEntity;
 import io.quarkcloud.quarkadmin.entity.RoleHasPermissionEntity;
 import io.quarkcloud.quarkadmin.mapper.PermissionMapper;
 import io.quarkcloud.quarkadmin.mapper.RoleHasMenuMapper;
+import io.quarkcloud.quarkadmin.mapper.RoleHasDepartmentMapper;
 import io.quarkcloud.quarkadmin.mapper.RoleHasPermissionMapper;
 import io.quarkcloud.quarkadmin.mapper.RoleMapper;
 import io.quarkcloud.quarkadmin.service.RoleService;
@@ -33,6 +35,10 @@ public class RoleServiceImpl extends ResourceServiceImpl<RoleMapper, RoleEntity>
     // 角色菜单关联表
     @Resource
     private RoleHasMenuMapper roleHasMenuMapper;
+
+    // 角色部门关联表
+    @Resource
+    private RoleHasDepartmentMapper roleHasDepartmentMapper;
 
     // 权限表
     @Resource
@@ -73,6 +79,21 @@ public class RoleServiceImpl extends ResourceServiceImpl<RoleMapper, RoleEntity>
         List<RoleHasMenuEntity> roleHasMenus = roleHasMenuMapper.selectList(queryWrapper);
         for (RoleHasMenuEntity roleHasMenu : roleHasMenus) {
             list.add(roleHasMenu.getMenuId());
+        }
+        
+        return list;
+    }
+
+    // 根据角色id获取部门ID列表
+    public List<Long> getDepartmentIdsById(Long roleId) {
+        List<Long> list = new ArrayList<>();
+        QueryWrapper<RoleHasDepartmentEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("role_id", roleId);
+        queryWrapper.eq("guard_name", "admin");
+
+        List<RoleHasDepartmentEntity> roleHasDepartments = roleHasDepartmentMapper.selectList(queryWrapper);
+        for (RoleHasDepartmentEntity roleHasDepartment : roleHasDepartments) {
+            list.add(roleHasDepartment.getDepartmentId());
         }
         
         return list;
