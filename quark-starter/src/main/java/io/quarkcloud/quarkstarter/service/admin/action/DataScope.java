@@ -5,13 +5,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 
 import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
 import io.quarkcloud.quarkadmin.service.ResourceService;
 import io.quarkcloud.quarkadmin.template.resource.impl.action.ModalFormImpl;
 import io.quarkcloud.quarkcore.service.Context;
-import io.quarkcloud.quarkcore.util.Message;
+import io.quarkcloud.quarkadmin.component.message.Message;
 import io.quarkcloud.quarkadmin.component.form.Field;
 import io.quarkcloud.quarkadmin.component.form.Rule;
 import io.quarkcloud.quarkadmin.component.form.fields.Tree.TreeData;
@@ -106,6 +108,13 @@ public class DataScope<M, T> extends ModalFormImpl<ResourceMapper<T>, T> {
 
     // 执行行为句柄
     public Object handle(Context context, UpdateWrapper<T> updateWrapper, ResourceService<ResourceMapper<T>, T> resourceService) {
+        Long id = context.getRequestParam("id", Long.class);
+        Short dataScope = context.getRequestParam("dataScope", Short.class);
+        List<Long> departmentIds = context.getRequestParam("departmentIds", new TypeReference<List<Long>>() {});
+        boolean result = roleService.updateDataScope(id, dataScope, departmentIds);
+        if (!result) {
+            return Message.error("操作失败");
+        }
         return Message.success("操作成功");
     }
 }

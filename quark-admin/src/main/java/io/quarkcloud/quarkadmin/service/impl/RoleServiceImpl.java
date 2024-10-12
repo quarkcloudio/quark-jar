@@ -174,4 +174,44 @@ public class RoleServiceImpl extends ResourceServiceImpl<RoleMapper, RoleEntity>
             return false;
         }
     }
+
+    // 添加部门
+    public boolean addDepartment(Long roleId, Long departmentId) {
+        RoleHasDepartmentEntity roleHasDepartmentEntity = new RoleHasDepartmentEntity();
+        roleHasDepartmentEntity.setRoleId(roleId);
+        roleHasDepartmentEntity.setDepartmentId(departmentId);
+        roleHasDepartmentEntity.setGuardName("admin");
+        Integer result = this.roleHasDepartmentMapper.insert(roleHasDepartmentEntity);
+        if (result > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // 删除部门
+    public boolean removeAllDepartments(Long roleId) {
+        QueryWrapper<RoleHasDepartmentEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("role_id", roleId);
+        queryWrapper.eq("guard_name", "admin");
+        Integer result = this.roleHasDepartmentMapper.delete(queryWrapper);
+        if (result > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean updateDataScope(Long roleId, Short dataScope, List<Long> departmentIds) {
+        RoleEntity roleEntity = new RoleEntity();
+        roleEntity.setId(roleId);
+        roleEntity.setDataScope(dataScope);
+        boolean result = this.updateById(roleEntity);
+        if (result) {
+            this.removeAllDepartments(roleId);
+            for (int i = 0; i < departmentIds.size(); i++) {
+                this.addDepartment(roleId, departmentIds.get(i));
+            }
+        }
+        return result;
+    }
 }

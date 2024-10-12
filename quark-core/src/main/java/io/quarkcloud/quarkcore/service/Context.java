@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.exc.StreamReadException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cn.hutool.core.date.DateUtil;
@@ -229,6 +230,30 @@ public class Context implements ApplicationContextAware {
         return request.getParameter(arg0);
     }
 
+    /*
+    * 获取GET、POST请求参数数据
+    * 
+    * @param arg0 参数名称，用于指定需要获取的请求参数
+    * @return 返回参数的值，如果参数不存在或者出现异常，可能返回null或空字符串
+    */
+    public <T> T getParameter(String arg0, Class<T> valueType) {
+        String parameter = request.getParameter(arg0);
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.convertValue(parameter, valueType);
+    }
+
+    /*
+    * 获取GET、POST请求参数数据
+    * 
+    * @param arg0 参数名称，用于指定需要获取的请求参数
+    * @return 返回参数的值，如果参数不存在或者出现异常，可能返回null或空字符串
+    */
+    public <T> T getParameter(String arg0, TypeReference<T> valueType) {
+        String parameter = request.getParameter(arg0);
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.convertValue(parameter, valueType);
+    }
+
     /**
      * 获取请求参数的映射表
      * 
@@ -290,10 +315,6 @@ public class Context implements ApplicationContextAware {
         Map<String, Object> map = null;
         try {
             map = mapper.readValue(this.getReader(), Map.class);
-        } catch (StreamReadException e) {
-            e.printStackTrace();
-        } catch (DatabindException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -301,6 +322,56 @@ public class Context implements ApplicationContextAware {
             return map.get(arg0);
         }
         return map;
+    }
+
+    /**
+     * 从请求中获取参数值
+     * 
+     * 该方法通过JSON请求体的字符串形式，解析出一个Map对象，并从该Map中获取指定的参数值
+     * 如果在解析过程中发生错误（如JSON格式错误，数据绑定错误，或IO错误），则打印错误信息
+     * 如果成功解析出非空的Map且指定参数存在，则返回该参数的值；否则，返回null
+     * 
+     * @param arg0 参数的名称
+     * @return 参数的值，如果参数不存在或解析失败则返回null
+     */
+    public <T> T getRequestParam(String arg0, Class<T> valueType) {
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> map = null;
+        T value = null;
+        try {
+            map = mapper.readValue(this.getReader(), Map.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (map!=null && !map.isEmpty()) {
+            value = mapper.convertValue(map.get(arg0), valueType);
+        }
+        return value;
+    }
+
+    /**
+     * 从请求中获取参数值
+     * 
+     * 该方法通过JSON请求体的字符串形式，解析出一个Map对象，并从该Map中获取指定的参数值
+     * 如果在解析过程中发生错误（如JSON格式错误，数据绑定错误，或IO错误），则打印错误信息
+     * 如果成功解析出非空的Map且指定参数存在，则返回该参数的值；否则，返回null
+     * 
+     * @param arg0 参数的名称
+     * @return 参数的值，如果参数不存在或解析失败则返回null
+     */
+    public <T> T getRequestParam(String arg0, TypeReference<T> valueType) {
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> map = null;
+        T value = null;
+        try {
+            map = mapper.readValue(this.getReader(), Map.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (map!=null && !map.isEmpty()) {
+            value = mapper.convertValue(map.get(arg0), valueType);
+        }
+        return value;
     }
 
     /**

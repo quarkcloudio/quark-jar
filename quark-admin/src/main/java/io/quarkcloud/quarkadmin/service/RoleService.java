@@ -35,4 +35,13 @@ public interface RoleService extends ResourceService<RoleMapper, RoleEntity> {
 
     // 删除权限
     public boolean removeAllPermissions(Long roleId);
+
+    // 添加部门
+    public boolean addDepartment(Long roleId, Long menuId);
+
+    // 删除部门
+    public boolean removeAllDepartments(Long roleId);
+
+    // 更新数据权限
+    public boolean updateDataScope(Long roleId, Short dataScope, List<Long> departmentIds);
 }
