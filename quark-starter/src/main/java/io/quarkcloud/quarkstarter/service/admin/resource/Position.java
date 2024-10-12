@@ -68,7 +68,6 @@ public class Position extends ResourceImpl<PositionMapper, PositionEntity> {
             new EditModal<PositionMapper, PositionEntity>("编辑", this.editApi(context), this.editValueApi(context), this.editFields(context)),
             new Delete<PositionMapper, PositionEntity>(),
             new BatchDelete<PositionMapper, PositionEntity>(),
-            new BatchDelete<PositionMapper, PositionEntity>(),
             new BatchDisable<PositionMapper, PositionEntity>(),
             new BatchEnable<PositionMapper, PositionEntity>()
         );
