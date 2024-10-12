@@ -21,6 +21,7 @@ import io.quarkcloud.quarkadmin.entity.UserEntity;
 import io.quarkcloud.quarkadmin.mapper.UserMapper;
 import io.quarkcloud.quarkadmin.service.UserService;
 import io.quarkcloud.quarkadmin.service.DepartmentService;
+import io.quarkcloud.quarkadmin.service.PositionService;
 import io.quarkcloud.quarkadmin.service.RoleService;
 import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
 import io.quarkcloud.quarkcore.service.Context;
@@ -51,6 +52,9 @@ public class User extends ResourceImpl<UserMapper, UserEntity> {
 
     @Autowired
     private DepartmentService departmentService;
+
+    @Autowired
+    private PositionService positionService;
 
     // 构造函数
     public User() {
@@ -112,7 +116,9 @@ public class User extends ResourceImpl<UserMapper, UserEntity> {
             )).setUpdateRules(Arrays.asList(
                     Rule.unique("users", "username", "{id}", "用户名已存在")
             )),
-            Field.checkbox("roleIds").setOptions(roleService.getCheckboxOptions()).onlyOnForms(),
+            Field.checkbox("roleIds","角色").setOptions(roleService.getCheckboxOptions()).onlyOnForms(),
+            Field.treeSelect("departmentId","部门").setTreeData(departmentService.treeSelect()).onlyOnForms(),
+            Field.checkbox("positionIds","职位").setOptions(positionService.getCheckboxOptions()).onlyOnForms(),
             Field.text("nickname", "昵称").setEditable(true).setRules(Arrays.asList(
                 Rule.required(true, "昵称必须填写")
             )),

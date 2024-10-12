@@ -27,47 +27,61 @@ public class Text extends Component {
 
     // 开启 grid 模式时传递给 Row, 仅在ProFormGroup, ProFormList, ProFormFieldSet 中有效，默认：{
     // gutter: 8 }
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Map<String, Object> rowProps;
 
     // 开启 grid 模式时传递给 Col，默认：{ xs: 24 }
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Map<String, Object> colProps;
 
     // 是否是次要控件，只针对 LightFilter 下有效
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean secondary;
 
     // 配合 label 属性使用，表示是否显示 label 后面的冒号
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean colon;
 
     // 额外的提示信息，和 help 类似，当需要错误信息和提示文案同时出现时，可以使用这个。
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     String extra;
 
     // 配合 valiTextStatus 属性使用，展示校验状态图标，建议只配合 Input 组件使用
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean hasFeedback;
 
     // 提示信息，如不设置，则会根据校验规则自动生成
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     String help;
 
     // 是否隐藏字段（依然会收集和校验字段）
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean hidden;
 
     // 设置子元素默认值，如果与 Form 的 initialValues 冲突则以 Form 为准
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object initialValue;
 
     // label 标签的文本
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     String label;
 
     // 标签文本对齐方式
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     String labelAlign;
 
     // label 标签布局，同 <Col> 组件，设置 span offset 值，如 {span: 3, offset: 12} 或 sm: {span:
     // 3, offset: 12}。你可以通过 Form 的 labelCol 进行统一设置，不会作用于嵌套 Item。当和 Form 同时设置时，以 Item
     // 为准
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object labelCol;
 
     // 字段名，支持数组
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     String name;
 
     // 为 true 时不带样式，作为纯字段控件使用
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean noStyle;
 
     // 必填样式设置。如不设置，则会根据校验规则自动生成
@@ -75,13 +89,16 @@ public class Text extends Component {
     boolean required;
 
     // 会在 label 旁增加一个 icon，悬浮后展示配置的信息
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     String tooltip;
 
     // 子节点的值的属性，如 Switch 的是 'checked'。该属性为 getValueProps 的封装，自定义 getValueProps 后会失效
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     String valuePropName;
 
     // 需要为输入控件设置布局样式时，使用该属性，用法同 labelCol。你可以通过 Form 的 wrapperCol 进行统一设置，不会作用于嵌套
     // Item。当和 Form 同时设置时，以 Item 为准
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object wrapperCol;
 
     // 列表页、详情页中列属性
@@ -89,21 +106,27 @@ public class Text extends Component {
     Object column;
 
     // 设置列的对齐方式,left | right | center，只在列表页、详情页中有效
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     String align;
 
     // （IE 下无效）列是否固定，可选 true (等效于 left) left rightr，只在列表页中有效
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object fixed;
 
     // 表格列是否可编辑，只在列表页中有效
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean editable;
 
     // 是否自动缩略，只在列表页、详情页中有效
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean ellipsis;
 
     // 是否支持复制，只在列表页、详情页中有效
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean copyable;
 
     // 表头的筛选菜单项，当值为 true 时，自动使用 valueEnum 生成，只在列表页中有效
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object filters;
 
     // 查询表单中的权重，权重大排序靠前，只在列表页中有效
@@ -111,6 +134,7 @@ public class Text extends Component {
     int order;
 
     // 可排序列，只在列表页中有效
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object sorter;
 
     // 包含列的数量，只在详情页中有效
@@ -122,9 +146,11 @@ public class Text extends Component {
     int columnWidth;
 
     // 获取数据接口
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     String api;
 
     // 是否忽略保存到数据库，默认为 false
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean ignore;
 
     // 全局校验规则
