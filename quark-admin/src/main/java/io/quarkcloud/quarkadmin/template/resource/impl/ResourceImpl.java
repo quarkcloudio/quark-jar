@@ -584,6 +584,18 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         return title;
     }
 
+    // 表单页面显示前回调
+    // TODO
+    public Object beforeFormShowing(Context context) {
+        return null;
+    }
+
+    // 表单执行
+    // TODO
+    public boolean formHandle(Context context) {
+        return false;
+    }
+
     // 创建表单组件渲染
     public Object formWithinCard(
         Context context,
@@ -850,6 +862,12 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         return this.afterSaved(context, getEntity);
     }
 
+    // 导入数据后回调
+    // TODO
+    public Object afterImported(Context context,T result) {
+        return null;
+    }
+
     // 保存数据后回调
     public Object afterSaved(Context context,T result) {
         if (context.isImport()) {
@@ -860,6 +878,12 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         }
         String redirectUrl = "/layout/index?api=/api/admin/{resource}/index".replace("{resource}", context.getPathVariable("resource"));
         return Message.success("操作成功！", redirectUrl);
+    }
+
+    // 保存数据后跳转回调
+    // TODO
+    public Object afterSavedRedirectTo(Context context,T result) {
+        return null;
     }
 
     // 表格行内编辑
