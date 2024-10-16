@@ -4,18 +4,21 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cn.hutool.jwt.JWT;
 import io.quarkcloud.quarkadmin.component.form.Field;
 import io.quarkcloud.quarkadmin.component.form.Rule;
+import io.quarkcloud.quarkadmin.component.message.Message;
 import io.quarkcloud.quarkadmin.entity.UserEntity;
 import io.quarkcloud.quarkadmin.mapper.UserMapper;
 import io.quarkcloud.quarkadmin.service.UserService;
-import io.quarkcloud.quarkadmin.template.resource.core.ResolveAction;
 import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
 import io.quarkcloud.quarkcore.service.Context;
-import io.quarkcloud.quarkstarter.service.admin.action.ChangeAccount;
 import io.quarkcloud.quarkstarter.service.admin.action.FormBack;
 import io.quarkcloud.quarkstarter.service.admin.action.FormExtraBack;
 import io.quarkcloud.quarkstarter.service.admin.action.FormReset;
@@ -31,13 +34,6 @@ public class Account extends ResourceImpl<UserMapper, UserEntity> {
     public Account() {
         this.entity = new UserEntity();
         this.title = "个人设置";
-    }
-
-    public String formApi(Context context) {
-        ChangeAccount<UserMapper, UserEntity> changeAccount= new ChangeAccount<UserMapper, UserEntity>();
-        List<String> params = changeAccount.getApiParams();
-        String uriKey = changeAccount.getUriKey(changeAccount);
-        return new ResolveAction<UserMapper, UserEntity>().buildActionApi(context, params, uriKey);
     }
 
     // 字段
@@ -74,7 +70,6 @@ public class Account extends ResourceImpl<UserMapper, UserEntity> {
     // 行为
     public List<Object> actions(Context context) {
         return Arrays.asList(
-            new ChangeAccount<UserMapper, UserEntity>(),
             new FormExtraBack<UserMapper, UserEntity>(),
             new FormSubmit<UserMapper, UserEntity>(),
             new FormReset<UserMapper, UserEntity>(),
@@ -83,7 +78,7 @@ public class Account extends ResourceImpl<UserMapper, UserEntity> {
     }
 
     // 创建前回调
-    public Object beforeCreating(Context context) {
+    public Object beforeFormShowing(Context context) {
         JWT jwt = context.parseToken();
         Long adminId = Long.parseLong(jwt.getPayload("id").toString());
 
@@ -96,5 +91,41 @@ public class Account extends ResourceImpl<UserMapper, UserEntity> {
         adminInfo.setPassword(null);
 
         return adminInfo;
+    }
+
+    // 表单执行
+    public Object formHandle(Context context) {
+        JWT jwt = context.parseToken();
+        UserEntity adminEntity = context.getRequestBody(UserEntity.class);
+        Long adminId = Long.parseLong(jwt.getPayload("id").toString());
+        if (adminEntity.getAvatar() != null) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                adminEntity.setAvatar(objectMapper.writeValueAsString(adminEntity.getAvatar()));
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (adminEntity.getPassword() !=null && !adminEntity.getPassword().isEmpty()) {
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            adminEntity.setPassword(encoder.encode(adminEntity.getPassword()));
+        }
+
+        // 获取登录管理员信息
+        UserEntity adminInfo = adminService.getById(adminId);
+        if (adminInfo == null) {
+            return Message.error("管理员信息获取失败");
+        }
+
+        adminEntity.setId(adminId);
+
+        // 更新管理员信息
+        boolean result = adminService.updateById(adminEntity);
+        if (!result) {
+            return Message.error("操作失败！");
+        }
+        
+        return Message.success("操作成功！");
     }
 }

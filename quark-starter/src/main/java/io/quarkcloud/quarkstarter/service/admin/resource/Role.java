@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 import io.quarkcloud.quarkadmin.component.form.Field;
 import io.quarkcloud.quarkadmin.component.form.Rule;
-import io.quarkcloud.quarkadmin.component.message.Message;
 import io.quarkcloud.quarkadmin.entity.RoleEntity;
 import io.quarkcloud.quarkadmin.mapper.RoleMapper;
 import io.quarkcloud.quarkadmin.service.MenuService;
@@ -103,12 +102,9 @@ public class Role extends ResourceImpl<RoleMapper, RoleEntity> {
     }
 
     // 保存数据后回调
-    public Object afterSaved(Context context, RoleEntity result) {
-        if (context.isImport()) {
-            return result;
-        }
+    public boolean afterSaved(Context context, RoleEntity result) {
         if (result == null) {
-            return Message.error("操作失败！");
+            return false;
         }
 
         // 保存关联
@@ -133,11 +129,6 @@ public class Role extends ResourceImpl<RoleMapper, RoleEntity> {
             }
         }
 
-        if (!insertAllResult) {
-            return Message.error("操作失败！");
-        }
-
-        String redirectUrl = "/layout/index?api=/api/admin/{resource}/index".replace("{resource}", context.getPathVariable("resource"));
-        return Message.success("操作成功！", redirectUrl);
+        return insertAllResult;
     }
 }

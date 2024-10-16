@@ -11,17 +11,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.quarkcloud.quarkadmin.component.form.Field;
+import io.quarkcloud.quarkadmin.component.message.Message;
 import io.quarkcloud.quarkadmin.component.tabs.TabPane;
 import io.quarkcloud.quarkadmin.entity.ConfigEntity;
 import io.quarkcloud.quarkadmin.mapper.ConfigMapper;
 import io.quarkcloud.quarkadmin.service.ResourceService;
 import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
 import io.quarkcloud.quarkcore.service.Context;
-import io.quarkcloud.quarkstarter.service.admin.action.ChangeWebConfig;
 import io.quarkcloud.quarkstarter.service.admin.action.FormBack;
 import io.quarkcloud.quarkstarter.service.admin.action.FormExtraBack;
 import io.quarkcloud.quarkstarter.service.admin.action.FormReset;
@@ -37,10 +39,6 @@ public class WebConfig extends ResourceImpl<ConfigMapper, ConfigEntity> {
     public WebConfig() {
         this.entity = new ConfigEntity();
         this.title = "网站配置";
-    }
-
-    public String formApi(Context context) {
-        return "/api/admin/webConfig/action/change-web-config";
     }
 
     // 字段
@@ -97,7 +95,6 @@ public class WebConfig extends ResourceImpl<ConfigMapper, ConfigEntity> {
     // 行为
     public List<Object> actions(Context context) {
         return Arrays.asList(
-            new ChangeWebConfig<ConfigMapper, ConfigEntity>(),
             new FormExtraBack<ConfigMapper, ConfigEntity>(),
             new FormSubmit<ConfigMapper, ConfigEntity>(),
             new FormReset<ConfigMapper, ConfigEntity>(),
@@ -105,7 +102,7 @@ public class WebConfig extends ResourceImpl<ConfigMapper, ConfigEntity> {
         );
     }
 
-    public Object beforeCreating(Context context) {
+    public Object beforeFormShowing(Context context) {
         List<ConfigEntity> configs = resourceService.list(
             new QueryWrapper<ConfigEntity>().eq("status", 1)
         );
@@ -137,5 +134,44 @@ public class WebConfig extends ResourceImpl<ConfigMapper, ConfigEntity> {
         }
 
         return data;
+    }
+
+    // 表单执行
+    public Object formHandle(Context context) {
+        Map<?,?> data = context.getRequestBody(Map.class);
+        if (data.isEmpty()) {
+            return Message.error("参数错误！");
+        }
+
+        boolean result = true;
+        for (Map.Entry<?, ?> entry : data.entrySet()) {
+            String key = (String) entry.getKey();
+            Object value = entry.getValue();
+            ConfigEntity configEntity = new ConfigEntity();
+            UpdateWrapper<ConfigEntity> newUpdateWrapper = new UpdateWrapper<>();
+            newUpdateWrapper.eq("name", key);
+            if (value instanceof List<?>) {
+                try {
+                    value = new ObjectMapper().writeValueAsString(value);
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+            } else if (value instanceof Map<?, ?>) {
+                try {
+                    value = new ObjectMapper().writeValueAsString(value);
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+            }
+            configEntity.setValue(value);
+            boolean updateResult = resourceService.update(configEntity, newUpdateWrapper);
+            if (!updateResult) {
+                result = false;
+            }
+        }
+        if (!result) {
+            return Message.error("操作失败，请重试！");
+        }
+        return Message.success("操作成功！");
     }
 }

@@ -585,15 +585,36 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     }
 
     // 表单页面显示前回调
-    // TODO
     public Object beforeFormShowing(Context context) {
-        return null;
+        return this.entity;
     }
 
     // 表单执行
-    // TODO
-    public boolean formHandle(Context context) {
-        return false;
+    public Object formHandle(Context context) {
+
+        // 获取实体数据
+        T getEntity = (T) context.getRequestBody(entity.getClass());
+
+        // 获取资源服务
+        ResourceService<ResourceMapper<T>, T> getResourceService = (ResourceService<ResourceMapper<T>, T>) this.resourceService;
+
+        // 创建数据前验证数据
+        Object validationResult = new PerformValidation<T>(context, this.fields(context), getResourceService).validatorForCreation(getEntity);
+        if (validationResult!= null) {
+            return Message.error(validationResult);
+        }
+
+        // 保存前
+        getEntity = this.beforeSaving(context, getEntity);
+
+        // 保存数据
+        this.resourceService.save(getEntity);
+
+        // 保存后回调
+        boolean result = this.afterSaved(context, getEntity);
+
+        // 保存后跳转回调
+        return this.afterSavedRedirectTo(context, result);
     }
 
     // 创建表单组件渲染
@@ -669,6 +690,9 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         if (uri[uri.length - 1].equals("index")) {
             return context.getRequest().getRequestURI().replace("/index", "/store");
         }
+        if (uri[uri.length - 1].equals("form")) {
+            return context.getRequest().getRequestURI().replace("/form", "/store");
+        }
         return context.getRequest().getRequestURI().replace("/create", "/store");
     }
 
@@ -684,7 +708,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
 
     // 创建页面显示前回调
     public Object beforeCreating(Context context) {
-        return this.entity;
+        return this.beforeFormShowing(context);
     }
 
     // 渲染创建页组件
@@ -706,29 +730,8 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     }
 
     // 保存创建数据
-    @SuppressWarnings("unchecked")
     public Object storeRender(Context context) {
-
-        // 获取实体数据
-        T getEntity = (T) context.getRequestBody(entity.getClass());
-
-        // 获取资源服务
-        ResourceService<ResourceMapper<T>, T> getResourceService = (ResourceService<ResourceMapper<T>, T>) this.resourceService;
-
-        // 创建数据前验证数据
-        Object validationResult = new PerformValidation<T>(context, this.fields(context), getResourceService).validatorForCreation(getEntity);
-        if (validationResult!= null) {
-            return Message.error(validationResult);
-        }
-
-        // 保存前
-        getEntity = this.beforeSaving(context, getEntity);
-
-        // 保存数据
-        this.resourceService.save(getEntity);
-
-        // 保存后回调
-        return this.afterSaved(context, getEntity);
+        return this.formHandle(context);
     }
 
     // 编辑表单的接口
@@ -859,31 +862,29 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         this.resourceService.update(getEntity, queryWrapper);
 
         // 保存后回调
-        return this.afterSaved(context, getEntity);
+        boolean result = this.afterSaved(context, getEntity);
+
+        // 保存后跳转回调
+        return this.afterSavedRedirectTo(context, result);
     }
 
     // 导入数据后回调
-    // TODO
-    public Object afterImported(Context context,T result) {
-        return null;
+    public boolean afterImported(Context context,T result) {
+        return true;
     }
 
     // 保存数据后回调
-    public Object afterSaved(Context context,T result) {
-        if (context.isImport()) {
-            return result;
-        }
-        if (result == null) {
+    public boolean afterSaved(Context context,T result) {
+        return true;
+    }
+
+    // 保存数据后跳转回调
+    public Object afterSavedRedirectTo(Context context,boolean result) {
+        if (result == false) {
             return Message.error("操作失败！");
         }
         String redirectUrl = "/layout/index?api=/api/admin/{resource}/index".replace("{resource}", context.getPathVariable("resource"));
         return Message.success("操作成功！", redirectUrl);
-    }
-
-    // 保存数据后跳转回调
-    // TODO
-    public Object afterSavedRedirectTo(Context context,T result) {
-        return null;
     }
 
     // 表格行内编辑
@@ -1230,7 +1231,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
 
             // 保存后回调
             try {
-                this.afterSaved(context, resourceEntity);
+                this.afterImported(context, resourceEntity);
             } catch (Exception e) {
                 importResult = false;
                 importFailedNum++;

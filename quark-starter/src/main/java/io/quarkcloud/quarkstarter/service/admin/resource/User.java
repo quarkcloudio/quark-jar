@@ -16,7 +16,6 @@ import com.github.yulichang.wrapper.MPJLambdaWrapper;
 
 import io.quarkcloud.quarkadmin.component.form.Field;
 import io.quarkcloud.quarkadmin.component.form.Rule;
-import io.quarkcloud.quarkadmin.component.message.Message;
 import io.quarkcloud.quarkadmin.entity.UserEntity;
 import io.quarkcloud.quarkadmin.mapper.UserMapper;
 import io.quarkcloud.quarkadmin.service.UserService;
@@ -213,12 +212,9 @@ public class User extends ResourceImpl<UserMapper, UserEntity> {
     }
 
     // 保存数据后回调
-    public Object afterSaved(Context context, UserEntity result) {
-        if (context.isImport()) {
-            return result;
-        }
+    public boolean afterSaved(Context context, UserEntity result) {
         if (result == null) {
-            return Message.error("操作失败！");
+            return false;
         }
 
         // 保存角色关联
@@ -235,11 +231,6 @@ public class User extends ResourceImpl<UserMapper, UserEntity> {
             }
         }
 
-        if (!insertRoleResult) {
-            return Message.error("操作失败！");
-        }
-
-        String redirectUrl = "/layout/index?api=/api/admin/{resource}/index".replace("{resource}", context.getPathVariable("resource"));
-        return Message.success("操作成功！", redirectUrl);
+       return insertRoleResult;
     }
 }

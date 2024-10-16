@@ -11,7 +11,6 @@ import io.quarkcloud.quarkadmin.component.form.Field;
 import io.quarkcloud.quarkadmin.component.form.Rule;
 import io.quarkcloud.quarkadmin.component.form.fields.Transfer.DataSource;
 import io.quarkcloud.quarkadmin.component.form.fields.TreeSelect;
-import io.quarkcloud.quarkadmin.component.message.Message;
 import io.quarkcloud.quarkadmin.entity.MenuEntity;
 import io.quarkcloud.quarkadmin.mapper.MenuMapper;
 import io.quarkcloud.quarkadmin.service.MenuService;
@@ -202,12 +201,9 @@ public class Menu extends ResourceImpl<MenuMapper, MenuEntity> {
     }
 
     // 保存数据后回调
-    public Object afterSaved(Context context,MenuEntity result) {
-        if (context.isImport()) {
-            return result;
-        }
+    public boolean afterSaved(Context context,MenuEntity result) {
         if (result == null) {
-            return Message.error("操作失败！");
+            return false;
         }
 
         // 保存菜单权限关联
@@ -224,11 +220,6 @@ public class Menu extends ResourceImpl<MenuMapper, MenuEntity> {
             }
         }
 
-        if (!insertAllResult) {
-            return Message.error("操作失败！");
-        }
-
-        String redirectUrl = "/layout/index?api=/api/admin/{resource}/index".replace("{resource}", context.getPathVariable("resource"));
-        return Message.success("操作成功！", redirectUrl);
+        return insertAllResult;
     }
 }
