@@ -420,6 +420,6 @@ CREATE TABLE `users`  (
 -- ----------------------------
 -- Records of users
 -- ----------------------------
-INSERT INTO `users` VALUES (1, 'administrator', '超级管理员', 1, 'admin@yourweb.com', '10086', '$2a$04$v69e6Z5aNtF5UTDJVDHI2eB5j26jqUylD0318gky8/9jaDy0dgwOy', '', 1, NULL, '127.0.0.1', '2024-10-11 08:52:28.448', '', '', 1, '2024-10-10 19:20:41.592', '2024-10-11 08:52:28.449', NULL);
+INSERT INTO `users` VALUES (1, 'administrator', '超级管理员', 1, 'admin@yourweb.com', '10086', '$2a$04$v69e6Z5aNtF5UTDJVDHI2eB5j26jqUylD0318gky8/9jaDy0dgwOy', NULL, 1, NULL, '127.0.0.1', '2024-10-11 08:52:28.448', '', '', 1, '2024-10-10 19:20:41.592', '2024-10-11 08:52:28.449', NULL);
 
 SET FOREIGN_KEY_CHECKS = 1;
