@@ -20,8 +20,8 @@ public class Status<T> extends SelectImpl<T> {
 
     public Object options(Context context) {
         return Arrays.asList(
-            this.option(0, "禁用"),
-            this.option(1, "启用")
+            this.option("禁用",0),
+            this.option("启用",1)
         );
     }
 }

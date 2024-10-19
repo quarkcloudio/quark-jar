@@ -18,7 +18,7 @@ public class TreeSelectImpl<T> extends SearchImpl<T> {
     }
 
     // 设置Option
-    public TreeData option(Object value, String title) {
+    public TreeData option(String title, Object value) {
         return new TreeData(title, value);
     }
 }

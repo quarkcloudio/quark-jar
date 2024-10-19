@@ -18,7 +18,7 @@ public class SelectImpl<T> extends SearchImpl<T> {
     }
 
     // 设置Option
-    public Option option(Object value, String label) {
+    public Option option(String label, Object value) {
         return new Option(label, value);
     }
 }
