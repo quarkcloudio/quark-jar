@@ -1,6 +1,7 @@
 package io.quarkcloud.quarkadmin.template.resource.core;
 
 import java.util.List;
+import java.util.Map;
 
 import io.quarkcloud.quarkadmin.component.form.Field;
 import io.quarkcloud.quarkadmin.component.form.fields.Cascader;
@@ -76,6 +77,9 @@ public class ResolveSearch<T> {
             // 获取属性
             Object options = search.options(context);
 
+            // 加载数据
+            Map<String, String> load = search.load(context);
+
             // 根据组件类型构建组件
             switch (component) {
                 case "textField":
@@ -87,7 +91,8 @@ public class ResolveSearch<T> {
                     field = Field.
                         select(name, label).
                         setWidth(null).
-                        setOptions((List<SelectField.Option>) options);
+                        setOptions((List<SelectField.Option>) options).
+                        setLoad(load.get("field"), load.get("api"));
                     break;
                 case "radioField":
                     field = Field.
