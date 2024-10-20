@@ -484,6 +484,30 @@ public class Dependency extends Component {
         return this;
     }
 
+    // Specify that the element should only be shown on creation.
+    public Dependency onlyOnCreating() {
+        this.showOnIndex = false;
+        this.showOnDetail = false;
+        this.showOnCreation = true;
+        this.showOnUpdate = false;
+        this.showOnExport = false;
+        this.showOnImport = false;
+
+        return this;
+    }
+
+    // Specify that the element should only be shown on update.
+    public Dependency onlyOnUpdating() {
+        this.showOnIndex = false;
+        this.showOnDetail = false;
+        this.showOnCreation = false;
+        this.showOnUpdate = true;
+        this.showOnExport = false;
+        this.showOnImport = false;
+
+        return this;
+    }
+    
     // Specify that the element should only be shown on export file.
     public Dependency onlyOnExport() {
         this.showOnIndex = false;

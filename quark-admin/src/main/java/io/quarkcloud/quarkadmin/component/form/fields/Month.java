@@ -566,6 +566,30 @@ public class Month extends Component {
         return this;
     }
 
+    // Specify that the element should only be shown on creation.
+    public Month onlyOnCreating() {
+        this.showOnIndex = false;
+        this.showOnDetail = false;
+        this.showOnCreation = true;
+        this.showOnUpdate = false;
+        this.showOnExport = false;
+        this.showOnImport = false;
+
+        return this;
+    }
+
+    // Specify that the element should only be shown on update.
+    public Month onlyOnUpdating() {
+        this.showOnIndex = false;
+        this.showOnDetail = false;
+        this.showOnCreation = false;
+        this.showOnUpdate = true;
+        this.showOnExport = false;
+        this.showOnImport = false;
+
+        return this;
+    }
+
     // Specify that the element should only be shown on export file.
     public Month onlyOnExport() {
         this.showOnIndex = false;

@@ -485,6 +485,30 @@ public class Fieldset extends Component {
         return this;
     }
 
+    // Specify that the element should only be shown on creation.
+    public Fieldset onlyOnCreating() {
+        this.showOnIndex = false;
+        this.showOnDetail = false;
+        this.showOnCreation = true;
+        this.showOnUpdate = false;
+        this.showOnExport = false;
+        this.showOnImport = false;
+
+        return this;
+    }
+
+    // Specify that the element should only be shown on update.
+    public Fieldset onlyOnUpdating() {
+        this.showOnIndex = false;
+        this.showOnDetail = false;
+        this.showOnCreation = false;
+        this.showOnUpdate = true;
+        this.showOnExport = false;
+        this.showOnImport = false;
+
+        return this;
+    }
+
     // Specify that the element should only be shown on export file.
     public Fieldset onlyOnExport() {
         this.showOnIndex = false;

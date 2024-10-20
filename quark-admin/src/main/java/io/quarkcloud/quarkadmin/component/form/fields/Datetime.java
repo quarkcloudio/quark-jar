@@ -566,6 +566,30 @@ public class Datetime extends Component {
         return this;
     }
 
+    // Specify that the element should only be shown on creation.
+    public Datetime onlyOnCreating() {
+        this.showOnIndex = false;
+        this.showOnDetail = false;
+        this.showOnCreation = true;
+        this.showOnUpdate = false;
+        this.showOnExport = false;
+        this.showOnImport = false;
+
+        return this;
+    }
+
+    // Specify that the element should only be shown on update.
+    public Datetime onlyOnUpdating() {
+        this.showOnIndex = false;
+        this.showOnDetail = false;
+        this.showOnCreation = false;
+        this.showOnUpdate = true;
+        this.showOnExport = false;
+        this.showOnImport = false;
+
+        return this;
+    }
+    
     // Specify that the element should only be shown on export file.
     public Datetime onlyOnExport() {
         this.showOnIndex = false;

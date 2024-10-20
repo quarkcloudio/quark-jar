@@ -480,6 +480,30 @@ public class Space extends Component {
         return this;
     }
 
+    // Specify that the element should only be shown on creation.
+    public Space onlyOnCreating() {
+        this.showOnIndex = false;
+        this.showOnDetail = false;
+        this.showOnCreation = true;
+        this.showOnUpdate = false;
+        this.showOnExport = false;
+        this.showOnImport = false;
+
+        return this;
+    }
+
+    // Specify that the element should only be shown on update.
+    public Space onlyOnUpdating() {
+        this.showOnIndex = false;
+        this.showOnDetail = false;
+        this.showOnCreation = false;
+        this.showOnUpdate = true;
+        this.showOnExport = false;
+        this.showOnImport = false;
+
+        return this;
+    }
+
     // Specify that the element should only be shown on export file.
     public Space onlyOnExport() {
         this.showOnIndex = false;

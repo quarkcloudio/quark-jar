@@ -568,6 +568,30 @@ public class Year extends Component {
         return this;
     }
 
+    // Specify that the element should only be shown on creation.
+    public Year onlyOnCreating() {
+        this.showOnIndex = false;
+        this.showOnDetail = false;
+        this.showOnCreation = true;
+        this.showOnUpdate = false;
+        this.showOnExport = false;
+        this.showOnImport = false;
+
+        return this;
+    }
+
+    // Specify that the element should only be shown on update.
+    public Year onlyOnUpdating() {
+        this.showOnIndex = false;
+        this.showOnDetail = false;
+        this.showOnCreation = false;
+        this.showOnUpdate = true;
+        this.showOnExport = false;
+        this.showOnImport = false;
+
+        return this;
+    }
+
     // Specify that the element should only be shown on export file.
     public Year onlyOnExport() {
         this.showOnIndex = false;

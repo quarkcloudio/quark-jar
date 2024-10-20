@@ -507,6 +507,30 @@ public class MapField extends Component {
         return this;
     }
 
+    // Specify that the element should only be shown on creation.
+    public MapField onlyOnCreating() {
+        this.showOnIndex = false;
+        this.showOnDetail = false;
+        this.showOnCreation = true;
+        this.showOnUpdate = false;
+        this.showOnExport = false;
+        this.showOnImport = false;
+
+        return this;
+    }
+
+    // Specify that the element should only be shown on update.
+    public MapField onlyOnUpdating() {
+        this.showOnIndex = false;
+        this.showOnDetail = false;
+        this.showOnCreation = false;
+        this.showOnUpdate = true;
+        this.showOnExport = false;
+        this.showOnImport = false;
+
+        return this;
+    }
+
     // Specify that the element should only be shown on export file.
     public MapField onlyOnExport() {
         this.showOnIndex = false;
