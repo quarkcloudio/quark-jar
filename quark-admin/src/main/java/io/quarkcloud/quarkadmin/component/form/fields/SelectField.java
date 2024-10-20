@@ -506,6 +506,9 @@ public class SelectField extends Component {
         conditionBuilder.append("<%=String(").append(this.name).append(")");
 
         switch (operator) {
+            case "!=":
+                conditionBuilder.append(" !== '").append(option).append("' %>");
+                break;
             case "=":
                 conditionBuilder.append(" === '").append(option).append("' %>");
                 break;

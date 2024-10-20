@@ -451,6 +451,9 @@ public class Cascader extends Component {
         conditionBuilder.append("<%=String(").append(this.name).append(")");
 
         switch (operator) {
+            case "!=":
+                conditionBuilder.append(" !== '").append(option).append("' %>");
+                break;
             case "=":
                 conditionBuilder.append(" === '").append(option).append("' %>");
                 break;
@@ -604,6 +607,30 @@ public class Cascader extends Component {
         this.showOnIndex = false;
         this.showOnDetail = false;
         this.showOnCreation = true;
+        this.showOnUpdate = true;
+        this.showOnExport = false;
+        this.showOnImport = false;
+
+        return this;
+    }
+
+    // Specify that the element should only be shown on creation.
+    public Cascader onlyOnCreating() {
+        this.showOnIndex = false;
+        this.showOnDetail = false;
+        this.showOnCreation = true;
+        this.showOnUpdate = false;
+        this.showOnExport = false;
+        this.showOnImport = false;
+
+        return this;
+    }
+
+    // Specify that the element should only be shown on update.
+    public Cascader onlyOnUpdating() {
+        this.showOnIndex = false;
+        this.showOnDetail = false;
+        this.showOnCreation = false;
         this.showOnUpdate = true;
         this.showOnExport = false;
         this.showOnImport = false;
