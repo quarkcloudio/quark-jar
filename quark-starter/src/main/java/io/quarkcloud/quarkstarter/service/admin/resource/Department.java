@@ -60,12 +60,17 @@ public class Department extends ResourceImpl<DepartmentMapper, DepartmentEntity>
                     Rule.required(true, "名称必须填写")
                 )),
 
+            Field.treeSelect("pid", "父节点")
+            .setTreeData(menus)
+            .setDefaultValue(1)
+            .onlyOnCreating(),
+
             Field.dependency()
                 .setWhen("id", ">", 1, () -> Arrays.asList(
                     Field.treeSelect("pid", "父节点")
                         .setTreeData(menus)
                         .setDefaultValue(1)
-                        .onlyOnForms()
+                        .onlyOnUpdating()
                 )),
 
             Field.number("sort", "排序")
