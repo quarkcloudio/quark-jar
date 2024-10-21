@@ -60,6 +60,9 @@ public class Department extends ResourceImpl<DepartmentMapper, DepartmentEntity>
                 )),
 
             Field.treeSelect("pid", "父节点")
+            .setRules(Arrays.asList(
+                Rule.required(true, "请选择父节点")
+            ))
             .setTreeData(departments,"pid","name","id")
             .setDefaultValue(1)
             .onlyOnCreating(),
@@ -67,6 +70,9 @@ public class Department extends ResourceImpl<DepartmentMapper, DepartmentEntity>
             Field.dependency()
                 .setWhen("id", ">", 1, () -> Arrays.asList(
                     Field.treeSelect("pid", "父节点")
+                        .setRules(Arrays.asList(
+                            Rule.required(true, "请选择父节点")
+                        ))
                         .setTreeData(departments,"pid","name","id")
                         .setDefaultValue(1)
                         .onlyOnUpdating()
