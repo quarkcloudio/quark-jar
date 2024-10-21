@@ -58,6 +58,6 @@ public class SearchImpl<T> implements Search<T> {
 
     // 单向联动
     public Map<String, String> load(Context context) {
-        return null;
+        return new java.util.HashMap<>();
     }
 }

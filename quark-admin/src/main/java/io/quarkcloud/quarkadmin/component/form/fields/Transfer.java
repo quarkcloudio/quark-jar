@@ -29,9 +29,10 @@ public class Transfer extends Component {
     @Data
     public static class DataSource {
 
-        DataSource(Object key, String title, String description) {
+        public DataSource(Object key, String title, String description) {
             this.key = key;
             this.title = title;
+            this.description = description;
         }
 
         // 主键

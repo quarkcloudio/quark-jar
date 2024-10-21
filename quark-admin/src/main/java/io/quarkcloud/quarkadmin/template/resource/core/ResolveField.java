@@ -240,7 +240,7 @@ public class ResolveField {
 
         // 如果可编辑，设置编辑项
         if (editable) {
-            String editableApi = context.getRequest().getRequestURI().replace("/index", "/editable");
+            String editableApi = context.getRequestURI().replace("/index", "/editable");
             column.setEditable(component, options, editableApi);
         }
 
@@ -285,6 +285,12 @@ public class ResolveField {
         return items;
     }
 
+    // 判断是否在创建页面显示
+    private boolean isShownOnCreation(Object obj) {
+        Object isShown = new Reflect(obj).invoke("isShownOnCreation");
+        return isShown != null && (Boolean) isShown;
+    }
+
     // 解析创建页表单组件内的字段
     public List<Object> creationFormFieldsParser(Context context, Object fields) {
         List<Object> items = new ArrayList<>();
@@ -292,35 +298,75 @@ public class ResolveField {
         // 解析字段
         if (fields instanceof List<?>) {
             List<?> fieldList = (List<?>) fields;
+
             for (Object obj : fieldList) {
-                // 检查是否有Body字段
                 Reflect bodyReflect = new Reflect(obj);
+
+                // 检查是否有Body字段
                 boolean bodyFieldExist = bodyReflect.checkFieldExist("body");
                 if (bodyFieldExist) {
-                    // 获取Body字段的内容值
-                    Object body = (Object) bodyReflect.getFieldValue("body");
+                    Object body = bodyReflect.getFieldValue("body");
 
-                    // 递归解析值
+                    // 递归解析body字段的内容
                     Object parsedFields = creationFormFieldsParser(context, body);
 
                     // 更新Body字段的值
-                    bodyReflect.setFieldValue(parsedFields);
-
+                    bodyReflect.setFieldValue("body", parsedFields);
                     items.add(obj);
                 } else {
                     // 获取Component字段的值
                     String component = (String) bodyReflect.getFieldValue("component");
 
-                    // 如果Component包含"Field"，则进行进一步处理
+                    // 如果Component包含"Field"，则处理
                     if (component.contains("Field")) {
-                        // 判断是否在创建页面显示
-                        Object isShown = new Reflect(obj).invoke("isShownOnCreation");
-                        if (isShown!=null && (Boolean) isShown) {
-                            if ((Boolean) isShown) {
-                                new Reflect(obj).invoke("buildFrontendRules", String.class, context.getRequestURI());
-                                items.add(obj);
+                        Reflect itemReflect = new Reflect(obj);
+
+                        // 判断是否有"when"字段
+                        boolean whenFieldExist = itemReflect.checkFieldExist("when");
+                        if (whenFieldExist) {
+                            Object getWhen = itemReflect.getFieldValue("when");
+                            Reflect whenReflect = new Reflect(getWhen);
+
+                            // 检查when的items字段
+                            if (whenReflect.checkFieldExist("items")) {
+                                Object whenItems = whenReflect.getFieldValue("items");
+                                if (whenItems instanceof List<?>) {
+                                    List<?> whenItemsList = (List<?>) whenItems;
+                                    List<Object> updatedWhenItems = new ArrayList<>();
+
+                                    for (Object v : whenItemsList) {
+                                        Reflect subBodyReflect = new Reflect(v);
+
+                                        // 检查子项目是否有body字段
+                                        if (subBodyReflect.checkFieldExist("body")) {
+                                            Object subBody = subBodyReflect.getFieldValue("body");
+
+                                            if (subBody instanceof List<?>) {
+                                                subBody = creationFormFieldsParser(context, subBody); // 递归解析
+                                                subBodyReflect.setFieldValue("body", subBody);
+                                            } else if (isShownOnCreation(subBody)) {
+                                                new Reflect(subBody).invoke("buildFrontendRules", String.class, context.getRequestURI());
+                                                subBodyReflect.setFieldValue("body", subBody);
+                                            }
+                                        }
+                                        updatedWhenItems.add(v); // 更新后的项加入列表
+                                    }
+
+                                    // 更新when中的items
+                                    whenReflect.setFieldValue("items", updatedWhenItems);
+                                    
+                                    // 重新将更新后的when对象设置回itemReflect
+                                    itemReflect.setFieldValue("when", getWhen);
+                                }
                             }
                         }
+
+                        // 判断是否在创建页面显示
+                        if (isShownOnCreation(obj)) {
+                            new Reflect(obj).invoke("buildFrontendRules", String.class, context.getRequestURI());
+                            items.add(obj);
+                        }
+
                     } else {
                         items.add(obj);
                     }
@@ -369,6 +415,12 @@ public class ResolveField {
         return items;
     }
 
+    // 判断是否在创建页面显示
+    private boolean isShownOnUpdate(Object obj) {
+        Object isShown = new Reflect(obj).invoke("isShownOnUpdate");
+        return isShown != null && (Boolean) isShown;
+    }
+
     // 解析编辑页表单组件内的字段
     public List<Object> updateFormFieldsParser(Context context, Object fields) {
         List<Object> items = new ArrayList<>();
@@ -376,35 +428,75 @@ public class ResolveField {
         // 解析字段
         if (fields instanceof List<?>) {
             List<?> fieldList = (List<?>) fields;
+
             for (Object obj : fieldList) {
-                // 检查是否有Body字段
                 Reflect bodyReflect = new Reflect(obj);
+
+                // 检查是否有Body字段
                 boolean bodyFieldExist = bodyReflect.checkFieldExist("body");
                 if (bodyFieldExist) {
-                    // 获取Body字段的内容值
-                    Object body = (Object) bodyReflect.getFieldValue("body");
-    
-                    // 递归解析值
+                    Object body = bodyReflect.getFieldValue("body");
+
+                    // 递归解析body字段的内容
                     Object parsedFields = updateFormFieldsParser(context, body);
-    
+
                     // 更新Body字段的值
-                    bodyReflect.setFieldValue(parsedFields);
-    
+                    bodyReflect.setFieldValue("body", parsedFields);
                     items.add(obj);
                 } else {
                     // 获取Component字段的值
                     String component = (String) bodyReflect.getFieldValue("component");
-    
-                    // 如果Component包含"Field"，则进行进一步处理
+
+                    // 如果Component包含"Field"，则处理
                     if (component.contains("Field")) {
-                        // 判断是否在创建页面显示
-                        Object isShown = new Reflect(obj).invoke("isShownOnUpdate");
-                        if (isShown!=null && (Boolean) isShown) {
-                            if ((Boolean) isShown) {
-                                new Reflect(obj).invoke("buildFrontendRules", String.class, context.getRequestURI());
-                                items.add(obj);
+                        Reflect itemReflect = new Reflect(obj);
+
+                        // 判断是否有"when"字段
+                        boolean whenFieldExist = itemReflect.checkFieldExist("when");
+                        if (whenFieldExist) {
+                            Object getWhen = itemReflect.getFieldValue("when");
+                            Reflect whenReflect = new Reflect(getWhen);
+
+                            // 检查when的items字段
+                            if (whenReflect.checkFieldExist("items")) {
+                                Object whenItems = whenReflect.getFieldValue("items");
+                                if (whenItems instanceof List<?>) {
+                                    List<?> whenItemsList = (List<?>) whenItems;
+                                    List<Object> updatedWhenItems = new ArrayList<>();
+
+                                    for (Object v : whenItemsList) {
+                                        Reflect subBodyReflect = new Reflect(v);
+
+                                        // 检查子项目是否有body字段
+                                        if (subBodyReflect.checkFieldExist("body")) {
+                                            Object subBody = subBodyReflect.getFieldValue("body");
+
+                                            if (subBody instanceof List<?>) {
+                                                subBody = updateFormFieldsParser(context, subBody); // 递归解析
+                                                subBodyReflect.setFieldValue("body", subBody);
+                                            } else if (isShownOnUpdate(subBody)) {
+                                                new Reflect(subBody).invoke("buildFrontendRules", String.class, context.getRequestURI());
+                                                subBodyReflect.setFieldValue("body", subBody);
+                                            }
+                                        }
+                                        updatedWhenItems.add(v); // 更新后的项加入列表
+                                    }
+
+                                    // 更新when中的items
+                                    whenReflect.setFieldValue("items", updatedWhenItems);
+                                    
+                                    // 重新将更新后的when对象设置回itemReflect
+                                    itemReflect.setFieldValue("when", getWhen);
+                                }
                             }
                         }
+
+                        // 判断是否在创建页面显示
+                        if (isShownOnUpdate(obj)) {
+                            new Reflect(obj).invoke("buildFrontendRules", String.class, context.getRequestURI());
+                            items.add(obj);
+                        }
+
                     } else {
                         items.add(obj);
                     }
@@ -416,27 +508,87 @@ public class ResolveField {
     }
 
     // 解析表单组件内的字段
-    @SuppressWarnings("unchecked")
     public Object formFieldsParser(Context context, Object fields) {
-        if (fields instanceof List) {
-            ((List<Object>) fields).stream().forEach(field -> {
+        List<Object> items = new ArrayList<>();
+
+        // 解析字段
+        if (fields instanceof List<?>) {
+            List<?> fieldList = (List<?>) fields;
+
+            for (Object obj : fieldList) {
+                Reflect bodyReflect = new Reflect(obj);
+
                 // 检查是否有Body字段
-                Reflect bodyReflect = new Reflect(field);
                 boolean bodyFieldExist = bodyReflect.checkFieldExist("body");
                 if (bodyFieldExist) {
-                    // 获取Body字段的内容值
-                    Object body = (Object) bodyReflect.getFieldValue("body");
-                    this.formFieldsParser(context, body);
+                    Object body = bodyReflect.getFieldValue("body");
+
+                    // 递归解析body字段的内容
+                    Object parsedFields = formFieldsParser(context, body);
+
+                    // 更新Body字段的值
+                    bodyReflect.setFieldValue("body", parsedFields);
+                    items.add(obj);
                 } else {
+                    // 获取Component字段的值
                     String component = (String) bodyReflect.getFieldValue("component");
+
+                    // 如果Component包含"Field"，则处理
                     if (component.contains("Field")) {
-                        new Reflect(field).invoke("buildFrontendRules", String.class, context.getRequestURI());
+                        Reflect itemReflect = new Reflect(obj);
+
+                        // 判断是否有"when"字段
+                        boolean whenFieldExist = itemReflect.checkFieldExist("when");
+                        if (whenFieldExist) {
+                            Object getWhen = itemReflect.getFieldValue("when");
+                            Reflect whenReflect = new Reflect(getWhen);
+
+                            // 检查when的items字段
+                            if (whenReflect.checkFieldExist("items")) {
+                                Object whenItems = whenReflect.getFieldValue("items");
+                                if (whenItems instanceof List<?>) {
+                                    List<?> whenItemsList = (List<?>) whenItems;
+                                    List<Object> updatedWhenItems = new ArrayList<>();
+
+                                    for (Object v : whenItemsList) {
+                                        Reflect subBodyReflect = new Reflect(v);
+
+                                        // 检查子项目是否有body字段
+                                        if (subBodyReflect.checkFieldExist("body")) {
+                                            Object subBody = subBodyReflect.getFieldValue("body");
+
+                                            if (subBody instanceof List<?>) {
+                                                subBody = formFieldsParser(context, subBody); // 递归解析
+                                                subBodyReflect.setFieldValue("body", subBody);
+                                            } else {
+                                                new Reflect(subBody).invoke("buildFrontendRules", String.class, context.getRequestURI());
+                                                subBodyReflect.setFieldValue("body", subBody);
+                                            }
+                                        }
+                                        updatedWhenItems.add(v); // 更新后的项加入列表
+                                    }
+
+                                    // 更新when中的items
+                                    whenReflect.setFieldValue("items", updatedWhenItems);
+                                    
+                                    // 重新将更新后的when对象设置回itemReflect
+                                    itemReflect.setFieldValue("when", getWhen);
+                                }
+                            }
+                        }
+
+                        // 判断是否在创建页面显示
+                        new Reflect(obj).invoke("buildFrontendRules", String.class, context.getRequestURI());
+                        items.add(obj);
+
+                    } else {
+                        items.add(obj);
                     }
                 }
-            });
+            }
         }
 
-        return fields;
+        return items;
     }
 
     // 详情页字段

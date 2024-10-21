@@ -43,10 +43,7 @@ public class PermissionServiceImpl extends ResourceServiceImpl<PermissionMapper,
         List<PermissionEntity> permissions = this.list();
         // 将权限转换为数据源格式
         return permissions.stream().map(permission -> {
-            DataSource option = new DataSource();
-            option.setKey(permission.getId());
-            option.setTitle(permission.getName());
-            option.setDescription(permission.getRemark());
+            DataSource option = new DataSource(permission.getId(), permission.getName(), permission.getRemark());
             return option;
         }).collect(Collectors.toList());
     }
