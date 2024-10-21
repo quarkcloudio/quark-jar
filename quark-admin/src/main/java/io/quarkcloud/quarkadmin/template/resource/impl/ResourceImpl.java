@@ -590,6 +590,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     }
 
     // 表单执行
+    @SuppressWarnings("unchecked")
     public Object formHandle(Context context) {
 
         // 获取实体数据
