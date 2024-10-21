@@ -424,7 +424,7 @@ public class TreeSelect extends Component {
     }
 
     // 使用反射构建树结构
-    public List<TreeData> buildTree(List<?> items, int pid, String parentKeyName, String titleName, String valueName) {
+    public List<TreeData> buildTree(List<?> items, Object pid, String parentKeyName, String titleName, String valueName) {
         List<TreeData> tree = new ArrayList<>();
 
         for (Object item : items) {
@@ -440,8 +440,8 @@ public class TreeSelect extends Component {
                 parentKeyField.setAccessible(true);
                 titleField.setAccessible(true);
 
-                int value = (int) valueField.get(item);
-                int parentKey = (int) parentKeyField.get(item);
+                Object value = valueField.get(item);
+                Object parentKey = parentKeyField.get(item);
                 String title = (String) titleField.get(item);
 
                 // 如果当前项的 ParentKey 与传入的 pid 匹配
@@ -461,7 +461,7 @@ public class TreeSelect extends Component {
     }
 
     public List<TreeData> listToTreeData(List<?> list, String parentKeyName, String titleName, String valueName) {
-        return buildTree(list, 0, parentKeyName, titleName, valueName);
+        return buildTree(list, 0L, parentKeyName, titleName, valueName);
     }
 
     // 设置树数据（通过列表）

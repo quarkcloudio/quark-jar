@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import io.quarkcloud.quarkadmin.component.form.Field;
 import io.quarkcloud.quarkadmin.component.form.Rule;
-import io.quarkcloud.quarkadmin.component.form.fields.TreeSelect;
 import io.quarkcloud.quarkadmin.component.table.Table.Expandable;
 import io.quarkcloud.quarkadmin.entity.DepartmentEntity;
 import io.quarkcloud.quarkadmin.mapper.DepartmentMapper;
@@ -47,8 +46,8 @@ public class Department extends ResourceImpl<DepartmentMapper, DepartmentEntity>
     // 字段
     public List<Object> fields(Context context) {
 
-        // 菜单列表
-        List<TreeSelect.TreeData> menus = departmentService.treeSelect();
+        // 部门列表
+        List<DepartmentEntity> departments = departmentService.getList();
 
         return Arrays.asList(
             Field.hidden("id", "ID"), // 列表读取且不展示的字段
@@ -61,14 +60,14 @@ public class Department extends ResourceImpl<DepartmentMapper, DepartmentEntity>
                 )),
 
             Field.treeSelect("pid", "父节点")
-            .setTreeData(menus)
+            .setTreeData(departments,"pid","name","id")
             .setDefaultValue(1)
             .onlyOnCreating(),
 
             Field.dependency()
                 .setWhen("id", ">", 1, () -> Arrays.asList(
                     Field.treeSelect("pid", "父节点")
-                        .setTreeData(menus)
+                        .setTreeData(departments,"pid","name","id")
                         .setDefaultValue(1)
                         .onlyOnUpdating()
                 )),

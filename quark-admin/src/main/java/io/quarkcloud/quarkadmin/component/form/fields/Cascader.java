@@ -349,7 +349,7 @@ public class Cascader extends Component {
     }
 
     // 使用反射构建树结构
-    public List<Option> buildTree(List<?> items, int pid, String parentKeyName, String labelName, String valueName) {
+    public List<Option> buildTree(List<?> items, Object pid, String parentKeyName, String labelName, String valueName) {
         List<Option> tree = new ArrayList<>();
 
         // 遍历切片中的每个元素
@@ -367,8 +367,8 @@ public class Cascader extends Component {
                 labelField.setAccessible(true);
 
                 // 确保字段存在并且类型正确
-                int value = (int) valueField.get(item);
-                int parentKey = (int) parentKeyField.get(item);
+                Object value = valueField.get(item);
+                Object parentKey = parentKeyField.get(item);
                 String label = (String) labelField.get(item);
 
                 // 如果当前项的 Pid 与传入的 pid 匹配
@@ -388,7 +388,7 @@ public class Cascader extends Component {
     }
 
     public List<Option> listToOptions(List<?> list, String parentKeyName, String labelName, String valueName) {
-        return buildTree(list, 0, parentKeyName, labelName, valueName);
+        return buildTree(list, 0L, parentKeyName, labelName, valueName);
     }
 
     public Cascader setOptions(List<Option> options) {

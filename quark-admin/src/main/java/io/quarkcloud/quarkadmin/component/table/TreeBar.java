@@ -192,7 +192,7 @@ public class TreeBar extends Component {
     }
 
     // 使用反射构建树结构
-    public List<TreeData> buildTree(List<?> items, int pid, String parentKeyName, String keyName, String titleName) {
+    public List<TreeData> buildTree(List<?> items, Object pid, String parentKeyName, String keyName, String titleName) {
         List<TreeData> tree = new ArrayList<>();
 
         for (Object item : items) {
@@ -208,8 +208,8 @@ public class TreeBar extends Component {
                 parentKeyField.setAccessible(true);
                 titleField.setAccessible(true);
 
-                int key = (int) keyField.get(item);
-                int parentKey = (int) parentKeyField.get(item);
+                Object key = keyField.get(item);
+                Object parentKey = parentKeyField.get(item);
                 String title = (String) titleField.get(item);
 
                 // 如果当前项的 ParentKey 与传入的 pid 匹配
@@ -229,7 +229,7 @@ public class TreeBar extends Component {
     }
 
     public List<TreeData> listToTreeData(List<?> list, String parentKeyName, String keyName, String titleName) {
-        return buildTree(list, 0, parentKeyName, keyName, titleName);
+        return buildTree(list, 0L, parentKeyName, keyName, titleName);
     }
 
     // 设置树数据（通过列表）

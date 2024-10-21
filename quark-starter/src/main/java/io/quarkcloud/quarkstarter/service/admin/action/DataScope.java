@@ -16,7 +16,7 @@ import io.quarkcloud.quarkcore.service.Context;
 import io.quarkcloud.quarkadmin.component.message.Message;
 import io.quarkcloud.quarkadmin.component.form.Field;
 import io.quarkcloud.quarkadmin.component.form.Rule;
-import io.quarkcloud.quarkadmin.component.form.fields.Tree.TreeData;
+import io.quarkcloud.quarkadmin.entity.DepartmentEntity;
 import io.quarkcloud.quarkadmin.entity.RoleEntity;
 import io.quarkcloud.quarkadmin.service.DepartmentService;
 import io.quarkcloud.quarkadmin.service.RoleService;
@@ -65,7 +65,7 @@ public class DataScope<M, T> extends ModalFormImpl<ResourceMapper<T>, T> {
 
     // 字段
     public List<Object> fields(Context context) {
-        List<TreeData> departments = departmentService.tree();
+        List<DepartmentEntity> departments = departmentService.getList();
         return List.of(
             Field.hidden("id", "ID"), // 隐藏字段
             Field.text("name", "名称"), // 禁用文本字段
@@ -86,7 +86,7 @@ public class DataScope<M, T> extends ModalFormImpl<ResourceMapper<T>, T> {
                     return List.of(
                         Field.tree("departmentIds", "数据权限")
                             .setDefaultExpandAll(true)
-                            .setTreeData(departments)
+                            .setTreeData(departments,"pid","id","name")
                     );
                 })
         );

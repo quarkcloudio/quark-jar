@@ -16,6 +16,7 @@ import com.github.yulichang.wrapper.MPJLambdaWrapper;
 
 import io.quarkcloud.quarkadmin.component.form.Field;
 import io.quarkcloud.quarkadmin.component.form.Rule;
+import io.quarkcloud.quarkadmin.entity.DepartmentEntity;
 import io.quarkcloud.quarkadmin.entity.UserEntity;
 import io.quarkcloud.quarkadmin.mapper.UserMapper;
 import io.quarkcloud.quarkadmin.service.UserService;
@@ -93,13 +94,20 @@ public class User extends ResourceImpl<UserMapper, UserEntity> {
 
     // 列表页树形栏
     public Object indexTableTreeBar(Context context) {
+
+        // 部门列表
+        List<DepartmentEntity> departments = departmentService.getList();
+
         return this.tableTreeBar.
             setName("departmentIds").
-            setTreeData(departmentService.tableTree());
+            setTreeData(departments, "pid", "id", "name");
     }
 
     // 字段
     public List<Object> fields(Context context) {
+
+        // 部门列表
+        List<DepartmentEntity> departments = departmentService.getList();
 
         return Arrays.asList(
             Field.id("id", "ID"),
@@ -123,7 +131,7 @@ public class User extends ResourceImpl<UserMapper, UserEntity> {
                 .setOptions(roleService.getCheckboxOptions())
                 .onlyOnForms(),
             Field.treeSelect("departmentId","部门")
-                .setTreeData(departmentService.treeSelect())
+                .setTreeData(departments, "pid", "name", "id")
                 .onlyOnForms(),
             Field.checkbox("positionIds","职位")
                 .setOptions(positionService.getCheckboxOptions())
