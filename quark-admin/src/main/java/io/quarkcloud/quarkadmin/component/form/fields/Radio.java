@@ -1,5 +1,6 @@
 package io.quarkcloud.quarkadmin.component.form.fields;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -254,6 +255,50 @@ public class Radio extends Component {
         style.put("width", width);
         this.style = style;
 
+        return this;
+    }
+
+    // 使用反射构建选项
+    public List<Option> buildOptions(List<?> items, String labelName, String valueName) {
+        List<Option> options = new ArrayList<>();
+
+        // 遍历切片中的每个元素
+        for (Object item : items) {
+            try {
+                Class<?> clazz = item.getClass();
+
+                // 使用反射获取字段
+                Field valueField = clazz.getDeclaredField(valueName);
+                Field labelField = clazz.getDeclaredField(labelName);
+
+                valueField.setAccessible(true);
+                labelField.setAccessible(true);
+
+                // 确保字段存在并且类型正确
+                Object value = valueField.get(item);
+                String label = (String) labelField.get(item);
+
+                // 构建选项
+                Option option = new Option(label, value);
+                options.add(option);
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                continue;
+            }
+        }
+        return options;
+    }
+
+    public List<Option> listToOptions(List<?> list, String labelName, String valueName) {
+        return buildOptions(list, labelName, valueName);
+    }
+
+    public Radio setOptions(List<Option> options) {
+        this.options = options;
+        return this;
+    }
+
+    public Radio setOptions(List<?> list, String labelName, String valueName) {
+        this.options = listToOptions(list, labelName, valueName);
         return this;
     }
 

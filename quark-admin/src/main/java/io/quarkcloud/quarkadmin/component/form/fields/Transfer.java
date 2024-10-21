@@ -1,5 +1,6 @@
 package io.quarkcloud.quarkadmin.component.form.fields;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +28,11 @@ public class Transfer extends Component {
 
     @Data
     public static class DataSource {
+
+        DataSource(Object key, String title, String description) {
+            this.key = key;
+            this.title = title;
+        }
 
         // 主键
         @JsonInclude(JsonInclude.Include.NON_DEFAULT)
@@ -311,6 +317,50 @@ public class Transfer extends Component {
         style.put("width", width);
         this.style = style;
 
+        return this;
+    }
+
+    // 使用反射构建数据源
+    public List<DataSource> buildDataSource(List<?> items, String keyName, String titleName, String descriptionName) {
+        List<DataSource> options = new ArrayList<>();
+
+        for (Object item : items) {
+            try {
+                Class<?> clazz = item.getClass();
+                Field keyField = clazz.getDeclaredField(keyName);
+                Field titleField = clazz.getDeclaredField(titleName);
+                Field descriptionField = clazz.getDeclaredField(descriptionName);
+
+                keyField.setAccessible(true);
+                titleField.setAccessible(true);
+                descriptionField.setAccessible(true);
+
+                Object key = keyField.get(item);
+                String title = (String) titleField.get(item);
+                String description = (String) descriptionField.get(item);
+
+                DataSource option = new DataSource(key, title, description);
+                options.add(option);
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                continue;
+            }
+        }
+        return options;
+    }
+
+    public List<DataSource> listToDataSource(List<?> list, String keyName, String titleName, String descriptionName) {
+        return buildDataSource(list, keyName, titleName, descriptionName);
+    }
+
+    // 设置数据源
+    public Transfer setDataSource(List<DataSource> dataSource) {
+        this.dataSource = dataSource;
+        return this;
+    }
+
+    // 设置数据源（通过列表）
+    public Transfer setDataSource(Object items, String keyName, String titleName, String descriptionName) {
+        this.dataSource = listToDataSource((List<?>) items, keyName, titleName, descriptionName);
         return this;
     }
 

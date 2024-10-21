@@ -1,5 +1,6 @@
 package io.quarkcloud.quarkadmin.component.form.fields;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,6 +43,13 @@ public class Tree extends Component {
         public TreeData(String title, Object key) {
             this.title = title;
             this.key = key;
+        }
+
+        // 选项的标签
+        public TreeData(String title, Object key, List<TreeData> children) {
+            this.title = title;
+            this.key = key;
+            this.children = children;
         }
 
         // 当树为 checkable 时，设置独立节点是否展示 Checkbox
@@ -383,6 +391,59 @@ public class Tree extends Component {
         style.put("width", width);
         this.style = style;
 
+        return this;
+    }
+
+    // 使用反射构建树结构
+    public List<TreeData> buildTree(List<?> items, int pid, String parentKeyName, String keyName, String titleName) {
+        List<TreeData> tree = new ArrayList<>();
+
+        for (Object item : items) {
+            try {
+                Class<?> clazz = item.getClass();
+
+                // 使用反射获取字段
+                Field keyField = clazz.getDeclaredField(keyName);
+                Field parentKeyField = clazz.getDeclaredField(parentKeyName);
+                Field titleField = clazz.getDeclaredField(titleName);
+
+                keyField.setAccessible(true);
+                parentKeyField.setAccessible(true);
+                titleField.setAccessible(true);
+
+                int key = (int) keyField.get(item);
+                int parentKey = (int) parentKeyField.get(item);
+                String title = (String) titleField.get(item);
+
+                // 如果当前项的 ParentKey 与传入的 pid 匹配
+                if (parentKey == pid) {
+                    // 递归查找子节点
+                    List<TreeData> children = buildTree(items, key, parentKeyName, keyName, titleName);
+
+                    // 构建树结构的选项
+                    TreeData option = new TreeData(title, key, children);
+                    tree.add(option);
+                }
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                continue;
+            }
+        }
+        return tree;
+    }
+
+    public List<TreeData> listToTreeData(List<?> list, String parentKeyName, String keyName, String titleName) {
+        return buildTree(list, 0, parentKeyName, keyName, titleName);
+    }
+
+    // 设置树数据（通过列表）
+    public Tree setTreeData(List<TreeData> treeData) {
+        this.treeData = treeData;
+        return this;
+    }
+
+    // 设置树数据（通过构造方法）
+    public Tree setTreeData(Object items, String parentKeyName, String keyName, String titleName) {
+        this.treeData = listToTreeData((List<?>) items, parentKeyName, keyName, titleName);
         return this;
     }
 

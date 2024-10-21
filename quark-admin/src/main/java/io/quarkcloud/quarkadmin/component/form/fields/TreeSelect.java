@@ -1,5 +1,6 @@
 package io.quarkcloud.quarkadmin.component.form.fields;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,6 +43,13 @@ public class TreeSelect extends Component {
         public TreeData(String title, Object value) {
             this.title = title;
             this.value = value;
+        }
+
+        // 选项的标签
+        public TreeData(String title, Object value, List<TreeData> children) {
+            this.title = title;
+            this.value = value;
+            this.children = children;
         }
 
         // 选项的文本
@@ -415,6 +423,59 @@ public class TreeSelect extends Component {
         return this;
     }
 
+    // 使用反射构建树结构
+    public List<TreeData> buildTree(List<?> items, int pid, String parentKeyName, String titleName, String valueName) {
+        List<TreeData> tree = new ArrayList<>();
+
+        for (Object item : items) {
+            try {
+                Class<?> clazz = item.getClass();
+
+                // 使用反射获取字段
+                Field valueField = clazz.getDeclaredField(valueName);
+                Field parentKeyField = clazz.getDeclaredField(parentKeyName);
+                Field titleField = clazz.getDeclaredField(titleName);
+
+                valueField.setAccessible(true);
+                parentKeyField.setAccessible(true);
+                titleField.setAccessible(true);
+
+                int value = (int) valueField.get(item);
+                int parentKey = (int) parentKeyField.get(item);
+                String title = (String) titleField.get(item);
+
+                // 如果当前项的 ParentKey 与传入的 pid 匹配
+                if (parentKey == pid) {
+                    // 递归查找子节点
+                    List<TreeData> children = buildTree(items, value, parentKeyName, titleName, valueName);
+
+                    // 构建树结构的选项
+                    TreeData option = new TreeData(title, value, children);
+                    tree.add(option);
+                }
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                continue;
+            }
+        }
+        return tree;
+    }
+
+    public List<TreeData> listToTreeData(List<?> list, String parentKeyName, String titleName, String valueName) {
+        return buildTree(list, 0, parentKeyName, titleName, valueName);
+    }
+
+    // 设置树数据（通过列表）
+    public TreeSelect setTreeData(List<TreeData> treeData) {
+        this.treeData = treeData;
+        return this;
+    }
+
+    // 设置树数据（通过构造方法）
+    public TreeSelect setTreeData(Object items, String parentKeyName, String titleName, String valueName) {
+        this.treeData = listToTreeData((List<?>) items, parentKeyName, titleName, valueName);
+        return this;
+    }
+
     // 校验规则，设置字段的校验逻辑
     //
     // new TreeSelect().
@@ -424,7 +485,6 @@ public class TreeSelect extends Component {
     // rule.max(20, "用户名不能超过20个字符") // 用户名最多只能包含20个字符
     // ));
     public TreeSelect setRules(List<Rule> rules) {
-
         rules.forEach(rule -> rule.setName(name));
         this.rules = rules;
 

@@ -1,5 +1,6 @@
 package io.quarkcloud.quarkadmin.component.form.fields;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +32,13 @@ public class Cascader extends Component {
         public Option(String label, Object value) {
             this.label = label;
             this.value = value;
+        }
+
+        // 选项的标签
+        public Option(String label, Object value, List<Option> children) {
+            this.label = label;
+            this.value = value;
+            this.children = children;
         }
 
         // 选项的文本
@@ -337,6 +345,59 @@ public class Cascader extends Component {
         style.put("width", width);
         this.style = style;
 
+        return this;
+    }
+
+    // 使用反射构建树结构
+    public List<Option> buildTree(List<?> items, int pid, String parentKeyName, String labelName, String valueName) {
+        List<Option> tree = new ArrayList<>();
+
+        // 遍历切片中的每个元素
+        for (Object item : items) {
+            try {
+                Class<?> clazz = item.getClass();
+
+                // 使用反射获取字段
+                Field valueField = clazz.getDeclaredField(valueName);
+                Field parentKeyField = clazz.getDeclaredField(parentKeyName);
+                Field labelField = clazz.getDeclaredField(labelName);
+
+                valueField.setAccessible(true);
+                parentKeyField.setAccessible(true);
+                labelField.setAccessible(true);
+
+                // 确保字段存在并且类型正确
+                int value = (int) valueField.get(item);
+                int parentKey = (int) parentKeyField.get(item);
+                String label = (String) labelField.get(item);
+
+                // 如果当前项的 Pid 与传入的 pid 匹配
+                if (parentKey == pid) {
+                    // 递归查找子节点
+                    List<Option> children = buildTree(items, value, parentKeyName, labelName, valueName);
+
+                    // 构建级联选择框的选项
+                    Option option = new Option(label, value, children);
+                    tree.add(option);
+                }
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                continue;
+            }
+        }
+        return tree;
+    }
+
+    public List<Option> listToOptions(List<?> list, String parentKeyName, String labelName, String valueName) {
+        return buildTree(list, 0, parentKeyName, labelName, valueName);
+    }
+
+    public Cascader setOptions(List<Option> options) {
+        this.options = options;
+        return this;
+    }
+
+    public Cascader setOptions(List<?> list, String parentKeyName, String labelName, String valueName) {
+        this.options = listToOptions(list, parentKeyName, labelName, valueName);
         return this;
     }
 

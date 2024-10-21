@@ -95,7 +95,7 @@ public class User extends ResourceImpl<UserMapper, UserEntity> {
     public Object indexTableTreeBar(Context context) {
         return this.tableTreeBar.
             setName("departmentIds").
-            setData(departmentService.tableTree());
+            setTreeData(departmentService.tableTree());
     }
 
     // 字段
