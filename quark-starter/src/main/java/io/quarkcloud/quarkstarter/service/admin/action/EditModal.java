@@ -21,11 +21,7 @@ public class EditModal<M, T> extends ModalImpl<ResourceMapper<T>, T> {
     public Object fields;
 
     // 初始化
-    public EditModal(String title, String api, String initApi, Object fields) {
-        this.api = api;
-        this.fields = fields;
-        this.initApi = initApi;
-        this.setName(title);
+    public EditModal() {
         this.setType("link");
         this.setSize("small");
         this.setDestroyOnClose(true);
@@ -33,14 +29,38 @@ public class EditModal<M, T> extends ModalImpl<ResourceMapper<T>, T> {
         this.setOnlyOnIndexTableRow(true);
     }
 
+    // 标题
+    public EditModal<M, T> setTitle(String title) {
+        this.name = title;
+        return this;
+    }
+
+    // API
+    public EditModal<M, T> setApi(String api) {
+        this.api = api;
+        return this;
+    }
+
+    // InitApi
+    public EditModal<M, T> setInitApi(String initApi) {
+        this.initApi = initApi;
+        return this;
+    }
+
+    // 字段
+    public EditModal<M, T> setFields(Object fields) {
+        this.fields = fields;
+        return this;
+    }
+
     // 内容
     public Object getBody(Context context) {
         Form form = new Form();
         form.setComponentKey("editModalForm", false);
         return form.setStyle(Map.of("paddingTop", "24px"))
-            .setApi(api)
-            .setInitApi(initApi)
-            .setBody(fields)
+            .setApi(this.api)
+            .setInitApi(this.initApi)
+            .setBody(this.fields)
             .setLabelCol(Map.of("span", 6))
             .setWrapperCol(Map.of("span", 18));
     }

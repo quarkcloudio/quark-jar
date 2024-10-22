@@ -21,11 +21,7 @@ public class EditDrawer<M, T> extends DrawerImpl<ResourceMapper<T>, T> {
     public Object fields;
 
     // 初始化
-    public EditDrawer(String title, String api, String initApi, Object fields) {
-        this.api = api;
-        this.fields = fields;
-        this.initApi = initApi;
-        this.setName(title);
+    public EditDrawer() {
         this.setType("link");
         this.setSize("small");
         this.setDestroyOnClose(true);
@@ -33,13 +29,37 @@ public class EditDrawer<M, T> extends DrawerImpl<ResourceMapper<T>, T> {
         this.setOnlyOnIndexTableRow(true);
     }
 
+    // 标题
+    public EditDrawer<M, T> setTitle(String title) {
+        this.name = title;
+        return this;
+    }
+
+    // API
+    public EditDrawer<M, T> setApi(String api) {
+        this.api = api;
+        return this;
+    }
+
+    // InitApi
+    public EditDrawer<M, T> setInitApi(String initApi) {
+        this.initApi = initApi;
+        return this;
+    }
+
+    // 字段
+    public EditDrawer<M, T> setFields(Object fields) {
+        this.fields = fields;
+        return this;
+    }
+
     // 内容
     public Object getBody(Context context) {
         Form form = new Form();
         form.setComponentKey("editDrawerForm", false);
-        return form.setApi(api)
-            .setInitApi(initApi)
-            .setBody(fields)
+        return form.setApi(this.api)
+            .setInitApi(this.initApi)
+            .setBody(this.fields)
             .setLabelCol(Map.of("span", 6))
             .setWrapperCol(Map.of("span", 18));
     }

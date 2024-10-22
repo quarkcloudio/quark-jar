@@ -63,9 +63,17 @@ public class Position extends ResourceImpl<PositionMapper, PositionEntity> {
     // 行为
     public List<Object> actions(Context context) {
         return Arrays.asList(
-            new CreateModal<PositionMapper, PositionEntity>(this.getTitle(),this.creationApi(context), this.creationFields(context), this.creationData(context)),
+            new CreateModal<PositionMapper, PositionEntity>()
+                .setTitle(this.getTitle())
+                .setApi(this.creationApi(context))
+                .setFields(this.creationFields(context))
+                .setData(this.creationData(context)),
             new ChangeStatus<PositionMapper, PositionEntity>(),
-            new EditModal<PositionMapper, PositionEntity>("编辑", this.editApi(context), this.editValueApi(context), this.editFields(context)),
+            new EditModal<PositionMapper, PositionEntity>()
+                .setTitle("编辑")
+                .setApi(this.editApi(context))
+                .setInitApi(this.editValueApi(context))
+                .setFields(this.editFields(context)),
             new Delete<PositionMapper, PositionEntity>(),
             new BatchDelete<PositionMapper, PositionEntity>(),
             new BatchDisable<PositionMapper, PositionEntity>(),

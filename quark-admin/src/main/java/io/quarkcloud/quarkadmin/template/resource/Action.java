@@ -47,7 +47,7 @@ public interface Action<T> {
     String getIcon();
 
     // 行为表单字段
-    List<Object> fields(Context context);
+    Object fields(Context context);
 
     // 确认标题
     String getConfirmTitle();
@@ -59,109 +59,109 @@ public interface Action<T> {
     String getConfirmType();
 
     // 设置名称
-    void setName(String name);
+    Action<T> setName(String name);
 
     // 设置执行成功后刷新的组件
-    void setReload(String componentKey);
+    Action<T> setReload(String componentKey);
 
     // 行为接口接收的参数，当行为在表格行展示的时候，可以配置当前行的任意字段
-    void setApiParams(List<String> apiParams);
+    Action<T> setApiParams(List<String> apiParams);
 
     // 执行行为的接口
-    void setApi(String api);
+    Action<T> setApi(String api);
 
     // 【必填】这是 action 最核心的配置，来指定该 action 的作用类型，支持：ajax、link、url、drawer、dialog、confirm、cancel、prev、next、copy、close。
-    void setActionType(String actionType);
+    Action<T> setActionType(String actionType);
 
     // 当 action 的作用类型为submit的时候，可以指定提交哪个表格，submitForm为提交表单的key值，为空时提交当前表单
-    void setSubmitForm(String submitForm);
+    Action<T> setSubmitForm(String submitForm);
 
     // 设置按钮类型，primary | ghost | dashed | link | text | default
-    void setType(String buttonType);
+    Action<T> setType(String buttonType);
 
     // 设置按钮大小,large | middle | small | default
-    void setSize(String size);
+    Action<T> setSize(String size);
 
     // 是否具有loading，当action 的作用类型为ajax,submit时有效
-    void setWithLoading(boolean loading);
+    Action<T> setWithLoading(boolean loading);
 
     // 设置按钮的图标组件
-    void setIcon(String icon);
+    Action<T> setIcon(String icon);
 
     // 行为表单字段
-    void setFields(List<Object> fields);
+    Action<T> setFields(Object fields);
 
     // 确认标题
-    void setConfirmTitle(String confirmTitle);
+    Action<T> setConfirmTitle(String confirmTitle);
 
     // 确认文字
-    void setConfirmText(String confirmText);
+    Action<T> setConfirmText(String confirmText);
 
     // 确认类型
-    void setConfirmType(String confirmType);
+    Action<T> setConfirmType(String confirmType);
 
     // 设置行为前的确认操作
-    void withConfirm(String title, String text, String confirmType);
+    Action<T> withConfirm(String title, String text, String confirmType);
 
     // 只在列表页展示
-    void setOnlyOnIndex(boolean value);
+    Action<T> setOnlyOnIndex(boolean value);
 
     // 除了列表页外展示
-    void setExceptOnIndex();
+    Action<T> setExceptOnIndex();
 
     // 只在表单页展示
-    void setOnlyOnForm(boolean value);
+    Action<T> setOnlyOnForm(boolean value);
 
     // 除了表单页外展示
-    void setExceptOnForm();
+    Action<T> setExceptOnForm();
 
     // 除了表单页右上角自定义区域外展示
-    void setOnlyOnFormExtra(boolean value);
+    Action<T> setOnlyOnFormExtra(boolean value);
 
     // 只在详情页展示
-    void setOnlyOnDetail(boolean value);
+    Action<T> setOnlyOnDetail(boolean value);
 
     // 除了详情页外展示
-    void setExceptOnDetail();
+    Action<T> setExceptOnDetail();
 
     // 只在详情页右上角自定义区域展示
-    void setOnlyOnDetailExtra(boolean value);
+    Action<T> setOnlyOnDetailExtra(boolean value);
 
     // 除了详情页右上角自定义区域外展示
-    void setExceptOnDetailExtra();
+    Action<T> setExceptOnDetailExtra();
 
     // 在表格行内展示
-    void setOnlyOnIndexTableRow(boolean value);
+    Action<T> setOnlyOnIndexTableRow(boolean value);
 
     // 除了表格行内外展示
-    void setExceptOnIndexTableRow();
+    Action<T> setExceptOnIndexTableRow();
 
     // 在表格多选弹出层展示
-    void setOnlyOnIndexTableAlert(boolean value);
+    Action<T> setOnlyOnIndexTableAlert(boolean value);
 
     // 除了表格多选弹出层外展示
-    void setExceptOnIndexTableAlert();
+    Action<T> setExceptOnIndexTableAlert();
 
     // 在列表页展示
-    void setShowOnIndex();
+    Action<T> setShowOnIndex();
 
     // 在表单页展示
-    void setShowOnForm();
+    Action<T> setShowOnForm();
 
     // 在表单页右上角自定义区域展示
-    void setShowOnFormExtra();
+    Action<T> setShowOnFormExtra();
 
     // 在详情页展示
-    void setShowOnDetail();
+    Action<T> setShowOnDetail();
 
     // 在详情页右上角自定义区域展示
-    void setShowOnDetailExtra();
+    Action<T> setShowOnDetailExtra();
 
     // 在表格行内展示
-    void setShowOnIndexTableRow();
+    Action<T> setShowOnIndexTableRow();
 
     // 在多选弹出层展示
-    void setShowOnIndexTableAlert();
+    Action<T> setShowOnIndexTableAlert();
 
     // 判断是否在列表页展示
     boolean shownOnIndex();

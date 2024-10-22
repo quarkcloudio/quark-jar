@@ -62,8 +62,16 @@ public class Permission extends ResourceImpl<PermissionMapper, PermissionEntity>
     public List<Object> actions(Context context) {
         return Arrays.asList(
             new SyncPermission<PermissionMapper, PermissionEntity>(),
-            new CreateModal<PermissionMapper, PermissionEntity>(this.getTitle(), this.creationApi(context), this.creationFields(context), this.creationData(context)),
-            new EditModal<PermissionMapper, PermissionEntity>("编辑", this.editApi(context), this.editValueApi(context), this.editFields(context)),
+            new CreateModal<PermissionMapper, PermissionEntity>()
+                .setTitle(this.getTitle())
+                .setApi(this.creationApi(context))
+                .setFields(this.creationFields(context))
+                .setData(this.creationData(context)),
+            new EditModal<PermissionMapper, PermissionEntity>()
+                .setTitle("编辑")
+                .setApi(this.editApi(context))
+                .setInitApi(this.editValueApi(context))
+                .setFields(this.editFields(context)),
             new Delete<PermissionMapper, PermissionEntity>(),
             new BatchDelete<PermissionMapper, PermissionEntity>()
         );

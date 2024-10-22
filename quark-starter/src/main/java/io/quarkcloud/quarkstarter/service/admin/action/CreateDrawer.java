@@ -21,11 +21,7 @@ public class CreateDrawer<M, T> extends DrawerImpl<ResourceMapper<T>, T> {
     public Object data;
 
     // 初始化
-    public CreateDrawer(String title, String api, Object fields, Object data) {
-        this.api = api;
-        this.fields = fields;
-        this.data = data;
-        this.setName("创建" + title);
+    public CreateDrawer() {
         this.setType("primary");
         this.setIcon("plus-circle");
         this.setDestroyOnClose(true);
@@ -33,13 +29,37 @@ public class CreateDrawer<M, T> extends DrawerImpl<ResourceMapper<T>, T> {
         this.setOnlyOnIndex(true);
     }
 
+    // 标题
+    public CreateDrawer<M, T> setTitle(String title) {
+        this.name = "创建" + title;
+        return this;
+    }
+
+    // API
+    public CreateDrawer<M, T> setApi(String api) {
+        this.api = api;
+        return this;
+    }
+
+    // 字段
+    public CreateDrawer<M, T> setFields(Object fields) {
+        this.fields = fields;
+        return this;
+    }
+
+    // 数据
+    public CreateDrawer<M, T> setData(Object data) {
+        this.data = data;
+        return this;
+    }
+
     // 内容
     public Object getBody(Context context) {
         Form form = new Form();
         form.setComponentKey("createDrawerForm", false);
-        return form.setApi(api)
-            .setBody(fields)
-            .setInitialValues(data)
+        return form.setApi(this.api)
+            .setBody(this.fields)
+            .setInitialValues(this.data)
             .setLabelCol(Map.of("span", 6))
             .setWrapperCol(Map.of("span", 18));
     }
