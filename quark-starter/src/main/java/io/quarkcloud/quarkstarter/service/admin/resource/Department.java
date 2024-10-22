@@ -52,7 +52,7 @@ public class Department extends ResourceImpl<DepartmentMapper, DepartmentEntity>
         return Arrays.asList(
             Field.hidden("id", "ID"), // 列表读取且不展示的字段
 
-            Field.hidden("pid", "PID").onlyOnIndex(), // 列表读取且不展示的字段
+            Field.hidden("pid", "PID"), // 列表读取且不展示的字段
 
             Field.text("name", "名称")
                 .setRules(Arrays.asList(
