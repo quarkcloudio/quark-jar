@@ -56,22 +56,22 @@ public class Department extends ResourceImpl<DepartmentMapper, DepartmentEntity>
 
             Field.text("name", "名称")
                 .setRules(Arrays.asList(
-                    Rule.required(true, "名称必须填写")
+                    Rule.required("名称必须填写")
                 )),
 
             Field.treeSelect("pid", "父节点")
-            .setRules(Arrays.asList(
-                Rule.required(true, "请选择父节点")
-            ))
-            .setTreeData(departments,"pid","name","id")
-            .setDefaultValue(1)
-            .onlyOnCreating(),
+                .setRules(Arrays.asList(
+                    Rule.required("请选择父节点")
+                ))
+                .setTreeData(departments,"pid","name","id")
+                .setDefaultValue(1)
+                .onlyOnCreating(),
 
             Field.dependency()
                 .setWhen("id", ">", 1, () -> Arrays.asList(
                     Field.treeSelect("pid", "父节点")
                         .setRules(Arrays.asList(
-                            Rule.required(true, "请选择父节点")
+                            Rule.required("请选择父节点")
                         ))
                         .setTreeData(departments,"pid","name","id")
                         .setDefaultValue(1)

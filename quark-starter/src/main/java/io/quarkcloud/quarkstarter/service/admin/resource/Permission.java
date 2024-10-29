@@ -33,8 +33,8 @@ public class Permission extends ResourceImpl<PermissionMapper, PermissionEntity>
             Field.id("id", "ID"),
             Field.text("name", "名称"),
             Field.text("path", "路径"),
-            Field.select("method", "方法").
-                setOptions(Arrays.asList(
+            Field.select("method", "方法")
+                .setOptions(Arrays.asList(
                     Field.selectOption("Any","Any"),
                     Field.selectOption("GET","GET"),
                     Field.selectOption("HEAD","HEAD"),
@@ -43,9 +43,9 @@ public class Permission extends ResourceImpl<PermissionMapper, PermissionEntity>
                     Field.selectOption("PUT","PUT"),
                     Field.selectOption("PATCH","PATCH"),
                     Field.selectOption("DELETE","DELETE")
-                )).
-                setFilters(true).
-                setDefaultValue("GET"),
+                ))
+                .setFilters(true)
+                .setDefaultValue("GET"),
             Field.text("remark", "备注")
         );
     }

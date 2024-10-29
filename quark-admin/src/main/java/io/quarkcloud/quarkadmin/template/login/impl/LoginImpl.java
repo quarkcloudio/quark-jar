@@ -149,7 +149,7 @@ public class LoginImpl implements Login {
         return Arrays.asList(
             Field.text("username").
             setRules(Arrays.asList(
-                Rule.required(true, "请输入用户名"
+                Rule.required("请输入用户名"
             ))).
             setPlaceholder("用户名").
             setWidth("100%").
@@ -158,7 +158,7 @@ public class LoginImpl implements Login {
 
             Field.password("password").
             setRules(Arrays.asList(
-                Rule.required(true, "请输入密码")
+                Rule.required("请输入密码")
             )).
             setPlaceholder("密码").
             setWidth("100%").
@@ -167,7 +167,7 @@ public class LoginImpl implements Login {
 
             Field.imageCaptcha("captcha").
             setRules(Arrays.asList(
-                Rule.required(true, "请输入验证码")
+                Rule.required("请输入验证码")
             )).
             setPlaceholder("验证码").
             setWidth("100%").

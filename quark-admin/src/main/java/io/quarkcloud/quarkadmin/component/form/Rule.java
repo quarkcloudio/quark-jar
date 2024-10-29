@@ -150,7 +150,7 @@ public class Rule {
     }
 
     // 是否为必选字段
-    public static Rule required(boolean required, String message) {
+    public static Rule required(String message) {
         Rule rule = new Rule();
 
         return rule.setRequired().setMessage(message);

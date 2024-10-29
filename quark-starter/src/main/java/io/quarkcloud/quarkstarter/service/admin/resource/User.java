@@ -117,7 +117,7 @@ public class User extends ResourceImpl<UserMapper, UserEntity> {
                     return String.format("<a href='#/layout/index?api=/api/admin/user/edit&id=%d'>%s</a>", this.entity.getId(), this.entity.getUsername());
                 })
                 .setRules(Arrays.asList(
-                    Rule.required(true, "用户名必须填写"),
+                    Rule.required("用户名必须填写"),
                     Rule.min(6, "用户名不能少于6个字符"),
                     Rule.max(20, "用户名不能超过20个字符")
                 ))
@@ -139,16 +139,16 @@ public class User extends ResourceImpl<UserMapper, UserEntity> {
             Field.text("nickname", "昵称")
                 .setEditable(true)
                 .setRules(Arrays.asList(
-                    Rule.required(true, "昵称必须填写")
+                    Rule.required("昵称必须填写")
                 )),
             Field.text("email", "邮箱")
                 .setRules(Arrays.asList(
-                    Rule.required(true, "邮箱必须填写")
+                    Rule.required("邮箱必须填写")
                 ))
                 .onlyOnForms(),
             Field.text("phone", "手机号")
                 .setRules(Arrays.asList(
-                    Rule.required(true, "手机号必须填写")
+                    Rule.required("手机号必须填写")
                 )),
             Field.radio("sex", "性别")
                 .setOptions(Arrays.asList(
@@ -159,15 +159,15 @@ public class User extends ResourceImpl<UserMapper, UserEntity> {
                 .setDefaultValue(1),
             Field.password("password", "密码")
                 .setCreationRules(Arrays.asList(
-                    Rule.required(true, "密码必须填写")
+                    Rule.required("密码必须填写")
                 ))
                 .onlyOnForms(),
             Field.datetime("lastLoginTime", "最后登录时间").onlyOnIndex(),
-            Field.switchField("status", "状态").
-                setTrueValue("正常").
-                setFalseValue("禁用").
-                setEditable(true).
-                setDefaultValue(true)
+            Field.switchField("status", "状态")
+                .setTrueValue("正常")
+                .setFalseValue("禁用")
+                .setEditable(true)
+                .setDefaultValue(true)
         );
     }
 

@@ -37,18 +37,21 @@ public class Position extends ResourceImpl<PositionMapper, PositionEntity> {
     public List<Object> fields(Context context) {
         return Arrays.asList(
             Field.id("id", "ID"),
-            Field.text("name", "名称").setRules(Arrays.asList(
-                Rule.required(true, "名称必须填写"),
-                Rule.min(2, "名称不能少于2个字符"),
-                Rule.max(100, "名称不能超过100个字符")
-            )),
-            Field.number("sort", "排序").setEditable(true).setDefaultValue(0),
+            Field.text("name", "名称")
+                .setRules(Arrays.asList(
+                    Rule.required("名称必须填写"),
+                    Rule.min(2, "名称不能少于2个字符"),
+                    Rule.max(100, "名称不能超过100个字符")
+                )),
+            Field.number("sort", "排序")
+                .setEditable(true)
+                .setDefaultValue(0),
             Field.textarea("remark", "备注"),
-            Field.switchField("status", "状态").
-                setTrueValue("正常").
-                setFalseValue("禁用").
-                setEditable(true).
-                setDefaultValue(true)
+            Field.switchField("status", "状态")
+                .setTrueValue("正常")
+                .setFalseValue("禁用")
+                .setEditable(true)
+                .setDefaultValue(true)
         );
     }
 

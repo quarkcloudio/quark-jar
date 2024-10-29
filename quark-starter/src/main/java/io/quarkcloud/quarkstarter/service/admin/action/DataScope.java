@@ -79,7 +79,7 @@ public class DataScope<M, T> extends ModalFormImpl<ResourceMapper<T>, T> {
                         Field.selectOption("仅本人数据权限", 5)
                     )
                 )
-                .setRules(List.of(Rule.required(true,"请选择数据范围")))
+                .setRules(List.of(Rule.required("请选择数据范围")))
                 .setDefaultValue(1),
             Field.dependency()
                 .setWhen("dataScope", 2, () -> {

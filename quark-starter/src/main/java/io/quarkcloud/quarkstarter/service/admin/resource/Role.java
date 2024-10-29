@@ -59,7 +59,7 @@ public class Role extends ResourceImpl<RoleMapper, RoleEntity> {
             Field.id("id", "ID"),
             Field.text("name", "名称")
                 .setRules(Arrays.asList(
-                    Rule.required(true, "名称必须填写")
+                    Rule.required("名称必须填写")
                 )),
             Field.text("guardName", "守卫").setDefaultValue("admin"),
             Field.tree("menuIds", "菜单")

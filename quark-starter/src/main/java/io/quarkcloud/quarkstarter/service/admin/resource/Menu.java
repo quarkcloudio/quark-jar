@@ -73,12 +73,12 @@ public class Menu extends ResourceImpl<MenuMapper, MenuEntity> {
             Field.group(Arrays.asList(
                 Field.text("name", "名称")
                     .setRules(Arrays.asList(
-                        Rule.required(true, "名称必须填写")
+                        Rule.required("名称必须填写")
                     )),
 
                 Field.text("guardName", "守卫")
                     .setRules(Arrays.asList(
-                        Rule.required(true, "守卫必须填写")
+                        Rule.required("守卫必须填写")
                     ))
                     .setDefaultValue("admin")
                     .onlyOnForms(),
@@ -111,7 +111,7 @@ public class Menu extends ResourceImpl<MenuMapper, MenuEntity> {
                         Field.radioOption("按钮", 3)
                     ))
                     .setRules(Arrays.asList(
-                        Rule.required(true, "类型必须选择")
+                        Rule.required("类型必须选择")
                     ))
                     .setDefaultValue(1),
 
@@ -126,12 +126,11 @@ public class Menu extends ResourceImpl<MenuMapper, MenuEntity> {
                 .setWhen("type", 1, () -> Arrays.asList(
                     Field.text("path", "路由")
                         .setRules(Arrays.asList(
-                            Rule.required(true, "路由必须填写")
+                            Rule.required("路由必须填写")
                         ))
                         .setEditable(true)
                         .setHelp("前端路由")
                         .setWidth(400)
-                        .buildFrontendRules(context.getRequestURI())
                 )),
 
             Field.dependency()
@@ -148,13 +147,12 @@ public class Menu extends ResourceImpl<MenuMapper, MenuEntity> {
 
                     Field.text("path", "路由")
                         .setRules(Arrays.asList(
-                            Rule.required(true, "路由必须填写")
+                            Rule.required("路由必须填写")
                         ))
                         .setEditable(true)
                         .setHelp("前端路由或后端api")
                         .setWidth(400)
                         .onlyOnForms()
-                        .buildFrontendRules(context.getRequestURI())
                 )),
 
             Field.dependency()
