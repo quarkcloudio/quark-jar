@@ -468,7 +468,7 @@ public class Context implements ApplicationContextAware {
                 currentPage = 1;
             }
             if (map!=null) {
-                Object getPage = map.get("page");
+                Object getPage = map.get("current");
                 if (getPage!=null && getPage instanceof String) {
                     currentPage = Long.parseLong((String) getPage);
                 }
