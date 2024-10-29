@@ -222,7 +222,7 @@ public class Action extends Component {
     }
 
     // 弹窗
-    public Action setModal(Closure closure) {
+    public Action setModal(Closure<? super Modal> closure) {
         Modal modal= new Modal();
         this.modal = closure.callback(modal);
 
@@ -230,7 +230,7 @@ public class Action extends Component {
     }
 
     // 抽屉
-    public Action setDrawer(Closure closure) {
+    public Action setDrawer(Closure<? super Drawer> closure) {
         Drawer drawer= new Drawer();
         this.drawer = closure.callback(drawer);
 
