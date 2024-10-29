@@ -387,8 +387,8 @@ public class Cascader extends Component {
         return tree;
     }
 
-    public List<Option> listToOptions(List<?> list, String parentKeyName, String labelName, String valueName) {
-        return buildTree(list, 0L, parentKeyName, labelName, valueName);
+    public List<Option> listToOptions(List<?> list,Long pid, String parentKeyName, String labelName, String valueName) {
+        return buildTree(list, pid, parentKeyName, labelName, valueName);
     }
 
     public Cascader setOptions(List<Option> options) {
@@ -397,7 +397,12 @@ public class Cascader extends Component {
     }
 
     public Cascader setOptions(List<?> list, String parentKeyName, String labelName, String valueName) {
-        this.options = listToOptions(list, parentKeyName, labelName, valueName);
+        this.options = listToOptions(list, 0L, parentKeyName, labelName, valueName);
+        return this;
+    }
+
+    public Cascader setOptions(List<?> list, Long pid, String parentKeyName, String labelName, String valueName) {
+        this.options = listToOptions(list, pid, parentKeyName, labelName, valueName);
         return this;
     }
 

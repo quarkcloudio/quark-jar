@@ -460,8 +460,8 @@ public class TreeSelect extends Component {
         return tree;
     }
 
-    public List<TreeData> listToTreeData(List<?> list, String parentKeyName, String titleName, String valueName) {
-        return buildTree(list, 0L, parentKeyName, titleName, valueName);
+    public List<TreeData> listToTreeData(List<?> list, Long pid, String parentKeyName, String titleName, String valueName) {
+        return buildTree(list, pid, parentKeyName, titleName, valueName);
     }
 
     // 设置树数据（通过列表）
@@ -472,7 +472,13 @@ public class TreeSelect extends Component {
 
     // 设置树数据（通过构造方法）
     public TreeSelect setTreeData(Object items, String parentKeyName, String titleName, String valueName) {
-        this.treeData = listToTreeData((List<?>) items, parentKeyName, titleName, valueName);
+        this.treeData = listToTreeData((List<?>) items, 0L, parentKeyName, titleName, valueName);
+        return this;
+    }
+
+    // 设置树数据（通过构造方法）
+    public TreeSelect setTreeData(Object items, Long pid, String parentKeyName, String titleName, String valueName) {
+        this.treeData = listToTreeData((List<?>) items, pid, parentKeyName, titleName, valueName);
         return this;
     }
 

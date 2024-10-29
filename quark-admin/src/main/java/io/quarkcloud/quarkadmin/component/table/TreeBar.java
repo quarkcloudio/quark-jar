@@ -228,8 +228,8 @@ public class TreeBar extends Component {
         return tree;
     }
 
-    public List<TreeData> listToTreeData(List<?> list, String parentKeyName, String keyName, String titleName) {
-        return buildTree(list, 0L, parentKeyName, keyName, titleName);
+    public List<TreeData> listToTreeData(List<?> list, Long pid, String parentKeyName, String keyName, String titleName) {
+        return buildTree(list, pid, parentKeyName, keyName, titleName);
     }
 
     // 设置树数据（通过列表）
@@ -240,7 +240,13 @@ public class TreeBar extends Component {
 
     // 设置树数据（通过构造方法）
     public TreeBar setTreeData(Object items, String parentKeyName, String keyName, String titleName) {
-        this.treeData = listToTreeData((List<?>) items, parentKeyName, keyName, titleName);
+        this.treeData = listToTreeData((List<?>) items, 0L, parentKeyName, keyName, titleName);
+        return this;
+    }
+
+    // 设置树数据（通过构造方法）
+    public TreeBar setTreeData(Object items, Long pid, String parentKeyName, String keyName, String titleName) {
+        this.treeData = listToTreeData((List<?>) items, pid, parentKeyName, keyName, titleName);
         return this;
     }
 
