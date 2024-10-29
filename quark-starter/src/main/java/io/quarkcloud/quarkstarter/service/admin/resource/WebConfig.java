@@ -112,9 +112,7 @@ public class WebConfig extends ResourceImpl<ConfigMapper, ConfigEntity> {
             String name = config.getName();
             String type = config.getType();
             Object value = config.getValue();
-            
             data.put(name, value);
-            
             if ("switch".equals(type)) {
                 data.put(name, !"0".equals(value));
             } else if ("picture".equals(type) || "file".equals(type)) {
