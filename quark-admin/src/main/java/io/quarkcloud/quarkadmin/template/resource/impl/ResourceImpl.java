@@ -26,6 +26,7 @@ import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
 import cn.hutool.poi.excel.ExcelWriter;
 import io.quarkcloud.quarkcore.service.Context;
+import io.quarkcloud.quarkcore.util.Lister;
 import io.quarkcloud.quarkcore.util.Reflect;
 import jakarta.servlet.ServletOutputStream;
 import io.quarkcloud.quarkadmin.annotation.AdminResource;
@@ -111,6 +112,9 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     // 列表页表格是否轮询数据
     public int tablePolling;
     
+    // 列表页数据转换为树形结构, true 或者 map[string]interface{}{"pkName": "id",""pidName": "pid","childrenName": "children","rootId":0}
+    public Object tableListToTree;
+
     // 全局排序规则
     public Map<String, String> queryOrder;
 
@@ -481,6 +485,34 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         return list;
     }
 
+    public Object indexTableListToTree(Context context, Object list) {
+        String search = context.getParameter("search");
+        if (search!=null && !search.isEmpty() && !search.equals("{}")) {
+            return list;
+        }
+
+        String pkName = "id";
+        String pidName = "pid";
+        String childrenName = "children";
+        Long rootId = 0L;
+
+        Object tableListToTree = this.tableListToTree;
+        if (tableListToTree instanceof Boolean) {
+            if (!(Boolean) tableListToTree) {
+                return list;
+            }
+        } else if (tableListToTree instanceof Map) {
+            @SuppressWarnings("unchecked")
+            Map<String, Object> tableListToTreeMap = (Map<String, Object>) tableListToTree;
+            pkName = (String) tableListToTreeMap.get("pkName");
+            pidName = (String) tableListToTreeMap.get("pidName");
+            childrenName = (String) tableListToTreeMap.get("childrenName");
+            rootId = (Long) tableListToTreeMap.get("rootId");
+        }
+
+        return Lister.listToTree(list, pkName, pidName, childrenName, rootId);
+    }
+
     // 列表页组件渲染
     public Object indexComponentRender(Context context) {
 
@@ -545,6 +577,9 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         if (perPage == null || !((perPage instanceof Integer) || (perPage instanceof Long))) {
             List<T> data = resourceService.list(queryWrapper);
             Object items = this.performsIndexList(context, data);
+            if (this.tableListToTree != null) {
+                items = this.indexTableListToTree(context, items);
+            }
             return table.setDatasource(items);
         }
 
@@ -560,7 +595,11 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         long total = data.getTotal();
         long defaultCurrent = 1;
         Object items = this.performsIndexList(context, data.getRecords());
-        return table.setPagination(current, pageSize, total, defaultCurrent).setDatasource(items);
+        if (this.tableListToTree != null) {
+            items = this.indexTableListToTree(context, items);
+        }
+
+        return table.setDatasource(items).setPagination(current, pageSize, total, defaultCurrent);
     }
 
     // 列表页组件渲染
@@ -687,14 +726,14 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         if (!formApi.isEmpty()) {
             return formApi;
         }
-        String[] uri = context.getRequest().getRequestURI().split("/");
+        String[] uri = context.getRequestURI().split("/");
         if (uri[uri.length - 1].equals("index")) {
-            return context.getRequest().getRequestURI().replace("/index", "/store");
+            return context.getRequestURI().replace("/index", "/store");
         }
         if (uri[uri.length - 1].equals("form")) {
-            return context.getRequest().getRequestURI().replace("/form", "/store");
+            return context.getRequestURI().replace("/form", "/store");
         }
-        return context.getRequest().getRequestURI().replace("/create", "/store");
+        return context.getRequestURI().replace("/create", "/store");
     }
 
     // 创建表单的字段

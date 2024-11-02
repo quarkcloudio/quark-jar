@@ -15,7 +15,6 @@ import io.quarkcloud.quarkadmin.mapper.DepartmentMapper;
 import io.quarkcloud.quarkadmin.service.DepartmentService;
 import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
 import io.quarkcloud.quarkcore.service.Context;
-import io.quarkcloud.quarkcore.util.Lister;
 import io.quarkcloud.quarkstarter.service.admin.action.BatchDelete;
 import io.quarkcloud.quarkstarter.service.admin.action.BatchDisable;
 import io.quarkcloud.quarkstarter.service.admin.action.BatchEnable;
@@ -39,8 +38,9 @@ public class Department extends ResourceImpl<DepartmentMapper, DepartmentEntity>
             .setDefaultExpandedRowKeys(List.of(1)));
         this.entity = new DepartmentEntity();
         this.title = "部门";
-        this.perPage = false;
         this.queryOrder = Map.of("sort", "asc","id","asc");
+        this.tableListToTree = true;
+        this.perPage = false;
     }
 
     // 字段
@@ -117,16 +117,5 @@ public class Department extends ResourceImpl<DepartmentMapper, DepartmentEntity>
             new BatchDisable<DepartmentMapper, DepartmentEntity>(),
             new BatchEnable<DepartmentMapper, DepartmentEntity>()
         );
-    }
-
-    public Object beforeIndexShowing(Context context, List<DepartmentEntity> list) {
-        String search = context.getParameter("search");
-        if (search!=null && !search.isEmpty() && !search.equals("{}")) {
-            // 返回原始列表
-            return list;
-        }
-
-        // 转换成树形结构
-        return Lister.listToTree(list, "id", "pid", "children", 0L);
     }
 }

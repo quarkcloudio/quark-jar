@@ -1,7 +1,5 @@
 package io.quarkcloud.quarkcore.util;
 
-import java.util.List;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -12,7 +10,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 public class Lister {
 
     // Convert generic list of Node objects to Tree
-    public static <T> ArrayNode listToTree(List<T> list, String pk, String pid, String child, Long root) {
+    public static ArrayNode listToTree(Object list, String pk, String pid, String child, Long root) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         mapper.registerModule(new JavaTimeModule());
