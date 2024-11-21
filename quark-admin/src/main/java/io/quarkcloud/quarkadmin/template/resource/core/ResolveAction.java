@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.StringJoiner;
 
 import io.quarkcloud.quarkadmin.component.action.Action.Closure;
 import io.quarkcloud.quarkadmin.component.drawer.Drawer;
@@ -555,25 +554,52 @@ public class ResolveAction<M extends ResourceMapper<T>, T> {
 
     // 构建表单初始化数据接口
     public String buildFormInitApi(Context context, List<String> params, String uriKey) {
-        // 拼接参数
-        String paramsUri = "";
-        if (!params.isEmpty()) {
-            StringJoiner joiner = new StringJoiner("&", "?", "");
-            for (String param : params) {
-                joiner.add(param + "=${" + param + "}");
+        StringBuilder paramsUri = new StringBuilder();
+        String api = context.getRequest().getRequestURI();
+        if (params!=null) {
+            for (String v : params) {
+                paramsUri.append(v).append("=${").append(v).append("}&");
             }
-            paramsUri = joiner.toString();
         }
 
-        // 构建基本 API 路径
-        String api = context.getRequest().getRequestURI().replace("/index", "/action/" + uriKey + "/values");
+        // 获取api路径
+        String[] apiPaths = api.split("/");
 
-        // 处理不同页面接口的情况
-        api = api.replace("/create", "/action/" + uriKey + "/values");
-        api = api.replace("/edit", "/action/" + uriKey + "/values");
-        api = api.replace("/detail", "/action/" + uriKey + "/values");
+        // 错误路径，直接返回
+        if (apiPaths.length <= 2) {
+            return "";
+        }
 
-        return api + paramsUri;
+        // 解析数据
+        switch (apiPaths[apiPaths.length - 1]) {
+            case "index":
+                // 列表页接口
+                api = api.replace("/index", "/action/" + uriKey + "/values");
+                break;
+            case "create":
+                // 创建页接口
+                api = api.replace("/create", "/action/" + uriKey + "/values");
+                break;
+            case "edit":
+                // 编辑页接口
+                api = api.replace("/edit", "/action/" + uriKey + "/values");
+                break;
+            case "detail":
+                // 详情页接口
+                api = api.replace("/detail", "/action/" + uriKey + "/values");
+                break;
+            case "form":
+                // 表单页接口
+                String lastPath = apiPaths[apiPaths.length - 2];
+                api = api.replace(lastPath + "/form", "/action/" + uriKey + "/values");
+                break;
+        }
+
+        // 追加参数
+        if (paramsUri.length() > 0) {
+            api = api + "?" + paramsUri.toString();
+        }
+
+        return api;
     }
-
 }
