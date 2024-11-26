@@ -119,8 +119,8 @@ public class LayoutImpl implements Layout {
 
         // 友情链接
         links = Arrays.asList(
-            Map.of("key","1","title", "QuarkCloud", "href", "https://quarkcloud.io/"),
-            Map.of("key","2","title", "QuarkJar", "href", "https://github.com/quarkcloudio/quark-jar"),
+            Map.of("key","1","title", "QuarkJar", "href", "https://github.com/quarkcloudio/quark-jar"),
+            Map.of("key","2","title", "QuarkCloud", "href", "https://quarkcloud.io/"),
             Map.of("key","3","title", "Github", "href", "https://github.com/quarkcloudio")
         );
 
