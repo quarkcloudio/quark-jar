@@ -22,6 +22,12 @@ public class ModalFormImpl<M, T> extends ActionImpl<ResourceMapper<T>, T> {
     // 获取提交按钮文案
     public String submitText;
 
+    // 表单提交接口的类型，GET 或 POST，默认 POST
+	public String apiType;
+
+    // 提交表单的数据是否打开新页面，只有在GET类型的时候有效
+	public boolean targetBlank;
+
     // 初始化
     public ModalFormImpl() {
         this.setActionType("modalForm");
@@ -29,6 +35,8 @@ public class ModalFormImpl<M, T> extends ActionImpl<ResourceMapper<T>, T> {
         this.setReload("table");
         this.cancelText = "取消";
         this.submitText = "提交";
+        this.apiType = "POST";
+        this.targetBlank = false;
     }
 
     // 表单字段
@@ -60,4 +68,14 @@ public class ModalFormImpl<M, T> extends ActionImpl<ResourceMapper<T>, T> {
     public String getSubmitText() {
         return this.submitText;
     }
+
+    // 表单提交接口的类型，GET 或 POST，默认 POST
+    public String getApiType() {
+		return apiType;
+	}
+
+    // 提交表单的数据是否打开新页面，只有在GET类型的时候有效
+    public boolean getTargetBlank() {
+		return targetBlank;
+	}
 }

@@ -331,6 +331,12 @@ public class ResolveAction<M extends ResourceMapper<T>, T> {
                 // 关闭时销毁 Modal 里的子元素
                 boolean modalFormDestroyOnClose = modalFormerActioner.getDestroyOnClose();
 
+                // 表单提交接口的类型，GET 或 POST，默认 POST
+                String modalFormApiType = modalFormerActioner.getApiType();
+
+                // 提交表单的数据是否打开新页面，只有在GET类型的时候有效
+                boolean modalFormTargetBlank = modalFormerActioner.getTargetBlank();
+
                 // 构建表单组件
                 Form formComponent = new Form();
 
@@ -343,6 +349,8 @@ public class ResolveAction<M extends ResourceMapper<T>, T> {
                     }})
                     .setApi(api)
                     .setInitApi(initApi)
+                    .setApiType(modalFormApiType)
+                    .setTargetBlank(modalFormTargetBlank)
                     .setBody(formFields)
                     .setInitialValues(modalFormData)
                     .setLabelCol(new HashMap<String, Object>() {{
@@ -407,6 +415,12 @@ public class ResolveAction<M extends ResourceMapper<T>, T> {
                 // 关闭时销毁 Drawer 里的子元素
                 boolean drawerFormDestroyOnClose = drawerFormerActioner.getDestroyOnClose();
 
+                // 表单提交接口的类型，GET 或 POST，默认 POST
+                String drawerFormApiType = drawerFormerActioner.getApiType();
+
+                // 提交表单的数据是否打开新页面，只有在GET类型的时候有效
+                boolean drawerFormTargetBlank = drawerFormerActioner.getTargetBlank();
+
                 // 构建表单组件
                 Form drawerFormComponent = new Form();
 
@@ -416,6 +430,8 @@ public class ResolveAction<M extends ResourceMapper<T>, T> {
                 // 构建表单组件
                 drawerFormComponent.setApi(api)
                     .setInitApi(initApiDrawer)
+                    .setApiType(drawerFormApiType)
+                    .setTargetBlank(drawerFormTargetBlank)
                     .setBody(drawerFormFieldComponents)
                     .setInitialValues(drawerFormData)
                     .setLabelCol(new HashMap<String, Object>() {{
