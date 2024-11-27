@@ -40,7 +40,7 @@ public class Department extends ResourceImpl<DepartmentMapper, DepartmentEntity>
         this.title = "部门";
         this.queryOrder = Map.of("sort", "asc","id","asc");
         this.tableListToTree = true;
-        this.perPage = false;
+        this.pageSize = false;
     }
 
     // 字段

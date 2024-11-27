@@ -21,7 +21,10 @@ public interface Resource<T> {
     public boolean isBackIcon();
 
     // 获取列表页分页配置
-    public Object getPerPage();
+    public Object getPageSize();
+
+    // 指定每页可以显示多少条，[10, 20, 50, 100]
+    public List<Integer> getPageSizeOptions();
 
     // 获取表格标题后缀
     public String getTableTitleSuffix();

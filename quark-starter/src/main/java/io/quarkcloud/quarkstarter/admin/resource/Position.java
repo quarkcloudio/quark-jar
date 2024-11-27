@@ -29,7 +29,7 @@ public class Position extends ResourceImpl<PositionMapper, PositionEntity> {
     public Position() {
         this.entity = new PositionEntity();
         this.title = "职位";
-        this.perPage = 10;
+        this.pageSize = 10;
         this.queryOrder = Map.of("sort", "asc");
     }
 

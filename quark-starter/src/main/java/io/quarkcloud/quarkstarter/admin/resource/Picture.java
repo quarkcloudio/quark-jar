@@ -26,7 +26,7 @@ public class Picture extends ResourceImpl<PictureMapper, PictureEntity> {
     public Picture() {
         this.entity = new PictureEntity();
         this.title = "图片";
-        this.perPage = 10;
+        this.pageSize = 10;
     }
 
     // 字段

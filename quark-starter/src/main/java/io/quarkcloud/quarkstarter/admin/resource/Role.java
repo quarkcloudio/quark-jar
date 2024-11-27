@@ -50,7 +50,7 @@ public class Role extends ResourceImpl<RoleMapper, RoleEntity> {
     public Role() {
         this.entity = new RoleEntity();
         this.title = "角色";
-        this.perPage = 10;
+        this.pageSize = 10;
     }
 
     // 字段

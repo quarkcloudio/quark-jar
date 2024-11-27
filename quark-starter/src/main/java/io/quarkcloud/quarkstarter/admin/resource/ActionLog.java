@@ -22,7 +22,7 @@ public class ActionLog extends ResourceImpl<ActionLogMapper, ActionLogEntity> {
     public ActionLog() {
         this.entity = new ActionLogEntity();
         this.title = "操作日志";
-        this.perPage = 10;
+        this.pageSize = 10;
     }
 
     // 字段

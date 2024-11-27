@@ -80,7 +80,10 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     public boolean backIcon;
     
     // 列表页分页配置
-    public Object perPage;
+    public Object pageSize;
+
+    // 分页配置
+    public List<Integer> pageSizeOptions;
     
     // 表单页Form实例
     public Form form;
@@ -170,11 +173,16 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     }
 
     // 获取列表页分页配置
-    public Object getPerPage() {
-        if (annotationClass == null || annotationClass.perPage() == 0) {
-            return perPage;
+    public Object getPageSize() {
+        if (annotationClass == null || annotationClass.pageSize() == 0) {
+            return pageSize;
         }
-        return annotationClass.perPage();
+        return annotationClass.pageSize();
+    }
+
+    // 指定每页可以显示多少条，[10, 20, 50, 100]
+    public List<Integer> getPageSizeOptions() {
+        return pageSizeOptions;
     }
 
     // 获取表格标题后缀
@@ -573,8 +581,9 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
             buildIndexQuery();
 
         // 获取分页
-        Object perPage = this.getPerPage();
-        if (perPage == null || !((perPage instanceof Integer) || (perPage instanceof Long))) {
+        Object pageSize = this.getPageSize();
+        List<Integer> pageSizeOptions = this.getPageSizeOptions();
+        if (pageSize == null || !((pageSize instanceof Integer) || (pageSize instanceof Long))) {
             List<T> data = resourceService.list(queryWrapper);
             Object items = this.performsIndexList(context, data);
             if (this.tableListToTree != null) {
@@ -584,10 +593,10 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         }
 
         // 默认分页数量
-        long pageSize = ((Number) perPage).longValue();
+        long getPageSize = ((Number) pageSize).longValue();
 
         // 获取分页参数
-        IPage<T> page = new Page<T>(context.getPageFromSearch(), context.getPageSizeFromSearch(pageSize));
+        IPage<T> page = new Page<T>(context.getPageFromSearch(), context.getPageSizeFromSearch(getPageSize));
 
         // 获取分页数据
         IPage<T> data = resourceService.page(page, queryWrapper);
@@ -599,7 +608,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
             items = this.indexTableListToTree(context, items);
         }
 
-        return table.setDatasource(items).setPagination(current, pageSize, total, defaultCurrent);
+        return table.setDatasource(items).setPagination(current, getPageSize, total, defaultCurrent, pageSizeOptions);
     }
 
     // 列表页组件渲染

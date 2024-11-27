@@ -42,7 +42,7 @@ public class Menu extends ResourceImpl<MenuMapper, MenuEntity> {
         this.title = "菜单";
         this.queryOrder = Map.of("sort", "asc");
         this.tableListToTree = true;
-        this.perPage = false;
+        this.pageSize = false;
     }
 
     // 字段

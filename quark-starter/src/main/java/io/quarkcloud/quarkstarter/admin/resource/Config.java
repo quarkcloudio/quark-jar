@@ -31,7 +31,7 @@ public class Config extends ResourceImpl<ConfigMapper, ConfigEntity> {
     public Config() {
         this.entity = new ConfigEntity();
         this.title = "配置";
-        this.perPage = 10;
+        this.pageSize = 10;
     }
 
     // 字段

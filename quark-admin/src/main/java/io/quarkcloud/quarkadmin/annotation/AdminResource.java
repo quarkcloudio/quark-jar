@@ -19,7 +19,7 @@ public @interface AdminResource {
     boolean backIcon() default false;
 
     // 列表页分页配置
-    int perPage() default 0;
+    int pageSize() default 0;
 
     // 列表页表格标题后缀
     String tableTitleSuffix() default "";

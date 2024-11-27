@@ -21,7 +21,7 @@ public class File extends ResourceImpl<FileMapper, FileEntity> {
     public File() {
         this.entity = new FileEntity();
         this.title = "文件";
-        this.perPage = 10;
+        this.pageSize = 10;
     }
 
     // 字段

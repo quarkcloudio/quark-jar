@@ -24,7 +24,7 @@ public class Permission extends ResourceImpl<PermissionMapper, PermissionEntity>
     public Permission() {
         this.entity = new PermissionEntity();
         this.title = "权限";
-        this.perPage = 10;
+        this.pageSize = 10;
     }
 
     // 字段

@@ -60,7 +60,7 @@ public class User extends ResourceImpl<UserMapper, UserEntity> {
     public User() {
         this.entity = new UserEntity();
         this.title = "用户";
-        this.perPage = 10;
+        this.pageSize = 10;
     }
 
     // 列表页查询
