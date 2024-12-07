@@ -161,6 +161,16 @@ public class User extends ResourceImpl<UserMapper, UserEntity> {
                 .setCreationRules(Arrays.asList(
                     Rule.required("密码必须填写")
                 ))
+                .setRules(
+                    Arrays.asList(
+                        Rule.regexp("/^.{6,}$/", "密码不少于六位"),
+                        Rule.regexp("/[A-Z]/", "至少包含一个大写字母"),
+                        Rule.regexp("/[a-z]/", "至少包含一个小写字母"),
+                        Rule.regexp("/[0-9]/", "至少包含一个数字"),
+                        Rule.regexp("/[@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]/", "至少包含一个特殊字符")
+                    )
+                )
+                .setHelp("密码不少于六位，且至少包含一个大写字母、小写字母、数字和特殊字符")
                 .onlyOnForms(),
             Field.datetime("lastLoginTime", "最后登录时间").onlyOnIndex(),
             Field.switchField("status", "状态")
