@@ -66,7 +66,12 @@ public class Role extends ResourceImpl<RoleMapper, RoleEntity> {
                 .setTreeData(menuService.tree())
                 .onlyOnForms(),
             Field.datetime("createdAt", "创建时间").onlyOnIndex(),
-            Field.datetime("updatedAt", "更新时间").onlyOnIndex()
+            Field.datetime("updatedAt", "更新时间").onlyOnIndex(),
+            Field.switchField("status", "状态")
+                .setTrueValue("正常")
+                .setFalseValue("禁用")
+                .setEditable(true)
+                .setDefaultValue(true)
         );
     }
 

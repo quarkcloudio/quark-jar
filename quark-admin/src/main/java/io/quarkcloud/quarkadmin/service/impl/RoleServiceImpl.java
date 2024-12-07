@@ -123,7 +123,9 @@ public class RoleServiceImpl extends ResourceServiceImpl<RoleMapper, RoleEntity>
     // 获取复选框选项
     public List<Option> getCheckboxOptions() {
         List<Option> list = new ArrayList<>();
-        List<RoleEntity> roleEntities = this.list();
+        QueryWrapper<RoleEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("status", 1);
+        List<RoleEntity> roleEntities = this.list(queryWrapper);
         for (RoleEntity roleEntity : roleEntities) {
             list.add(new Option(roleEntity.getName(), roleEntity.getId()));
         }

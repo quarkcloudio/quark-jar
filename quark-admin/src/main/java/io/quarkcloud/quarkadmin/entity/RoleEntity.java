@@ -46,4 +46,7 @@ public class RoleEntity {
     @TableField(value = "updated_at", fill = FieldFill.INSERT_UPDATE)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "Asia/Shanghai")
     private LocalDateTime updatedAt;
+
+    // 状态
+    private Boolean status;
 }
