@@ -43,6 +43,7 @@ import io.quarkcloud.quarkadmin.component.table.ToolBar;
 import io.quarkcloud.quarkadmin.component.table.TreeBar;
 import io.quarkcloud.quarkadmin.component.tabs.Tabs;
 import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
+import io.quarkcloud.quarkadmin.service.ConfigService;
 import io.quarkcloud.quarkadmin.service.FileService;
 import io.quarkcloud.quarkadmin.service.ResourceService;
 import io.quarkcloud.quarkadmin.template.resource.Action;
@@ -63,6 +64,9 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
 
     @Autowired
     private FileService fileService;
+
+    @Autowired
+    private ConfigService configService;
 
     // 注解实例
     protected AdminResource annotationClass = null;
@@ -1296,7 +1300,12 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         if (!importResult) {
             String filePath = "public/storage/failImports/";
             String fileName = IdUtil.simpleUUID() + ".xlsx";
-            String fileUrl = "//" + context.getRemoteHost() + "/storage/failImports/" + fileName;
+            String getServerName = context.getRequest().getServerName() + ":" + context.getRequest().getServerPort();
+            String webSiteDomain = (String) configService.getValue("WEB_SITE_DOMAIN");
+            if (webSiteDomain != null && !webSiteDomain.isEmpty()) {
+                getServerName = webSiteDomain;
+            }
+            String fileUrl = "//" + getServerName + "/storage/failImports/" + fileName;
 
             // 不存在路径，则创建
             File dir = FileUtil.file(filePath);
