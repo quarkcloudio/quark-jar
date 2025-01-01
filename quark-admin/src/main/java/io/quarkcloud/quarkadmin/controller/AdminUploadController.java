@@ -114,9 +114,9 @@ public class AdminUploadController {
     @ResponseBody
     public Object getImageList(
         @RequestParam(value = "page", defaultValue = "1") Integer page,
-        @RequestParam(value = "pictureCategoryId", defaultValue = "") Integer categoryId,
-        @RequestParam(value = "pictureSearchName", defaultValue = "") String name,
-        @RequestParam(value = "pictureSearchDate", defaultValue = "") String[] date,
+        @RequestParam(value = "categoryId", defaultValue = "") Integer categoryId,
+        @RequestParam(value = "name", defaultValue = "") String name,
+        @RequestParam(value = "createtime", defaultValue = "") String[] date,
         @RequestHeader(value = "Authorization", defaultValue = "") String authToken) {
         
         // 检查token
