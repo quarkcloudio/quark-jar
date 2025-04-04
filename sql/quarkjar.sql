@@ -1,17 +1,17 @@
 /*
  Navicat Premium Dump SQL
 
- Source Server         : 本地
+ Source Server         : 本地连接
  Source Server Type    : MySQL
- Source Server Version : 50738 (5.7.38-log)
- Source Host           : 127.0.0.1:3306
+ Source Server Version : 50743 (5.7.43-log)
+ Source Host           : localhost:3306
  Source Schema         : quarkjar
 
  Target Server Type    : MySQL
- Target Server Version : 50738 (5.7.38-log)
+ Target Server Version : 50743 (5.7.43-log)
  File Encoding         : 65001
 
- Date: 07/12/2024 11:17:05
+ Date: 04/04/2025 14:50:03
 */
 
 SET NAMES utf8mb4;
@@ -33,10 +33,74 @@ CREATE TABLE `action_logs`  (
   `created_at` datetime(3) NULL DEFAULT NULL,
   `updated_at` datetime(3) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of action_logs
+-- ----------------------------
+INSERT INTO `action_logs` VALUES (1, 1, 'administrator', '/api/admin/layout/index/index', NULL, '127.0.0.1', 'admin', 1, '2025-04-04 14:05:32.679', '2025-04-04 14:05:32.681');
+INSERT INTO `action_logs` VALUES (2, 1, 'administrator', '/api/admin/dashboard/index/index', NULL, '127.0.0.1', 'admin', 1, '2025-04-04 14:05:32.679', '2025-04-04 14:05:32.681');
+INSERT INTO `action_logs` VALUES (3, 1, 'administrator', '/api/admin/user/index', NULL, '127.0.0.1', 'admin', 1, '2025-04-04 14:05:39.564', '2025-04-04 14:05:39.565');
+INSERT INTO `action_logs` VALUES (4, 1, 'administrator', '/api/admin/user/index', NULL, '127.0.0.1', 'admin', 1, '2025-04-04 14:05:39.909', '2025-04-04 14:05:39.909');
+INSERT INTO `action_logs` VALUES (5, 1, 'administrator', '/api/admin/permission/index', NULL, '127.0.0.1', 'admin', 1, '2025-04-04 14:05:41.945', '2025-04-04 14:05:41.945');
+INSERT INTO `action_logs` VALUES (6, 1, 'administrator', '/api/admin/permission/index', NULL, '127.0.0.1', 'admin', 1, '2025-04-04 14:05:42.106', '2025-04-04 14:05:42.106');
+INSERT INTO `action_logs` VALUES (7, 1, 'administrator', '/api/admin/user/index', NULL, '127.0.0.1', 'admin', 1, '2025-04-04 14:05:42.648', '2025-04-04 14:05:42.648');
+INSERT INTO `action_logs` VALUES (8, 1, 'administrator', '/api/admin/user/index', NULL, '127.0.0.1', 'admin', 1, '2025-04-04 14:05:42.809', '2025-04-04 14:05:42.809');
+INSERT INTO `action_logs` VALUES (9, 1, 'administrator', '/api/admin/dashboard/index/index', NULL, '127.0.0.1', 'admin', 1, '2025-04-04 14:05:43.976', '2025-04-04 14:05:43.976');
+INSERT INTO `action_logs` VALUES (10, 1, 'administrator', '/api/admin/user/index', NULL, '127.0.0.1', 'admin', 1, '2025-04-04 14:07:23.920', '2025-04-04 14:07:23.920');
+INSERT INTO `action_logs` VALUES (11, 1, 'administrator', '/api/admin/user/index', NULL, '127.0.0.1', 'admin', 1, '2025-04-04 14:07:24.128', '2025-04-04 14:07:24.128');
+INSERT INTO `action_logs` VALUES (12, 1, 'administrator', '/api/admin/dashboard/index/index', NULL, '127.0.0.1', 'admin', 1, '2025-04-04 14:07:25.489', '2025-04-04 14:07:25.489');
+INSERT INTO `action_logs` VALUES (13, 1, 'administrator', '/api/admin/file/index', NULL, '127.0.0.1', 'admin', 1, '2025-04-04 14:07:28.026', '2025-04-04 14:07:28.026');
+INSERT INTO `action_logs` VALUES (14, 1, 'administrator', '/api/admin/file/index', NULL, '127.0.0.1', 'admin', 1, '2025-04-04 14:07:28.181', '2025-04-04 14:07:28.181');
+INSERT INTO `action_logs` VALUES (15, 1, 'administrator', '/api/admin/picture/index', NULL, '127.0.0.1', 'admin', 1, '2025-04-04 14:07:29.006', '2025-04-04 14:07:29.006');
+INSERT INTO `action_logs` VALUES (16, 1, 'administrator', '/api/admin/picture/index', NULL, '127.0.0.1', 'admin', 1, '2025-04-04 14:07:29.143', '2025-04-04 14:07:29.144');
+INSERT INTO `action_logs` VALUES (17, 1, 'administrator', '/api/admin/file/index', NULL, '127.0.0.1', 'admin', 1, '2025-04-04 14:07:29.440', '2025-04-04 14:07:29.440');
+INSERT INTO `action_logs` VALUES (18, 1, 'administrator', '/api/admin/file/index', NULL, '127.0.0.1', 'admin', 1, '2025-04-04 14:07:29.561', '2025-04-04 14:07:29.561');
+
+-- ----------------------------
+-- Table structure for attachment_categories
+-- ----------------------------
+DROP TABLE IF EXISTS `attachment_categories`;
+CREATE TABLE `attachment_categories`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `source` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `uid` smallint(6) NULL DEFAULT 0,
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `sort` smallint(6) NULL DEFAULT 0,
+  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of attachment_categories
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for attachments
+-- ----------------------------
+DROP TABLE IF EXISTS `attachments`;
+CREATE TABLE `attachments`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `uid` smallint(6) NULL DEFAULT 0,
+  `source` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `category_id` smallint(6) NULL DEFAULT 0,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `sort` smallint(6) NULL DEFAULT 0,
+  `size` mediumint(9) NULL DEFAULT 0,
+  `ext` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `hash` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `extra` varchar(5000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `status` tinyint(4) NOT NULL DEFAULT 1,
+  `created_at` datetime(3) NULL DEFAULT NULL,
+  `updated_at` datetime(3) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of attachments
 -- ----------------------------
 
 -- ----------------------------
@@ -100,50 +164,6 @@ INSERT INTO `departments` VALUES (2, 1, '研发中心', 0, 1, '2024-10-10 19:20:
 INSERT INTO `departments` VALUES (3, 1, '营销中心', 0, 1, '2024-10-10 19:20:41.601', '2024-10-10 19:20:41.601');
 
 -- ----------------------------
--- Table structure for file_categories
--- ----------------------------
-DROP TABLE IF EXISTS `file_categories`;
-CREATE TABLE `file_categories`  (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `obj_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
-  `obj_id` smallint(6) NULL DEFAULT 0,
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `sort` smallint(6) NULL DEFAULT 0,
-  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of file_categories
--- ----------------------------
-
--- ----------------------------
--- Table structure for files
--- ----------------------------
-DROP TABLE IF EXISTS `files`;
-CREATE TABLE `files`  (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `obj_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
-  `obj_id` smallint(6) NULL DEFAULT 0,
-  `file_category_id` smallint(6) NULL DEFAULT 0,
-  `sort` smallint(6) NULL DEFAULT 0,
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `size` mediumint(9) NULL DEFAULT 0,
-  `ext` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
-  `path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `hash` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `status` tinyint(4) NOT NULL DEFAULT 1,
-  `created_at` datetime(3) NULL DEFAULT NULL,
-  `updated_at` datetime(3) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of files
--- ----------------------------
-
--- ----------------------------
 -- Table structure for menu_has_permissions
 -- ----------------------------
 DROP TABLE IF EXISTS `menu_has_permissions`;
@@ -203,7 +223,7 @@ INSERT INTO `menus` VALUES (11, '菜单管理', 'admin', '', 2, 7, 0, '/api/admi
 INSERT INTO `menus` VALUES (12, '操作日志', 'admin', '', 2, 7, 100, '/api/admin/actionLog/index', 1, 1, 0, 1, NULL, NULL, NULL, '2024-10-10 19:20:41.596', '2024-10-10 19:20:41.596');
 INSERT INTO `menus` VALUES (13, '附件空间', 'admin', 'icon-attachment', 1, 0, 100, '/attachment', 1, 0, 0, 1, NULL, NULL, NULL, '2024-10-10 19:20:41.596', '2024-10-10 19:20:41.596');
 INSERT INTO `menus` VALUES (14, '文件管理', 'admin', '', 2, 13, 0, '/api/admin/file/index', 1, 1, 0, 1, NULL, NULL, NULL, '2024-10-10 19:20:41.596', '2024-10-10 19:20:41.596');
-INSERT INTO `menus` VALUES (15, '图片管理', 'admin', '', 2, 13, 0, '/api/admin/picture/index', 1, 1, 0, 1, NULL, NULL, NULL, '2024-10-10 19:20:41.596', '2024-10-10 19:20:41.596');
+INSERT INTO `menus` VALUES (15, '图片管理', 'admin', '', 2, 13, 0, '/api/admin/image/index', 1, 1, 0, 1, NULL, NULL, NULL, '2024-10-10 19:20:41.596', '2024-10-10 19:20:41.596');
 INSERT INTO `menus` VALUES (16, '我的账号', 'admin', 'icon-user', 1, 0, 100, '/account', 1, 0, 0, 1, NULL, NULL, NULL, '2024-10-10 19:20:41.596', '2024-10-10 19:20:41.596');
 INSERT INTO `menus` VALUES (17, '个人设置', 'admin', '', 2, 16, 0, '/api/admin/account/form', 1, 1, 0, 1, NULL, NULL, NULL, '2024-10-10 19:20:41.596', '2024-10-10 19:20:41.596');
 INSERT INTO `menus` VALUES (18, '部门列表', 'admin', '', 2, 3, 0, '/api/admin/department/index', 1, 1, 0, 1, NULL, NULL, NULL, '2024-10-10 19:20:41.596', '2024-10-10 19:20:41.596');
@@ -227,52 +247,6 @@ CREATE TABLE `permissions`  (
 
 -- ----------------------------
 -- Records of permissions
--- ----------------------------
-
--- ----------------------------
--- Table structure for picture_categories
--- ----------------------------
-DROP TABLE IF EXISTS `picture_categories`;
-CREATE TABLE `picture_categories`  (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `obj_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
-  `obj_id` smallint(6) NULL DEFAULT 0,
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `sort` smallint(6) NULL DEFAULT 0,
-  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of picture_categories
--- ----------------------------
-
--- ----------------------------
--- Table structure for pictures
--- ----------------------------
-DROP TABLE IF EXISTS `pictures`;
-CREATE TABLE `pictures`  (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `obj_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
-  `obj_id` smallint(6) NULL DEFAULT 0,
-  `picture_category_id` smallint(6) NULL DEFAULT 0,
-  `sort` smallint(6) NULL DEFAULT 0,
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `size` mediumint(9) NULL DEFAULT 0,
-  `width` smallint(6) NULL DEFAULT 0,
-  `height` smallint(6) NULL DEFAULT 0,
-  `ext` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
-  `path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `hash` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `status` tinyint(4) NOT NULL DEFAULT 1,
-  `created_at` datetime(3) NULL DEFAULT NULL,
-  `updated_at` datetime(3) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of pictures
 -- ----------------------------
 
 -- ----------------------------

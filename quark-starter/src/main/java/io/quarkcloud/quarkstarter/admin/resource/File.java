@@ -6,8 +6,8 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import io.quarkcloud.quarkadmin.component.form.Field;
-import io.quarkcloud.quarkadmin.entity.FileEntity;
-import io.quarkcloud.quarkadmin.mapper.FileMapper;
+import io.quarkcloud.quarkadmin.entity.AttachmentEntity;
+import io.quarkcloud.quarkadmin.mapper.AttachmentMapper;
 import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
 import io.quarkcloud.quarkcore.service.Context;
 import io.quarkcloud.quarkstarter.admin.action.BatchDelete;
@@ -15,11 +15,11 @@ import io.quarkcloud.quarkstarter.admin.action.Delete;
 import io.quarkcloud.quarkstarter.admin.search.Input;
 
 @Component
-public class File extends ResourceImpl<FileMapper, FileEntity> {
+public class File extends ResourceImpl<AttachmentMapper, AttachmentEntity> {
 
     // 构造函数
     public File() {
-        this.entity = new FileEntity();
+        this.entity = new AttachmentEntity();
         this.title = "文件";
         this.pageSize = 10;
     }
@@ -38,16 +38,16 @@ public class File extends ResourceImpl<FileMapper, FileEntity> {
     // 搜索表单
     public List<Object> searches(Context context) {
         return Arrays.asList(
-            new Input<FileEntity>("name", "名称"),
-            new Input<FileEntity>("created_at", "上传时间")
+            new Input<AttachmentEntity>("name", "名称"),
+            new Input<AttachmentEntity>("created_at", "上传时间")
         );
     }
     
     // 行为
     public List<Object> actions(Context context) {
         return Arrays.asList(
-            new Delete<FileMapper, FileEntity>(),
-            new BatchDelete<FileMapper, FileEntity>()
+            new Delete<AttachmentMapper, AttachmentEntity>(),
+            new BatchDelete<AttachmentMapper, AttachmentEntity>()
         );
     }
 }

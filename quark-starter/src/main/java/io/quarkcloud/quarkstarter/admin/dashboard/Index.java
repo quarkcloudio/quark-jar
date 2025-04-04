@@ -12,7 +12,7 @@ import io.quarkcloud.quarkstarter.admin.metric.SystemInfo;
 import io.quarkcloud.quarkstarter.admin.metric.TeamInfo;
 import io.quarkcloud.quarkstarter.admin.metric.TotalFile;
 import io.quarkcloud.quarkstarter.admin.metric.TotalLog;
-import io.quarkcloud.quarkstarter.admin.metric.TotalPicture;
+import io.quarkcloud.quarkstarter.admin.metric.TotalImage;
 import io.quarkcloud.quarkstarter.admin.metric.TotalUser;
 
 @Component(value = "dashboardIndex")
@@ -27,7 +27,7 @@ public class Index extends DashboardImpl {
             new TotalUser(),
             new TotalLog(),
             new TotalFile(),
-            new TotalPicture(),
+            new TotalImage(),
             new SystemInfo(),
             new TeamInfo()
         );

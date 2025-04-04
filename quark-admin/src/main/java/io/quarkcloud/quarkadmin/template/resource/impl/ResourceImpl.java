@@ -44,7 +44,7 @@ import io.quarkcloud.quarkadmin.component.table.TreeBar;
 import io.quarkcloud.quarkadmin.component.tabs.Tabs;
 import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
 import io.quarkcloud.quarkadmin.service.ConfigService;
-import io.quarkcloud.quarkadmin.service.FileService;
+import io.quarkcloud.quarkadmin.service.AttachmentService;
 import io.quarkcloud.quarkadmin.service.ResourceService;
 import io.quarkcloud.quarkadmin.template.resource.Action;
 import io.quarkcloud.quarkadmin.template.resource.Resource;
@@ -63,7 +63,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     ResourceService<M, T> resourceService;
 
     @Autowired
-    private FileService fileService;
+    private AttachmentService attachmentService;
 
     @Autowired
     private ConfigService configService;
@@ -1219,7 +1219,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
             return Message.error("参数错误！");
         }
 
-        String excelFilePath = fileService.getFilePath(id);
+        String excelFilePath = attachmentService.getFilePath(id);
         if (excelFilePath == null || excelFilePath.contains("")) {
             return Message.error("未找到上传的文件！");
         }

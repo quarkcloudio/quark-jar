@@ -10,24 +10,24 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper=false)
-@TableName("file_categories")
-public class FileCategoryEntity extends Model<FileCategoryEntity> {
+@TableName("attachment_categories")
+public class AttachmentCategoryEntity extends Model<AttachmentCategoryEntity> {
 
     // 主键
     @TableId(type = IdType.AUTO)
     private Long id;
 
-    // 对象类型
-    private String objType;
+    // 上传来源
+    private String source;
 
-    // 对象Id
-    private Long objId;
+    // 创建用户
+    private Long uid;
 
     // 分类名称
     private String title;
 
     // 排序
-    private Integer sort;
+    private Short sort;
 
     // 描述
     private String description;

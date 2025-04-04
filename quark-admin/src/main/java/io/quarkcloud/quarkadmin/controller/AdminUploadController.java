@@ -41,29 +41,23 @@ import cn.hutool.jwt.JWT;
 import cn.hutool.jwt.JWTUtil;
 import cn.hutool.jwt.JWTValidator;
 import io.quarkcloud.quarkadmin.component.message.Message;
-import io.quarkcloud.quarkadmin.entity.PictureEntity;
-import io.quarkcloud.quarkadmin.entity.FileEntity;
-import io.quarkcloud.quarkadmin.entity.PictureCategoryEntity;
-import io.quarkcloud.quarkadmin.service.PictureService;
+import io.quarkcloud.quarkadmin.entity.AttachmentEntity;
+import io.quarkcloud.quarkadmin.entity.AttachmentCategoryEntity;
+import io.quarkcloud.quarkadmin.service.AttachmentService;
 import jakarta.servlet.http.HttpServletRequest;
 import io.quarkcloud.quarkadmin.service.ConfigService;
-import io.quarkcloud.quarkadmin.service.FileService;
-import io.quarkcloud.quarkadmin.service.PictureCategoryService;
+import io.quarkcloud.quarkadmin.service.AttachmentCategoryService;
 
 @RestController
 public class AdminUploadController {
     
     // 注入图片服务
     @Autowired
-    private PictureService pictureService;
+    private AttachmentService attachmentService;
 
     // 注入图片分类服务
     @Autowired
-    private PictureCategoryService pictureCategoryService;
-
-    // 注入文件服务
-    @Autowired
-    private FileService fileService;
+    private AttachmentCategoryService pictureCategoryService;
 
     // 注入读取配置服务
     @Autowired
@@ -142,10 +136,10 @@ public class AdminUploadController {
         }
 
         // 获取列表
-        IPage<PictureEntity> result = pictureService.getListBySearch("ADMIN", jwt.getPayload("id"), categoryId, name, date[0], date[1], page);
+        IPage<AttachmentEntity> result = attachmentService.getListBySearch(jwt.getPayload("id"),"IMAGE", categoryId, name, date[0], date[1], page);
 
         // 获取分类
-        List<PictureCategoryEntity> categorys = pictureCategoryService.getListByObj("ADMIN", jwt.getPayload("id"));
+        List<AttachmentCategoryEntity> categorys = pictureCategoryService.getList(jwt.getPayload("id"));
 
         // 返回数据
         return Message.success("获取成功","", Map.of(
@@ -161,7 +155,7 @@ public class AdminUploadController {
         if (id.isEmpty()) {
             return Message.error("参数错误");
         }
-        boolean result = pictureService.removeById(id);
+        boolean result = attachmentService.removeById(id);
         if (!result) {
             return Message.error("操作失败，请重试");
         }
@@ -184,7 +178,7 @@ public class AdminUploadController {
             return Message.error("参数错误！");
         }
 
-        PictureEntity pictureInfo = pictureService.getById(Integer.parseInt(id));
+        AttachmentEntity pictureInfo = attachmentService.getById(Integer.parseInt(id));
         if (pictureInfo == null || pictureInfo.getId() == 0) {
             return Message.error("文件不存在");
         }
@@ -288,13 +282,12 @@ public class AdminUploadController {
             }
         }
 
-        pictureInfo.setObjType("ADMIN");
-        pictureInfo.setObjId(Long.parseLong(jwt.getPayload("id").toString()));
+        pictureInfo.setSource("ADMIN");
+        pictureInfo.setType("IMAGE");
+        pictureInfo.setUid(Long.parseLong(jwt.getPayload("id").toString()));
         pictureInfo.setSize(fileSize);
         pictureInfo.setHash(fileHash);
-        pictureInfo.setWidth(fileWidth);
-        pictureInfo.setHeight(fileHeight);
-        boolean result = pictureService.updateById(pictureInfo);
+        boolean result = attachmentService.updateById(pictureInfo);
         if (!result) {
             return Message.error("操作失败，请重试！");
         }
@@ -394,16 +387,15 @@ public class AdminUploadController {
         int fileWidth = image.getWidth();
         int fileHeight = image.getHeight();
 
-        PictureEntity pictureEntity = new PictureEntity();
-        pictureEntity.setObjType("ADMIN");
-        pictureEntity.setObjId(Long.parseLong(jwt.getPayload("id").toString()));
-        pictureEntity.setName(originalFilename);
-        pictureEntity.setPath(filePath);
-        pictureEntity.setSize(fileSize);
-        pictureEntity.setHash(fileHash);
-        pictureEntity.setExt(fileExt);
-        pictureEntity.setWidth(fileWidth);
-        pictureEntity.setHeight(fileHeight);
+        AttachmentEntity attachmentEntity = new AttachmentEntity();
+        attachmentEntity.setType("IMAGE");
+        attachmentEntity.setSource("ADMIN");
+        attachmentEntity.setUid(Long.parseLong(jwt.getPayload("id").toString()));
+        attachmentEntity.setName(originalFilename);
+        attachmentEntity.setPath(filePath);
+        attachmentEntity.setSize(fileSize);
+        attachmentEntity.setHash(fileHash);
+        attachmentEntity.setExt(fileExt);
 
         String fileUrl = "";
         // 上传到OSS
@@ -437,13 +429,13 @@ public class AdminUploadController {
                 return Message.error(e.getMessage());
             }
 
-            fileUrl = pictureService.getPath(filePath); // 获取文件Url路径
+            fileUrl = attachmentService.getImageUrl(filePath); // 获取文件Url路径
         }
 
-        pictureEntity.setUrl(fileUrl);
+        attachmentEntity.setUrl(fileUrl);
 
         // 保存文件记录
-        Long fileId = pictureService.saveGetId(pictureEntity);
+        Long fileId = attachmentService.saveGetId(attachmentEntity);
 
         // 返回上传成功的消息
         return Message.success("上传成功", "", Map.of(
@@ -451,8 +443,6 @@ public class AdminUploadController {
             "contentType", fileType,
             "ext", fileExt,
             "hash", fileHash,
-            "width", fileWidth,
-            "height", fileHeight,
             "name", fileName,
             "path", filePath,
             "size", fileSize,
@@ -559,16 +549,15 @@ public class AdminUploadController {
         int fileWidth = image.getWidth();
         int fileHeight = image.getHeight();
 
-        PictureEntity pictureEntity = new PictureEntity();
-        pictureEntity.setObjType("ADMIN");
-        pictureEntity.setObjId(Long.parseLong(jwt.getPayload("id").toString()));
-        pictureEntity.setName(originalFilename);
-        pictureEntity.setPath(filePath);
-        pictureEntity.setSize(fileSize);
-        pictureEntity.setHash(fileHash);
-        pictureEntity.setExt(fileExt);
-        pictureEntity.setWidth(fileWidth);
-        pictureEntity.setHeight(fileHeight);
+        AttachmentEntity attachmentEntity = new AttachmentEntity();
+        attachmentEntity.setType("IMAGE");
+        attachmentEntity.setSource("ADMIN");
+        attachmentEntity.setUid(Long.parseLong(jwt.getPayload("id").toString()));
+        attachmentEntity.setName(originalFilename);
+        attachmentEntity.setPath(filePath);
+        attachmentEntity.setSize(fileSize);
+        attachmentEntity.setHash(fileHash);
+        attachmentEntity.setExt(fileExt);
 
         String fileUrl = "";
         // 上传到OSS
@@ -602,13 +591,13 @@ public class AdminUploadController {
                 return Message.error(e.getMessage());
             }
 
-            fileUrl = pictureService.getPath(filePath); // 获取文件Url路径
+            fileUrl = attachmentService.getImageUrl(filePath); // 获取文件Url路径
         }
 
-        pictureEntity.setUrl(fileUrl);
+        attachmentEntity.setUrl(fileUrl);
 
         // 保存文件记录
-        Long fileId = pictureService.saveGetId(pictureEntity);
+        Long fileId = attachmentService.saveGetId(attachmentEntity);
 
         // 返回上传成功的消息
         return Message.success("上传成功", "", Map.of(
@@ -616,8 +605,6 @@ public class AdminUploadController {
             "contentType", fileType,
             "ext", fileExt,
             "hash", fileHash,
-            "width", fileWidth,
-            "height", fileHeight,
             "name", fileName,
             "path", filePath,
             "size", fileSize,
@@ -693,14 +680,16 @@ public class AdminUploadController {
             return Message.error("文件类型不允许");
         }
 
-        FileEntity fileEntity = new FileEntity();
-        fileEntity.setObjType("ADMIN");
-        fileEntity.setObjId(Long.parseLong(jwt.getPayload("id").toString()));
-        fileEntity.setName(originalFilename);
-        fileEntity.setPath(filePath);
-        fileEntity.setSize(fileSize);
-        fileEntity.setHash(fileHash);
-        fileEntity.setExt(fileExt);
+        AttachmentEntity attachmentEntity = new AttachmentEntity();
+
+        attachmentEntity.setType("FILE");
+        attachmentEntity.setSource("ADMIN");
+        attachmentEntity.setUid(Long.parseLong(jwt.getPayload("id").toString()));
+        attachmentEntity.setName(originalFilename);
+        attachmentEntity.setPath(filePath);
+        attachmentEntity.setSize(fileSize);
+        attachmentEntity.setHash(fileHash);
+        attachmentEntity.setExt(fileExt);
 
         String fileUrl = "";
         // 上传到OSS
@@ -735,10 +724,10 @@ public class AdminUploadController {
             }
         }
 
-        fileEntity.setUrl(fileUrl);
+        attachmentEntity.setUrl(fileUrl);
 
         // 保存文件记录
-        Long fileId = fileService.saveGetId(fileEntity);
+        Long fileId = attachmentService.saveGetId(attachmentEntity);
 
         // 返回上传成功的消息
         return Message.success("上传成功", "", Map.of(

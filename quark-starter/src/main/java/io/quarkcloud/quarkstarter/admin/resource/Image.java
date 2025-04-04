@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import io.quarkcloud.quarkadmin.component.form.Field;
-import io.quarkcloud.quarkadmin.entity.PictureEntity;
-import io.quarkcloud.quarkadmin.mapper.PictureMapper;
-import io.quarkcloud.quarkadmin.service.PictureService;
+import io.quarkcloud.quarkadmin.entity.AttachmentEntity;
+import io.quarkcloud.quarkadmin.mapper.AttachmentMapper;
+import io.quarkcloud.quarkadmin.service.AttachmentService;
 import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
 import io.quarkcloud.quarkcore.service.Context;
 import io.quarkcloud.quarkstarter.admin.action.BatchDelete;
@@ -17,14 +17,14 @@ import io.quarkcloud.quarkstarter.admin.action.Delete;
 import io.quarkcloud.quarkstarter.admin.search.Input;
 
 @Component
-public class Picture extends ResourceImpl<PictureMapper, PictureEntity> {
+public class Image extends ResourceImpl<AttachmentMapper, AttachmentEntity> {
 
     @Autowired
-    PictureService pictureService;
+    AttachmentService attachmentService;
 
     // 构造函数
-    public Picture() {
-        this.entity = new PictureEntity();
+    public Image() {
+        this.entity = new AttachmentEntity();
         this.title = "图片";
         this.pageSize = 10;
     }
@@ -34,7 +34,7 @@ public class Picture extends ResourceImpl<PictureMapper, PictureEntity> {
         return Arrays.asList(
             Field.id("id", "ID"),
             Field.text("path", "显示", () -> {
-                return String.format("<img src='%s' width=50 height=50 />", pictureService.getPath(this.entity.getId()));
+                return String.format("<img src='%s' width=50 height=50 />", attachmentService.getUrl(this.entity.getId()));
             }),
             Field.text("name", "名称").setEllipsis(true),
             Field.text("size", "大小").setSorter(true),
@@ -48,16 +48,16 @@ public class Picture extends ResourceImpl<PictureMapper, PictureEntity> {
     // 搜索表单
     public List<Object> searches(Context context) {
         return Arrays.asList(
-            new Input<PictureEntity>("name", "名称"),
-            new Input<PictureEntity>("created_at", "上传时间")
+            new Input<AttachmentEntity>("name", "名称"),
+            new Input<AttachmentEntity>("created_at", "上传时间")
         );
     }
     
     // 行为
     public List<Object> actions(Context context) {
         return Arrays.asList(
-            new Delete<PictureMapper, PictureEntity>(),
-            new BatchDelete<PictureMapper, PictureEntity>()
+            new Delete<AttachmentMapper, AttachmentEntity>(),
+            new BatchDelete<AttachmentMapper, AttachmentEntity>()
         );
     }
 }

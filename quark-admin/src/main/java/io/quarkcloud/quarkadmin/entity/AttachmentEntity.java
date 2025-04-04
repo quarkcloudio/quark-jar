@@ -15,36 +15,33 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper=false)
-@TableName("pictures")
-public class PictureEntity extends Model<PictureEntity> {
+@TableName("attachments")
+public class AttachmentEntity extends Model<AttachmentEntity> {
 
     // 主键
     @TableId(type = IdType.AUTO)
     private Long id;
 
-    // 对象类型
-    private String objType;
+    // 上传用户Id
+    private Long uid;
 
-    // 对象Id
-    private Long objId;
+    // 上传来源
+    private String source;
 
-    // 文件分类id
-    private Long pictureCategoryId;
-
-    // 排序
-    private Integer sort;
+    // 分类id
+    private Long categoryId;
 
     // 文件名
     private String name;
 
+    // 文件类型
+    private String type;
+
+    // 排序
+    private Integer sort;
+
     // 状态
     private Long size;
-
-    // 宽度
-    private Integer width;
-
-    // 高度
-    private Integer height;
 
     // 文件扩展名
     private String ext;
@@ -57,6 +54,9 @@ public class PictureEntity extends Model<PictureEntity> {
 
     // 文件hash
     private String hash;
+
+    // 文件扩展属性
+    private String extra;
 
     // 创建时间
     @TableField(value = "created_at", fill = FieldFill.INSERT)
