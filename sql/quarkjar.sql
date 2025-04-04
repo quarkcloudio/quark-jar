@@ -33,29 +33,7 @@ CREATE TABLE `action_logs`  (
   `created_at` datetime(3) NULL DEFAULT NULL,
   `updated_at` datetime(3) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of action_logs
--- ----------------------------
-INSERT INTO `action_logs` VALUES (1, 1, 'administrator', '/api/admin/layout/index/index', NULL, '127.0.0.1', 'admin', 1, '2025-04-04 14:05:32.679', '2025-04-04 14:05:32.681');
-INSERT INTO `action_logs` VALUES (2, 1, 'administrator', '/api/admin/dashboard/index/index', NULL, '127.0.0.1', 'admin', 1, '2025-04-04 14:05:32.679', '2025-04-04 14:05:32.681');
-INSERT INTO `action_logs` VALUES (3, 1, 'administrator', '/api/admin/user/index', NULL, '127.0.0.1', 'admin', 1, '2025-04-04 14:05:39.564', '2025-04-04 14:05:39.565');
-INSERT INTO `action_logs` VALUES (4, 1, 'administrator', '/api/admin/user/index', NULL, '127.0.0.1', 'admin', 1, '2025-04-04 14:05:39.909', '2025-04-04 14:05:39.909');
-INSERT INTO `action_logs` VALUES (5, 1, 'administrator', '/api/admin/permission/index', NULL, '127.0.0.1', 'admin', 1, '2025-04-04 14:05:41.945', '2025-04-04 14:05:41.945');
-INSERT INTO `action_logs` VALUES (6, 1, 'administrator', '/api/admin/permission/index', NULL, '127.0.0.1', 'admin', 1, '2025-04-04 14:05:42.106', '2025-04-04 14:05:42.106');
-INSERT INTO `action_logs` VALUES (7, 1, 'administrator', '/api/admin/user/index', NULL, '127.0.0.1', 'admin', 1, '2025-04-04 14:05:42.648', '2025-04-04 14:05:42.648');
-INSERT INTO `action_logs` VALUES (8, 1, 'administrator', '/api/admin/user/index', NULL, '127.0.0.1', 'admin', 1, '2025-04-04 14:05:42.809', '2025-04-04 14:05:42.809');
-INSERT INTO `action_logs` VALUES (9, 1, 'administrator', '/api/admin/dashboard/index/index', NULL, '127.0.0.1', 'admin', 1, '2025-04-04 14:05:43.976', '2025-04-04 14:05:43.976');
-INSERT INTO `action_logs` VALUES (10, 1, 'administrator', '/api/admin/user/index', NULL, '127.0.0.1', 'admin', 1, '2025-04-04 14:07:23.920', '2025-04-04 14:07:23.920');
-INSERT INTO `action_logs` VALUES (11, 1, 'administrator', '/api/admin/user/index', NULL, '127.0.0.1', 'admin', 1, '2025-04-04 14:07:24.128', '2025-04-04 14:07:24.128');
-INSERT INTO `action_logs` VALUES (12, 1, 'administrator', '/api/admin/dashboard/index/index', NULL, '127.0.0.1', 'admin', 1, '2025-04-04 14:07:25.489', '2025-04-04 14:07:25.489');
-INSERT INTO `action_logs` VALUES (13, 1, 'administrator', '/api/admin/file/index', NULL, '127.0.0.1', 'admin', 1, '2025-04-04 14:07:28.026', '2025-04-04 14:07:28.026');
-INSERT INTO `action_logs` VALUES (14, 1, 'administrator', '/api/admin/file/index', NULL, '127.0.0.1', 'admin', 1, '2025-04-04 14:07:28.181', '2025-04-04 14:07:28.181');
-INSERT INTO `action_logs` VALUES (15, 1, 'administrator', '/api/admin/picture/index', NULL, '127.0.0.1', 'admin', 1, '2025-04-04 14:07:29.006', '2025-04-04 14:07:29.006');
-INSERT INTO `action_logs` VALUES (16, 1, 'administrator', '/api/admin/picture/index', NULL, '127.0.0.1', 'admin', 1, '2025-04-04 14:07:29.143', '2025-04-04 14:07:29.144');
-INSERT INTO `action_logs` VALUES (17, 1, 'administrator', '/api/admin/file/index', NULL, '127.0.0.1', 'admin', 1, '2025-04-04 14:07:29.440', '2025-04-04 14:07:29.440');
-INSERT INTO `action_logs` VALUES (18, 1, 'administrator', '/api/admin/file/index', NULL, '127.0.0.1', 'admin', 1, '2025-04-04 14:07:29.561', '2025-04-04 14:07:29.561');
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for attachment_categories
