@@ -10,6 +10,7 @@ import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +33,8 @@ import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.OSSException;
 import com.aliyun.oss.model.PutObjectRequest;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileTypeUtil;
@@ -178,8 +181,8 @@ public class AdminUploadController {
             return Message.error("参数错误！");
         }
 
-        AttachmentEntity pictureInfo = attachmentService.getById(Integer.parseInt(id));
-        if (pictureInfo == null || pictureInfo.getId() == 0) {
+        AttachmentEntity imageInfo = attachmentService.getById(Integer.parseInt(id));
+        if (imageInfo == null || imageInfo.getId() == 0) {
             return Message.error("文件不存在");
         }
 
@@ -267,14 +270,14 @@ public class AdminUploadController {
             
             // 上传文件
             try {
-                ossClient.putObject(new PutObjectRequest(bucketName, pictureInfo.getPath(), fileInputStream));
+                ossClient.putObject(new PutObjectRequest(bucketName, imageInfo.getPath(), fileInputStream));
             } catch (OSSException | ClientException e) {
                 return Message.error(e.getMessage());
             }
             ossClient.shutdown();
         } else {
             // 上传到本地
-            File dest = new File(pictureInfo.getPath());
+            File dest = new File(imageInfo.getPath());
             try {
                 FileUtil.writeBytes(fileData, dest);
             } catch (IllegalStateException e) {
@@ -282,28 +285,40 @@ public class AdminUploadController {
             }
         }
 
-        pictureInfo.setSource("ADMIN");
-        pictureInfo.setType("IMAGE");
-        pictureInfo.setUid(Long.parseLong(jwt.getPayload("id").toString()));
-        pictureInfo.setSize(fileSize);
-        pictureInfo.setHash(fileHash);
-        boolean result = attachmentService.updateById(pictureInfo);
+        imageInfo.setSource("ADMIN");
+        imageInfo.setType("IMAGE");
+        imageInfo.setUid(Long.parseLong(jwt.getPayload("id").toString()));
+        imageInfo.setSize(fileSize);
+        imageInfo.setHash(fileHash);
+
+        Map<String, Object> extraMap = new HashMap<>();
+        extraMap.put("width", fileWidth);
+        extraMap.put("height", fileHeight);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String extraString = "";
+        try {
+            extraString = objectMapper.writeValueAsString(extraMap);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        imageInfo.setExtra(extraString);
+        boolean result = attachmentService.updateById(imageInfo);
         if (!result) {
             return Message.error("操作失败，请重试！");
         }
 
         // 返回上传成功的消息
         return Message.success("上传成功", "", Map.of(
-            "id", pictureInfo.getId(),
+            "id", imageInfo.getId(),
             "contentType", fileExt,
-            "ext", pictureInfo.getExt(),
+            "ext", imageInfo.getExt(),
             "hash", fileHash,
-            "width", fileWidth,
-            "height", fileHeight,
-            "name", pictureInfo.getName(),
-            "path", pictureInfo.getPath(),
+            "extra", extraMap,
+            "name", imageInfo.getName(),
+            "path", imageInfo.getPath(),
             "size", fileSize,
-            "url", pictureInfo.getUrl()
+            "url", imageInfo.getUrl()
         ));
     }
 
@@ -397,6 +412,18 @@ public class AdminUploadController {
         attachmentEntity.setHash(fileHash);
         attachmentEntity.setExt(fileExt);
 
+        Map<String, Object> extraMap = new HashMap<>();
+        extraMap.put("width", fileWidth);
+        extraMap.put("height", fileHeight);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String extraString = "";
+        try {
+            extraString = objectMapper.writeValueAsString(extraMap);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        attachmentEntity.setExtra(extraString);
+
         String fileUrl = "";
         // 上传到OSS
         if (configService.getValue("OSS_OPEN").equals("1")) {
@@ -446,7 +473,8 @@ public class AdminUploadController {
             "name", fileName,
             "path", filePath,
             "size", fileSize,
-            "url", fileUrl
+            "url", fileUrl,
+            "extra", extraMap
         ));
     }
 
@@ -559,6 +587,18 @@ public class AdminUploadController {
         attachmentEntity.setHash(fileHash);
         attachmentEntity.setExt(fileExt);
 
+        Map<String, Object> extraMap = new HashMap<>();
+        extraMap.put("width", fileWidth);
+        extraMap.put("height", fileHeight);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String extraString = "";
+        try {
+            extraString = objectMapper.writeValueAsString(extraMap);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        attachmentEntity.setExtra(extraString);
+
         String fileUrl = "";
         // 上传到OSS
         if (configService.getValue("OSS_OPEN").equals("1")) {
@@ -608,7 +648,8 @@ public class AdminUploadController {
             "name", fileName,
             "path", filePath,
             "size", fileSize,
-            "url", fileUrl
+            "url", fileUrl,
+            "extra", extraMap
         ));
     }
 
