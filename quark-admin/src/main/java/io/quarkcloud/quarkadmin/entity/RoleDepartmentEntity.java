@@ -10,20 +10,22 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-@TableName("user_has_roles")
-public class UserHasRoleEntity {
+@EqualsAndHashCode(callSuper=false)
+@TableName("role_departments")
+public class RoleDepartmentEntity {
 
     // 主键
     @TableId(type = IdType.AUTO)
     private Long id;
 
-    // 用户id
-    private Long uid;
-
-    // 角色id
+    // 角色ID
     private Long roleId;
+
+    // 部门ID
+    private Long departmentId;
 
     // 守卫名称
     private String guardName;

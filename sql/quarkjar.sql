@@ -142,10 +142,10 @@ INSERT INTO `departments` VALUES (2, 1, '研发中心', 0, 1, '2024-10-10 19:20:
 INSERT INTO `departments` VALUES (3, 1, '营销中心', 0, 1, '2024-10-10 19:20:41.601', '2024-10-10 19:20:41.601');
 
 -- ----------------------------
--- Table structure for menu_has_permissions
+-- Table structure for menu_permissions
 -- ----------------------------
-DROP TABLE IF EXISTS `menu_has_permissions`;
-CREATE TABLE `menu_has_permissions`  (
+DROP TABLE IF EXISTS `menu_permissions`;
+CREATE TABLE `menu_permissions`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `menu_id` bigint(20) NOT NULL,
   `permission_id` bigint(20) NOT NULL,
@@ -156,7 +156,7 @@ CREATE TABLE `menu_has_permissions`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Records of menu_has_permissions
+-- Records of menu_permissions
 -- ----------------------------
 
 -- ----------------------------
@@ -250,10 +250,10 @@ INSERT INTO `positions` VALUES (2, '项目经理', 0, 1, '', '2024-10-10 19:20:4
 INSERT INTO `positions` VALUES (3, '普通员工', 0, 1, '', '2024-10-10 19:20:41.604', '2024-10-10 19:20:41.604');
 
 -- ----------------------------
--- Table structure for role_has_departments
+-- Table structure for role_departments
 -- ----------------------------
-DROP TABLE IF EXISTS `role_has_departments`;
-CREATE TABLE `role_has_departments`  (
+DROP TABLE IF EXISTS `role_departments`;
+CREATE TABLE `role_departments`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `role_id` bigint(20) NOT NULL,
   `department_id` bigint(20) NOT NULL,
@@ -264,14 +264,14 @@ CREATE TABLE `role_has_departments`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Records of role_has_departments
+-- Records of role_departments
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for role_has_menus
+-- Table structure for role_menus
 -- ----------------------------
-DROP TABLE IF EXISTS `role_has_menus`;
-CREATE TABLE `role_has_menus`  (
+DROP TABLE IF EXISTS `role_menus`;
+CREATE TABLE `role_menus`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `role_id` bigint(20) NOT NULL,
   `menu_id` bigint(20) NOT NULL,
@@ -282,14 +282,14 @@ CREATE TABLE `role_has_menus`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Records of role_has_menus
+-- Records of role_menus
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for role_has_permissions
+-- Table structure for role_permissions
 -- ----------------------------
-DROP TABLE IF EXISTS `role_has_permissions`;
-CREATE TABLE `role_has_permissions`  (
+DROP TABLE IF EXISTS `role_permissions`;
+CREATE TABLE `role_permissions`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `role_id` bigint(20) NOT NULL,
   `permission_id` bigint(20) NOT NULL,
@@ -300,7 +300,7 @@ CREATE TABLE `role_has_permissions`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Records of role_has_permissions
+-- Records of role_permissions
 -- ----------------------------
 
 -- ----------------------------
@@ -324,10 +324,10 @@ CREATE TABLE `roles`  (
 INSERT INTO `roles` VALUES (1, '普通角色', 2, 'admin', 1, '2024-10-10 19:20:41.599', '2024-10-11 10:35:59.535');
 
 -- ----------------------------
--- Table structure for user_has_roles
+-- Table structure for user_roles
 -- ----------------------------
-DROP TABLE IF EXISTS `user_has_roles`;
-CREATE TABLE `user_has_roles`  (
+DROP TABLE IF EXISTS `user_roles`;
+CREATE TABLE `user_roles`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `uid` bigint(20) NOT NULL,
   `role_id` bigint(20) NOT NULL,
@@ -338,7 +338,7 @@ CREATE TABLE `user_has_roles`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Records of user_has_roles
+-- Records of user_roles
 -- ----------------------------
 
 -- ----------------------------

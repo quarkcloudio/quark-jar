@@ -13,8 +13,8 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 
 import io.quarkcloud.quarkadmin.component.form.fields.TreeSelect.TreeData;
 import io.quarkcloud.quarkadmin.entity.MenuEntity;
-import io.quarkcloud.quarkadmin.entity.MenuHasPermissionEntity;
-import io.quarkcloud.quarkadmin.mapper.MenuHasPermissionMapper;
+import io.quarkcloud.quarkadmin.entity.MenuPermissionEntity;
+import io.quarkcloud.quarkadmin.mapper.MenuPermissionMapper;
 import io.quarkcloud.quarkadmin.mapper.MenuMapper;
 import io.quarkcloud.quarkadmin.service.UserService;
 import io.quarkcloud.quarkadmin.service.MenuService;
@@ -30,7 +30,7 @@ public class MenuServiceImpl extends ResourceServiceImpl<MenuMapper, MenuEntity>
 
     // 菜单权限关联
     @Resource
-    private MenuHasPermissionMapper menuHasPermissionMapper;
+    private MenuPermissionMapper menuHasPermissionMapper;
 
     // 用户角色
     @Autowired
@@ -201,7 +201,7 @@ public class MenuServiceImpl extends ResourceServiceImpl<MenuMapper, MenuEntity>
 
     // 给菜单绑定权限
     public boolean addPermission(Long menuId, Long permissionId) {
-        MenuHasPermissionEntity menuHasPermissionEntity = new MenuHasPermissionEntity();
+        MenuPermissionEntity menuHasPermissionEntity = new MenuPermissionEntity();
         menuHasPermissionEntity.setMenuId(menuId);
         menuHasPermissionEntity.setPermissionId(permissionId);
         menuHasPermissionEntity.setGuardName("admin");
@@ -215,7 +215,7 @@ public class MenuServiceImpl extends ResourceServiceImpl<MenuMapper, MenuEntity>
 
     // 清理菜单所有权限
     public boolean removeAllPermissions(Long menuId) {
-        QueryWrapper<MenuHasPermissionEntity> queryWrapper = new QueryWrapper<>();
+        QueryWrapper<MenuPermissionEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("menu_id", menuId);
         queryWrapper.eq("guard_name", "admin");
         Integer result = this.menuHasPermissionMapper.delete(queryWrapper);

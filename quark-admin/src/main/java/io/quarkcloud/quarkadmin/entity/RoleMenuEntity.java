@@ -15,8 +15,8 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper=false)
-@TableName("role_has_menus")
-public class RoleHasMenuEntity extends Model<RoleHasMenuEntity> {
+@TableName("role_menus")
+public class RoleMenuEntity extends Model<RoleMenuEntity> {
 
     // 主键
     @TableId(type = IdType.AUTO)

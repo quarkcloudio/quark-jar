@@ -7,26 +7,23 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 @Data
-@EqualsAndHashCode(callSuper=false)
-@TableName("role_has_permissions")
-public class RoleHasPermissionEntity extends Model<RoleHasPermissionEntity> {
+@TableName("user_roles")
+public class UserRoleEntity {
 
     // 主键
     @TableId(type = IdType.AUTO)
     private Long id;
 
-    // 角色ID
-    private Long roleId;
+    // 用户id
+    private Long uid;
 
-    // 权限ID
-    private Long permissionId;
+    // 角色id
+    private Long roleId;
 
     // 守卫名称
     private String guardName;

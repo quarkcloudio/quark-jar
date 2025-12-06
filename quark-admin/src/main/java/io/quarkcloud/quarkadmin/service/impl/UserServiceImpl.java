@@ -12,10 +12,10 @@ import io.quarkcloud.quarkadmin.entity.DepartmentEntity;
 import io.quarkcloud.quarkadmin.entity.UserEntity;
 import io.quarkcloud.quarkadmin.entity.PermissionEntity;
 import io.quarkcloud.quarkadmin.entity.RoleEntity;
-import io.quarkcloud.quarkadmin.entity.UserHasRoleEntity;
+import io.quarkcloud.quarkadmin.entity.UserRoleEntity;
 import io.quarkcloud.quarkadmin.mapper.UserMapper;
 import io.quarkcloud.quarkadmin.mapper.RoleMapper;
-import io.quarkcloud.quarkadmin.mapper.UserHasRoleMapper;
+import io.quarkcloud.quarkadmin.mapper.UserRoleMapper;
 import io.quarkcloud.quarkadmin.service.UserService;
 import io.quarkcloud.quarkadmin.service.PermissionService;
 import io.quarkcloud.quarkadmin.service.RoleService;
@@ -31,7 +31,7 @@ public class UserServiceImpl extends ResourceServiceImpl<UserMapper, UserEntity>
 
     // 用户角色关联表
     @Resource
-    private UserHasRoleMapper userHasRoleMapper;
+    private UserRoleMapper userHasRoleMapper;
 
     // 用户角色关联表
     @Resource
@@ -85,11 +85,11 @@ public class UserServiceImpl extends ResourceServiceImpl<UserMapper, UserEntity>
     // 根据用户id获取角色Id列表
     public List<Long> getRoleIdsById(Long adminId) {
         List<Long> list = new ArrayList<>();
-        QueryWrapper<UserHasRoleEntity> queryWrapper = new QueryWrapper<>();
+        QueryWrapper<UserRoleEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("uid", adminId);
         queryWrapper.eq("guard_name", "admin");
-        List<UserHasRoleEntity> userHasRoles = userHasRoleMapper.selectList(queryWrapper);
-        for (UserHasRoleEntity userHasRole : userHasRoles) {
+        List<UserRoleEntity> userHasRoles = userHasRoleMapper.selectList(queryWrapper);
+        for (UserRoleEntity userHasRole : userHasRoles) {
             list.add(userHasRole.getRoleId());
         }
         return list;
@@ -148,7 +148,7 @@ public class UserServiceImpl extends ResourceServiceImpl<UserMapper, UserEntity>
 
     // 给管理员添加角色
     public boolean addRole(Long adminId, Long roleId) {
-        UserHasRoleEntity userHasRoleEntity = new UserHasRoleEntity();
+        UserRoleEntity userHasRoleEntity = new UserRoleEntity();
         userHasRoleEntity.setUid(adminId);
         userHasRoleEntity.setRoleId(roleId);
         userHasRoleEntity.setGuardName("admin");
@@ -162,7 +162,7 @@ public class UserServiceImpl extends ResourceServiceImpl<UserMapper, UserEntity>
 
     // 清理管理员所有角色
     public boolean removeAllRoles(Long adminId) {
-        QueryWrapper<UserHasRoleEntity> queryWrapper = new QueryWrapper<>();
+        QueryWrapper<UserRoleEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("uid", adminId);
         queryWrapper.eq("guard_name", "admin");
         Integer result = this.userHasRoleMapper.delete(queryWrapper);

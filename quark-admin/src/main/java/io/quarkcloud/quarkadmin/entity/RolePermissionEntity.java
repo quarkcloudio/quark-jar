@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
@@ -14,8 +15,8 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper=false)
-@TableName("role_has_departments")
-public class RoleHasDepartmentEntity {
+@TableName("role_permissions")
+public class RolePermissionEntity extends Model<RolePermissionEntity> {
 
     // 主键
     @TableId(type = IdType.AUTO)
@@ -24,8 +25,8 @@ public class RoleHasDepartmentEntity {
     // 角色ID
     private Long roleId;
 
-    // 部门ID
-    private Long departmentId;
+    // 权限ID
+    private Long permissionId;
 
     // 守卫名称
     private String guardName;

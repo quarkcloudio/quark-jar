@@ -2,9 +2,9 @@ package io.quarkcloud.quarkadmin.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import io.quarkcloud.quarkadmin.entity.RoleHasMenuEntity;
+import io.quarkcloud.quarkadmin.entity.UserRoleEntity;
 
 @Mapper
-public interface RoleHasMenuMapper extends BaseMapper<RoleHasMenuEntity> {
+public interface UserRoleMapper extends BaseMapper<UserRoleEntity> {
 
 }

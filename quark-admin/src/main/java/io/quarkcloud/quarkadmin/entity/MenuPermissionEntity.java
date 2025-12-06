@@ -12,8 +12,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 @Data
-@TableName("menu_has_permissions")
-public class MenuHasPermissionEntity{
+@TableName("menu_permissions")
+public class MenuPermissionEntity{
 
     // 主键
     @TableId(type = IdType.AUTO)
