@@ -30,7 +30,7 @@ public class AdminAuthCaptchaAspect {
      * 环绕通知
      */
     @Around("AdminAuthCaptcha()")
-    public void advice(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object advice(ProceedingJoinPoint joinPoint) throws Throwable {
 
         // 得到连接点执行的方法对象
         MethodSignature signature= (MethodSignature) joinPoint.getSignature();
@@ -39,7 +39,7 @@ public class AdminAuthCaptchaAspect {
         // 得到方法上的注解
         AdminAuthCaptcha annotation = method.getAnnotation(AdminAuthCaptcha.class);
         if (annotation == null) {
-            return;
+            return joinPoint.proceed();
         }
 
         // 调用原方法
@@ -54,7 +54,7 @@ public class AdminAuthCaptchaAspect {
         // 获取资源名称
         Object resource = newContext.getPathVariable("resource");
         if (resource == null) {
-            return;
+            return joinPoint.proceed();
         }
 
         // 字符串首字母大写
@@ -63,8 +63,10 @@ public class AdminAuthCaptchaAspect {
         // 获取配置文件
         String[] basePackages = Config.getInstance().getBasePackages("admin");
         if (basePackages.length == 0) {
-            return;
+            return joinPoint.proceed();
         }
+
+        Object result = null;
 
         // 扫描包含的类
         Reflections reflections = new Reflections(basePackages[0], Scanners.SubTypes, Scanners.TypesAnnotated);
@@ -73,8 +75,15 @@ public class AdminAuthCaptchaAspect {
         Set<Class<? extends AuthImpl>> classes = reflections.getSubTypesOf(AuthImpl.class);
         for (Class<?> clazz : classes) {
             if(clazz.getSimpleName().equals(resource)) {
-                new ClassLoader().setClazz(clazz).doMethod("captcha", newContext);
+                result = new ClassLoader().setClazz(clazz).doMethod("captcha", newContext);
             }
         }
+
+        if (result == null) {
+            return joinPoint.proceed();
+        }
+
+        // 调用类方法
+        return result;
     }
 }

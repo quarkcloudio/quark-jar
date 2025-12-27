@@ -15,17 +15,11 @@ public interface Auth {
     // 获取标题
     public String getTitle();
 
-    // 获取子标题
-    public String getSubTitle();
-
     // 获取字段
     public List<Object> fields(Context context);
 
-    // 获取验证码ID
-    public Object captchaId(Context context);
-
     // 获取验证码
-    public void captcha(Context context);
+    public Object captcha(Context context);
 
     // 包裹在组件内的创建页字段
     public Object fieldsWithinComponents(Context context);
@@ -34,7 +28,7 @@ public interface Auth {
     public Object formFieldsParser(Context context, Object fields);
 
     // 执行登录
-    public Object handle(Context context);
+    public Object login(Context context);
     
     // 执行退出
     public Object logout(Context context);

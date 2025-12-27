@@ -20,7 +20,6 @@ import io.quarkcloud.quarkadmin.annotation.AdminAuth;
 import io.quarkcloud.quarkadmin.component.form.Field;
 import io.quarkcloud.quarkadmin.component.form.Rule;
 import io.quarkcloud.quarkadmin.component.icon.Icon;
-import io.quarkcloud.quarkadmin.component.message.Message;
 import io.quarkcloud.quarkadmin.entity.UserEntity;
 import io.quarkcloud.quarkadmin.service.UserService;
 import io.quarkcloud.quarkadmin.template.auth.Auth;
@@ -28,6 +27,7 @@ import io.quarkcloud.quarkcore.service.Cache;
 import io.quarkcloud.quarkcore.service.Context;
 import io.quarkcloud.quarkcore.service.Env;
 import io.quarkcloud.quarkcore.service.Redis;
+import io.quarkcloud.quarkcore.common.Message;
 
 public class AuthImpl implements Auth {
 
@@ -52,9 +52,6 @@ public class AuthImpl implements Auth {
     // 标题
     public String title;
 
-    // 副标题
-    public String subTitle;
-
     // 构造函数
     public AuthImpl() {
 
@@ -71,9 +68,6 @@ public class AuthImpl implements Auth {
 
         // 标题
         title = "QuarkJar";
-
-        // 副标题
-        subTitle = "信息丰富的世界里，唯一稀缺的就是人类的注意力";
     }
 
     // 获取接口
@@ -127,23 +121,6 @@ public class AuthImpl implements Auth {
         return annotationClass.title();
     }
 
-    // 获取子标题
-    public String getSubTitle() {
-
-        // 检查是否存在注解
-        if (annotationClass == null) {
-            return subTitle;
-        }
-
-        // 注解值为空返回默认值
-        if (annotationClass.subTitle().isEmpty()) {
-            return subTitle;
-        }
-
-        // 获取注解值
-        return annotationClass.subTitle();
-    }
-
     // 获取字段
     public List<Object> fields(Context context) {
         return Arrays.asList(
@@ -172,54 +149,15 @@ public class AuthImpl implements Auth {
             setPlaceholder("验证码").
             setWidth("100%").
             setSize("large").
-            setCaptchaIdUrl("/api/admin/login/index/captchaId").
-            setCaptchaUrl("/api/admin/login/index/captcha/{id}").
+            setCaptchaUrl("/api/admin/auth/index/captcha").
             setPrefix(new Icon().setType("icon-safetycertificate"))
         );
     }
 
-    // 获取验证码ID
-    public Object captchaId(Context context) {
-        Map<String, String> map = new HashMap<String, String>();
-
-        // 生成验证码ID
-        String simpleUUID = IdUtil.simpleUUID();
-
-        String redisHost = Env.getProperty("spring.redis.host");
-        if (redisHost !=null && !redisHost.isEmpty()) {
-            redisClient.setValue(simpleUUID, "uninitialized");
-        } else {
-            // 放入缓存
-            Cache.getInstance().put(simpleUUID, "uninitialized");
-        }
-
-        // 返回验证码ID
-        map.put("captchaId", simpleUUID);
-
-        return Message.success("获取成功！", null, map);
-    }
-
     // 获取验证码
-    public void captcha(Context context) {
-        String id = context.getPathVariable("id");
-        if (id.isEmpty()) {
-            return;
-        }
-
-        Object cacheValue = null;
+    public Object captcha(Context context) {
+        String id = IdUtil.simpleUUID();
         String redisHost = Env.getProperty("spring.redis.host");
-        if (redisHost !=null && !redisHost.isEmpty()) {
-            cacheValue = redisClient.getValueAndDelete(id);
-        } else {
-            // 获取缓存
-            cacheValue = Cache.getInstance().get(id);
-        }
-        if (cacheValue == null) {
-            return;
-        }
-        if (!cacheValue.equals("uninitialized")) {
-            return;
-        }
 
         // 定义图形验证码的长、宽、验证码字符数、干扰线宽度
         LineCaptcha lineCaptcha = CaptchaUtil.createLineCaptcha(150, 40, 5, 4);
@@ -230,11 +168,12 @@ public class AuthImpl implements Auth {
             Cache.getInstance().put(id, lineCaptcha.getCode());
         }
 
-        try {
-            lineCaptcha.write(context.getOutputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Map<String, Object> data = new HashMap<>();
+        data.put("captchaEnabled", true);
+        data.put("img", lineCaptcha.getImageBase64());
+        data.put("uuid", id);
+
+        return Message.success("请求成功", data);
     }
 
     // 包裹在组件内的创建页字段
@@ -285,7 +224,7 @@ public class AuthImpl implements Auth {
 
     // 执行登录
     @SuppressWarnings("unchecked")
-    public Object handle(Context context) {
+    public Object login(Context context) {
         Map<String, Object> map = context.getRequestBody(Map.class);
         if (map.isEmpty()) {
             return Message.error("参数错误！");
@@ -368,7 +307,7 @@ public class AuthImpl implements Auth {
         Map<String, String> result = new HashMap<>();
         result.put("token", token);
 
-        return Message.success("登录成功！", null, result);
+        return Message.success("登录成功！", result);
     }
     
     // 执行退出
@@ -391,15 +330,12 @@ public class AuthImpl implements Auth {
         // 获取标题
         title = this.getTitle();
 
-        // 获取子标题
-        subTitle = this.getSubTitle();
-
         // 获取组件内的字段
         Object body = this.fieldsWithinComponents(context);
 
         // 设置组件属性
-        login.setApi(api).setRedirect(redirect).setLogo(logo).setTitle(title).setSubTitle(subTitle).setBody(body);
+        login.setApi(api).setRedirect(redirect).setLogo(logo).setTitle(title).setBody(body);
 
-        return login;
+        return Message.success(login);
     }
 }

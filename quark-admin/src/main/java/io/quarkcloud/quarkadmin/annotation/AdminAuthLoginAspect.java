@@ -75,7 +75,7 @@ public class AdminAuthLoginAspect {
         Set<Class<? extends AuthImpl>> classes = reflections.getSubTypesOf(AuthImpl.class);
         for (Class<?> clazz : classes) {
             if(clazz.getSimpleName().equals(resource)) {
-                result = new ClassLoader().setClazz(clazz).doMethod("handle", newContext);
+                result = new ClassLoader().setClazz(clazz).doMethod("login", newContext);
             }
         }
 

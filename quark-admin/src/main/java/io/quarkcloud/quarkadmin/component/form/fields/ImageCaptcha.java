@@ -230,9 +230,6 @@ public class ImageCaptcha extends Component {
     // 自定义样式
     Map<String, Object> style;
 
-    // 获取验证码ID的URL
-    String captchaIdUrl;
-
     // 获取验证码URL
     String captchaUrl;
 
