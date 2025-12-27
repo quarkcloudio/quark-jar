@@ -13,23 +13,23 @@ import org.reflections.scanners.Scanners;
 import org.springframework.stereotype.Component;
 import io.quarkcloud.quarkcore.service.Config;
 import io.quarkcloud.quarkcore.service.Context;
-import io.quarkcloud.quarkadmin.template.login.impl.LoginImpl;
+import io.quarkcloud.quarkadmin.template.auth.impl.AuthImpl;
 import io.quarkcloud.quarkcore.service.ClassLoader;
 
 @Aspect
 @Component
-public class AdminLoginLogoutAspect {
+public class AdminAuthLoginAspect {
 
     // 加载基础资源包路径
     public String[] basePackages = Config.getInstance().getBasePackages("admin");
 
-    @Pointcut("@annotation(io.quarkcloud.quarkadmin.annotation.AdminLoginLogout)")
-    private void AdminLoginLogout() {}
+    @Pointcut("@annotation(io.quarkcloud.quarkadmin.annotation.AdminAuthLogin)")
+    private void AdminAuthLogin() {}
 
     /**
      * 环绕通知
      */
-    @Around("AdminLoginLogout()")
+    @Around("AdminAuthLogin()")
     public Object advice(ProceedingJoinPoint joinPoint) throws Throwable {
 
         // 得到连接点执行的方法对象
@@ -37,8 +37,8 @@ public class AdminLoginLogoutAspect {
         Method method = signature.getMethod();
  
         // 得到方法上的注解
-        AdminLoginLogout annotation = method.getAnnotation(AdminLoginLogout.class);
-        if (annotation == null) {
+        AdminAuthLogin annotation = method.getAnnotation(AdminAuthLogin.class);
+        if (annotation==null) {
             return joinPoint.proceed();
         }
 
@@ -72,10 +72,10 @@ public class AdminLoginLogoutAspect {
         Reflections reflections = new Reflections(basePackages[0], Scanners.SubTypes, Scanners.TypesAnnotated);
         
         // 获取所有类
-        Set<Class<? extends LoginImpl>> classes = reflections.getSubTypesOf(LoginImpl.class);
+        Set<Class<? extends AuthImpl>> classes = reflections.getSubTypesOf(AuthImpl.class);
         for (Class<?> clazz : classes) {
             if(clazz.getSimpleName().equals(resource)) {
-                result = new ClassLoader().setClazz(clazz).doMethod("logout", newContext);
+                result = new ClassLoader().setClazz(clazz).doMethod("handle", newContext);
             }
         }
 

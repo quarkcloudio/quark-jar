@@ -13,23 +13,23 @@ import org.reflections.scanners.Scanners;
 import org.springframework.stereotype.Component;
 import io.quarkcloud.quarkcore.service.Config;
 import io.quarkcloud.quarkcore.service.Context;
-import io.quarkcloud.quarkadmin.template.login.impl.LoginImpl;
+import io.quarkcloud.quarkadmin.template.auth.impl.AuthImpl;
 import io.quarkcloud.quarkcore.service.ClassLoader;
 
 @Aspect
 @Component
-public class AdminLoginCaptchaAspect {
+public class AdminAuthCaptchaAspect {
 
     // 加载基础资源包路径
     public String[] basePackages = Config.getInstance().getBasePackages("admin");
 
-    @Pointcut("@annotation(io.quarkcloud.quarkadmin.annotation.AdminLoginCaptcha)")
-    private void AdminLoginCaptcha() {}
+    @Pointcut("@annotation(io.quarkcloud.quarkadmin.annotation.AdminAuthCaptcha)")
+    private void AdminAuthCaptcha() {}
 
     /**
      * 环绕通知
      */
-    @Around("AdminLoginCaptcha()")
+    @Around("AdminAuthCaptcha()")
     public void advice(ProceedingJoinPoint joinPoint) throws Throwable {
 
         // 得到连接点执行的方法对象
@@ -37,7 +37,7 @@ public class AdminLoginCaptchaAspect {
         Method method = signature.getMethod();
  
         // 得到方法上的注解
-        AdminLoginCaptcha annotation = method.getAnnotation(AdminLoginCaptcha.class);
+        AdminAuthCaptcha annotation = method.getAnnotation(AdminAuthCaptcha.class);
         if (annotation == null) {
             return;
         }
@@ -70,7 +70,7 @@ public class AdminLoginCaptchaAspect {
         Reflections reflections = new Reflections(basePackages[0], Scanners.SubTypes, Scanners.TypesAnnotated);
         
         // 获取所有类
-        Set<Class<? extends LoginImpl>> classes = reflections.getSubTypesOf(LoginImpl.class);
+        Set<Class<? extends AuthImpl>> classes = reflections.getSubTypesOf(AuthImpl.class);
         for (Class<?> clazz : classes) {
             if(clazz.getSimpleName().equals(resource)) {
                 new ClassLoader().setClazz(clazz).doMethod("captcha", newContext);

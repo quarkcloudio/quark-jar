@@ -13,23 +13,23 @@ import org.reflections.scanners.Scanners;
 import org.springframework.stereotype.Component;
 import io.quarkcloud.quarkcore.service.Config;
 import io.quarkcloud.quarkcore.service.Context;
-import io.quarkcloud.quarkadmin.template.login.impl.LoginImpl;
+import io.quarkcloud.quarkadmin.template.auth.impl.AuthImpl;
 import io.quarkcloud.quarkcore.service.ClassLoader;
 
 @Aspect
 @Component
-public class AdminLoginRenderAspect {
+public class AdminAuthLogoutAspect {
 
     // 加载基础资源包路径
     public String[] basePackages = Config.getInstance().getBasePackages("admin");
 
-    @Pointcut("@annotation(io.quarkcloud.quarkadmin.annotation.AdminLoginRender)")
-    private void AdminLoginRender() {}
+    @Pointcut("@annotation(io.quarkcloud.quarkadmin.annotation.AdminAuthLogout)")
+    private void AdminAuthLogout() {}
 
     /**
      * 环绕通知
      */
-    @Around("AdminLoginRender()")
+    @Around("AdminAuthLogout()")
     public Object advice(ProceedingJoinPoint joinPoint) throws Throwable {
 
         // 得到连接点执行的方法对象
@@ -37,8 +37,8 @@ public class AdminLoginRenderAspect {
         Method method = signature.getMethod();
  
         // 得到方法上的注解
-        AdminLoginRender annotation = method.getAnnotation(AdminLoginRender.class);
-        if (annotation==null) {
+        AdminAuthLogout annotation = method.getAnnotation(AdminAuthLogout.class);
+        if (annotation == null) {
             return joinPoint.proceed();
         }
 
@@ -72,10 +72,10 @@ public class AdminLoginRenderAspect {
         Reflections reflections = new Reflections(basePackages[0], Scanners.SubTypes, Scanners.TypesAnnotated);
         
         // 获取所有类
-        Set<Class<? extends LoginImpl>> classes = reflections.getSubTypesOf(LoginImpl.class);
+        Set<Class<? extends AuthImpl>> classes = reflections.getSubTypesOf(AuthImpl.class);
         for (Class<?> clazz : classes) {
             if(clazz.getSimpleName().equals(resource)) {
-                result = new ClassLoader().setClazz(clazz).doMethod("render", newContext);
+                result = new ClassLoader().setClazz(clazz).doMethod("logout", newContext);
             }
         }
 

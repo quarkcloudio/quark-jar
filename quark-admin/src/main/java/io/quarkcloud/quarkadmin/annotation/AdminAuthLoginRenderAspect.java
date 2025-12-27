@@ -13,23 +13,23 @@ import org.reflections.scanners.Scanners;
 import org.springframework.stereotype.Component;
 import io.quarkcloud.quarkcore.service.Config;
 import io.quarkcloud.quarkcore.service.Context;
-import io.quarkcloud.quarkadmin.template.login.impl.LoginImpl;
+import io.quarkcloud.quarkadmin.template.auth.impl.AuthImpl;
 import io.quarkcloud.quarkcore.service.ClassLoader;
 
 @Aspect
 @Component
-public class AdminLoginCaptchaIdAspect {
+public class AdminAuthLoginRenderAspect {
 
     // 加载基础资源包路径
     public String[] basePackages = Config.getInstance().getBasePackages("admin");
 
-    @Pointcut("@annotation(io.quarkcloud.quarkadmin.annotation.AdminLoginCaptchaId)")
-    private void AdminLoginCaptchaId() {}
+    @Pointcut("@annotation(io.quarkcloud.quarkadmin.annotation.AdminAuthLoginRender)")
+    private void AdminAuthLoginRender() {}
 
     /**
      * 环绕通知
      */
-    @Around("AdminLoginCaptchaId()")
+    @Around("AdminAuthLoginRender()")
     public Object advice(ProceedingJoinPoint joinPoint) throws Throwable {
 
         // 得到连接点执行的方法对象
@@ -37,7 +37,7 @@ public class AdminLoginCaptchaIdAspect {
         Method method = signature.getMethod();
  
         // 得到方法上的注解
-        AdminLoginCaptchaId annotation = method.getAnnotation(AdminLoginCaptchaId.class);
+        AdminAuthLoginRender annotation = method.getAnnotation(AdminAuthLoginRender.class);
         if (annotation==null) {
             return joinPoint.proceed();
         }
@@ -72,10 +72,10 @@ public class AdminLoginCaptchaIdAspect {
         Reflections reflections = new Reflections(basePackages[0], Scanners.SubTypes, Scanners.TypesAnnotated);
         
         // 获取所有类
-        Set<Class<? extends LoginImpl>> classes = reflections.getSubTypesOf(LoginImpl.class);
+        Set<Class<? extends AuthImpl>> classes = reflections.getSubTypesOf(AuthImpl.class);
         for (Class<?> clazz : classes) {
             if(clazz.getSimpleName().equals(resource)) {
-                result = new ClassLoader().setClazz(clazz).doMethod("captchaId", newContext);
+                result = new ClassLoader().setClazz(clazz).doMethod("render", newContext);
             }
         }
 

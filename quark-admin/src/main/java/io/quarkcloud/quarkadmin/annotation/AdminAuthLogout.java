@@ -7,6 +7,6 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface AdminLoginLogout {
+public @interface AdminAuthLogout {
     String resource() default "index";
 }

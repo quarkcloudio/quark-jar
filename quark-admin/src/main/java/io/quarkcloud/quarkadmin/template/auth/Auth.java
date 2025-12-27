@@ -1,10 +1,10 @@
-package io.quarkcloud.quarkadmin.template.login;
+package io.quarkcloud.quarkadmin.template.auth;
 
 import java.util.List;
 
 import io.quarkcloud.quarkcore.service.Context;
 
-public interface Login {
+public interface Auth {
 
     // 获取接口
     public String getApi();

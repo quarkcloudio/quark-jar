@@ -7,6 +7,6 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface AdminLoginCaptcha {
+public @interface AdminAuthCaptcha {
     String resource() default "index";
 }

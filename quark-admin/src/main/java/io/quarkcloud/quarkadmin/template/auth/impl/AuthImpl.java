@@ -1,4 +1,4 @@
-package io.quarkcloud.quarkadmin.template.login.impl;
+package io.quarkcloud.quarkadmin.template.auth.impl;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -16,20 +16,20 @@ import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.LineCaptcha;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.jwt.JWT;
-import io.quarkcloud.quarkadmin.annotation.AdminLogin;
+import io.quarkcloud.quarkadmin.annotation.AdminAuth;
 import io.quarkcloud.quarkadmin.component.form.Field;
 import io.quarkcloud.quarkadmin.component.form.Rule;
 import io.quarkcloud.quarkadmin.component.icon.Icon;
 import io.quarkcloud.quarkadmin.component.message.Message;
 import io.quarkcloud.quarkadmin.entity.UserEntity;
 import io.quarkcloud.quarkadmin.service.UserService;
-import io.quarkcloud.quarkadmin.template.login.Login;
+import io.quarkcloud.quarkadmin.template.auth.Auth;
 import io.quarkcloud.quarkcore.service.Cache;
 import io.quarkcloud.quarkcore.service.Context;
 import io.quarkcloud.quarkcore.service.Env;
 import io.quarkcloud.quarkcore.service.Redis;
 
-public class LoginImpl implements Login {
+public class AuthImpl implements Auth {
 
     @Autowired
     UserService adminService;
@@ -38,7 +38,7 @@ public class LoginImpl implements Login {
     Redis redisClient;
 
     // 注解实例
-    protected AdminLogin annotationClass = null;
+    protected AdminAuth annotationClass = null;
 
     // 登录接口
     public String api;
@@ -56,15 +56,15 @@ public class LoginImpl implements Login {
     public String subTitle;
 
     // 构造函数
-    public LoginImpl() {
+    public AuthImpl() {
 
         // 获取注解对象
-        if (getClass().isAnnotationPresent(AdminLogin.class)) {
-            annotationClass = getClass().getAnnotation(AdminLogin.class);
+        if (getClass().isAnnotationPresent(AdminAuth.class)) {
+            annotationClass = getClass().getAnnotation(AdminAuth.class);
         }
 
         // 登录接口
-        api = "/api/admin/login/{resource}/handle";
+        api = "/api/admin/auth/{resource}/login";
 
         // 登录成功后跳转地址
         redirect = "/layout/index?api=/api/admin/dashboard/index/index";

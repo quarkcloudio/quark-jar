@@ -5,49 +5,49 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.quarkcloud.quarkadmin.annotation.AdminLoginCaptcha;
-import io.quarkcloud.quarkadmin.annotation.AdminLoginCaptchaId;
-import io.quarkcloud.quarkadmin.annotation.AdminLoginHandle;
-import io.quarkcloud.quarkadmin.annotation.AdminLoginRender;
-import io.quarkcloud.quarkadmin.annotation.AdminLoginLogout;
+import io.quarkcloud.quarkadmin.annotation.AdminAuthCaptcha;
+import io.quarkcloud.quarkadmin.annotation.AdminAuthCaptchaId;
+import io.quarkcloud.quarkadmin.annotation.AdminAuthLogin;
+import io.quarkcloud.quarkadmin.annotation.AdminAuthLoginRender;
+import io.quarkcloud.quarkadmin.annotation.AdminAuthLogout;
 import io.quarkcloud.quarkcore.service.Context;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
-public class AdminLoginController {
+public class AdminAuthController {
     
-    @RequestMapping(value = "/api/admin/login/{resource}/index", method = {RequestMethod.GET})
+    @RequestMapping(value = "/api/admin/auth/{resource}/index", method = {RequestMethod.GET})
     @ResponseBody
-    @AdminLoginRender
+    @AdminAuthLoginRender
     public Object index(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
 
-    @RequestMapping(value = "/api/admin/login/{resource}/handle", method = {RequestMethod.POST})
+    @RequestMapping(value = "/api/admin/auth/{resource}/login", method = {RequestMethod.POST})
     @ResponseBody
-    @AdminLoginHandle
+    @AdminAuthLogin
     public Object handle(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
 
-    @RequestMapping(value = "/api/admin/login/{resource}/captchaId", method = {RequestMethod.GET})
+    @RequestMapping(value = "/api/admin/auth/{resource}/captchaId", method = {RequestMethod.GET})
     @ResponseBody
-    @AdminLoginCaptchaId
+    @AdminAuthCaptchaId
     public Object captchaId(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
 
-    @RequestMapping(value = "/api/admin/login/{resource}/captcha/{id}", method = {RequestMethod.GET})
+    @RequestMapping(value = "/api/admin/auth/{resource}/captcha/{id}", method = {RequestMethod.GET})
     @ResponseBody
-    @AdminLoginCaptcha
+    @AdminAuthCaptcha
     public Object captcha(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
 
-    @RequestMapping(value = "/api/admin/logout/{resource}/handle", method = {RequestMethod.GET})
+    @RequestMapping(value = "/api/admin/auth/{resource}/logout", method = {RequestMethod.GET})
     @ResponseBody
-    @AdminLoginLogout
+    @AdminAuthLogout
     public Object logout(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
