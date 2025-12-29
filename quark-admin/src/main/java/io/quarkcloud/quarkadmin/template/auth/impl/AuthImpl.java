@@ -130,7 +130,7 @@ public class AuthImpl implements Auth {
             setPlaceholder("用户名").
             setWidth("100%").
             setSize("large").
-            setPrefix(new Icon().setType("icon-user")),
+            setPrefix(new Icon().setType("ant-design:user-outlined")),
 
             Field.password("password").
             setRules(Arrays.asList(
@@ -139,7 +139,7 @@ public class AuthImpl implements Auth {
             setPlaceholder("密码").
             setWidth("100%").
             setSize("large").
-            setPrefix(new Icon().setType("icon-lock")),
+            setPrefix(new Icon().setType("ant-design:lock-outlined")),
 
             Field.imageCaptcha("captcha").
             setRules(Arrays.asList(
@@ -149,7 +149,7 @@ public class AuthImpl implements Auth {
             setWidth("100%").
             setSize("large").
             setCaptchaUrl("/api/admin/auth/index/captcha").
-            setPrefix(new Icon().setType("icon-safetycertificate"))
+            setPrefix(new Icon().setType("ant-design:safety-certificate-outlined"))
         );
     }
 

@@ -214,12 +214,14 @@ public class Text extends Component {
     boolean allowClear;
 
     // 是否有边框，默认true
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean bordered;
 
     // 默认的选中项
     Object defaultValue;
 
     // 禁用
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object disabled;
 
     // 输入框的 id

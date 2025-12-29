@@ -188,12 +188,14 @@ public class Password extends Component {
     boolean allowClear;
 
     // 是否有边框，默认true
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean bordered;
 
     // 默认的选中项
     Object defaultValue;
 
     // 禁用
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object disabled;
 
     // 输入框的 id
@@ -204,6 +206,7 @@ public class Password extends Component {
     int maxLength;
 
     // 是否展示字数
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean showCount;
 
     // 设置校验状态,'error' | 'warning'
