@@ -30,6 +30,12 @@ public interface Auth {
     // 执行登录
     public Object login(Context context);
     
+    // 获取用户信息
+    public Object userInfo(Context context);
+
+    // 获取用户路由
+    public Object userRoutes(Context context);
+
     // 执行退出
     public Object logout(Context context);
 

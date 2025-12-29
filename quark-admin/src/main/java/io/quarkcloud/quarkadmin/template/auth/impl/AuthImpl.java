@@ -249,7 +249,7 @@ public class AuthImpl implements Auth {
         }
 
         Map<String, String> getCaptcha = (Map<String, String>) captcha;
-        String id = getCaptcha.get("id");
+        String id = getCaptcha.get("uuid");
         String captchaValue = getCaptcha.get("value");
         if (id.isEmpty()) {
             return Message.error("验证码ID不能为空！");
@@ -309,6 +309,14 @@ public class AuthImpl implements Auth {
         return Message.success("登录成功！", result);
     }
     
+    public Object userInfo(Context context) { 
+        return Message.success("获取用户信息成功！");
+    }
+
+    public Object userRoutes(Context context) { 
+        return Message.success("获取用户权限成功！");
+    }
+
     // 执行退出
     public Object logout(Context context) {
         return Message.success("退出成功！","/");
