@@ -3,24 +3,21 @@ package io.quarkcloud.quarkadmin.template.auth.impl;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.LineCaptcha;
 import cn.hutool.core.util.IdUtil;
-import cn.hutool.jwt.JWT;
 import io.quarkcloud.quarkadmin.annotation.AdminAuth;
 import io.quarkcloud.quarkadmin.component.form.Field;
 import io.quarkcloud.quarkadmin.component.form.Rule;
 import io.quarkcloud.quarkadmin.component.icon.Icon;
 import io.quarkcloud.quarkadmin.entity.UserEntity;
-import io.quarkcloud.quarkadmin.service.UserService;
+import io.quarkcloud.quarkadmin.service.AuthService;
 import io.quarkcloud.quarkadmin.template.auth.Auth;
 import io.quarkcloud.quarkcore.service.Cache;
 import io.quarkcloud.quarkcore.service.Context;
@@ -31,7 +28,7 @@ import io.quarkcloud.quarkcore.common.Message;
 public class AuthImpl implements Auth {
 
     @Autowired
-    UserService adminService;
+    AuthService authService;
 
     @Autowired
     Redis redisClient;
@@ -275,33 +272,7 @@ public class AuthImpl implements Auth {
             return Message.error("验证码错误！");
         }
 
-        UserEntity adminInfo = adminService.getByUsername((String) username);
-        if (adminInfo == null) {
-            return Message.error("用户名或密码错误！");
-        }
-
-        // 创建 BCryptPasswordEncoder 实例
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        System.out.println(password);
-        System.out.println(adminInfo.getPassword());
-        if (!encoder.matches((String) password, adminInfo.getPassword())) {
-            return Message.error("用户名或密码错误！");
-        }
-
-        // JWT密钥
-        String appKey = Env.getProperty("app.key");
-        String token = JWT.create()
-                .setPayload("id", adminInfo.getId())
-                .setPayload("username", adminInfo.getUsername())
-                .setPayload("nickname", adminInfo.getNickname())
-                .setPayload("sex", adminInfo.getSex())
-                .setPayload("email", adminInfo.getEmail())
-                .setPayload("phone", adminInfo.getPhone())
-                .setPayload("avatar", adminInfo.getAvatar())
-                .setPayload("guard_name", "admin")
-                .setKey(appKey.getBytes())
-                .setExpiresAt(new Date(System.currentTimeMillis() + (3600000 * 24)))
-                .sign();
+        String token = authService.login(username, password);
 
         Map<String, String> result = new HashMap<>();
         result.put("token", token);
@@ -310,7 +281,11 @@ public class AuthImpl implements Auth {
     }
     
     public Object userInfo(Context context) { 
-        return Message.success("获取用户信息成功！");
+        UserEntity userInfo = authService.getUserInfo();
+        if (userInfo == null) {
+            return Message.error("获取用户信息失败！");
+        }
+        return Message.success("获取用户信息成功！", userInfo);
     }
 
     public Object userRoutes(Context context) { 

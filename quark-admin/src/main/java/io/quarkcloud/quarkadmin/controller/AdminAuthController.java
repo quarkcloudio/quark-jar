@@ -9,6 +9,7 @@ import io.quarkcloud.quarkadmin.annotation.AdminAuthCaptcha;
 import io.quarkcloud.quarkadmin.annotation.AdminAuthLogin;
 import io.quarkcloud.quarkadmin.annotation.AdminAuthLoginRender;
 import io.quarkcloud.quarkadmin.annotation.AdminAuthLogout;
+import io.quarkcloud.quarkadmin.annotation.AdminAuthUserInfo;
 import io.quarkcloud.quarkcore.service.Context;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -27,6 +28,13 @@ public class AdminAuthController {
     @ResponseBody
     @AdminAuthLogin
     public Object login(HttpServletRequest request, HttpServletResponse response) {
+        return new Context(request, response);
+    }
+
+    @RequestMapping(value = "/api/admin/auth/{resource}/userInfo", method = {RequestMethod.GET})
+    @ResponseBody
+    @AdminAuthUserInfo
+    public Object userInfo(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
 
