@@ -1,4 +1,4 @@
-package io.quarkcloud.quarkadmin.config;
+package io.quarkcloud.quarkadmin.config.mybatisplus;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

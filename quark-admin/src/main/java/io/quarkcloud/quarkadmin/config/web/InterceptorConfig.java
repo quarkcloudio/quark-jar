@@ -1,4 +1,4 @@
-package io.quarkcloud.quarkadmin.config;
+package io.quarkcloud.quarkadmin.config.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
