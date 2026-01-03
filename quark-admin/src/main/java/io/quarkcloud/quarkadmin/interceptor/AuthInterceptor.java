@@ -77,10 +77,11 @@ public class AuthInterceptor implements HandlerInterceptor {
 
         // 记录日志
         ActionLogEntity actionLogEntity = new ActionLogEntity();
-        actionLogEntity.setObjectId(adminId);
+        actionLogEntity.setUid(adminId);
         actionLogEntity.setUsername(jwt.getPayload("username").toString());
         actionLogEntity.setUrl(request.getRequestURI());
         actionLogEntity.setType("admin");
+        actionLogEntity.setRemark("");
         String remoteAddr = request.getHeader("X-FORWARDED-FOR");
         if (remoteAddr == null || "".equals(remoteAddr)) {
             remoteAddr = request.getRemoteAddr();
