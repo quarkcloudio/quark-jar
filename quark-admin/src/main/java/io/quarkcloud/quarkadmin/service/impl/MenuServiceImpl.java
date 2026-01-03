@@ -177,7 +177,7 @@ public class MenuServiceImpl extends ResourceServiceImpl<MenuMapper, MenuEntity>
             }
         }
 
-        menuTree = Lister.listToTree(newMenus, "id", "pid", "routes", 0L);
+        menuTree = Lister.listToTree(newMenus, "id", "pid", "children", 0L);
         
         return menuTree;
     }
