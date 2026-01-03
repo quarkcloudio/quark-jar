@@ -10,6 +10,7 @@ import io.quarkcloud.quarkadmin.annotation.AdminAuthLogin;
 import io.quarkcloud.quarkadmin.annotation.AdminAuthLoginRender;
 import io.quarkcloud.quarkadmin.annotation.AdminAuthLogout;
 import io.quarkcloud.quarkadmin.annotation.AdminAuthUserInfo;
+import io.quarkcloud.quarkadmin.annotation.AdminAuthUserRoutes;
 import io.quarkcloud.quarkcore.service.Context;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -35,6 +36,13 @@ public class AdminAuthController {
     @ResponseBody
     @AdminAuthUserInfo
     public Object userInfo(HttpServletRequest request, HttpServletResponse response) {
+        return new Context(request, response);
+    }
+
+    @RequestMapping(value = "/api/admin/auth/{resource}/userRoutes", method = {RequestMethod.GET})
+    @ResponseBody
+    @AdminAuthUserRoutes
+    public Object userRoutes(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
 
