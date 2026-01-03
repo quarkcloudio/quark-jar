@@ -1,4 +1,4 @@
-package io.quarkcloud.quarkadmin.config.mybatisplus;
+package io.quarkcloud.quarkadmin.config.mybatis;
 
 import java.time.LocalDateTime;
 

@@ -37,7 +37,7 @@ public class AdminAuthUserInfoAspect {
         Method method = signature.getMethod();
  
         // 得到方法上的注解
-        AdminAuthLogin annotation = method.getAnnotation(AdminAuthLogin.class);
+        AdminAuthUserInfo annotation = method.getAnnotation(AdminAuthUserInfo.class);
         if (annotation==null) {
             return joinPoint.proceed();
         }

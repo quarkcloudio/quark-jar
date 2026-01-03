@@ -1,6 +1,8 @@
 package io.quarkcloud.quarkadmin.service;
 
-import io.quarkcloud.quarkadmin.entity.UserEntity;
+import io.quarkcloud.quarkadmin.security.AuthUser;
+
+import org.springframework.security.core.Authentication;
 
 public interface AuthService {
 
@@ -10,9 +12,16 @@ public interface AuthService {
     public String login(Object username, Object password);
 
     /**
+     * 获得当前认证信息
+     *
+     * @return 认证信息
+     */
+    public Authentication getAuthentication();
+
+    /**
      * 获取用户信息
      */
-    public UserEntity getUserInfo();
+    public AuthUser getUserInfo();
 
     /**
      * 获取用户ID

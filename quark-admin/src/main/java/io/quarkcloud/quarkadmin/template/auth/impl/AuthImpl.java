@@ -16,7 +16,7 @@ import io.quarkcloud.quarkadmin.annotation.AdminAuth;
 import io.quarkcloud.quarkadmin.component.form.Field;
 import io.quarkcloud.quarkadmin.component.form.Rule;
 import io.quarkcloud.quarkadmin.component.icon.Icon;
-import io.quarkcloud.quarkadmin.entity.UserEntity;
+import io.quarkcloud.quarkadmin.security.AuthUser;
 import io.quarkcloud.quarkadmin.service.AuthService;
 import io.quarkcloud.quarkadmin.template.auth.Auth;
 import io.quarkcloud.quarkcore.service.Cache;
@@ -280,8 +280,9 @@ public class AuthImpl implements Auth {
         return Message.success("登录成功！", result);
     }
     
-    public Object userInfo(Context context) { 
-        UserEntity userInfo = authService.getUserInfo();
+    public Object userInfo(Context context) {
+        System.err.println("userInfo");
+        AuthUser userInfo = authService.getUserInfo();
         if (userInfo == null) {
             return Message.error("获取用户信息失败！");
         }
