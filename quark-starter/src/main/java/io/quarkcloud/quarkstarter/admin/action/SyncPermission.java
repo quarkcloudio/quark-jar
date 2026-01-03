@@ -23,7 +23,6 @@ import io.quarkcloud.quarkadmin.entity.PermissionEntity;
 import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
 import io.quarkcloud.quarkadmin.service.ResourceService;
 import io.quarkcloud.quarkadmin.template.dashboard.impl.DashboardImpl;
-import io.quarkcloud.quarkadmin.template.layout.impl.LayoutImpl;
 import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
 import io.quarkcloud.quarkadmin.template.resource.impl.action.AjaxImpl;
 import io.quarkcloud.quarkcore.service.Config;
@@ -89,15 +88,6 @@ public class SyncPermission<M, T> extends AjaxImpl<ResourceMapper<T>, T> {
                                 // 获取所有Dashboard类
                                 Set<Class<? extends DashboardImpl>> dashboardClasses = reflections.getSubTypesOf(DashboardImpl.class);
                                 for (Class<?> clazz : dashboardClasses) {
-                                    String clazzName = clazz.getSimpleName().substring(0, 1).toLowerCase() + clazz.getSimpleName().substring(1);
-                                    String newPatternValue = patternValue.replace("{resource}", clazzName);
-                                    urlPaths.add(Map.of("url", newPatternValue,"method", methodName));
-                                }
-                                break;
-                            case "AdminLayoutController":
-                                // 获取所有Layout类
-                                Set<Class<? extends LayoutImpl>> layoutClasses = reflections.getSubTypesOf(LayoutImpl.class);
-                                for (Class<?> clazz : layoutClasses) {
                                     String clazzName = clazz.getSimpleName().substring(0, 1).toLowerCase() + clazz.getSimpleName().substring(1);
                                     String newPatternValue = patternValue.replace("{resource}", clazzName);
                                     urlPaths.add(Map.of("url", newPatternValue,"method", methodName));
