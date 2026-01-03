@@ -27,10 +27,6 @@ import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import cn.hutool.core.date.DateUtil;
-import cn.hutool.jwt.JWT;
-import cn.hutool.jwt.JWTUtil;
-import cn.hutool.jwt.JWTValidator;
 import lombok.Data;
 
 @Data
@@ -548,37 +544,6 @@ public class Context implements ApplicationContextAware {
     // getOutputStream
     public ServletOutputStream getOutputStream() throws IOException {
         return response.getOutputStream();
-    }
-
-    // 获取头部的token
-    public String getToken() {
-        String authHeader = getHeader("Authorization");
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return null;
-        }
-        String token = authHeader.substring("Bearer ".length());
-        return token;
-    }
-
-    // 解析token
-    public JWT parseToken() {
-        String authHeader = getHeader("Authorization");
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return null;
-        }
-        String token = authHeader.substring("Bearer ".length());
-        String appKey = Env.getProperty("app.key");
-        if (!JWT.of(token).setKey(appKey.getBytes()).verify()) {
-            return null;
-        }
-        try {
-            JWTValidator.of(token).validateDate(DateUtil.date());
-        } catch (Exception e) {
-            return null;
-        }
-        final JWT jwt = JWTUtil.parseToken(token);
-
-        return jwt;
     }
 
     public boolean isIndex() {

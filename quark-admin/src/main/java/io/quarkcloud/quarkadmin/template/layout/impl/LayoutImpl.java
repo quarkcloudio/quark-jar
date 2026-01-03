@@ -9,10 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
-import cn.hutool.jwt.JWT;
 import io.quarkcloud.quarkadmin.annotation.AdminLayout;
 import io.quarkcloud.quarkadmin.component.action.Action;
 import io.quarkcloud.quarkadmin.component.footer.Footer;
+import io.quarkcloud.quarkadmin.service.AuthService;
 import io.quarkcloud.quarkadmin.service.MenuService;
 import io.quarkcloud.quarkadmin.template.layout.Layout;
 import io.quarkcloud.quarkcore.service.Context;
@@ -21,6 +21,9 @@ public class LayoutImpl implements Layout {
 
     @Autowired
     MenuService menuService;
+
+    @Autowired
+    AuthService authService;
 
     // 注解实例
     protected AdminLayout annotationClass = null;
@@ -397,11 +400,9 @@ public class LayoutImpl implements Layout {
      * @return "权限菜单"
      */
     public ArrayNode getMenus(Context context) {
-        // 获取当前登录用户Token
-        JWT jwt = context.parseToken();
 
         // 获取当前登录用户ID
-        Long adminId = Long.parseLong(jwt.getPayload("id").toString());
+        Long adminId = authService.getUserId();
 
         return menuService.getListByAdminId(adminId);
     }
