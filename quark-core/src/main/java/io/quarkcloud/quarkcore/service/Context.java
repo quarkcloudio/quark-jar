@@ -546,6 +546,16 @@ public class Context implements ApplicationContextAware {
         return response.getOutputStream();
     }
 
+    // 获取头部的token
+    public String getToken() {
+        String authHeader = getHeader("Authorization");
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return null;
+        }
+        String token = authHeader.substring("Bearer ".length());
+        return token;
+    }
+
     public boolean isIndex() {
         String[] uri = getRequestURI().split("/");
         return uri[uri.length - 1].equals("index");

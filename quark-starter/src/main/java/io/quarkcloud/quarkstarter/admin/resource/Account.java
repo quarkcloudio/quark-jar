@@ -10,12 +10,12 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import cn.hutool.jwt.JWT;
 import io.quarkcloud.quarkadmin.component.form.Field;
 import io.quarkcloud.quarkadmin.component.form.Rule;
 import io.quarkcloud.quarkadmin.component.message.Message;
 import io.quarkcloud.quarkadmin.entity.UserEntity;
 import io.quarkcloud.quarkadmin.mapper.UserMapper;
+import io.quarkcloud.quarkadmin.service.AuthService;
 import io.quarkcloud.quarkadmin.service.UserService;
 import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
 import io.quarkcloud.quarkcore.service.Context;
@@ -29,6 +29,9 @@ public class Account extends ResourceImpl<UserMapper, UserEntity> {
 
     @Autowired
     private UserService adminService;
+
+    @Autowired
+    AuthService authService;
 
     // 构造函数
     public Account() {
@@ -87,8 +90,7 @@ public class Account extends ResourceImpl<UserMapper, UserEntity> {
 
     // 创建前回调
     public Object beforeFormShowing(Context context) {
-        JWT jwt = context.parseToken();
-        Long adminId = Long.parseLong(jwt.getPayload("id").toString());
+        Long adminId = authService.getUserId();
 
         // 获取登录管理员信息
         UserEntity adminInfo = adminService.getById(adminId);
@@ -103,9 +105,8 @@ public class Account extends ResourceImpl<UserMapper, UserEntity> {
 
     // 表单执行
     public Object formHandle(Context context) {
-        JWT jwt = context.parseToken();
         UserEntity adminEntity = context.getRequestBody(UserEntity.class);
-        Long adminId = Long.parseLong(jwt.getPayload("id").toString());
+        Long adminId = authService.getUserId();
         if (adminEntity.getAvatar() != null) {
             ObjectMapper objectMapper = new ObjectMapper();
             try {
