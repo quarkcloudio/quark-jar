@@ -4,7 +4,6 @@ import cn.hutool.core.map.MapUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,13 +16,35 @@ import java.util.Map;
 @Data
 public class AuthUser {
 
-    public static final String INFO_KEY_NICKNAME = "nickname";
-    public static final String INFO_KEY_DEPT_ID = "deptId";
-
     /**
      * 用户编号
      */
     private Long id;
+
+    /**
+     * 用户名
+     */
+    private String username;
+
+    /**
+     * 昵称
+     */
+    private String nickname;
+
+    /**
+     * 头像
+     */
+    private Object avatar;
+
+    /**
+     * Email
+     */
+    private String email;
+
+    /**
+     * 手机
+     */
+    private String phone;
 
     /**
      * 额外的用户信息
@@ -31,15 +52,14 @@ public class AuthUser {
     private Map<String, String> info;
 
     /**
-     * 授权范围
+     * 按钮权限
      */
-    private List<String> scopes;
+    private List<String> buttons;
 
     /**
-     * 过期时间
+     * 角色权限
      */
-    private LocalDateTime expiresTime;
-
+    private List<String> roles;
 
     // ========== 上下文 ==========
     /**

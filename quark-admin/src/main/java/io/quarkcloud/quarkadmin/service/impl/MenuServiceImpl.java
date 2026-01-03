@@ -2,7 +2,7 @@ package io.quarkcloud.quarkadmin.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -171,13 +171,8 @@ public class MenuServiceImpl extends ResourceServiceImpl<MenuMapper, MenuEntity>
         ArrayNode menuTree = new ObjectMapper().createArrayNode();
         List<MenuEntity> newMenus = new ArrayList<>();
         for (MenuEntity menu : menus) {
-            menu.setKey(UUID.randomUUID().toString()); // 生成唯一标识
-            menu.setLocale("menu" + menu.getPath().replace("/", "."));
-            menu.setHideInMenu(!menu.getShow()); // 设置是否隐藏
-            if (menu.getType().equals(2) && menu.getIsEngine()) {
-                menu.setPath("/layout/index?api=" + menu.getPath()); // 设置路径
-            }
-            if (!hasMenu(newMenus, menu.getId()) && !menu.getType().equals(3)) {
+            menu.setMeta(Map.of("title", menu.getName(), "icon", menu.getIcon(), "order", menu.getSort(), "hideInMenu", !menu.getVisible()));
+            if (!hasMenu(newMenus, menu.getId())) {
                 newMenus.add(menu); // 添加新菜单
             }
         }

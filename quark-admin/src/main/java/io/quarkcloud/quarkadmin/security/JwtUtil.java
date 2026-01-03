@@ -60,10 +60,4 @@ public class JwtUtil {
         }
         return null;
     }
-
-    /** 获取用户名 */
-    public String getUsername(String token) {
-        JWT jwt = JWTUtil.parseToken(token);
-        return (String) jwt.getPayload("username");
-    }
 }

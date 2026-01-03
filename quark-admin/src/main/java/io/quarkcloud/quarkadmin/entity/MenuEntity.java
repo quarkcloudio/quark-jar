@@ -2,6 +2,7 @@ package io.quarkcloud.quarkadmin.entity;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -26,11 +27,17 @@ public class MenuEntity {
     // GuardName
     private String guardName;
 
+    // 权限标识
+    private String permission;
+
     // 图标
     private String icon;
 
-    // 类型
+    // 菜单类型：1目录，2菜单，3按钮
     private Integer type;
+
+    // 页面类型：1默认，2引擎，3外链，
+    private Integer pageType;
 
     // 父ID
     private Long pid;
@@ -41,15 +48,14 @@ public class MenuEntity {
     // 访问路径
     private String path;
 
+    // 请求参数
+    private String query;
+
+    // 前端组件
+    private String component;
+
     // 是否显示
-    @TableField(value = "`show`")
-    private Boolean show;
-
-    // 是否为引擎路由
-    private Boolean isEngine;
-
-    // 是否打开新页面
-    private Boolean isLink;
+    private Boolean visible;
 
     // 权限ID
     @TableField(exist = false)
@@ -58,15 +64,12 @@ public class MenuEntity {
     // 状态
     private Boolean status;
 
-    // 组件key
-    @TableField(value = "`key`")
-    private String key;
-
-    // 语言
-    private String locale;
-
     // 在菜单中隐藏
+    @TableField(exist = false)
     private Boolean hideInMenu;
+
+    @TableField(exist = false)
+    private Map<String, Object> meta;
 
     // 创建时间
     @TableField(value = "created_at", fill = FieldFill.INSERT)

@@ -9,6 +9,9 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
+import com.fasterxml.jackson.databind.node.ArrayNode;
+
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.LineCaptcha;
 import cn.hutool.core.util.IdUtil;
@@ -18,6 +21,7 @@ import io.quarkcloud.quarkadmin.component.form.Rule;
 import io.quarkcloud.quarkadmin.component.icon.Icon;
 import io.quarkcloud.quarkadmin.security.AuthUser;
 import io.quarkcloud.quarkadmin.service.AuthService;
+import io.quarkcloud.quarkadmin.service.MenuService;
 import io.quarkcloud.quarkadmin.template.auth.Auth;
 import io.quarkcloud.quarkcore.service.Cache;
 import io.quarkcloud.quarkcore.service.Context;
@@ -29,6 +33,9 @@ public class AuthImpl implements Auth {
 
     @Autowired
     AuthService authService;
+
+    @Autowired
+    MenuService menuService;
 
     @Autowired
     Redis redisClient;
@@ -290,7 +297,10 @@ public class AuthImpl implements Auth {
     }
 
     public Object userRoutes(Context context) { 
-        return Message.success("获取用户权限成功！");
+        // 获取当前登录用户ID
+        Long adminId = authService.getUserId();
+        ArrayNode menus = menuService.getListByAdminId(adminId);
+        return Message.success("获取用户权限成功！",Map.of("routes", menus, "home","home"));
     }
 
     // 执行退出

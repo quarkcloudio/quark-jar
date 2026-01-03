@@ -1,6 +1,6 @@
 package io.quarkcloud.quarkadmin.config.security;
 
-import io.quarkcloud.quarkadmin.security.JwtAuthenticationFilter;
+import io.quarkcloud.quarkadmin.security.AuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
 import org.springframework.security.authentication.*;
@@ -18,7 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     @Autowired
-    private JwtAuthenticationFilter jwtFilter;
+    private AuthenticationFilter filter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http)
@@ -34,7 +34,7 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
             )
             .addFilterBefore(
-                jwtFilter,
+                filter,
                 UsernamePasswordAuthenticationFilter.class
             );
 
