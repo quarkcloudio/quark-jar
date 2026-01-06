@@ -1,4 +1,4 @@
-package io.quarkcloud.quarkadmin.component.login;
+package io.quarkcloud.quarkadmin.component.auth;
 
 import java.util.List;
 import java.util.Map;
@@ -13,17 +13,19 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class Login extends Component {
+public class Auth extends Component {
 
-    public String api;
+    public String loginApi;
+
+    public String userInfoApi;
+
+    public String userRoutesApi;
 
     public String redirect;
 
-    public String logo;
+    public Object logo;
 
     public String title;
-
-    public String subTitle;
 
     public String backgroundImageUrl;
 
@@ -35,8 +37,8 @@ public class Login extends Component {
 
     public List<Object> actions;
 
-    public Login() {
-        this.component = "login";
+    public Auth() {
+        this.component = "auth";
         this.setComponentKey();
     }
 }

@@ -9,8 +9,14 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AdminAuth {
 
-    // api
-    String api() default "";
+    // loginApi
+    String loginApi() default "";
+
+    // userInfoApi
+    String userInfoApi() default "";
+
+    // userRoutesApi
+    String userRoutesApi() default "";
 
     // logo
     String logo() default "";

@@ -11,6 +11,6 @@ public class Index extends AuthImpl {
 
     // 构造函数
     public Index() {
-        api = "/api/admin/auth/index/login";
+        loginApi = "/api/admin/auth/index/login";
     }
 }

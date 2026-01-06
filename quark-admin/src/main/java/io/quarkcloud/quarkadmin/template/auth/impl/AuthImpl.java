@@ -44,7 +44,13 @@ public class AuthImpl implements Auth {
     protected AdminAuth annotationClass = null;
 
     // 登录接口
-    public String api;
+    public String loginApi;
+
+    // 获取用户信息接口
+    public String userInfoApi;
+
+    // 用户路由接口
+    public String userRoutesApi;
 
     // 登录成功后跳转地址
     public String redirect;
@@ -64,7 +70,13 @@ public class AuthImpl implements Auth {
         }
 
         // 登录接口
-        api = "/api/admin/auth/{resource}/login";
+        loginApi = "/api/admin/auth/index/login";
+
+        // 获取用户信息接口
+        userInfoApi = "/api/admin/auth/index/userInfo";
+
+        // 用户路由接口
+        userRoutesApi = "/api/admin/auth/index/userRoutes";
 
         // 登录成功后跳转地址
         redirect = "/layout/index?api=/api/admin/dashboard/index/index";
@@ -74,20 +86,54 @@ public class AuthImpl implements Auth {
     }
 
     // 获取接口
-    public String getApi() {
+    public String getLoginApi() {
 
         // 检查是否存在注解
         if (annotationClass == null) {
-            return api;
+            return loginApi;
         }
 
         // 注解值为空返回默认值
-        if (annotationClass.api().isEmpty()) {
-            return api;
+        if (annotationClass.loginApi().isEmpty()) {
+            return loginApi;
         }
 
         // 获取注解值
-        return annotationClass.api();
+        return annotationClass.loginApi();
+    }
+
+    // 获取用户信息接口
+    public String getUserInfoApi() {
+
+        // 检查是否存在注解
+        if (annotationClass == null) {
+            return userInfoApi;
+        }
+
+        // 注解值为空返回默认值
+        if (annotationClass.userInfoApi().isEmpty()) {
+            return userInfoApi;
+        }
+
+        // 获取注解值
+        return annotationClass.userInfoApi();
+    }
+
+    // 用户路由接口
+    public String getUserRoutesApi() {
+
+        // 检查是否存在注解
+        if (annotationClass == null) {
+            return userRoutesApi;
+        }
+
+        // 注解值为空返回默认值
+        if (annotationClass.userRoutesApi().isEmpty()) {
+            return userRoutesApi;
+        }
+
+        // 获取注解值
+        return annotationClass.userRoutesApi();
     }
 
     // 登录成功后跳转地址
@@ -312,10 +358,12 @@ public class AuthImpl implements Auth {
     public Object render(Context context) {
 
         // 登录表单组件
-        io.quarkcloud.quarkadmin.component.login.Login login = new io.quarkcloud.quarkadmin.component.login.Login();
+        io.quarkcloud.quarkadmin.component.auth.Auth login = new io.quarkcloud.quarkadmin.component.auth.Auth();
 
         // 获取接口
-        api = this.getApi();
+        loginApi = this.getLoginApi();
+        userInfoApi = this.getUserInfoApi();
+        userRoutesApi = this.getUserRoutesApi();
 
         // 获取重定向
         redirect = this.getRedirect();
@@ -327,7 +375,7 @@ public class AuthImpl implements Auth {
         Object body = this.fieldsWithinComponents(context);
 
         // 设置组件属性
-        login.setApi(api).setRedirect(redirect).setLogo(logo).setTitle(title).setBody(body);
+        login.setLoginApi(loginApi).setUserInfoApi(userInfoApi).setUserRoutesApi(userRoutesApi).setRedirect(redirect).setLogo(logo).setTitle(title).setBody(body);
 
         return Message.success(login);
     }

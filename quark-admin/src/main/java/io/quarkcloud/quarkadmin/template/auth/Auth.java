@@ -7,7 +7,11 @@ import io.quarkcloud.quarkcore.service.Context;
 public interface Auth {
 
     // 获取接口
-    public String getApi();
+    public String getLoginApi();
+
+    public String getUserInfoApi();
+
+    public String getUserRoutesApi();
 
     // 登录成功后跳转地址
     public String getRedirect();
