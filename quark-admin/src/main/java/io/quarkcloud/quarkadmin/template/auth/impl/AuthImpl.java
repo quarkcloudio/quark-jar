@@ -19,6 +19,7 @@ import io.quarkcloud.quarkadmin.annotation.AdminAuth;
 import io.quarkcloud.quarkadmin.component.form.Field;
 import io.quarkcloud.quarkadmin.component.form.Rule;
 import io.quarkcloud.quarkadmin.component.icon.Icon;
+import io.quarkcloud.quarkadmin.dto.AdminAuthLoginRespVo;
 import io.quarkcloud.quarkadmin.security.AuthUser;
 import io.quarkcloud.quarkadmin.service.AuthService;
 import io.quarkcloud.quarkadmin.service.MenuService;
@@ -325,16 +326,12 @@ public class AuthImpl implements Auth {
             return Message.error("验证码错误！");
         }
 
-        String token = authService.login(username, password);
-
-        Map<String, String> result = new HashMap<>();
-        result.put("token", token);
+        AdminAuthLoginRespVo result = authService.login(username, password);
 
         return Message.success("登录成功！", result);
     }
     
     public Object userInfo(Context context) {
-        System.err.println("userInfo");
         AuthUser userInfo = authService.getUserInfo();
         if (userInfo == null) {
             return Message.error("获取用户信息失败！");

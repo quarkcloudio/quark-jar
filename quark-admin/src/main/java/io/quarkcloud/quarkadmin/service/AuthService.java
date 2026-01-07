@@ -1,5 +1,6 @@
 package io.quarkcloud.quarkadmin.service;
 
+import io.quarkcloud.quarkadmin.dto.AdminAuthLoginRespVo;
 import io.quarkcloud.quarkadmin.security.AuthUser;
 
 import org.springframework.security.core.Authentication;
@@ -9,7 +10,7 @@ public interface AuthService {
     /**
      * 登录
      */
-    public String login(Object username, Object password);
+    public AdminAuthLoginRespVo login(Object username, Object password);
 
     /**
      * 获得当前认证信息

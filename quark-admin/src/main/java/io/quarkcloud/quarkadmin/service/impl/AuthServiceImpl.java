@@ -7,6 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import io.quarkcloud.quarkadmin.dto.AdminAuthLoginRespVo;
 import io.quarkcloud.quarkadmin.entity.UserEntity;
 import io.quarkcloud.quarkadmin.security.AuthUser;
 import io.quarkcloud.quarkadmin.security.JwtUtil;
@@ -23,7 +24,7 @@ public class AuthServiceImpl implements AuthService {
     JwtUtil jwtUtil;
 
     @Override
-    public String login(Object username, Object password) {
+    public AdminAuthLoginRespVo login(Object username, Object password) {
         UserEntity adminInfo = userService.getByUsername((String) username);
         if (adminInfo == null) {
             throw new IllegalArgumentException("用户名或密码错误！");
@@ -37,7 +38,7 @@ public class AuthServiceImpl implements AuthService {
 
         String token = jwtUtil.generateToken(adminInfo);
 
-        return token;
+        return  AdminAuthLoginRespVo.builder().token(token).build();
     }
 
     /**
