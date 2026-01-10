@@ -26,30 +26,38 @@ public class DatetimeRange extends Component {
 
     // 开启 grid 模式时传递给 Row, 仅在ProFormGroup, ProFormList, ProFormFieldSet 中有效，默认：{
     // gutter: 8 }
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Map<String, Object> rowProps;
 
     // 开启 grid 模式时传递给 Col，默认：{ xs: 24 }
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Map<String, Object> colProps;
 
     // 是否是次要控件，只针对 LightFilter 下有效
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean secondary;
 
     // 配合 label 属性使用，表示是否显示 label 后面的冒号
     boolean colon;
 
     // 额外的提示信息，和 help 类似，当需要错误信息和提示文案同时出现时，可以使用这个。
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     String extra;
 
     // 配合 valiTextStatus 属性使用，展示校验状态图标，建议只配合 Input 组件使用
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean hasFeedback;
 
     // 提示信息，如不设置，则会根据校验规则自动生成
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     String help;
 
     // 是否隐藏字段（依然会收集和校验字段）
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean hidden;
 
     // 设置子元素默认值，如果与 Form 的 initialValues 冲突则以 Form 为准
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object initialValue;
 
     // label 标签的文本
@@ -67,6 +75,7 @@ public class DatetimeRange extends Component {
     String name;
 
     // 为 true 时不带样式，作为纯字段控件使用
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean noStyle;
 
     // 必填样式设置。如不设置，则会根据校验规则自动生成
@@ -74,13 +83,16 @@ public class DatetimeRange extends Component {
     boolean required;
 
     // 会在 label 旁增加一个 icon，悬浮后展示配置的信息
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     String tooltip;
 
     // 子节点的值的属性，如 Switch 的是 'checked'。该属性为 getValueProps 的封装，自定义 getValueProps 后会失效
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     String valuePropName;
 
     // 需要为输入控件设置布局样式时，使用该属性，用法同 labelCol。你可以通过 Form 的 wrapperCol 进行统一设置，不会作用于嵌套
     // Item。当和 Form 同时设置时，以 Item 为准
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object wrapperCol;
 
     // 列表页、详情页中列属性
@@ -91,18 +103,23 @@ public class DatetimeRange extends Component {
     String align;
 
     // （IE 下无效）列是否固定，可选 true (等效于 left) left rightr，只在列表页中有效
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object fixed;
 
     // 表格列是否可编辑，只在列表页中有效
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean editable;
 
     // 是否自动缩略，只在列表页、详情页中有效
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean ellipsis;
 
     // 是否支持复制，只在列表页、详情页中有效
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean copyable;
 
     // 表头的筛选菜单项，当值为 true 时，自动使用 valueEnum 生成，只在列表页中有效
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object filters;
 
     // 查询表单中的权重，权重大排序靠前，只在列表页中有效
@@ -110,6 +127,7 @@ public class DatetimeRange extends Component {
     int order;
 
     // 可排序列，只在列表页中有效
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object sorter;
 
     // 包含列的数量，只在详情页中有效
@@ -121,9 +139,11 @@ public class DatetimeRange extends Component {
     int columnWidth;
 
     // 获取数据接口
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     String api;
 
     // 是否忽略保存到数据库，默认为 false
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean ignore;
 
     // 全局校验规则
@@ -178,87 +198,111 @@ public class DatetimeRange extends Component {
     Closure callback;
 
     // 是否支持清除，默认true
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean allowClear;
 
     // 自动获取焦点，默认false
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean autoFocus;
 
     // 是否有边框，默认true
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean bordered;
 
     // 自定义类名
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     String className;
 
     // 默认的选中项
     Object[] defaultValue;
 
     // 禁用
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object disabled;
 
     // 设置日期格式，为数组时支持多格式匹配，展示以第一个为准。
     String format;
 
     // 额外的弹出日历 className
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     String popupClassName;
 
     // 设置输入框为只读（避免在移动设备上打开虚拟键盘）
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean inputReadOnly;
 
     // 国际化配置
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object locale;
 
     // 日期面板的状态 time | date | month | year | decade
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     String mode;
 
     // 自定义下一个图标
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object nextIcon;
 
     // 控制浮层显隐
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean open;
 
     // 设置选择器类型 date | week | month | quarter | year
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     String picker;
 
     // 输入框占位文本
     String[] placeholder;
 
     // 浮层预设位置，bottomLeft bottomRight topLeft topRight
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     String placement;
 
     // 额外的弹出日历样式
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object popupStyle;
 
     // 自定义上一个图标
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object prevIcon;
 
     // 输入框大小，large | middle | small
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     String size;
 
     // 设置校验状态，'error' | 'warning'
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     String status;
 
     // 自定义的选择框后缀图标
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object suffixIcon;
 
     // 自定义 << 切换图标
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object superNextIcon;
 
     // 自定义 >> 切换图标
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object superPrevIcon;
 
     // 指定选中项,string[] | number[]
     Object value;
 
     // 默认面板日期
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     String defaultPickerValue;
 
     // 当设定了 showTime 的时候，面板是否显示“此刻”按钮
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean showNow;
 
     // 增加时间选择功能
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object showTime;
 
     // 是否展示“今天”按钮
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean showToday;
 
     public DatetimeRange() {
