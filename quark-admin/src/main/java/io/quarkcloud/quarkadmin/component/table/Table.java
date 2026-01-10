@@ -109,11 +109,6 @@ public class Table  extends Component {
     public Object search;
 
     /**
-     * 批量操作配置
-     */
-    public Object batchActions;
-
-    /**
      * 日期格式化字符串
      */
     public String dateFormatter;

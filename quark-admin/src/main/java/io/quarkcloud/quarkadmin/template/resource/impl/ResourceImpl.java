@@ -513,9 +513,6 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         // 列表页表格列
         Object tableColumns = indexTableColumns(context);
 
-        // 列表页批量操作
-        Object indexTableAlertActions = indexTableAlertActions(context);
-
         // 列表页搜索栏
         Object indexSearches = new ResolveSearch<T>(tableSearch, this.searches(context), context).
             setWithExport(this.isWithExport()).
@@ -528,7 +525,6 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
             .setToolBar(tableToolBar)
             .setTreeBar(tableTreeBar)
             .setColumns(tableColumns)
-            .setBatchActions(indexTableAlertActions)
             .setSearches(indexSearches);
 
         // 查询条件
