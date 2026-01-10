@@ -319,37 +319,6 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         return null;
     }
 
-    // 页面组件渲染
-    public Object pageComponentRender(Context context, Object body) {
-        return this.pageContainerComponentRender(context, body);
-    }
-
-    // 页面容器组件渲染
-    public Object pageContainerComponentRender(Context context, Object body) {
-
-        // 页面标题
-        String title = this.getTitle();
-
-        // 页面子标题
-        String subTitle = this.getSubTitle();
-
-        // 页面是否携带返回Icon
-        boolean backIcon = this.isBackIcon();
-
-        // 设置头部
-        PageHeader header = new PageHeader()
-                .setTitle(title)
-                .setSubTitle(subTitle);
-
-        if (!backIcon) {
-            header.setBackIcon(false);
-        }
-
-        return new PageContainer()
-                .setHeader(header)
-                .setBody(body);
-    }
-
     // 列表页表格主体
     public Object indexTableExtraRender(Context context) {
         return null;
@@ -779,7 +748,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
     // 创建页组件渲染
     public Object creationRender(Context context) {
         Object data = this.creationData(context);
-        return this.pageComponentRender(context, creationComponentRender(context, data));
+        return Message.success(this.creationComponentRender(context, data));
     }
 
     // 保存创建数据
@@ -865,7 +834,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         T data = this.editData(context);
 
         // 渲染编辑页组件
-        return this.pageComponentRender(context, editComponentRender(context, data));
+        return Message.success(this.editComponentRender(context, data));
     }
 
     // 获取编辑表单值
@@ -1157,13 +1126,13 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         data = beforeDetailShowing(context, data);
 
         // 渲染组件
-        return this.pageComponentRender(context, detailComponentRender(context, data));
+        return Message.success(this.detailComponentRender(context, data));
     }
 
     // 表单渲染
     public Object formRender(Context context) {
         Object data = beforeCreating(context);
-        return this.pageComponentRender(context, creationComponentRender(context, data));
+        return Message.success(this.creationComponentRender(context, data));
     }
 
     // 导入模板

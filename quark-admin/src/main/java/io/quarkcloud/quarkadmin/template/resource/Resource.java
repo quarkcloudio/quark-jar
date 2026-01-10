@@ -71,12 +71,6 @@ public interface Resource<T> {
     // 行为执行完之后回调
     public Object afterAction(Context context, String uriKey, ResourceService<ResourceMapper<T>, T> resourceService);
 
-    // 页面组件渲染
-    public Object pageComponentRender(Context context, Object body);
-
-    // 页面容器组件渲染
-    public Object pageContainerComponentRender(Context context, Object body);
-
     // 列表页表格主体
     public Object indexTableExtraRender(Context context);
 
