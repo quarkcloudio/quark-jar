@@ -25,6 +25,7 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
 import cn.hutool.poi.excel.ExcelWriter;
+import io.quarkcloud.quarkcore.common.Message;
 import io.quarkcloud.quarkcore.service.Context;
 import io.quarkcloud.quarkcore.util.Lister;
 import io.quarkcloud.quarkcore.util.Reflect;
@@ -33,7 +34,6 @@ import io.quarkcloud.quarkadmin.annotation.AdminResource;
 import io.quarkcloud.quarkadmin.component.card.Card;
 import io.quarkcloud.quarkadmin.component.form.Closure;
 import io.quarkcloud.quarkadmin.component.form.Form;
-import io.quarkcloud.quarkadmin.component.message.Message;
 import io.quarkcloud.quarkadmin.component.pagecontainer.PageContainer;
 import io.quarkcloud.quarkadmin.component.pagecontainer.PageHeader;
 import io.quarkcloud.quarkadmin.component.table.Column;
@@ -617,7 +617,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
 
     // 列表页组件渲染
     public Object indexRender(Context context) {
-        return this.pageComponentRender(context, indexComponentRender(context));
+        return Message.success(this.indexComponentRender(context));
     }
 
     // 创建表单的接口
@@ -875,7 +875,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         T data = this.editData(context);
 
         // 渲染编辑页数据
-        return Message.success("获取成功！", null, data);
+        return Message.success("获取成功！", data);
     }
 
     // 保存编辑数据
@@ -1060,7 +1060,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
             }
         }
 
-        return Message.success("操作成功！", null, data);
+        return Message.success("操作成功！", data);
     }
 
     // 详情标题
