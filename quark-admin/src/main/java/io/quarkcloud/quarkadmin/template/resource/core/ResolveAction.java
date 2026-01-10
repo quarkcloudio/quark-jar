@@ -10,7 +10,6 @@ import io.quarkcloud.quarkadmin.component.action.Action.Closure;
 import io.quarkcloud.quarkadmin.component.drawer.Drawer;
 import io.quarkcloud.quarkadmin.component.dropdown.Dropdown;
 import io.quarkcloud.quarkadmin.component.form.Form;
-import io.quarkcloud.quarkadmin.component.space.Space;
 import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
 import io.quarkcloud.quarkadmin.component.modal.Modal;
 import io.quarkcloud.quarkadmin.template.resource.Action;
@@ -51,7 +50,7 @@ public class ResolveAction<M extends ResourceMapper<T>, T> {
             }
         }
 
-        return new Space().setBody(items);
+        return items;
     }
 
     // 表格行内行为

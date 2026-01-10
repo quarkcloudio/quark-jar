@@ -34,8 +34,6 @@ import io.quarkcloud.quarkadmin.annotation.AdminResource;
 import io.quarkcloud.quarkadmin.component.card.Card;
 import io.quarkcloud.quarkadmin.component.form.Closure;
 import io.quarkcloud.quarkadmin.component.form.Form;
-import io.quarkcloud.quarkadmin.component.pagecontainer.PageContainer;
-import io.quarkcloud.quarkadmin.component.pagecontainer.PageHeader;
 import io.quarkcloud.quarkadmin.component.table.Column;
 import io.quarkcloud.quarkadmin.component.table.Search;
 import io.quarkcloud.quarkadmin.component.table.Table;
