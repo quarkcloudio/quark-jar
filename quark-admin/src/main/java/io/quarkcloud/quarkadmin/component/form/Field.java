@@ -49,11 +49,11 @@ public class Field {
     }
 
     public static Cascader cascader(String name, String label) {
-        return new Cascader().setName(name).setLabel(label);
+        return new Cascader().setName(name).setLabel(label).setPlaceholder("请选择"+label);
     }
 
     public static Cascader cascader(String name, String label, Closure callback) {
-        return new Cascader().setName(name).setLabel(label).setCallback(callback);
+        return new Cascader().setName(name).setLabel(label).setCallback(callback).setPlaceholder("请选择"+label);
     }
 
     public static Checkbox checkbox(String name) {
@@ -81,11 +81,11 @@ public class Field {
     }
 
     public static Date date(String name, String label) {
-        return new Date().setName(name).setLabel(label);
+        return new Date().setName(name).setLabel(label).setPlaceholder("请选择"+label);
     }
 
     public static Date date(String name, String label, Closure callback) {
-        return new Date().setName(name).setLabel(label).setCallback(callback);
+        return new Date().setName(name).setLabel(label).setCallback(callback).setPlaceholder("请选择"+label);
     }
 
     public static DateRange dateRange(String name) {
@@ -105,11 +105,11 @@ public class Field {
     }
 
     public static Datetime datetime(String name, String label) {
-        return new Datetime().setName(name).setLabel(label);
+        return new Datetime().setName(name).setLabel(label).setPlaceholder("请选择"+label);
     }
 
     public static Datetime datetime(String name, String label, Closure callback) {
-        return new Datetime().setName(name).setLabel(label).setCallback(callback);
+        return new Datetime().setName(name).setLabel(label).setCallback(callback).setPlaceholder("请选择"+label);
     }
 
     public static DatetimeRange datetimeRange(String name) {
@@ -205,11 +205,11 @@ public class Field {
     }
 
     public static Icon icon(String name, String label) {
-        return new Icon().setName(name).setLabel(label);
+        return new Icon().setName(name).setLabel(label).setPlaceholder("请选择"+label);
     }
 
     public static Icon icon(String name, String label, Closure callback) {
-        return new Icon().setName(name).setLabel(label).setCallback(callback);
+        return new Icon().setName(name).setLabel(label).setCallback(callback).setPlaceholder("请选择"+label);
     }
 
     /** 
@@ -292,11 +292,11 @@ public class Field {
     }
 
     public static Month month(String name, String label) {
-        return new Month().setName(name).setLabel(label);
+        return new Month().setName(name).setLabel(label).setPlaceholder("请选择"+label);
     }
 
     public static Month month(String name, String label, Closure callback) {
-        return new Month().setName(name).setLabel(label).setCallback(callback);
+        return new Month().setName(name).setLabel(label).setCallback(callback).setPlaceholder("请选择"+label);
     }
 
     public static Number number(String name) {
@@ -304,11 +304,11 @@ public class Field {
     }
 
     public static Number number(String name, String label) {
-        return new Number().setName(name).setLabel(label);
+        return new Number().setName(name).setLabel(label).setPlaceholder("请输入"+label);
     }
 
     public static Number number(String name, String label, Closure callback) {
-        return new Number().setName(name).setLabel(label).setCallback(callback);
+        return new Number().setName(name).setLabel(label).setCallback(callback).setPlaceholder("请输入"+label);
     }
 
     public static Password password(String name) {
@@ -316,11 +316,11 @@ public class Field {
     }
 
     public static Password password(String name, String label) {
-        return new Password().setName(name).setLabel(label);
+        return new Password().setName(name).setLabel(label).setPlaceholder("请输入"+label);
     }
 
     public static Password password(String name, String label, Closure callback) {
-        return new Password().setName(name).setLabel(label).setCallback(callback);
+        return new Password().setName(name).setLabel(label).setCallback(callback).setPlaceholder("请输入"+label);
     }
 
     public static Quarter quarter(String name) {
@@ -328,11 +328,11 @@ public class Field {
     }
 
     public static Quarter quarter(String name, String label) {
-        return new Quarter().setName(name).setLabel(label);
+        return new Quarter().setName(name).setLabel(label).setPlaceholder("请选择"+label);
     }
 
     public static Quarter quarter(String name, String label, Closure callback) {
-        return new Quarter().setName(name).setLabel(label).setCallback(callback);
+        return new Quarter().setName(name).setLabel(label).setCallback(callback).setPlaceholder("请选择"+label);
     }
 
     public static Radio radio(String name) {
@@ -356,11 +356,11 @@ public class Field {
     }
 
     public static Search search(String name, String label) {
-        return new Search().setName(name).setLabel(label);
+        return new Search().setName(name).setLabel(label).setPlaceholder("请输入"+label);
     }
 
     public static Search search(String name, String label, Closure callback) {
-        return new Search().setName(name).setLabel(label).setCallback(callback);
+        return new Search().setName(name).setLabel(label).setCallback(callback).setPlaceholder("请输入"+label);
     }
 
     public static SelectField select(String name) {
@@ -368,11 +368,11 @@ public class Field {
     }
 
     public static SelectField select(String name, String label) {
-        return new SelectField().setName(name).setLabel(label);
+        return new SelectField().setName(name).setLabel(label).setPlaceholder("请选择"+label);
     }
 
     public static SelectField select(String name, String label, Closure callback) {
-        return new SelectField().setName(name).setLabel(label).setCallback(callback);
+        return new SelectField().setName(name).setLabel(label).setCallback(callback).setPlaceholder("请选择"+label);
     }
 
     public static SelectField selectField(String name) {
@@ -380,11 +380,11 @@ public class Field {
     }
 
     public static SelectField selectField(String name, String label) {
-        return new SelectField().setName(name).setLabel(label);
+        return new SelectField().setName(name).setLabel(label).setPlaceholder("请选择"+label);
     }
 
     public static SelectField selectField(String name, String label, Closure callback) {
-        return new SelectField().setName(name).setLabel(label).setCallback(callback);
+        return new SelectField().setName(name).setLabel(label).setCallback(callback).setPlaceholder("请选择"+label);
     }
 
     public static SelectField.Option selectOption(String label, Object value) {
@@ -432,11 +432,11 @@ public class Field {
     }
 
     public static Text text(String name, String label) {
-        return new Text().setName(name).setLabel(label);
+        return new Text().setName(name).setLabel(label).setPlaceholder("请输入"+label);
     }
 
     public static Text text(String name, String label, Closure callback) {
-        return new Text().setName(name).setLabel(label).setCallback(callback);
+        return new Text().setName(name).setLabel(label).setCallback(callback).setPlaceholder("请输入"+label);
     }
 
     public static Textarea textarea(String name) {
@@ -444,11 +444,11 @@ public class Field {
     }
 
     public static Textarea textarea(String name, String label) {
-        return new Textarea().setName(name).setLabel(label);
+        return new Textarea().setName(name).setLabel(label).setPlaceholder("请输入"+label);
     }
 
     public static Textarea textarea(String name, String label, Closure callback) {
-        return new Textarea().setName(name).setLabel(label).setCallback(callback);
+        return new Textarea().setName(name).setLabel(label).setCallback(callback).setPlaceholder("请输入"+label);
     }
 
     public static Time time(String name) {
@@ -456,11 +456,11 @@ public class Field {
     }
 
     public static Time time(String name, String label) {
-        return new Time().setName(name).setLabel(label);
+        return new Time().setName(name).setLabel(label).setPlaceholder("请选择"+label);
     }
 
     public static Time time(String name, String label, Closure callback) {
-        return new Time().setName(name).setLabel(label).setCallback(callback);
+        return new Time().setName(name).setLabel(label).setCallback(callback).setPlaceholder("请选择"+label);
     }
 
     public static TimeRange timeRange(String name) {
@@ -492,11 +492,11 @@ public class Field {
     }
 
     public static Tree tree(String name, String label) {
-        return new Tree().setName(name).setLabel(label);
+        return new Tree().setName(name).setLabel(label).setPlaceholder("请选择"+label);
     }
     
     public static Tree tree(String name, String label, Closure callback) {
-        return new Tree().setName(name).setLabel(label).setCallback(callback);
+        return new Tree().setName(name).setLabel(label).setCallback(callback).setPlaceholder("请选择"+label);
     }
 
     public static TreeSelect treeSelect(String name) {
@@ -504,11 +504,11 @@ public class Field {
     }
 
     public static TreeSelect treeSelect(String name, String label) {
-        return new TreeSelect().setName(name).setLabel(label);
+        return new TreeSelect().setName(name).setLabel(label).setPlaceholder("请选择"+label);
     }
 
     public static TreeSelect treeSelect(String name, String label, Closure callback) {
-        return new TreeSelect().setName(name).setLabel(label).setCallback(callback);
+        return new TreeSelect().setName(name).setLabel(label).setCallback(callback).setPlaceholder("请选择"+label);
     }
 
     public static Week week(String name) {
@@ -516,11 +516,11 @@ public class Field {
     }
 
     public static Week week(String name, String label) {
-        return new Week().setName(name).setLabel(label);
+        return new Week().setName(name).setLabel(label).setPlaceholder("请选择"+label);
     }
 
     public static Week week(String name, String label, Closure callback) {
-        return new Week().setName(name).setLabel(label).setCallback(callback);
+        return new Week().setName(name).setLabel(label).setCallback(callback).setPlaceholder("请选择"+label);
     }
 
     public static Year year(String name) {
@@ -528,10 +528,10 @@ public class Field {
     }
 
     public static Year year(String name, String label) {
-        return new Year().setName(name).setLabel(label);
+        return new Year().setName(name).setLabel(label).setPlaceholder("请选择"+label);
     }
 
     public static Year year(String name, String label, Closure callback) {
-        return new Year().setName(name).setLabel(label).setCallback(callback);
+        return new Year().setName(name).setLabel(label).setCallback(callback).setPlaceholder("请选择"+label);
     }
 }
