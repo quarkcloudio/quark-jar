@@ -456,11 +456,11 @@ public class Field {
     }
 
     public static Time time(String name, String label) {
-        return new Time().setName(name).setLabel(label).setPlaceholder("请选择"+label);
+        return new Time().setName(name).setLabel(label);
     }
 
     public static Time time(String name, String label, Closure callback) {
-        return new Time().setName(name).setLabel(label).setCallback(callback).setPlaceholder("请选择"+label);
+        return new Time().setName(name).setLabel(label).setCallback(callback);
     }
 
     public static TimeRange timeRange(String name) {
@@ -520,7 +520,7 @@ public class Field {
     }
 
     public static Week week(String name, String label, Closure callback) {
-        return new Week().setName(name).setLabel(label).setCallback(callback).setPlaceholder("请选择"+label);
+        return new Week().setName(name).setLabel(label).setCallback(callback);
     }
 
     public static Year year(String name) {
@@ -528,10 +528,10 @@ public class Field {
     }
 
     public static Year year(String name, String label) {
-        return new Year().setName(name).setLabel(label).setPlaceholder("请选择"+label);
+        return new Year().setName(name).setLabel(label);
     }
 
     public static Year year(String name, String label, Closure callback) {
-        return new Year().setName(name).setLabel(label).setCallback(callback).setPlaceholder("请选择"+label);
+        return new Year().setName(name).setLabel(label).setCallback(callback);
     }
 }
