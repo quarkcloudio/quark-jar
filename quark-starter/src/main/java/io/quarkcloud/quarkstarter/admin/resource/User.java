@@ -26,17 +26,13 @@ import io.quarkcloud.quarkadmin.service.RoleService;
 import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
 import io.quarkcloud.quarkcore.service.Context;
 import io.quarkcloud.quarkstarter.admin.action.BatchDelete;
-import io.quarkcloud.quarkstarter.admin.action.BatchDisable;
-import io.quarkcloud.quarkstarter.admin.action.BatchEnable;
-import io.quarkcloud.quarkstarter.admin.action.CreateLink;
+import io.quarkcloud.quarkstarter.admin.action.CreateDrawer;
 import io.quarkcloud.quarkstarter.admin.action.DeleteSpecial;
-import io.quarkcloud.quarkstarter.admin.action.DetailLink;
-import io.quarkcloud.quarkstarter.admin.action.EditLink;
+import io.quarkcloud.quarkstarter.admin.action.EditDrawer;
 import io.quarkcloud.quarkstarter.admin.action.FormBack;
 import io.quarkcloud.quarkstarter.admin.action.FormExtraBack;
 import io.quarkcloud.quarkstarter.admin.action.FormReset;
 import io.quarkcloud.quarkstarter.admin.action.FormSubmit;
-import io.quarkcloud.quarkstarter.admin.action.More;
 import io.quarkcloud.quarkstarter.admin.search.DatetimeRange;
 import io.quarkcloud.quarkstarter.admin.search.Input;
 import io.quarkcloud.quarkstarter.admin.search.Status;
@@ -194,15 +190,18 @@ public class User extends ResourceImpl<UserMapper, UserEntity> {
     // 行为
     public List<Object> actions(Context context) {
         return Arrays.asList(
-            new CreateLink<UserMapper, UserEntity>(this.getTitle()),
-            new DetailLink<UserMapper, UserEntity>(),
-            new More<UserMapper, UserEntity>().setActions(Arrays.asList(
-                new EditLink<UserMapper, UserEntity>(),
-                new DeleteSpecial<UserMapper, UserEntity>()
-            )),
+            new CreateDrawer<UserMapper, UserEntity>()
+                .setTitle(this.getTitle())
+                .setApi(this.creationApi(context))
+                .setFields(this.creationFields(context))
+                .setData(this.creationData(context)),
             new BatchDelete<UserMapper, UserEntity>(),
-            new BatchDisable<UserMapper, UserEntity>(),
-            new BatchEnable<UserMapper, UserEntity>(),
+            new EditDrawer<UserMapper, UserEntity>()
+                .setTitle("编辑")
+                .setApi(this.editApi(context))
+                .setInitApi(this.editValueApi(context))
+                .setFields(this.editFields(context)),
+            new DeleteSpecial<UserMapper, UserEntity>(),
             new FormExtraBack<UserMapper, UserEntity>(),
             new FormSubmit<UserMapper, UserEntity>(),
             new FormReset<UserMapper, UserEntity>(),
