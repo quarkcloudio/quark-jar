@@ -29,6 +29,9 @@ public class BatchDeleteRole<M, T> extends BatchImpl<ResourceMapper<T>, T> {
 
         // 行为接口接收的参数，当行为在表格行展示的时候，可以配置当前行的任意字段
         this.setApiParams(Arrays.asList("id"));
+
+        // 只在表格内展示
+        this.setOnlyOnIndex(true);
     }
 
     // 执行行为句柄
