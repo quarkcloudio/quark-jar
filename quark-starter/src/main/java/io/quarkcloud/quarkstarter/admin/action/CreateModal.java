@@ -23,7 +23,8 @@ public class CreateModal<M, T> extends ModalImpl<ResourceMapper<T>, T> {
     // 初始化
     public CreateModal() {
         this.setType("primary");
-        this.setIcon("plus-circle");
+        this.setGhost(true);
+        this.setIcon("ant-design:plus-outlined");
         this.setDestroyOnClose(true);
         this.setReload("table");
         this.setOnlyOnIndex(true);
@@ -31,7 +32,7 @@ public class CreateModal<M, T> extends ModalImpl<ResourceMapper<T>, T> {
 
     // 标题
     public CreateModal<M, T> setTitle(String title) {
-        this.name = "创建" + title;
+        this.name = "创建";
         return this;
     }
 
