@@ -32,7 +32,7 @@ public class CreateModal<M, T> extends ModalImpl<ResourceMapper<T>, T> {
 
     // 标题
     public CreateModal<M, T> setTitle(String title) {
-        this.name = "创建";
+        this.name = title;
         return this;
     }
 

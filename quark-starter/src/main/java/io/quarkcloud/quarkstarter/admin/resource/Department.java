@@ -102,7 +102,7 @@ public class Department extends ResourceImpl<DepartmentMapper, DepartmentEntity>
     public List<Object> actions(Context context) {
         return Arrays.asList(
             new CreateModal<DepartmentMapper, DepartmentEntity>()
-                .setTitle(this.getTitle())
+                .setTitle("新增")
                 .setApi(this.creationApi(context))
                 .setFields(this.creationFields(context))
                 .setData(this.creationData(context)),

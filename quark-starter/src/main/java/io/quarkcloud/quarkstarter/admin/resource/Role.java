@@ -8,7 +8,9 @@ import org.springframework.stereotype.Component;
 
 import io.quarkcloud.quarkadmin.component.form.Field;
 import io.quarkcloud.quarkadmin.component.form.Rule;
+import io.quarkcloud.quarkadmin.entity.DepartmentEntity;
 import io.quarkcloud.quarkadmin.entity.RoleEntity;
+import io.quarkcloud.quarkadmin.mapper.DepartmentMapper;
 import io.quarkcloud.quarkadmin.mapper.RoleMapper;
 import io.quarkcloud.quarkadmin.service.MenuService;
 import io.quarkcloud.quarkadmin.service.PermissionService;
@@ -17,10 +19,10 @@ import io.quarkcloud.quarkadmin.service.RoleService;
 import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
 import io.quarkcloud.quarkcore.service.Context;
 import io.quarkcloud.quarkstarter.admin.action.BatchDeleteRole;
-import io.quarkcloud.quarkstarter.admin.action.CreateLink;
+import io.quarkcloud.quarkstarter.admin.action.CreateModal;
 import io.quarkcloud.quarkstarter.admin.action.DataScope;
 import io.quarkcloud.quarkstarter.admin.action.DeleteRole;
-import io.quarkcloud.quarkstarter.admin.action.EditLink;
+import io.quarkcloud.quarkstarter.admin.action.EditModal;
 import io.quarkcloud.quarkstarter.admin.action.FormBack;
 import io.quarkcloud.quarkstarter.admin.action.FormExtraBack;
 import io.quarkcloud.quarkstarter.admin.action.FormReset;
@@ -88,8 +90,16 @@ public class Role extends ResourceImpl<RoleMapper, RoleEntity> {
             new DataScope<RoleMapper, RoleEntity>()
                 .setDepartmentService(departmentService)
                 .setRoleService(roleService),
-            new CreateLink<RoleMapper, RoleEntity>(this.getTitle()),
-            new EditLink<RoleMapper, RoleEntity>(),
+            new CreateModal<RoleMapper, RoleEntity>()
+                .setTitle("新增")
+                .setApi(this.creationApi(context))
+                .setFields(this.creationFields(context))
+                .setData(this.creationData(context)),
+            new EditModal<DepartmentMapper, DepartmentEntity>()
+                .setTitle("编辑")
+                .setApi(this.editApi(context))
+                .setInitApi(this.editValueApi(context))
+                .setFields(this.editFields(context)),
             new DeleteRole<RoleMapper, RoleEntity>(),
             new BatchDeleteRole<RoleMapper, RoleEntity>(),
             new FormExtraBack<RoleMapper, RoleEntity>(),
