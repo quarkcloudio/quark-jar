@@ -171,7 +171,7 @@ public class Menu extends ResourceImpl<MenuMapper, MenuEntity> {
     public List<Object> actions(Context context) {
         return Arrays.asList(
             new MenuCreateDrawer<MenuMapper, MenuEntity>()
-                .setTitle(this.getTitle())
+                .setTitle("新增")
                 .setApi(this.creationApi(context))
                 .setFields(this.creationFields(context))
                 .setData(this.creationData(context)),

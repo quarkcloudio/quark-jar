@@ -63,7 +63,7 @@ public class Permission extends ResourceImpl<PermissionMapper, PermissionEntity>
         return Arrays.asList(
             new SyncPermission<PermissionMapper, PermissionEntity>(),
             new CreateModal<PermissionMapper, PermissionEntity>()
-                .setTitle(this.getTitle())
+                .setTitle("新增")
                 .setApi(this.creationApi(context))
                 .setFields(this.creationFields(context))
                 .setData(this.creationData(context)),
