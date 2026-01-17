@@ -8,15 +8,17 @@ import org.springframework.stereotype.Component;
 import io.quarkcloud.quarkadmin.component.form.Field;
 import io.quarkcloud.quarkadmin.component.form.Rule;
 import io.quarkcloud.quarkadmin.entity.ConfigEntity;
+import io.quarkcloud.quarkadmin.entity.UserEntity;
 import io.quarkcloud.quarkadmin.mapper.ConfigMapper;
+import io.quarkcloud.quarkadmin.mapper.UserMapper;
 import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
 import io.quarkcloud.quarkcore.service.Context;
 import io.quarkcloud.quarkstarter.admin.action.BatchDelete;
 import io.quarkcloud.quarkstarter.admin.action.BatchDisable;
 import io.quarkcloud.quarkstarter.admin.action.BatchEnable;
-import io.quarkcloud.quarkstarter.admin.action.CreateLink;
+import io.quarkcloud.quarkstarter.admin.action.CreateDrawer;
 import io.quarkcloud.quarkstarter.admin.action.Delete;
-import io.quarkcloud.quarkstarter.admin.action.EditLink;
+import io.quarkcloud.quarkstarter.admin.action.EditDrawer;
 import io.quarkcloud.quarkstarter.admin.action.FormBack;
 import io.quarkcloud.quarkstarter.admin.action.FormExtraBack;
 import io.quarkcloud.quarkstarter.admin.action.FormReset;
@@ -81,8 +83,16 @@ public class Config extends ResourceImpl<ConfigMapper, ConfigEntity> {
     // 行为
     public List<Object> actions(Context context) {
         return Arrays.asList(
-            new CreateLink<ConfigMapper, ConfigEntity>(this.getTitle()),
-            new EditLink<ConfigMapper, ConfigEntity>(),
+            new CreateDrawer<UserMapper, UserEntity>()
+                .setTitle("新增")
+                .setApi(this.creationApi(context))
+                .setFields(this.creationFields(context))
+                .setData(this.creationData(context)),
+            new EditDrawer<UserMapper, UserEntity>()
+                .setTitle("编辑")
+                .setApi(this.editApi(context))
+                .setInitApi(this.editValueApi(context))
+                .setFields(this.editFields(context)),
             new Delete<ConfigMapper, ConfigEntity>(),
             new BatchDelete<ConfigMapper, ConfigEntity>(),
             new BatchDisable<ConfigMapper, ConfigEntity>(),
