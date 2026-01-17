@@ -19,6 +19,11 @@ public class ActionImpl<M extends ResourceMapper<T>, T> implements Action<T> {
     public String api;
     public String actionType;
     public String submitForm;
+    public boolean block;
+    public boolean batch;
+    public boolean danger;
+    public boolean disabled;
+    public boolean ghost;
     public String icon;
     public String type;
     public String size;
@@ -32,7 +37,6 @@ public class ActionImpl<M extends ResourceMapper<T>, T> implements Action<T> {
     public boolean onlyOnDetail;
     public boolean showOnIndex;
     public boolean showOnIndexTableRow;
-    public boolean showOnIndexTableAlert;
     public boolean showOnForm;
     public boolean showOnFormExtra;
     public boolean showOnDetail;
@@ -41,6 +45,8 @@ public class ActionImpl<M extends ResourceMapper<T>, T> implements Action<T> {
     // 构造函数
     public ActionImpl() {
         this.actionType = "ajax";
+        this.type = "default";
+        this.size = "small";
     }
 
     // 执行行为句柄
@@ -104,6 +110,31 @@ public class ActionImpl<M extends ResourceMapper<T>, T> implements Action<T> {
     // 设置按钮的图标组件
     public String getIcon() {
         return icon;
+    }
+
+    // 设置按钮为块级元素
+    public boolean getBlock() {
+        return block;
+    }
+
+    // 是否批量操作
+    public boolean getBatch() {
+        return batch;
+    }
+
+    // 危险按钮
+    public boolean getDanger() {
+        return danger;
+    }
+
+    // 禁用按钮
+    public boolean getDisabled() {
+        return disabled;
+    }
+
+    // 是否幽灵按钮
+    public boolean getGhost() {
+        return ghost;
     }
 
     // 行为表单字段
@@ -186,6 +217,36 @@ public class ActionImpl<M extends ResourceMapper<T>, T> implements Action<T> {
         return this;
     }
 
+    // 设置按钮为块级元素
+    public ActionImpl<M, T> setBlock(boolean block) {
+        this.block = block;
+        return this;
+    }
+
+    // 批量操作
+    public ActionImpl<M, T> setBatch(boolean batch) {
+        this.batch = batch;
+        return this;
+    }
+
+    // 危险按钮
+    public ActionImpl<M, T> setDanger(boolean danger) {
+        this.danger = danger;
+        return this;
+    }
+
+    // 禁用按钮
+    public ActionImpl<M, T> setDisabled(boolean disabled) {
+        this.disabled = disabled;
+        return this;
+    }
+
+    // 是否幽灵按钮
+    public ActionImpl<M, T> setGhost(boolean ghost) {
+        this.ghost = ghost;
+        return this;
+    }
+
     // 行为表单字段
     public ActionImpl<M, T> setFields(Object fields) {
         this.fields = fields;
@@ -224,7 +285,6 @@ public class ActionImpl<M extends ResourceMapper<T>, T> implements Action<T> {
         this.showOnIndex = value;
         this.showOnDetail = !value;
         this.showOnIndexTableRow = !value;
-        this.showOnIndexTableAlert = !value;
         this.showOnForm = !value;
         this.showOnFormExtra = !value;
         this.showOnDetail = !value;
@@ -236,7 +296,6 @@ public class ActionImpl<M extends ResourceMapper<T>, T> implements Action<T> {
     public ActionImpl<M, T> setExceptOnIndex() {
         this.showOnDetail = true;
         this.showOnIndexTableRow = true;
-        this.showOnIndexTableAlert = true;
         this.showOnForm = true;
         this.showOnFormExtra = true;
         this.showOnDetail = true;
@@ -248,7 +307,6 @@ public class ActionImpl<M extends ResourceMapper<T>, T> implements Action<T> {
     // 只在表单页展示
     public ActionImpl<M, T> setOnlyOnForm(boolean value) {
         this.showOnForm = value;
-        this.showOnIndexTableAlert = !value;
         this.showOnIndex = !value;
         this.showOnDetail = !value;
         this.showOnIndexTableRow = !value;
@@ -260,7 +318,6 @@ public class ActionImpl<M extends ResourceMapper<T>, T> implements Action<T> {
 
     // 除了表单页外展示
     public ActionImpl<M, T> setExceptOnForm() {
-        this.showOnIndexTableAlert = true;
         this.showOnIndex = true;
         this.showOnDetail = true;
         this.showOnIndexTableRow = true;
@@ -274,7 +331,6 @@ public class ActionImpl<M extends ResourceMapper<T>, T> implements Action<T> {
     // 只在表单页右上角自定义区域展示
     public ActionImpl<M, T> setOnlyOnFormExtra(boolean value) {
         this.showOnForm = !value;
-        this.showOnIndexTableAlert = !value;
         this.showOnIndex = !value;
         this.showOnDetail = !value;
         this.showOnIndexTableRow = !value;
@@ -286,7 +342,6 @@ public class ActionImpl<M extends ResourceMapper<T>, T> implements Action<T> {
 
     // 除了表单页右上角自定义区域外展示
     public ActionImpl<M, T> setExceptOnFormExtra() {
-        this.showOnIndexTableAlert = true;
         this.showOnIndex = true;
         this.showOnDetail = true;
         this.showOnIndexTableRow = true;
@@ -303,7 +358,6 @@ public class ActionImpl<M extends ResourceMapper<T>, T> implements Action<T> {
         this.showOnDetail = value;
         this.showOnIndex = !value;
         this.showOnIndexTableRow = !value;
-        this.showOnIndexTableAlert = !value;
         this.showOnForm = !value;
         this.showOnFormExtra = !value;
         this.showOnDetailExtra = !value;
@@ -315,7 +369,6 @@ public class ActionImpl<M extends ResourceMapper<T>, T> implements Action<T> {
         this.showOnIndex = true;
         this.showOnDetail = false;
         this.showOnIndexTableRow = true;
-        this.showOnIndexTableAlert = true;
         this.showOnForm = true;
         this.showOnFormExtra = true;
         this.showOnDetailExtra = true;
@@ -325,7 +378,6 @@ public class ActionImpl<M extends ResourceMapper<T>, T> implements Action<T> {
     // 只在详情页右上角自定义区域展示
     public ActionImpl<M, T> setOnlyOnDetailExtra(boolean value) {
         this.showOnForm = !value;
-        this.showOnIndexTableAlert = !value;
         this.showOnIndex = !value;
         this.showOnDetail = !value;
         this.showOnIndexTableRow = !value;
@@ -337,7 +389,6 @@ public class ActionImpl<M extends ResourceMapper<T>, T> implements Action<T> {
 
     // 除了详情页右上角自定义区域外展示
     public ActionImpl<M, T> setExceptOnDetailExtra() {
-        this.showOnIndexTableAlert = true;
         this.showOnIndex = true;
         this.showOnDetail = true;
         this.showOnIndexTableRow = true;
@@ -353,7 +404,6 @@ public class ActionImpl<M extends ResourceMapper<T>, T> implements Action<T> {
         this.showOnIndexTableRow = value;
         this.showOnIndex = !value;
         this.showOnDetail = !value;
-        this.showOnIndexTableAlert = !value;
         this.showOnForm = !value;
         this.showOnFormExtra = !value;
         this.showOnDetail = !value;
@@ -366,33 +416,6 @@ public class ActionImpl<M extends ResourceMapper<T>, T> implements Action<T> {
         this.showOnIndexTableRow = false;
         this.showOnIndex = true;
         this.showOnDetail = true;
-        this.showOnIndexTableAlert = true;
-        this.showOnForm = true;
-        this.showOnFormExtra = true;
-        this.showOnDetail = true;
-        this.showOnDetailExtra = true;
-        return this;
-    }
-
-    // 在表格多选弹出层展示
-    public ActionImpl<M, T> setOnlyOnIndexTableAlert(boolean value) {
-        this.showOnIndexTableAlert = value;
-        this.showOnIndex = !value;
-        this.showOnDetail = !value;
-        this.showOnIndexTableRow = !value;
-        this.showOnForm = !value;
-        this.showOnFormExtra = !value;
-        this.showOnDetail = !value;
-        this.showOnDetailExtra = !value;
-        return this;
-    }
-
-    // 除了表格多选弹出层外展示
-    public ActionImpl<M, T> setExceptOnIndexTableAlert() {
-        this.showOnIndexTableAlert = false;
-        this.showOnIndex = true;
-        this.showOnDetail = true;
-        this.showOnIndexTableRow = true;
         this.showOnForm = true;
         this.showOnFormExtra = true;
         this.showOnDetail = true;
@@ -436,12 +459,6 @@ public class ActionImpl<M extends ResourceMapper<T>, T> implements Action<T> {
         return this;
     }
 
-    // 在多选弹出层展示
-    public ActionImpl<M, T> setShowOnIndexTableAlert() {
-        this.showOnIndexTableAlert = true;
-        return this;
-    }
-
     // 判断是否在列表页展示
     public boolean shownOnIndex() {
         if (onlyOnIndex) {
@@ -478,11 +495,6 @@ public class ActionImpl<M extends ResourceMapper<T>, T> implements Action<T> {
     // 判断是否在表格行内展示
     public boolean shownOnIndexTableRow() {
         return showOnIndexTableRow;
-    }
-
-    // 判断是否在多选弹出层展示
-    public boolean shownOnIndexTableAlert() {
-        return showOnIndexTableAlert;
     }
 
     // 判断是否在表单页右上角自定义区域展示

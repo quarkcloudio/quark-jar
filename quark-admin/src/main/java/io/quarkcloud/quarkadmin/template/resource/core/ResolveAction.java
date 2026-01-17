@@ -74,27 +74,6 @@ public class ResolveAction<M extends ResourceMapper<T>, T> {
         return items;
     }
     
-    // 表格多选弹出层行为
-    @SuppressWarnings("unchecked")
-    public Object getIndexTableAlertActions() {
-        List<Object> items = new ArrayList<>();
-
-        // 判断是否为空
-        if (actions == null) {
-            return items;
-        }
-
-        // 遍历
-        for (Object item : actions) {
-            Action<T> action = (Action<T>) item;
-            if (action.shownOnIndexTableAlert()) {
-                items.add(buildAction(context, action));
-            }
-        }
-
-        return items;
-    }
-    
     // 表单页行为
     @SuppressWarnings("unchecked")
     public Object getFormActions() {
@@ -213,6 +192,21 @@ public class ResolveAction<M extends ResourceMapper<T>, T> {
         // 按钮大小
         String size = action.getSize();
 
+        // 按钮是否块级元素
+        boolean block = action.getBlock();
+
+        // 批量操作
+        boolean batch = action.getBatch();
+
+        // 按钮是否危险
+        boolean danger = action.getDanger();
+
+        // 按钮是否禁用
+        boolean disabled = action.getDisabled();
+
+        // 按钮是否幽灵按钮
+        boolean ghost = action.getGhost();
+
         // 按钮图标
         String icon = action.getIcon();
 
@@ -233,7 +227,12 @@ public class ResolveAction<M extends ResourceMapper<T>, T> {
             .setApi(api)
             .setActionType(actionType)
             .setType(buttonType, false)
-            .setSize(size);
+            .setSize(size)
+            .setBlock(block)
+            .setBatch(batch)
+            .setDanger(danger)
+            .setDisabled(disabled)
+            .setGhost(ghost);
 
         if (icon != null && !icon.isEmpty()) {
             actioncomponent.setIcon(icon);

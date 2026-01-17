@@ -191,7 +191,7 @@ public class User extends ResourceImpl<UserMapper, UserEntity> {
     public List<Object> actions(Context context) {
         return Arrays.asList(
             new CreateDrawer<UserMapper, UserEntity>()
-                .setTitle(this.getTitle())
+                .setTitle("新增")
                 .setApi(this.creationApi(context))
                 .setFields(this.creationFields(context))
                 .setData(this.creationData(context)),

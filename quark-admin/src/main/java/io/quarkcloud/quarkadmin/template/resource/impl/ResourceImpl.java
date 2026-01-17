@@ -349,12 +349,6 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         return tableColumns;
     }
 
-    // 列表页批量操作
-    public Object indexTableAlertActions(Context context) {
-        List<Object> getActions = actions(context);
-        return new ResolveAction<ResourceMapper<T>, T>(getActions, context).getIndexTableAlertActions();
-    }
-
     // 列表页标题
     public String indexTableTitle(Context context) {
         return this.getTitle() + this.getTableTitleSuffix();

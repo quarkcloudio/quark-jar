@@ -46,6 +46,21 @@ public interface Action<T> {
     // 设置按钮的图标组件
     String getIcon();
 
+    // 设置按钮是否为块级元素
+    boolean getBlock();
+
+    // 是否批量操作
+    boolean getBatch();
+
+    // 危险按钮
+    boolean getDanger();
+
+    // 禁用按钮
+    boolean getDisabled();
+
+    // 是否幽灵按钮
+    boolean getGhost();
+
     // 行为表单字段
     Object fields(Context context);
 
@@ -87,6 +102,22 @@ public interface Action<T> {
 
     // 设置按钮的图标组件
     Action<T> setIcon(String icon);
+
+    // 设置按钮为块级元素
+    Action<T> setBlock(boolean block);
+
+
+    // 批量操作
+    Action<T> setBatch(boolean batch);
+
+    // 危险按钮
+    Action<T> setDanger(boolean danger);
+
+    // 禁用按钮
+    Action<T> setDisabled(boolean disabled);
+
+    // 是否幽灵按钮
+    Action<T> setGhost(boolean ghost);
 
     // 行为表单字段
     Action<T> setFields(Object fields);
@@ -136,12 +167,6 @@ public interface Action<T> {
     // 除了表格行内外展示
     Action<T> setExceptOnIndexTableRow();
 
-    // 在表格多选弹出层展示
-    Action<T> setOnlyOnIndexTableAlert(boolean value);
-
-    // 除了表格多选弹出层外展示
-    Action<T> setExceptOnIndexTableAlert();
-
     // 在列表页展示
     Action<T> setShowOnIndex();
 
@@ -160,9 +185,6 @@ public interface Action<T> {
     // 在表格行内展示
     Action<T> setShowOnIndexTableRow();
 
-    // 在多选弹出层展示
-    Action<T> setShowOnIndexTableAlert();
-
     // 判断是否在列表页展示
     boolean shownOnIndex();
 
@@ -174,9 +196,6 @@ public interface Action<T> {
 
     // 判断是否在表格行内展示
     boolean shownOnIndexTableRow();
-
-    // 判断是否在多选弹出层展示
-    boolean shownOnIndexTableAlert();
 
     // 判断是否在表单页右上角自定义区域展示
     boolean shownOnFormExtra();

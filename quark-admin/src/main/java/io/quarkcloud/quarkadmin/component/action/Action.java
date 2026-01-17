@@ -22,6 +22,9 @@ public class Action extends Component {
     // 将按钮宽度调整为其父宽度的选项
     public boolean block;
 
+    // 批量操作
+    public boolean batch;
+
     // 危险按钮
     public boolean danger;
 
@@ -199,7 +202,7 @@ public class Action extends Component {
     // "icon-password", "icon-article", "icon-page", "icon-plugin", "icon-admin",
     // "icon-banner"
     public Action setIcon(String icon) {
-        this.icon = "icon-" + icon;
+        this.icon = icon;
 
         return this;
     }
