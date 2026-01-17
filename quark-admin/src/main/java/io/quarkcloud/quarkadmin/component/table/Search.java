@@ -81,7 +81,7 @@ public class Search extends Component {
         this.component = "search";
         this.defaultCollapsed = true;
         this.resetText = "重置";
-        this.searchText = "查询";
+        this.searchText = "搜索";
         this.items = new ArrayList<>();
     }
 
