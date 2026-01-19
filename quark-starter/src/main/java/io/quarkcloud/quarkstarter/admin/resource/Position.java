@@ -13,8 +13,6 @@ import io.quarkcloud.quarkadmin.mapper.PositionMapper;
 import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
 import io.quarkcloud.quarkcore.service.Context;
 import io.quarkcloud.quarkstarter.admin.action.BatchDelete;
-import io.quarkcloud.quarkstarter.admin.action.BatchDisable;
-import io.quarkcloud.quarkstarter.admin.action.BatchEnable;
 import io.quarkcloud.quarkstarter.admin.action.ChangeStatus;
 import io.quarkcloud.quarkstarter.admin.action.CreateModal;
 import io.quarkcloud.quarkstarter.admin.action.Delete;
@@ -78,9 +76,7 @@ public class Position extends ResourceImpl<PositionMapper, PositionEntity> {
                 .setInitApi(this.editValueApi(context))
                 .setFields(this.editFields(context)),
             new Delete<PositionMapper, PositionEntity>(),
-            new BatchDelete<PositionMapper, PositionEntity>(),
-            new BatchDisable<PositionMapper, PositionEntity>(),
-            new BatchEnable<PositionMapper, PositionEntity>()
+            new BatchDelete<PositionMapper, PositionEntity>()
         );
     }
 }

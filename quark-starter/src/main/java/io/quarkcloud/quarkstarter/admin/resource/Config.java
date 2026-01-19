@@ -14,8 +14,6 @@ import io.quarkcloud.quarkadmin.mapper.UserMapper;
 import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
 import io.quarkcloud.quarkcore.service.Context;
 import io.quarkcloud.quarkstarter.admin.action.BatchDelete;
-import io.quarkcloud.quarkstarter.admin.action.BatchDisable;
-import io.quarkcloud.quarkstarter.admin.action.BatchEnable;
 import io.quarkcloud.quarkstarter.admin.action.CreateDrawer;
 import io.quarkcloud.quarkstarter.admin.action.Delete;
 import io.quarkcloud.quarkstarter.admin.action.EditDrawer;
@@ -95,8 +93,6 @@ public class Config extends ResourceImpl<ConfigMapper, ConfigEntity> {
                 .setFields(this.editFields(context)),
             new Delete<ConfigMapper, ConfigEntity>(),
             new BatchDelete<ConfigMapper, ConfigEntity>(),
-            new BatchDisable<ConfigMapper, ConfigEntity>(),
-            new BatchEnable<ConfigMapper, ConfigEntity>(),
             new FormExtraBack<ConfigMapper, ConfigEntity>(),
             new FormSubmit<ConfigMapper, ConfigEntity>(),
             new FormReset<ConfigMapper, ConfigEntity>(),
