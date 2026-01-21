@@ -64,7 +64,7 @@ public class Department extends ResourceImpl<DepartmentMapper, DepartmentEntity>
                             Rule.required("请选择父节点")
                         ))
                         .setTreeData(departments,"pid","name","id")
-                        .setDefaultValue(1)
+                        .setDefaultValue(1).onlyOnForms()
                 )),
 
             Field.number("sort", "排序")
