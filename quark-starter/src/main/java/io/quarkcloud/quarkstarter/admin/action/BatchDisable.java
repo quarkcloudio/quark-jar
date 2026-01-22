@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 
-import io.quarkcloud.quarkadmin.component.message.Message;
+import io.quarkcloud.quarkcore.common.Message;
 import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
 import io.quarkcloud.quarkadmin.service.ResourceService;
 import io.quarkcloud.quarkadmin.template.resource.impl.action.BatchImpl;

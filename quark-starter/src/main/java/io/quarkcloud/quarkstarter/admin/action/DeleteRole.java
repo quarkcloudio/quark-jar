@@ -5,7 +5,7 @@ import java.util.Arrays;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 
-import io.quarkcloud.quarkadmin.component.message.Message;
+import io.quarkcloud.quarkcore.common.Message;
 import io.quarkcloud.quarkadmin.entity.RoleMenuEntity;
 import io.quarkcloud.quarkadmin.entity.RolePermissionEntity;
 import io.quarkcloud.quarkadmin.mapper.ResourceMapper;

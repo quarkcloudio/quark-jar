@@ -13,7 +13,7 @@ import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
 import io.quarkcloud.quarkadmin.service.ResourceService;
 import io.quarkcloud.quarkadmin.template.resource.impl.action.ModalFormImpl;
 import io.quarkcloud.quarkcore.service.Context;
-import io.quarkcloud.quarkadmin.component.message.Message;
+import io.quarkcloud.quarkcore.common.Message;
 import io.quarkcloud.quarkadmin.component.form.Field;
 import io.quarkcloud.quarkadmin.component.form.Rule;
 import io.quarkcloud.quarkadmin.entity.DepartmentEntity;
