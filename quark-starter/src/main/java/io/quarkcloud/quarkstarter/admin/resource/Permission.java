@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import io.quarkcloud.quarkadmin.component.form.Field;
+import io.quarkcloud.quarkadmin.component.form.Rule;
 import io.quarkcloud.quarkadmin.entity.PermissionEntity;
 import io.quarkcloud.quarkadmin.mapper.PermissionMapper;
 import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
@@ -31,8 +32,14 @@ public class Permission extends ResourceImpl<PermissionMapper, PermissionEntity>
     public List<Object> fields(Context context) {
         return Arrays.asList(
             Field.id("id", "ID"),
-            Field.text("name", "名称"),
-            Field.text("path", "路径"),
+            Field.text("name", "名称")
+                .setRules(Arrays.asList(
+                    Rule.required("名称必须填写")
+                )),
+            Field.text("path", "路径")
+                .setRules(Arrays.asList(
+                    Rule.required("路径必须填写")
+                )),
             Field.select("method", "方法")
                 .setOptions(Arrays.asList(
                     Field.selectOption("Any","Any"),
