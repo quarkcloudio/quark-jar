@@ -2,6 +2,9 @@ package io.quarkcloud.quarkcore.common;
 
 import java.util.*;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 public class Message {
     private int code;
     private String msg;

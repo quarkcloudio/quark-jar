@@ -894,7 +894,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
             return Message.error("操作失败！");
         }
         String redirectUrl = "/layout/index?api=/api/admin/{resource}/index".replace("{resource}", context.getPathVariable("resource"));
-        return Message.success("操作成功！", redirectUrl);
+        return Message.redirectTo("操作成功！", redirectUrl);
     }
 
     // 表格行内编辑
