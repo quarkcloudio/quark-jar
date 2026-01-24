@@ -40,6 +40,7 @@ public class Form extends Component {
     private String labelAlign;
 
     // 表单名称
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private String name;
 
     // 是否保留字段值
@@ -100,6 +101,7 @@ public class Form extends Component {
     private Object actions;
 
     // 样式
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private Map<String, Object> style;
 
     // 构造函数

@@ -100,7 +100,6 @@ public class Action extends Component {
     public String reload;
 
     // 是否具有loading
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public boolean withLoading;
 
     @FunctionalInterface
