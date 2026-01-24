@@ -26,30 +26,38 @@ public class ImageCaptcha extends Component {
 
     // 开启 grid 模式时传递给 Row, 仅在ProFormGroup, ProFormList, ProFormFieldSet 中有效，默认：{
     // gutter: 8 }
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Map<String, Object> rowProps;
 
     // 开启 grid 模式时传递给 Col，默认：{ xs: 24 }
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Map<String, Object> colProps;
 
     // 是否是次要控件，只针对 LightFilter 下有效
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean secondary;
 
     // 配合 label 属性使用，表示是否显示 label 后面的冒号
     boolean colon;
 
     // 额外的提示信息，和 help 类似，当需要错误信息和提示文案同时出现时，可以使用这个。
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     String extra;
 
     // 配合 valiTextStatus 属性使用，展示校验状态图标，建议只配合 Input 组件使用
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean hasFeedback;
 
     // 提示信息，如不设置，则会根据校验规则自动生成
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     String help;
 
     // 是否隐藏字段（依然会收集和校验字段）
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean hidden;
 
     // 设置子元素默认值，如果与 Form 的 initialValues 冲突则以 Form 为准
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object initialValue;
 
     // label 标签的文本
@@ -67,6 +75,7 @@ public class ImageCaptcha extends Component {
     String name;
 
     // 为 true 时不带样式，作为纯字段控件使用
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean noStyle;
 
     // 必填样式设置。如不设置，则会根据校验规则自动生成
@@ -74,13 +83,16 @@ public class ImageCaptcha extends Component {
     boolean required;
 
     // 会在 label 旁增加一个 icon，悬浮后展示配置的信息
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     String tooltip;
 
     // 子节点的值的属性，如 Switch 的是 'checked'。该属性为 getValueProps 的封装，自定义 getValueProps 后会失效
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     String valuePropName;
 
     // 需要为输入控件设置布局样式时，使用该属性，用法同 labelCol。你可以通过 Form 的 wrapperCol 进行统一设置，不会作用于嵌套
     // Item。当和 Form 同时设置时，以 Item 为准
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object wrapperCol;
 
     // 列表页、详情页中列属性
@@ -88,21 +100,27 @@ public class ImageCaptcha extends Component {
     Object column;
 
     // 设置列的对齐方式,left | right | center，只在列表页、详情页中有效
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     String align;
 
     // （IE 下无效）列是否固定，可选 true (等效于 left) left rightr，只在列表页中有效
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object fixed;
 
     // 表格列是否可编辑，只在列表页中有效
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean editable;
 
     // 是否自动缩略，只在列表页、详情页中有效
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean ellipsis;
 
     // 是否支持复制，只在列表页、详情页中有效
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean copyable;
 
     // 表头的筛选菜单项，当值为 true 时，自动使用 valueEnum 生成，只在列表页中有效
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object filters;
 
     // 查询表单中的权重，权重大排序靠前，只在列表页中有效
@@ -110,6 +128,7 @@ public class ImageCaptcha extends Component {
     int order;
 
     // 可排序列，只在列表页中有效
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object sorter;
 
     // 包含列的数量，只在详情页中有效
@@ -121,9 +140,11 @@ public class ImageCaptcha extends Component {
     int columnWidth;
 
     // 获取数据接口
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     String api;
 
     // 是否忽略保存到数据库，默认为 false
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean ignore;
 
     // 全局校验规则
@@ -178,50 +199,64 @@ public class ImageCaptcha extends Component {
     Closure callback;
 
     // 带标签的 input，设置后置标签
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object addonAfter;
 
     // 带标签的 input，设置前置标签
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object addonBefore;
 
     // 可以点击清除图标删除内容
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean allowClear;
 
     // 是否有边框，默认true
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean bordered;
 
     // 默认的选中项
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object defaultValue;
 
     // 禁用
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object disabled;
 
     // 输入框的 id
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     String id;
 
     // 最大长度
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     int maxLength;
 
-    // 是否展示字数
+    // 是否展示字数统计
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     boolean showCount;
 
     // 设置校验状态,'error' | 'warning'
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     String status;
 
     // 带有前缀图标的 input
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object prefix;
 
     // 控件大小。注：标准表单内的输入框大小限制为 middle，large | middle | small
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     String size;
 
     // 带有后缀图标的 input
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object suffix;
 
     // 声明 input 类型，同原生 input 标签的 type 属性，见：MDN(请直接使用 Input.TextArea 代替
     // type="textarea")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     String type;
 
     // 指定选中项,string[] | number[]
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     Object value;
 
     // 占位符
@@ -231,6 +266,7 @@ public class ImageCaptcha extends Component {
     Map<String, Object> style;
 
     // 获取验证码URL
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     String captchaUrl;
 
     public ImageCaptcha() {
