@@ -22,7 +22,8 @@ public class MenuCreateDrawer<M, T> extends DrawerImpl<ResourceMapper<T>, T> {
     // 初始化
     public MenuCreateDrawer() {
         this.setType("primary");
-        this.setIcon("plus-circle");
+        this.setGhost(true);
+        this.setIcon("ant-design:plus-outlined");
         this.setDestroyOnClose(true);
         this.setReload("table");
         this.setOnlyOnIndex(true);
@@ -31,7 +32,7 @@ public class MenuCreateDrawer<M, T> extends DrawerImpl<ResourceMapper<T>, T> {
 
     // 标题
     public MenuCreateDrawer<M, T> setTitle(String title) {
-        this.name = "创建" + title;
+        this.name = title;
         return this;
     }
 
