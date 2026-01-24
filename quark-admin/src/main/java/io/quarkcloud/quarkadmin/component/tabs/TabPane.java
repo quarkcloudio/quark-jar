@@ -13,15 +13,13 @@ import lombok.experimental.Accessors;
 public class TabPane extends Component {
 
     /** 标签标题 */
-    private String title;
+    String title;
     
     /** 内容 */
-    private Object body;
+    Object body;
 
     // 初始化
     public TabPane() {
-        this.title = "";
-        this.body = null;
         this.setComponentKey();
         this.component = "tabPane";
     }

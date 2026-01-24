@@ -657,10 +657,11 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         String title,
         Object extra,
         String api,
-        Object fields,
+        List<Object> fields,
         Object actions,
         Object data) {
-        Tabs tabsComponent = new Tabs().setTabPanes(fields).setTabBarExtraContent(extra);
+        Tabs tabsComponent = new Tabs();
+        tabsComponent.setTabPanes(fields).setTabBarExtraContent(extra);
         return this.form.setStyle(Map.of("backgroundColor", "#fff", "paddingBottom", "20px"))
             .setApi(api)
             .setActions(actions)
@@ -677,7 +678,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         String title,
         Object extra,
         String api,
-        Object fields,
+        List<Object> fields,
         Object actions,
         Object data) {
         if (fields instanceof List && !((List<?>) fields).isEmpty()) {
@@ -727,7 +728,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         List<Object> getActions = actions(context);
         Object formExtraActions = new ResolveAction<ResourceMapper<T>, T>(getActions, context).getFormExtraActions();
         String api = creationApi(context);
-        Object fields = creationFields(context);
+        List<Object> fields = creationFields(context);
         Object formActions = new ResolveAction<ResourceMapper<T>, T>(getActions, context).getFormActions();
         return this.formComponentRender(context, title, formExtraActions, api, fields, formActions, data);
 
@@ -810,7 +811,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         List<Object> getActions = actions(context);
         Object formExtraActions = new ResolveAction<ResourceMapper<T>, T>(getActions, context).getFormExtraActions();
         String api = editApi(context);
-        Object fields = editFields(context);
+        List<Object> fields = editFields(context);
         Object formActions = new ResolveAction<ResourceMapper<T>, T>(getActions, context).getFormActions();
         return this.formComponentRender(context, title, formExtraActions, api, fields, formActions, data);
     }
@@ -1080,7 +1081,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
             Context context,
             String title,
             Object extra,
-            Object fields,
+            List<Object> fields,
             List<Object> actions,
             T data) {
 

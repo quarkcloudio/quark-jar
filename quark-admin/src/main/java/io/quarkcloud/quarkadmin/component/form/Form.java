@@ -22,87 +22,87 @@ import lombok.experimental.Accessors;
 public class Form extends Component {
 
     // 表单标题
-    private String title;
+    String title;
 
     // 表单宽度
-    private String width;
+    String width;
 
     // 是否显示冒号
-    private boolean colon;
+    boolean colon;
 
     // 表单的值
-    private Object values;
+    Object values;
 
     // 表单的初始值
-    private Object initialValues;
+    Object initialValues;
 
     // 标签的对齐方式
-    private String labelAlign;
+    String labelAlign;
 
     // 表单名称
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    private String name;
+    String name;
 
     // 是否保留字段值
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    private boolean preserve;
+    boolean preserve;
 
     // 是否显示必填标记
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    private boolean requiredMark;
+    boolean requiredMark;
 
     // 提交失败是否滚动到第一个错误字段
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    private boolean scrollToFirstError;
+    boolean scrollToFirstError;
 
     // 字段组件的尺寸
-    private String size;
+    String size;
 
     // 日期格式化器
-    private String dateFormatter;
+    String dateFormatter;
 
     // 表单布局
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    private String layout;
+    String layout;
 
     // 是否开启栅格化模式
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    private boolean grid;
+    boolean grid;
 
     // 行属性
-    private Map<String, Object> rowProps;
+    Map<String, Object> rowProps;
 
     // 标签列属性
-    private Map<String, Object> labelCol;
+    Map<String, Object> labelCol;
 
     // 包装列属性
-    private Map<String, Object> wrapperCol;
+    Map<String, Object> wrapperCol;
 
     // 按钮包装列属性
-    private Map<String, Object> buttonWrapperCol;
+    Map<String, Object> buttonWrapperCol;
 
     // 表单提交的API
-    private String api;
+    String api;
 
     // 表单提交API的类型
-    private String apiType;
+    String apiType;
 
     // 是否新页面打开提交结果
-    private boolean targetBlank;
+    boolean targetBlank;
 
     // 初始化API
-    private String initApi;
+    String initApi;
 
     // 表单项
-    private Object body;
+    Object body;
 
     // 表单行为
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    private Object actions;
+    Object actions;
 
     // 样式
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    private Map<String, Object> style;
+    Map<String, Object> style;
 
     // 构造函数
     public Form() {
@@ -200,35 +200,50 @@ public class Form extends Component {
     // 解析字段
     public List<Object> fieldParser(Object v, boolean when) {
         List<Object> items = new ArrayList<>();
+        
         // 数组直接返回
         if (v instanceof List<?>) {
             return items;
         }
-
-        boolean isHasGetBody = new Reflect(v).checkMethodExist("getBody");
-        if (isHasGetBody) {
-            Object body = new Reflect(v).invoke("getBody");
-            List<Object> getItems = findFields(body, true);
-            if (!getItems.isEmpty()) {
-                items.addAll(getItems);
+    
+        Reflect reflect = new Reflect(v);
+    
+        // 如果有 getBody 方法，递归解析 body
+        if (reflect.checkMethodExist("getBody")) {
+            Object body = reflect.invoke("getBody");
+            if (body != null) {
+                List<Object> getItems = findFields(body, true);
+                if (!getItems.isEmpty()) {
+                    items.addAll(getItems);
+                }
             }
-            return items;
         }
-
-        boolean isHasGetTabPanes = new Reflect(v).checkMethodExist("getTabPanes");
-        if (isHasGetTabPanes) {
-            body = new Reflect(v).invoke("getTabPanes");
-            List<Object> getItems = findFields(body, true);
-            if (!getItems.isEmpty()) {
-                items.addAll(getItems);
+    
+        // 新增：处理 Tabs 的 tabPanes 里的字段
+        if ("tabs".equalsIgnoreCase((String) reflect.invoke("getComponent"))) {
+            if (reflect.checkMethodExist("getTabPanes")) {
+                Object tabPanes = reflect.invoke("getTabPanes");
+                if (tabPanes instanceof List<?>) {
+                    for (Object tabPane : (List<?>) tabPanes) {
+                        Reflect tabReflect = new Reflect(tabPane);
+                        if (tabReflect.checkMethodExist("getBody")) {
+                            Object body = tabReflect.invoke("getBody");
+                            if (body != null) {
+                                List<Object> getItems = findFields(body, true);
+                                if (!getItems.isEmpty()) {
+                                    items.addAll(getItems);
+                                }
+                            }
+                        }
+                    }
+                }
             }
-            return items;
         }
-
-        boolean isHasGetComponent = new Reflect(v).checkMethodExist("getComponent");
-        if (isHasGetComponent) {
-            String component = (String) new Reflect(v).invoke("getComponent");
-            if (component.contains("Field")) {
+    
+        // 如果是 Field 组件，加入 items
+        if (reflect.checkMethodExist("getComponent")) {
+            String component = (String) reflect.invoke("getComponent");
+            if (component != null && component.contains("Field")) {
                 items.add(v);
                 if (when) {
                     List<Object> whenFields = getWhenFields(v);
@@ -238,6 +253,7 @@ public class Form extends Component {
                 }
             }
         }
+    
         return items;
     }
 
@@ -289,7 +305,6 @@ public class Form extends Component {
         Map<String, Object> data = new HashMap<>();
     
         List<Object> fields = findFields(this.body, true);
-    
         for (Object field : fields) {
             Object value = parseInitialValue(field, initialValuesMap);
             if (value != null) {
@@ -331,6 +346,11 @@ public class Form extends Component {
             throw new IllegalArgumentException("If layout set vertical mode, can't set buttonWrapperCol!");
         }
         this.buttonWrapperCol = buttonWrapperCol;
+        return this;
+    }
+
+    public Form setBody(Object body) {
+        this.body = body;
         return this;
     }
 }

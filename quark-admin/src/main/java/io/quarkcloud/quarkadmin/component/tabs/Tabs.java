@@ -1,5 +1,6 @@
 package io.quarkcloud.quarkadmin.component.tabs;
 
+import java.util.List;
 import java.util.Map;
 
 import io.quarkcloud.quarkadmin.component.Component;
@@ -10,36 +11,34 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-public class Tabs  extends Component {
+public class Tabs extends Component {
 
     /** 是否居中显示标签 */
-    public boolean centered; 
+    public boolean centered;
     
     /** 默认激活的 tab 面板的 key */
-    public String defaultActiveKey; 
+    public String defaultActiveKey;
     
     /** 组件大小 (large, default, small) */
-    public String size; 
+    public String size;
     
     /** tab bar 上额外的元素 */
-    public Object tabBarExtraContent; 
+    public Object tabBarExtraContent;
     
     /** tabs 之间的间隙 (以像素为单位) */
-    public int tabBarGutter; 
+    public int tabBarGutter;
     
     /** tab bar 的样式对象 */
-    public Object tabBarStyle; 
+    public Object tabBarStyle;
     
     /** 页签位置 (top, right, bottom, left) */
-    public String tabPosition; 
-    
-    /** 页签的基本样式 (line, card, editable-card) */
-    public String type; 
-    
-    /** tab 的内容 */
-    public Object tabPanes;
+    public String tabPosition;
 
-    public Object body;
+    /** 页签的基本样式 (line, card, editable-card) */
+    public String type;
+
+    /** tab 的内容 - 标签页面板数组 */
+    public List<Object> tabPanes;
 
     // 初始化
     public Tabs() {
@@ -54,6 +53,12 @@ public class Tabs  extends Component {
     // 设置样式
     public Tabs setStyle(Map<String, Object> style) {
         this.tabBarStyle = style;
+        return this;
+    }
+    
+    // 设置标签页面板 - 保留原来的 tabPanes 属性
+    public Tabs setTabPanes(List<Object> tabPanes) {
+        this.tabPanes = tabPanes;
         return this;
     }
 }
