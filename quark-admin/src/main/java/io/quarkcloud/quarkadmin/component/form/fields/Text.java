@@ -275,7 +275,7 @@ public class Text extends Component {
         this.style = new HashMap<>();
         this.rules = new ArrayList<>();
         this.setComponentKey();
-        this.setWidth(200);
+        this.setWidth("200px");
         this.whenItem = new ArrayList<>();
         this.when = new When();
     }
