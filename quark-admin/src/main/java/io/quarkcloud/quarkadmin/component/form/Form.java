@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -42,12 +43,15 @@ public class Form extends Component {
     private String name;
 
     // 是否保留字段值
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean preserve;
 
     // 是否显示必填标记
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean requiredMark;
 
     // 提交失败是否滚动到第一个错误字段
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean scrollToFirstError;
 
     // 字段组件的尺寸
@@ -57,9 +61,11 @@ public class Form extends Component {
     private String dateFormatter;
 
     // 表单布局
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private String layout;
 
     // 是否开启栅格化模式
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean grid;
 
     // 行属性
@@ -90,6 +96,7 @@ public class Form extends Component {
     private Object body;
 
     // 表单行为
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private Object actions;
 
     // 样式
@@ -124,44 +131,54 @@ public class Form extends Component {
         return this;
     }
 
-    // 解析initialValue
-    public Object parseInitialValue(Object item, Map<String, Object> initialValues) {
+    // 解析初始值
+    public Object parseInitialValue(Object field, Map<String, Object> initialValues) {
+        if (field instanceof List<?>) return null; // 数组直接跳过
+    
+        Reflect reflect = new Reflect(field);
+    
+        if (!reflect.checkMethodExist("getName")) return null;
+        String name = (String) reflect.invoke("getName");
+        if (name == null || name.isEmpty()) return null;
+    
         Object value = null;
-
-        // 数组直接返回
-        if (item instanceof List<?>) {
-            return null;
+    
+        // defaultValue
+        if (reflect.checkMethodExist("getDefaultValue")) {
+            Object defaultValue = reflect.invoke("getDefaultValue");
+            if (defaultValue != null) value = defaultValue;
         }
-
-        boolean isHasGetName = new Reflect(item).checkMethodExist("getName");
-        if (!isHasGetName) {
-            return null;
+    
+        // value 覆盖
+        if (reflect.checkMethodExist("getValue")) {
+            Object v = reflect.invoke("getValue");
+            if (v != null) value = v;
         }
-        String name = (String) new Reflect(item).invoke("getName");
-        if (name == null || name.isEmpty()) {
-            return null;
+    
+        // initialValues 覆盖
+        if (initialValues != null && initialValues.containsKey(name)) {
+            Object initV = initialValues.get(name);
+            if (initV != null) value = initV;
         }
-
-        boolean issetDefaultValue = new Reflect(item).checkMethodExist("getDefaultValue");
-        if (issetDefaultValue) {
-            Object defaultValue = new Reflect(item).invoke("getDefaultValue");
-            if (defaultValue != null) {
-                value = defaultValue;
+    
+        // 空字符串视为 null
+        if (value instanceof String && ((String) value).trim().isEmpty()) {
+            value = null;
+        }
+    
+        // 解析字符串类型的 List/Map
+        if (value instanceof String) {
+            String str = ((String) value).trim();
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.registerModule(new JavaTimeModule());
+            try {
+                if (str.startsWith("[")) value = objectMapper.readValue(str, List.class);
+                else if (str.startsWith("{")) value = objectMapper.readValue(str, Map.class);
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
         }
-
-        boolean issetValue = new Reflect(item).checkMethodExist("getValue");
-        if (issetValue) {
-            Object getValue = new Reflect(item).invoke("getValue");
-            if (getValue != null) {
-                    value = getValue;
-            }
-        }
-
-        if (initialValues.get(name) != null) {
-            value = initialValues.get(name);
-        }
-
+    
         return value;
     }
 
@@ -261,60 +278,31 @@ public class Form extends Component {
 
     // 表单默认值，只有初始化以及重置时生效
     @SuppressWarnings("unchecked")
-    public Form setInitialValues(Object initialValues) {
+    public Form setInitialValues(Object initialValuesObj) {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         objectMapper.registerModule(new JavaTimeModule());
-        Map<String, Object> data = objectMapper.convertValue(initialValues, Map.class);
+    
+        Map<String, Object> initialValuesMap = objectMapper.convertValue(initialValuesObj, Map.class);
+        Map<String, Object> data = new HashMap<>();
+    
         List<Object> fields = findFields(this.body, true);
-        for (Object v : fields) {
-            Object value = parseInitialValue(v, data);
+    
+        for (Object field : fields) {
+            Object value = parseInitialValue(field, initialValuesMap);
             if (value != null) {
-                boolean isHasGetName = new Reflect(v).checkMethodExist("getName");
-                if (isHasGetName) {
-                    String name = (String) new Reflect(v).invoke("getName");
+                Reflect reflect = new Reflect(field);
+                if (reflect.checkMethodExist("getName")) {
+                    String name = (String) reflect.invoke("getName");
                     data.put(name, value);
                 }
             }
         }
-
-        for (Map.Entry<String, Object> entry : data.entrySet()) {
-            String k = entry.getKey();
-            Object v = entry.getValue();
-            if (v instanceof String) {
-                String getV = (String) v;
-                if (getV.contains("[")) {
-                    try {
-                        List<Object> m = new ArrayList<>();
-                        m = new ObjectMapper().readValue(getV, List.class);
-                        data.put(k, m);
-                    } catch (Exception e) {
-                        if (getV.contains("{")) {
-                            try {
-                                Map<String, Object> m = new HashMap<>();
-                                m = new ObjectMapper().readValue(getV, Map.class);
-                                data.put(k, m);
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-                            }
-                        }
-                    }
-                } else if (getV.contains("{")) {
-                    try {
-                        Map<String, Object> m = new HashMap<>();
-                        m = new ObjectMapper().readValue(getV, Map.class);
-                        data.put(k, m);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-            }
-        }
+    
         this.initialValues = data;
-
         return this;
     }
-
+    
     // 表单布局，horizontal | vertical
     public Form setLayout(String layout) {
         if (layout.equals("vertical")) {

@@ -2,6 +2,8 @@ package io.quarkcloud.quarkadmin.component.modal;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import io.quarkcloud.quarkadmin.component.Component;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -37,6 +39,7 @@ public class Modal extends Component {
     public boolean maskClosable;
 
     // 对话框是否可见
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public boolean open;
 
     // 宽度
@@ -46,6 +49,7 @@ public class Modal extends Component {
     public int zIndex;
 
     // 弹窗行为
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public List<Object> actions;
 
     // 容器控件里面的内容

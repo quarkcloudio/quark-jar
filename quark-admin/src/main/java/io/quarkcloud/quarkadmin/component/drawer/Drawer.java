@@ -3,6 +3,8 @@ package io.quarkcloud.quarkadmin.component.drawer;
 import java.util.HashMap;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import io.quarkcloud.quarkadmin.component.Component;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,18 +19,21 @@ public class Drawer extends Component {
     public String title;
 
     // Modal body 样式
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public Object bodyStyle;
 
     // 是否显示右上角的关闭按钮
     public boolean closable;
 
     // 可用于设置 Drawer 包裹内容部分的样式
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public Object contentWrapperStyle;
 
     // 关闭时销毁 Modal 里的子元素
     public boolean destroyOnClose;
 
     // 用于设置 Drawer 弹出层的样式
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public Object drawerStyle;
 
     // 抽屉页脚部件的样式
@@ -47,9 +52,11 @@ public class Drawer extends Component {
     public boolean maskClosable;
 
     // 遮罩样式
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public Object maskStyle;
 
     // 对话框是否可见
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public boolean open;
 
     // 宽度
@@ -59,6 +66,7 @@ public class Drawer extends Component {
     public int zIndex;
 
     // 弹窗行为
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public List<Object> actions;
 
     // 抽屉的方向,top | right | bottom | left

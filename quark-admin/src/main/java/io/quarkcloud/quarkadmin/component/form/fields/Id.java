@@ -222,7 +222,6 @@ public class Id extends Component {
     // rule.max(20, "用户名不能超过20个字符") // 用户名最多只能包含20个字符
     // ));
     public Id setRules(List<Rule> rules) {
-
         rules.forEach(rule -> rule.setName(name));
         this.rules = rules;
 
@@ -236,7 +235,6 @@ public class Id extends Component {
     // rule.unique("admins", "username", "用户名已存在"),
     // ));
     public Id setCreationRules(List<Rule> rules) {
-
         rules.forEach(rule -> rule.setName(name));
         this.creationRules = rules;
 

@@ -4,6 +4,8 @@ package io.quarkcloud.quarkadmin.component.action;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import io.quarkcloud.quarkadmin.component.Component;
 import io.quarkcloud.quarkadmin.component.drawer.Drawer;
 import io.quarkcloud.quarkadmin.component.modal.Modal;
@@ -20,24 +22,31 @@ public class Action extends Component {
     public String label;
 
     // 将按钮宽度调整为其父宽度的选项
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public boolean block;
 
     // 批量操作
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public boolean batch;
 
     // 危险按钮
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public boolean danger;
 
     // 按钮失效状态
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public boolean disabled;
 
     // 幽灵属性，使按钮背景透明
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public boolean ghost;
 
     // 按钮图标
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String icon;
 
     // 按钮形状，可选值为 circle、 round 或者不设
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String shape;
 
     // 按钮大小，large | middle | small | default
@@ -51,33 +60,47 @@ public class Action extends Component {
     public String actionType;
 
     // 当action 的作用类型为submit的时候，可以指定提交哪个表格，submitForm为提交表单的key值，为空时提交当前表单
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public Object submitForm;
 
     // 点击跳转的地址，指定此属性 button 的行为和 a 链接一致
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String href;
 
     // 相当于 a 链接的 target 属性，href 存在时生效
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String target;
 
     // 弹窗
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public Object modal;
 
     // 抽屉
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public Object drawer;
 
+    // 确认弹窗标题
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String confirmTitle;
 
+    // 确认弹窗内容
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String confirmText;
 
+    // 确认弹窗类型，可选值为 confirm | warning
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String confirmType;
 
     // 执行行为的接口链接
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String api;
 
     // 执行成功后刷新的组件
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public String reload;
 
     // 是否具有loading
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     public boolean withLoading;
 
     @FunctionalInterface
