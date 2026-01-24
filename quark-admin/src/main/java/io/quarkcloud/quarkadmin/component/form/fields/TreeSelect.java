@@ -405,7 +405,7 @@ public class TreeSelect extends Component {
         this.setComponentKey();
         this.style = new HashMap<>();
         this.rules = new ArrayList<>();
-        this.setWidth(200); // Set default width
+        this.setWidth("200px"); // Set default width
         this.whenItem = new ArrayList<>();
         this.when = new When();
     }

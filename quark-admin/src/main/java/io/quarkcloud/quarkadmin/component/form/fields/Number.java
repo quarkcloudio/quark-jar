@@ -276,7 +276,7 @@ public class Number extends Component {
         this.showOnImport = true;
         this.column = new Column();
         this.placeholder = "请输入";
-        this.setWidth(200);
+        this.setWidth("200px");
         this.whenItem = new ArrayList<>();
         this.when = new When();
 

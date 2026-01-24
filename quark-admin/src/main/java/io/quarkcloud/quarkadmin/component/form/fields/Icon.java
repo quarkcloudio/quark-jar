@@ -279,7 +279,7 @@ public class Icon extends Component {
             "icon-password", "icon-article", "icon-page", "icon-plugin", "icon-admin", "icon-banner"
         );
         this.defaultValue = "";
-        this.setWidth(200);
+        this.setWidth("200px");
         this.setComponentKey();
         this.whenItem = new ArrayList<>();
         this.when = new When();

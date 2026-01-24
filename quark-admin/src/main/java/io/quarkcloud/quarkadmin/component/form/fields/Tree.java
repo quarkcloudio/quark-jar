@@ -376,7 +376,7 @@ public class Tree extends Component {
         this.showOnExport = true;
         this.showOnImport = true;
         this.column = new Column();
-        this.setWidth(200);
+        this.setWidth("200px");
         this.whenItem = new ArrayList<>();
         this.when = new When();
     }

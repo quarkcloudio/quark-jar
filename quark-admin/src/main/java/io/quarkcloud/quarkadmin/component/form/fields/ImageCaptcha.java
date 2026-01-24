@@ -286,7 +286,7 @@ public class ImageCaptcha extends Component {
         this.maxLength = 200;
         this.whenItem = new ArrayList<>();
         this.when = new When();
-        this.setWidth(200);
+        this.setWidth("200px");
         this.setComponentKey();
     }
 

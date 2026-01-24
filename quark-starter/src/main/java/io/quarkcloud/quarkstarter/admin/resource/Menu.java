@@ -119,7 +119,7 @@ public class Menu extends ResourceImpl<MenuMapper, MenuEntity> {
                         ))
                         .setEditable(true)
                         .setHelp("前端路由")
-                        .setWidth(400)
+                        .setWidth("400px")
                 )),
 
             Field.dependency()
@@ -140,7 +140,7 @@ public class Menu extends ResourceImpl<MenuMapper, MenuEntity> {
                         ))
                         .setEditable(true)
                         .setHelp("前端路由或后端api")
-                        .setWidth(400)
+                        .setWidth("400px")
                         .onlyOnForms()
                 )),
 

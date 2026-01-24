@@ -378,7 +378,7 @@ public class SelectField extends Component {
         this.setComponentKey();
         this.style = new HashMap<>();
         this.rules = new ArrayList<>();
-        this.setWidth(200);
+        this.setWidth("200px");
         this.whenItem = new ArrayList<>();
         this.when = new When();
         this.load = new HashMap<>();
