@@ -303,7 +303,6 @@ public class Transfer extends Component {
         this.setComponentKey();
         this.style = new HashMap<>();
         this.rules = new ArrayList<>();
-        this.setWidth("400px");
         this.whenItem = new ArrayList<>();
         this.when = new When();
     }
