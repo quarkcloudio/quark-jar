@@ -90,17 +90,9 @@ public class Department extends ResourceImpl<DepartmentMapper, DepartmentEntity>
     // 行为
     public List<Object> actions(Context context) {
         return Arrays.asList(
-            new CreateModal<DepartmentMapper, DepartmentEntity>()
-                .setTitle("新增")
-                .setApi(this.creationApi(context))
-                .setFields(this.creationFields(context))
-                .setData(this.creationData(context)),
+            new CreateModal<DepartmentMapper, DepartmentEntity>(context, this),
             new ChangeStatus<DepartmentMapper, DepartmentEntity>(),
-            new EditModal<DepartmentMapper, DepartmentEntity>()
-                .setTitle("编辑")
-                .setApi(this.editApi(context))
-                .setInitApi(this.editValueApi(context))
-                .setFields(this.editFields(context)),
+            new EditModal<DepartmentMapper, DepartmentEntity>(context, this),
             new DeleteSpecial<DepartmentMapper, DepartmentEntity>(),
             new BatchDelete<DepartmentMapper, DepartmentEntity>()
         );

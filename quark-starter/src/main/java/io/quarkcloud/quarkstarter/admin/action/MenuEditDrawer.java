@@ -5,10 +5,11 @@ import java.util.List;
 import io.quarkcloud.quarkadmin.component.action.Action;
 import io.quarkcloud.quarkadmin.component.form.Form;
 import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
+import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
 import io.quarkcloud.quarkadmin.template.resource.impl.action.DrawerImpl;
 import io.quarkcloud.quarkcore.service.Context;
 
-public class MenuEditDrawer<M, T> extends DrawerImpl<ResourceMapper<T>, T> {
+public class MenuEditDrawer<M extends ResourceMapper<T>, T> extends DrawerImpl<ResourceMapper<T>, T> {
 
     // API
     public String api;
@@ -19,8 +20,16 @@ public class MenuEditDrawer<M, T> extends DrawerImpl<ResourceMapper<T>, T> {
     // 字段数据
     public Object fields;
 
+    // 资源
+    private final ResourceImpl<M, T> resource;
+
     // 初始化
-    public MenuEditDrawer() {
+    public MenuEditDrawer(Context context, ResourceImpl<M, T> resource) {
+        this.resource = resource;
+        this.setTitle("编辑");
+        this.setApi(this.resource.editApi(context));
+        this.setInitApi(this.resource.editValueApi(context));
+        this.setFields(this.resource.editFields(context));
         this.setType("link");
         this.setSize("small");
         this.setDestroyOnClose(true);

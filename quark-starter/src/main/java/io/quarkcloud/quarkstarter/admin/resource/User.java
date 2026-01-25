@@ -188,17 +188,9 @@ public class User extends ResourceImpl<UserMapper, UserEntity> {
     // 行为
     public List<Object> actions(Context context) {
         return Arrays.asList(
-            new CreateDrawer<UserMapper, UserEntity>()
-                .setTitle("新增")
-                .setApi(this.creationApi(context))
-                .setFields(this.creationFields(context))
-                .setData(this.creationData(context)),
+            new CreateDrawer<UserMapper, UserEntity>(context, this),
             new BatchDelete<UserMapper, UserEntity>(),
-            new EditDrawer<UserMapper, UserEntity>()
-                .setTitle("编辑")
-                .setApi(this.editApi(context))
-                .setInitApi(this.editValueApi(context))
-                .setFields(this.editFields(context)),
+            new EditDrawer<UserMapper, UserEntity>(context, this),
             new DeleteSpecial<UserMapper, UserEntity>(),
             new FormExtraBack<UserMapper, UserEntity>(),
             new FormSubmit<UserMapper, UserEntity>(),

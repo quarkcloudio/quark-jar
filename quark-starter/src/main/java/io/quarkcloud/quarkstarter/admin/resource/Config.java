@@ -8,9 +8,7 @@ import org.springframework.stereotype.Component;
 import io.quarkcloud.quarkadmin.component.form.Field;
 import io.quarkcloud.quarkadmin.component.form.Rule;
 import io.quarkcloud.quarkadmin.entity.ConfigEntity;
-import io.quarkcloud.quarkadmin.entity.UserEntity;
 import io.quarkcloud.quarkadmin.mapper.ConfigMapper;
-import io.quarkcloud.quarkadmin.mapper.UserMapper;
 import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
 import io.quarkcloud.quarkcore.service.Context;
 import io.quarkcloud.quarkstarter.admin.action.BatchDelete;
@@ -81,16 +79,8 @@ public class Config extends ResourceImpl<ConfigMapper, ConfigEntity> {
     // 行为
     public List<Object> actions(Context context) {
         return Arrays.asList(
-            new CreateDrawer<UserMapper, UserEntity>()
-                .setTitle("新增")
-                .setApi(this.creationApi(context))
-                .setFields(this.creationFields(context))
-                .setData(this.creationData(context)),
-            new EditDrawer<UserMapper, UserEntity>()
-                .setTitle("编辑")
-                .setApi(this.editApi(context))
-                .setInitApi(this.editValueApi(context))
-                .setFields(this.editFields(context)),
+            new CreateDrawer<ConfigMapper, ConfigEntity>(context, this),
+            new EditDrawer<ConfigMapper, ConfigEntity>(context, this),
             new Delete<ConfigMapper, ConfigEntity>(),
             new BatchDelete<ConfigMapper, ConfigEntity>(),
             new FormExtraBack<ConfigMapper, ConfigEntity>(),

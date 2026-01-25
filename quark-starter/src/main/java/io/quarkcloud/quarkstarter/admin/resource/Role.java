@@ -8,9 +8,7 @@ import org.springframework.stereotype.Component;
 
 import io.quarkcloud.quarkadmin.component.form.Field;
 import io.quarkcloud.quarkadmin.component.form.Rule;
-import io.quarkcloud.quarkadmin.entity.DepartmentEntity;
 import io.quarkcloud.quarkadmin.entity.RoleEntity;
-import io.quarkcloud.quarkadmin.mapper.DepartmentMapper;
 import io.quarkcloud.quarkadmin.mapper.RoleMapper;
 import io.quarkcloud.quarkadmin.service.MenuService;
 import io.quarkcloud.quarkadmin.service.PermissionService;
@@ -90,16 +88,8 @@ public class Role extends ResourceImpl<RoleMapper, RoleEntity> {
             new DataScope<RoleMapper, RoleEntity>()
                 .setDepartmentService(departmentService)
                 .setRoleService(roleService),
-            new CreateModal<RoleMapper, RoleEntity>()
-                .setTitle("新增")
-                .setApi(this.creationApi(context))
-                .setFields(this.creationFields(context))
-                .setData(this.creationData(context)),
-            new EditModal<DepartmentMapper, DepartmentEntity>()
-                .setTitle("编辑")
-                .setApi(this.editApi(context))
-                .setInitApi(this.editValueApi(context))
-                .setFields(this.editFields(context)),
+            new CreateModal<RoleMapper, RoleEntity>(context, this),
+            new EditModal<RoleMapper, RoleEntity>(context, this),
             new DeleteRole<RoleMapper, RoleEntity>(),
             new BatchDeleteRole<RoleMapper, RoleEntity>(),
             new FormExtraBack<RoleMapper, RoleEntity>(),

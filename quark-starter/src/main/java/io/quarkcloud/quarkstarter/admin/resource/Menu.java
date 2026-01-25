@@ -255,17 +255,9 @@ public class Menu extends ResourceImpl<MenuMapper, MenuEntity> {
     // 行为
     public List<Object> actions(Context context) {
         return Arrays.asList(
-            new MenuCreateDrawer<MenuMapper, MenuEntity>()
-                .setTitle("创建")
-                .setApi(this.creationApi(context))
-                .setFields(this.creationFields(context))
-                .setData(this.creationData(context)),
+            new MenuCreateDrawer<MenuMapper, MenuEntity>(context, this),
             new ChangeStatus<MenuMapper, MenuEntity>(),
-            new MenuEditDrawer<MenuMapper, MenuEntity>()
-                .setTitle("编辑")
-                .setApi(this.editApi(context))
-                .setInitApi(this.editValueApi(context))
-                .setFields(this.editFields(context)),
+            new MenuEditDrawer<MenuMapper, MenuEntity>(context, this),
             new Delete<MenuMapper, MenuEntity>(),
             new BatchDelete<MenuMapper, MenuEntity>(),
             new BatchDisable<MenuMapper, MenuEntity>(),

@@ -6,10 +6,11 @@ import java.util.Map;
 import io.quarkcloud.quarkadmin.component.action.Action;
 import io.quarkcloud.quarkadmin.component.form.Form;
 import io.quarkcloud.quarkadmin.mapper.ResourceMapper;
+import io.quarkcloud.quarkadmin.template.resource.impl.ResourceImpl;
 import io.quarkcloud.quarkadmin.template.resource.impl.action.ModalImpl;
 import io.quarkcloud.quarkcore.service.Context;
 
-public class CreateModal<M, T> extends ModalImpl<ResourceMapper<T>, T> {
+public class CreateModal<M extends ResourceMapper<T>, T> extends ModalImpl<ResourceMapper<T>, T> {
 
     // API
     public String api;
@@ -20,8 +21,15 @@ public class CreateModal<M, T> extends ModalImpl<ResourceMapper<T>, T> {
     // 数据
     public Object data;
 
+    // 资源
+    private final ResourceImpl<M, T> resource;
+
     // 初始化
-    public CreateModal() {
+    public CreateModal(Context context, ResourceImpl<M, T> resource) {
+        this.resource = resource;
+        this.setApi(this.resource.creationApi(context));
+        this.setFields(this.resource.creationFields(context));
+        this.setData(this.resource.creationData(context));
         this.setType("primary");
         this.setGhost(true);
         this.setIcon("ant-design:plus-outlined");
