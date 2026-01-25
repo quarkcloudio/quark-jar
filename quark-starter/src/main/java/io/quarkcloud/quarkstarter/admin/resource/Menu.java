@@ -234,8 +234,8 @@ public class Menu extends ResourceImpl<MenuMapper, MenuEntity> {
                     Field.transfer("permissionIds", "绑定权限")
                         .setDataSource(permissions)
                         .setListStyle(Map.of(
-                            "width", 320,
-                            "height", 300
+                            "width", "320px",
+                            "height", "300px"
                         ))
                         .setShowSearch(true)
                         .onlyOnForms()
