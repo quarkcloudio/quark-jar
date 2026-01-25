@@ -71,6 +71,12 @@ public class MenuEntity {
     @TableField(exist = false)
     private Map<String, Object> meta;
 
+    @TableField(exist = false)
+    private String api;
+
+    @TableField(exist = false)
+    private String url;
+
     // 创建时间
     @TableField(value = "created_at", fill = FieldFill.INSERT)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "Asia/Shanghai")

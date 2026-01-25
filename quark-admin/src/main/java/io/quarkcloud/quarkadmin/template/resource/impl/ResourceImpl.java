@@ -145,7 +145,6 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         this.tableTreeBar = new TreeBar();
         this.tableTitleSuffix = "列表";
         this.tableActionColumnTitle = "操作";
-        this.tableActionColumnWidth = 200;
         this.backIcon = true;
         this.indexQueryOrder = Map.of("id", "desc");
     }
