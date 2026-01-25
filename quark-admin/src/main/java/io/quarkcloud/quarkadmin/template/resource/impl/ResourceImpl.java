@@ -556,7 +556,7 @@ public class ResourceImpl<M extends ResourceMapper<T>, T> implements Resource<T>
         long getPageSize = ((Number) pageSize).longValue();
 
         // 获取分页参数
-        IPage<T> page = new Page<T>(context.getPageFromSearch(), context.getPageSizeFromSearch(getPageSize));
+        IPage<T> page = new Page<T>(context.getPageFromQuery(), context.getPageSizeFromQuery(getPageSize));
 
         // 获取分页数据
         IPage<T> data = resourceService.page(page, queryWrapper);

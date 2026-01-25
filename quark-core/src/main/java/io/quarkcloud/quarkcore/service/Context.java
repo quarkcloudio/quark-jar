@@ -425,15 +425,15 @@ public class Context implements ApplicationContextAware {
         return entity;
     }
 
-    // 从search参数中获取分页数量
+    // 从query参数中获取分页数量
     @SuppressWarnings("unchecked")
-    public Long getPageSizeFromSearch(Long pageSize) {
-        String searchParam = this.getParameter("search");
-        if (searchParam != null && searchParam != "") {
+    public Long getPageSizeFromQuery(Long pageSize) {
+        String paginationParam = this.getParameter("pagination");
+        if (paginationParam != null && paginationParam != "") {
             ObjectMapper mapper = new ObjectMapper();
             Map<String, Object> map = null;
             try {
-                map = mapper.readValue(searchParam, Map.class);
+                map = mapper.readValue(paginationParam, Map.class);
             } catch (JsonProcessingException e) {
                 pageSize = 0L;
             }
@@ -450,16 +450,16 @@ public class Context implements ApplicationContextAware {
         return pageSize;
     }
 
-    // 从search参数中获取页码
+    // 从query参数中获取页码
     @SuppressWarnings("unchecked")
-    public Long getPageFromSearch() {
+    public Long getPageFromQuery() {
         long currentPage = 1;
-        String searchParam = this.getParameter("search");
-        if (searchParam != null && searchParam != "") {
+        String paginationParam = this.getParameter("pagination");
+        if (paginationParam != null && paginationParam != "") {
             ObjectMapper mapper = new ObjectMapper();
             Map<String, Object> map = null;
             try {
-                map = mapper.readValue(searchParam, Map.class);
+                map = mapper.readValue(paginationParam, Map.class);
             } catch (JsonProcessingException e) {
                 currentPage = 1;
             }
