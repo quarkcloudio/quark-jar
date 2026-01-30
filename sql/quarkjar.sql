@@ -1,19 +1,3 @@
-/*
- Navicat Premium Dump SQL
-
- Source Server         : 本地连接
- Source Server Type    : MySQL
- Source Server Version : 50743 (5.7.43-log)
- Source Host           : localhost:3306
- Source Schema         : quarkcloud
-
- Target Server Type    : MySQL
- Target Server Version : 50743 (5.7.43-log)
- File Encoding         : 65001
-
- Date: 30/01/2026 15:50:36
-*/
-
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
