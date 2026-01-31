@@ -30,8 +30,10 @@ public class SecurityConfig {
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/admin/auth/**").permitAll()
-                .anyRequest().authenticated()
+                .requestMatchers("/", "/js/**","/admin/**","/api/admin/auth/**")
+                .permitAll()
+                .anyRequest()
+                .authenticated()
             )
             .addFilterBefore(
                 filter,
