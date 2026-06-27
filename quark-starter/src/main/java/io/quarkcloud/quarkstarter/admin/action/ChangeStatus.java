@@ -31,8 +31,8 @@ public class ChangeStatus<M, T> extends AjaxImpl<ResourceMapper<T>, T> {
         this.withConfirm("确定要<%= (status==true ? '禁用' : '启用') %>数据吗？", "", "pop");
 
         // 在表格行内展示
-        this.setOnlyOnIndexTableRow(true)
-;
+        this.setOnlyOnIndexTableRow(true);
+        
         // 行为接口接收的参数，当行为在表格行展示的时候，可以配置当前行的任意字段
         this.setApiParams(Arrays.asList("id", "status"));
     }
